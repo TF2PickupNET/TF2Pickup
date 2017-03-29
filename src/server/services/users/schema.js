@@ -1,0 +1,166 @@
+import SteamID from 'steamid';
+import { Schema } from 'mongoose';
+import regions from '@tf2-pickup/configs/regions';
+
+import { divs } from '/src/utils/etf2l';
+import {
+  url,
+  steamId,
+  isInArray,
+} from '../validators';
+
+function avatarSchema(name) {
+  return {
+    type: String,
+    validate: url(),
+    required: [false, `${name} Avatar is required!`],
+  };
+}
+
+function etf2lDivSchema(gamemode) {
+  return {
+    type: String,
+    validate: isInArray(divs, {
+      msg: `{VALUE} is not a valid etf2l ${gamemode} division`,
+      nullIsAllowed: true,
+    }),
+    default: null,
+  };
+}
+
+const allowedVolumes = new Array(10)
+  .fill(1)
+  .map((value, index) => (index + 1) / 10);
+
+export default new Schema({
+  id: {
+    type: String,
+    validate: steamId(),
+    required: [true, 'SteamId on the user object is required!'],
+    index: true,
+  },
+
+  createdOn: {
+    type: Date,
+    default: Date.now,
+  },
+
+  services: {
+    steam: {
+      tf2Hours: {
+        type: Number,
+        min: 0,
+        default: null,
+      },
+
+      isInBetaGroup: {
+        type: Boolean,
+        default: false,
+      },
+
+      avatar: {
+        small: avatarSchema('Small'),
+        medium: avatarSchema('Medium'),
+        large: avatarSchema('Large'),
+      },
+
+      vacBanned: {
+        type: Boolean,
+        default: false,
+      },
+
+      customUrl: {
+        type: String,
+        validate: {
+          validator(value) {
+            return /[\w-\d_]+/.test(value);
+          },
+          message: '{VALUE} is not a valid customUrl',
+        },
+        default: null,
+      },
+    },
+
+    etf2l: {
+      id: Number,
+      username: String,
+      banned: {
+        type: Boolean,
+        default: false,
+      },
+      banExpiry: {
+        type: Date,
+        default: null,
+      },
+      div6v6: etf2lDivSchema('6v6'),
+      div9v9: etf2lDivSchema('9v9'),
+    },
+  },
+
+  friends: {
+    type: [String],
+    validate: {
+      validator(friends) {
+        return friends.every(friend => new SteamID(friend).isValid());
+      },
+      msg: 'friends contains a not valid Steam ID!',
+    },
+    default: [],
+  },
+
+  settings: {
+    region: {
+      type: String,
+      validate: {
+        validator(region) {
+          return Object.keys(regions).includes(region) || region === null;
+        },
+        msg: '{VALUE} is not a valid region!',
+      },
+      default: null,
+    },
+
+    volume: {
+      type: Number,
+      validate: {
+        validator(volume) {
+          return allowedVolumes.includes(volume);
+        },
+        msg: '{VALUE} is not a valid volume',
+      },
+      default: 0.7,
+    },
+
+    username: {
+      type: String,
+      default: null,
+      unique: true,
+      trim: true,
+    },
+  },
+
+  isInGame: {
+    type: Boolean,
+    default: false,
+  },
+
+  lastUpdate: {
+    type: Date,
+    default: Date.now,
+  },
+
+  online: {
+    type: Boolean,
+    default: true,
+  },
+
+  lastOnline: {
+    type: Date,
+    default: Date.now,
+  },
+
+  hasAcceptedTheRules: {
+    type: Boolean,
+    default: false,
+  },
+});

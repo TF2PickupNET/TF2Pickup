@@ -11,10 +11,11 @@ export default function client() {
 
   that.use(fallback({ index: '/' }));
 
+
+  that.use('/assets', feathers.static(path.resolve(__dirname, '../assets')));
+
   if (that.get('env') === 'development') {
     const compiler = webpack(config);
-
-    that.use('/assets', feathers.static('node_modules/tf2pickup-assets/assets/src'));
     that.use(webpackDevMiddleware(compiler, {
       noInfo: true,
       stats: { colors: true },

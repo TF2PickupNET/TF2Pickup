@@ -1,12 +1,3 @@
 {
-  "presets": [
-    "latest",
-    "stage-2",
-    "react"
-  ],
-
-  "plugins": [
-    "transform-export-extensions",
-    "root-import"
-  ]
+  "presets": ["@tf2-pickup/babel-preset"]
 }

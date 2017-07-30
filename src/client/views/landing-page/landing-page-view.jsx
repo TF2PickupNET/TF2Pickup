@@ -18,6 +18,7 @@ import {
   storageKeys,
   imageUrl,
 } from '../../config';
+import { authUrl } from '../../../config';
 import { arrayToText } from '../../../utils/string';
 import app from '../../app';
 import LandingPageHeader from './landing-page-header';
@@ -119,6 +120,13 @@ export class LandingPageView extends PureComponent {
     this.props.redirect(`/${gamemode}`);
   };
 
+  /**
+   * Redirect the user to the steam login page.
+   */
+  redirectToSteamAuth = () => {
+    window.location = authUrl;
+  };
+
   render() {
     const { classes } = this.props;
 
@@ -195,6 +203,7 @@ export class LandingPageView extends PureComponent {
           imgProps={{
             src: `${imageUrl}/steam_large_noborder.png`,
             className: classes.steamButton,
+            onClick: this.redirectToSteamAuth,
           }}
           imagePosition="right"
         >

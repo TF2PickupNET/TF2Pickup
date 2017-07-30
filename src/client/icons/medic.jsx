@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-function Medic({
+export default function Medic({
   color,
   size,
   ...props
@@ -35,5 +36,3 @@ Medic.propTypes = {
 };
 
 Medic.defaultProps = { size: 48 };
-
-export default Medic;

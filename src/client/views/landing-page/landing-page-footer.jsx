@@ -5,8 +5,11 @@ import {
   colors,
   typography,
 } from 'materialize-react';
+import PropTypes from 'prop-types';
+import capitalize from 'lodash.capitalize';
 import injectSheet from 'react-jss';
 import socialMedia from '@tf2-pickup/configs/social-media';
+import Link from '../../components/link';
 
 function LandingPageFooter({ classes }) {
   const pages = [
@@ -24,13 +27,18 @@ function LandingPageFooter({ classes }) {
       <div className={classes.container}>
         {Object
           .values(socialMedia)
-          .map(value => (
-            <Icon
-              key={value.icon}
-              icon={value.icon}
-              className={'mdi-48px'}
-              style={{ color: 'inherit' }}
-            />
+          .map(data => (
+            <Link
+              key={data.name}
+              href={data.url}
+              className={classes.socialMediaLink}
+            >
+              <Icon
+                icon={data.icon}
+                className={'mdi-48px'}
+                style={{ color: 'inherit' }}
+              />
+            </Link>
           ))}
       </div>
 
@@ -38,12 +46,20 @@ function LandingPageFooter({ classes }) {
 
       <div className={classes.container}>
         {pages.map(route => (
-          <div key={route}>{route}</div>
+          <Link
+            href={`/${pages}`}
+            key={route}
+            className={classes.pageLink}
+          >
+            {capitalize(route)}
+          </Link>
         ))}
       </div>
     </footer>
   );
 }
+
+LandingPageFooter.propTypes = { classes: PropTypes.object.isRequired };
 
 LandingPageFooter.styles = {
   footer: {
@@ -54,7 +70,7 @@ LandingPageFooter.styles = {
 
   container: {
     display: 'flex',
-    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   socialMediaHeader: {
@@ -75,8 +91,8 @@ LandingPageFooter.styles = {
   },
 
   pageLink: {
-    ...typography.title,
-    padding: '5px 10px',
+    ...typography.display1,
+    padding: '15px 30px',
     color: 'inherit',
     textDecoration: 'none',
   },

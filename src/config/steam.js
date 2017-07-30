@@ -4,4 +4,5 @@ export const validateUsersAgainstSteamGroup = 'TF2PickupNETStaff';
 export const inviteToSteamGroup = '103582791435021680';
 
 // Min. required hours in TF2
-export const requiredInGameHours = 800;
+export const requiredInGameHours = 1000;
+

@@ -3,11 +3,11 @@ import axios from 'axios';
 import moment from 'moment';
 
 import {
-  divs,
   transformGamemode,
   oldDivsToNewDivs,
-} from '/src/utils/etf2l';
-import { displayGamemodeDivs } from '/src/utils/common';
+} from './utils';
+import { displayGamemodeDivs } from '../../../../../config';
+import { divs } from '../../../../../config/etf2l';
 
 async function getPlayerData(steamId) {
   const result = await axios.get(`http://api.etf2l.org/player/${steamId}.json`);
@@ -26,15 +26,28 @@ async function getMatches(etf2lId) {
   return result.data.results;
 }
 
+function addGamemodeToMatch(match) {
+  return {
+    ...match,
+    gamemode: transformGamemode(match.competition.type),
+  };
+}
+
+function isMatchValid(match) {
+  const isNotMerc = match.merced === 0;
+  const isAllowedGamemode = displayGamemodeDivs.includes(match.gamemode);
+
+  return isNotMerc && isAllowedGamemode;
+}
+
 export default async function updateETF2LData(id, app, updateDivs) {
   let player = null;
-  let matches = [];
 
   try {
     player = await getPlayerData(id);
   } catch (error) {
     return app.service('logs').create({
-      message: 'Error while updating etf2l info',
+      message: 'Error while updating ETF2L player data',
       environment: 'server',
       info: error,
       steamId: id,
@@ -51,11 +64,13 @@ export default async function updateETF2LData(id, app, updateDivs) {
   };
 
   if (updateDivs) {
+    let matches = [];
+
     try {
       matches = await getMatches(player.id);
     } catch (error) {
       app.service('logs').create({
-        message: 'Error while updating etf2l divisions',
+        message: 'Error while updating ETF2L divisions',
         environment: 'server',
         info: error,
         steamId: id,
@@ -63,18 +78,8 @@ export default async function updateETF2LData(id, app, updateDivs) {
     }
 
     matches
-      .map((match) => {
-        return {
-          ...match,
-          gamemode: transformGamemode(match.competition.type),
-        };
-      })
-      .filter((match) => {
-        const isNotMerc = match.merced === 0;
-        const isAllowedGamemode = displayGamemodeDivs.includes(match.gamemode);
-
-        return isNotMerc && isAllowedGamemode;
-      })
+      .map(addGamemodeToMatch)
+      .filter(isMatchValid)
       .forEach(({
         gamemode,
         division: { name },
@@ -105,7 +110,7 @@ export default async function updateETF2LData(id, app, updateDivs) {
 
       if (start.isBefore(now) && end.isAfter(now)) {
         result.services.etf2l.banned = true;
-        result.services.etf2l.banExpiry = true;
+        result.services.etf2l.banExpiry = end;
       }
     });
   }

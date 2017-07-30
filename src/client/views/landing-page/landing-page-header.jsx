@@ -1,6 +1,7 @@
 import React from 'react';
 import Chance from 'chance';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 import {
   timings,
   colors,
@@ -32,6 +33,8 @@ function LandingPageHeader({ classes }) {
     </header>
   );
 }
+
+LandingPageHeader.propTypes = { classes: PropTypes.object.isRequired };
 
 LandingPageHeader.styles = {
   '@keyframes header--fade-in': {

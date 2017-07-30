@@ -11,10 +11,6 @@ export default function users() {
   that.service('users', service({
     Model: mongoose.model('Users', schema),
     id: 'id',
-    events: [
-      'userLoggedIn',
-      'userLoggedOut',
-    ],
   }));
 
   that.service('users').hooks(hooks);

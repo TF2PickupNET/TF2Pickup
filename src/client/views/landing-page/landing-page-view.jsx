@@ -23,13 +23,22 @@ import app from '../../app';
 import LandingPageHeader from './landing-page-header';
 import LandingPageSection from './landing-page-section';
 import LandingPageFooter from './landing-page-footer';
+import Link from '../../components/link';
 
 const gamemodeDisplays = Object.values(gamemodes).map(gamemode => gamemode.display);
 const regionDisplays = Object.values(regions).map(region => region.fullName);
 const chance = new Chance();
 
+/**
+ * Main component for the Landing Page.
+ *
+ * @class
+ */
 export class LandingPageView extends PureComponent {
-  static propTypes = { redirect: PropTypes.func.isRequired };
+  static propTypes = {
+    redirect: PropTypes.func.isRequired,
+    classes: PropTypes.object.isRequired,
+  };
 
   static styles = {
     image: {
@@ -84,10 +93,16 @@ export class LandingPageView extends PureComponent {
     },
   };
 
+  /**
+   * Add a event listener to when the user logs in.
+   */
   componentWillMount() {
     app.on('authenticated', this.onLogin);
   }
 
+  /**
+   * Remove the event listener again when the component unmounts.
+   */
   componentWillUnmount() {
     app.removeListener('authenticated', this.onLogin);
   }
@@ -95,6 +110,9 @@ export class LandingPageView extends PureComponent {
   randomGamemode = chance.pickone(['6v6', '9v9']);
   randomRegion = chance.pickone(Object.keys(regions));
 
+  /**
+   * Redirect the user to the last gamemode when the user get's logged in automatically.
+   */
   onLogin = () => {
     const gamemode = lockr.get(storageKeys.lastGamemode) || '6v6';
 
@@ -112,6 +130,21 @@ export class LandingPageView extends PureComponent {
 
         <LandingPageSection
           imgProps={{
+            src: 'http://placehold.it/400x250',
+            className: classes.image,
+          }}
+          imagePosition="right"
+        >
+          High Quality Pugs without worrying about anything.
+          <br />
+          Simply join and we will take care of everything, <br />
+          from servers to setting the right config.
+        </LandingPageSection>
+
+        <Divider className={classes.divider} />
+
+        <LandingPageSection
+          imgProps={{
             src: `${imageUrl}/about/serveme_logo.png`,
             className: classes.image,
             style: {
@@ -122,25 +155,10 @@ export class LandingPageView extends PureComponent {
           }}
           imagePosition="left"
         >
-          Servers are graciously provided by serveme.tf
+          Servers are graciously provided by <Link href="http://serveme.tf">serveme.tf</Link>
           <br />
           This means no bad servers <br />
           like in the old days of TF2Pickup.
-        </LandingPageSection>
-
-        <Divider className={classes.divider} />
-
-        <LandingPageSection
-          imgProps={{
-            src: 'http://placehold.it/400x250',
-            className: classes.image,
-          }}
-          imagePosition="right"
-        >
-          High Quality Pugs without worrying about anything.
-          <br />
-          Simply join and we will take care of everything, <br />
-          from servers to setting the right config etc.
         </LandingPageSection>
 
         <section className={classes.regionContainer}>
@@ -162,8 +180,8 @@ export class LandingPageView extends PureComponent {
           }}
           imagePosition="left"
         >
-          We currently feature In-Game commands, <br />
-          support for reporting people for different reasons
+          As a medic you can pick one of the players as your buddy,
+          <br /> which automatically puts him on your team.
         </LandingPageSection>
 
         <Parallax

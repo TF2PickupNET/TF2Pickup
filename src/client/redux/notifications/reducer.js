@@ -2,10 +2,16 @@ import {
   ADD_NOTIFICATION,
   REMOVE_NOTIFICATION,
 } from './constants';
+import setupListeners from './setup-listeners';
 
-const defaultState = [];
-
-export default function reducer(state = defaultState, action) {
+/**
+ * The reducer for the notification store.
+ *
+ * @param {Object[]} [state] - The current state.
+ * @param {Object} action - The action object.
+ * @returns {Object[]} - Returns the new state.
+ */
+export default function reducer(state = [], action) {
   switch (action.type) {
     case ADD_NOTIFICATION:
       return state.concat([action.payload.notification]);
@@ -15,3 +21,5 @@ export default function reducer(state = defaultState, action) {
       return state;
   }
 }
+
+reducer.setupListeners = setupListeners;

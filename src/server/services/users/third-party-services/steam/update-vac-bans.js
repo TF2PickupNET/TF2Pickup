@@ -4,8 +4,7 @@ export default async function updateVACBans(id, app) {
   let player = {};
 
   try {
-    const params = { steamids: id };
-    const result = await steamApi().get('ISteamUser/GetPlayerBans/v1/', { params });
+    const result = await steamApi.get('ISteamUser/GetPlayerBans/v1/', { steamids: id });
 
     player = result.data.players[0];
   } catch (error) {

@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-function Soldier({
+export default function Soldier({
   color,
   size,
   ...props
@@ -52,5 +53,3 @@ Soldier.propTypes = {
 };
 
 Soldier.defaultProps = { size: 48 };
-
-export default Soldier;

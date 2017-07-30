@@ -2,7 +2,7 @@ import SteamID from 'steamid';
 import { Schema } from 'mongoose';
 import regions from '@tf2-pickup/configs/regions';
 
-import { divs } from '/src/utils/etf2l';
+import { divs } from '../../../config/etf2l';
 import {
   url,
   steamId,
@@ -40,11 +40,6 @@ export default new Schema({
     index: true,
   },
 
-  createdOn: {
-    type: Date,
-    default: Date.now,
-  },
-
   services: {
     steam: {
       tf2Hours: {
@@ -78,6 +73,11 @@ export default new Schema({
           message: '{VALUE} is not a valid customUrl',
         },
         default: null,
+      },
+
+      isInGroup: {
+        type: Boolean,
+        default: false,
       },
     },
 
@@ -163,4 +163,6 @@ export default new Schema({
     type: Boolean,
     default: false,
   },
+
+  createdOn: Date,
 });

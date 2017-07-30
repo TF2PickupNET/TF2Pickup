@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-function Scout({
+export default function Scout({
   color,
   size,
   ...props
@@ -47,5 +48,3 @@ Scout.propTypes = {
 };
 
 Scout.defaultProps = { size: 48 };
-
-export default Scout;

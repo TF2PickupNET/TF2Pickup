@@ -3,8 +3,15 @@ import SteamStrategy from 'passport-steam';
 import jwt, { Verifier } from 'feathers-authentication-jwt';
 import ms from 'ms';
 
-import getNewUserData from './services/users/get-new-user-data';
+import createLoginListener from './login-listener';
+import createLogoutListener from './logout-listener';
 
+/**
+ * A utility class which makes sure the id from the jwt get's mapped to the correct user.
+ *
+ * @class
+ * @extends Verifier
+ */
 class JWTVerifier extends Verifier {
   async verify(req, payload, done) {
     try {
@@ -17,6 +24,9 @@ class JWTVerifier extends Verifier {
   }
 }
 
+/**
+ * Initialize the authentication service.
+ */
 export default function authentication() {
   const that = this;
   const steamAuthPath = 'auth/steam';
@@ -43,10 +53,14 @@ export default function authentication() {
       const query = { id };
       const users = await usersService.find(query);
 
+      // Return the user if exactly one was found and if more than were found return an error
       if (users.length === 1) {
         return done(null, users[0]);
+      } else if (users.length > 1) {
+        return done(new Error(`Multiple users found with the steamId ${id}`), null);
       }
 
+      // Create a new user when no user was found
       try {
         const newUser = await usersService.create(query);
 
@@ -70,8 +84,10 @@ export default function authentication() {
     `/${steamAuthPath}/return`,
     auth.express.authenticate('steam'),
     async (req, res, next) => {
+      // Create a new jwt token
       const token = await req.app.passport.createJWT({ id: req.user.id }, that.get('auth'));
 
+      // Set the new jwt token as a cookie
       res.cookie(options.cookie.name, token, { maxAge: ms(options.jwt.expiresIn) });
 
       next();
@@ -79,67 +95,6 @@ export default function authentication() {
     (req, res) => res.redirect('/'),
   );
 
-  that.on('login', async (payload, { connection }) => {
-    const users = that.service('users');
-    const logs = that.service('logs');
-
-    try {
-      const updatedData = await getNewUserData(connection.user, that.app);
-
-      updatedData.online = true;
-
-      await users.patch(connection.user.id, updatedData);
-
-      users.emit('login', {
-        id: connection.user.id,
-        region: connection.user.settings.region,
-        username: connection.user.settings.username,
-        avatar: connection.user.services.steam.avatar,
-      });
-
-      await logs.create({
-        message: 'User logged in',
-        environment: 'server',
-        steamId: connection.user.id,
-      });
-    } catch (error) {
-      await logs.create({
-        message: 'Error on login callback',
-        environment: 'server',
-        info: error,
-        steamId: connection.user.id,
-      });
-    }
-  });
-
-  that.on('logout', async (payload, { connection }) => {
-    const logs = that.service('logs');
-    const users = that.service('users');
-    const update = {
-      online: false,
-      lastOnline: Date.now(),
-    };
-
-    try {
-      await users.patch(connection.user.id, update);
-
-      users.emit('logout', {
-        id: connection.user.id,
-        region: connection.user.settings.region,
-      });
-
-      await logs.create({
-        message: 'User logged out',
-        environment: 'server',
-        steamId: connection.user.id,
-      });
-    } catch (error) {
-      await logs.create({
-        message: 'Error on logout callback',
-        environment: 'server',
-        info: error,
-        steamId: connection.user.id,
-      });
-    }
-  });
+  that.on('login', createLoginListener(that));
+  that.on('logout', createLogoutListener(that));
 }

@@ -3,14 +3,20 @@ import {
   LOGIN_USER,
   LOGOUT_USER,
 } from './constants';
+import setupListeners from './setup-listeners';
 
-const defaultState = null;
-
-export default function reducer(state = defaultState, action) {
+/**
+ * The reducer for the currently logged in user.
+ *
+ * @param {Object} [state] - The current state.
+ * @param {Object} action - The action object.
+ * @returns {Object} - Returns the new state.
+ */
+export default function reducer(state = null, action) {
   switch (action.type) {
-    case UPDATE_USER:
-      return action.payload.user;
     case LOGIN_USER:
+      return action.payload.user;
+    case UPDATE_USER:
       return Object.assign({}, state, action.payload.user);
     case LOGOUT_USER:
       return null;
@@ -18,3 +24,5 @@ export default function reducer(state = defaultState, action) {
       return state;
   }
 }
+
+reducer.setupListeners = setupListeners;

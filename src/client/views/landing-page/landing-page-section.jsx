@@ -1,6 +1,7 @@
 import React from 'react';
 import injectSheet from 'react-jss';
 import { typography } from 'materialize-react';
+import PropTypes from 'prop-types';
 
 function LandingPageSection({
   classes,
@@ -25,6 +26,16 @@ function LandingPageSection({
     </section>
   );
 }
+
+LandingPageSection.propTypes = {
+  classes: PropTypes.object.isRequired,
+  imgSrc: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  imagePosition: PropTypes.oneOf(['left', 'right']).isRequired,
+  imgProps: PropTypes.object,
+};
+
+LandingPageSection.defaultProps = { imgProps: {} };
 
 LandingPageSection.styles = (theme) => {
   return {

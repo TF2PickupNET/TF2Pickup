@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-function Heavy({
+export default function Heavy({
   color,
   size,
   ...props
@@ -40,5 +41,3 @@ Heavy.propTypes = {
 };
 
 Heavy.defaultProps = { size: 48 };
-
-export default Heavy;

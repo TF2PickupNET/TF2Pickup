@@ -1,22 +1,21 @@
 import merge from 'lodash.merge';
 import SteamCommunity from 'steamcommunity';
-import auth from 'feathers-authentication';
+import promisify from 'es6-promisify';
 
-import getNewUserData from './get-new-user-data';
-import { inviteToSteamGroup } from '/src/utils/steam';
-import promisify from '/src/utils/promisify';
+import getUserData from './third-party-services';
+import { inviteToSteamGroup } from '../../../config/steam';
 
 const community = new SteamCommunity();
 
 export default {
   before: {
     async create(props) {
-      const newProps = props;
-      const newData = await getNewUserData(props.data, props.app);
+      const userData = await getUserData(props.data.id, true, props.app);
 
-      newProps.data = merge({}, newProps.data, newData, { createdAt: new Date() });
-
-      return newProps;
+      return {
+        ...props,
+        data: merge({}, props.data, userData, { createdAt: new Date() }),
+      };
     },
   },
 
@@ -35,16 +34,5 @@ export default {
 
       return props;
     },
-
-    find: [
-      auth.hooks.authenticate('jwt'),
-      (props) => {
-        if (props.result[0].id === props.params.user.id) {
-          return props;
-        }
-
-        return props;
-      },
-    ],
   },
 };

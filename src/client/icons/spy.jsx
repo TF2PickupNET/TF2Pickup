@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-function Spy({
+export default function Spy({
   color,
   size,
   ...props
@@ -59,5 +60,3 @@ Spy.propTypes = {
 };
 
 Spy.defaultProps = { size: 48 };
-
-export default Spy;

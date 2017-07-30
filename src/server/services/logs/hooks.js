@@ -5,6 +5,8 @@ export default {
 
   after: {
     create(props) {
+      console.log(props);
+
       if (props.result.environment === 'server') {
         // eslint-disable-next-line no-console
         console.log(props.result.message);

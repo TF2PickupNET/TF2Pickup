@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-function Sniper({
+export default function Sniper({
   color,
   size,
   ...props
@@ -44,5 +45,3 @@ Sniper.propTypes = {
 };
 
 Sniper.defaultProps = { size: 48 };
-
-export default Sniper;

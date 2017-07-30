@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-function Pyro({
+export default function Pyro({
   color,
   size,
   ...props
@@ -36,5 +37,3 @@ Pyro.propTypes = {
 };
 
 Pyro.defaultProps = { size: 48 };
-
-export default Pyro;

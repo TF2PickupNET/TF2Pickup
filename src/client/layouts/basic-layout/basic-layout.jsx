@@ -8,6 +8,12 @@ import {
 
 import app from '../../app';
 
+/**
+ * Render a basic layout which will try login with the token from a cookie and make sure
+ * the windows view is wide enough.
+ *
+ * @class
+ */
 export default class BasicLayout extends PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
@@ -18,6 +24,9 @@ export default class BasicLayout extends PureComponent {
 
   state = { browserWidth: window.innerWidth };
 
+  /**
+   * Tries to login with the token from the cookies.
+   */
   async componentWillMount() {
     const token = cookie.get('feathers-jwt');
 
@@ -28,19 +37,31 @@ export default class BasicLayout extends PureComponent {
           accessToken: token,
         });
       } catch (error) {
-        this.props.addNotification('Something went wrong while trying to authenticate!');
+        this.props.addNotification(
+          `Something went wrong while trying to authenticate! Error: ${error.message}`,
+        );
       }
     }
   }
 
+  /**
+   * Add an event handler to the resize event so we can update the state when the user changes
+   * the windows size.
+   */
   componentDidMount() {
     window.addEventListener('resize', this.handleResize);
   }
 
+  /**
+   * Remove the event listener in case this component unmounts.
+   */
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
   }
 
+  /**
+   * Change the state when the browser resizes.
+   */
   handleResize = () => {
     this.setState({ browserWidth: window.innerWidth });
   };

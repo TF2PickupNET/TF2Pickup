@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-function Demoman({
+export default function Demoman({
   color,
   size,
   ...props
@@ -65,5 +66,3 @@ Demoman.propTypes = {
 };
 
 Demoman.defaultProps = { size: 48 };
-
-export default Demoman;

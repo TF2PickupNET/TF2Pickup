@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-function Engineer({
+export default function Engineer({
   color,
   size,
   ...props
@@ -34,5 +35,3 @@ Engineer.propTypes = {
 };
 
 Engineer.defaultProps = { size: 48 };
-
-export default Engineer;

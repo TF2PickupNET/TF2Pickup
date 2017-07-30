@@ -5,7 +5,7 @@ export default async function updateSteamUser(id, app) {
 
   try {
     const params = { steamids: id };
-    const result = await steamApi().get('ISteamUser/GetPlayerSummaries/v0002/', { params });
+    const result = await steamApi.get('ISteamUser/GetPlayerSummaries/v0002/', { params });
 
     player = result.data.response.players[0];
   } catch (error) {

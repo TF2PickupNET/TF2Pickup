@@ -9,14 +9,26 @@ import {
   isInArray,
 } from '../validators';
 
+/**
+ * Create the schema for the avatar urls.
+ *
+ * @param {String} name - The name of the avatar.
+ * @returns {Object} - Returns the validation object.
+ */
 function avatarSchema(name) {
   return {
     type: String,
-    validate: url(),
+    validate: url({}),
     required: [false, `${name} Avatar is required!`],
   };
 }
 
+/**
+ * Create the schema for the etf2l divisions.
+ *
+ * @param {String} gamemode - The gamemodes name.
+ * @returns {Object} - Returns the validation object.
+ */
 function etf2lDivSchema(gamemode) {
   return {
     type: String,
@@ -35,7 +47,7 @@ const allowedVolumes = new Array(10)
 export default new Schema({
   id: {
     type: String,
-    validate: steamId(),
+    validate: steamId({}),
     required: [true, 'SteamId on the user object is required!'],
     index: true,
   },
@@ -137,11 +149,6 @@ export default new Schema({
       unique: true,
       trim: true,
     },
-  },
-
-  isInGame: {
-    type: Boolean,
-    default: false,
   },
 
   lastUpdate: {

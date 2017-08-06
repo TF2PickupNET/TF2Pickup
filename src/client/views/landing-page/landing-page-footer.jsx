@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import {
   Icon,
   Divider,
@@ -11,91 +11,129 @@ import injectSheet from 'react-jss';
 import socialMedia from '@tf2-pickup/configs/social-media';
 import Link from '../../components/link';
 
-function LandingPageFooter({ classes }) {
-  const pages = [
+/**
+ * This component renders the footer of the LandingPage.
+ *
+ * @class
+ */
+class LandingPageFooter extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({
+      footer: PropTypes.string.isRequired,
+      container: PropTypes.string.isRequired,
+      socialMediaHeader: PropTypes.string.isRequired,
+      socialMediaLink: PropTypes.string.isRequired,
+      divider: PropTypes.string.isRequired,
+      pageLink: PropTypes.string.isRequired,
+    }).isRequired,
+  };
+
+  static styles = {
+    footer: {
+      padding: '30px 15%',
+      backgroundColor: colors.grey900,
+      color: colors.grey300,
+    },
+
+    container: {
+      display: 'flex',
+      justifyContent: 'center',
+    },
+
+    socialMediaHeader: {
+      ...typography.display2,
+      textAlign: 'center',
+      margin: '0 0 30px',
+    },
+
+    socialMediaLink: {
+      padding: '0 20px',
+      color: 'inherit',
+    },
+
+    divider: {
+      width: '70%',
+      margin: '30px 15%',
+      backgroundColor: colors.whiteDivider,
+    },
+
+    pageLink: {
+      ...typography.display1,
+      padding: '15px 30px',
+      color: 'inherit',
+      textDecoration: 'none',
+    },
+  };
+
+  static pages = [
     'rules',
     'about',
     'help',
   ];
 
-  return (
-    <footer className={classes.footer}>
-      <div className={classes.socialMediaHeader}>
-        Check us out on our Social Media!
-      </div>
+  static socialMediaValues = Object.values(socialMedia);
 
-      <div className={classes.container}>
-        {Object
-          .values(socialMedia)
-          .map(data => (
-            <Link
-              key={data.name}
-              href={data.url}
-              className={classes.socialMediaLink}
-            >
-              <Icon
-                icon={data.icon}
-                className={'mdi-48px'}
-                style={{ color: 'inherit' }}
-              />
-            </Link>
-          ))}
-      </div>
+  /**
+   * Render the links and icons to the social media accounts.
+   *
+   * @param {Object} classes - The classes object from Jss.
+   * @returns {JSX[]} - Returns the JSX.
+   */
+  static renderSocialMediaLinks(classes) {
+    return LandingPageFooter.socialMediaValues.map(data => (
+      <Link
+        key={data.name}
+        href={data.url}
+        className={classes.socialMediaLink}
+      >
+        <Icon
+          icon={data.icon}
+          className={'mdi-48px'}
+          style={{ color: 'inherit' }}
+        />
+      </Link>
+    ));
+  }
 
-      <Divider className={classes.divider} />
+  /**
+   * Render the links for different internal page links like help and about.
+   *
+   * @param {Object} classes - The classes object from Jss.
+   * @returns {JSX[]} - Returns the JSX.
+   */
+  static renderPageLinks(classes) {
+    return LandingPageFooter.pages.map(page => (
+      <Link
+        href={`/${page}`}
+        key={page}
+        className={classes.pageLink}
+      >
+        {capitalize(page)}
+      </Link>
+    ));
+  }
 
-      <div className={classes.container}>
-        {pages.map(route => (
-          <Link
-            href={`/${pages}`}
-            key={route}
-            className={classes.pageLink}
-          >
-            {capitalize(route)}
-          </Link>
-        ))}
-      </div>
-    </footer>
-  );
+  render() {
+    const { classes } = this.props;
+
+    return (
+      <footer className={classes.footer}>
+        <div className={classes.socialMediaHeader}>
+          Check us out on our Social Media!
+        </div>
+
+        <div className={classes.container}>
+          {LandingPageFooter.renderSocialMediaLinks(classes)}
+        </div>
+
+        <Divider className={classes.divider} />
+
+        <div className={classes.container}>
+          {LandingPageFooter.renderPageLinks(classes)}
+        </div>
+      </footer>
+    );
+  }
 }
-
-LandingPageFooter.propTypes = { classes: PropTypes.object.isRequired };
-
-LandingPageFooter.styles = {
-  footer: {
-    padding: '30px 15%',
-    backgroundColor: colors.grey900,
-    color: colors.grey300,
-  },
-
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-
-  socialMediaHeader: {
-    ...typography.display2,
-    textAlign: 'center',
-    margin: '0 0 30px',
-  },
-
-  socialMediaLink: {
-    padding: '0 20px',
-    color: 'inherit',
-  },
-
-  divider: {
-    width: '70%',
-    margin: '30px 15%',
-    backgroundColor: colors.whiteDivider,
-  },
-
-  pageLink: {
-    ...typography.display1,
-    padding: '15px 30px',
-    color: 'inherit',
-    textDecoration: 'none',
-  },
-};
 
 export default injectSheet(LandingPageFooter.styles)(LandingPageFooter);

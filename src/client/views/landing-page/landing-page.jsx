@@ -7,19 +7,18 @@ import injectSheet from 'react-jss';
 import regions from '@tf2-pickup/configs/regions';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 import {
-  Parallax,
   Divider,
   colors,
   elevation,
   typography,
 } from 'materialize-react';
+import Parallax from 'react-smart-parallax';
 
 import {
   storageKeys,
   imageUrl,
 } from '../../config';
 import { authUrl } from '../../../config';
-import { arrayToText } from '../../../utils/string';
 import app from '../../app';
 import LandingPageHeader from './landing-page-header';
 import LandingPageSection from './landing-page-section';
@@ -35,21 +34,35 @@ const chance = new Chance();
  *
  * @class
  */
-export class LandingPageView extends PureComponent {
+export class LandingPage extends PureComponent {
   static propTypes = {
     redirect: PropTypes.func.isRequired,
-    classes: PropTypes.object.isRequired,
+    classes: PropTypes.shape({
+      image: PropTypes.string.isRequired,
+      divider: PropTypes.string.isRequired,
+      regionContainer: PropTypes.string.isRequired,
+      regionImage: PropTypes.string.isRequired,
+      regionText: PropTypes.string.isRequired,
+      parallax: PropTypes.string.isRequired,
+      steamButton: PropTypes.string.isRequired,
+    }).isRequired,
   };
 
   static styles = {
     image: {
       borderRadius: 3,
       boxShadow: elevation(4),
+
+      '&.serve-me': {
+        width: 300,
+        height: 300,
+        borderRadius: '50%',
+      },
     },
 
     divider: {
-      width: '70%',
-      margin: '0 15%',
+      width: '80%',
+      margin: '0 10%',
     },
 
     regionContainer: {
@@ -95,6 +108,20 @@ export class LandingPageView extends PureComponent {
   };
 
   /**
+   * Transform an array of strings into a comma and 'and' separated list.
+   *
+   * @param {String[]} array - The array of strings.
+   * @returns {String} - Returns the concatenated string.
+   */
+  static arrayToText(array) {
+    return array.reduce((str, currentValue, currentIndex) => {
+      const isLastItem = array.length - 1 === currentIndex;
+
+      return `${str}${isLastItem ? ' and' : ','} ${currentValue}`;
+    }).trim();
+  }
+
+  /**
    * Add a event listener to when the user logs in.
    */
   componentWillMount() {
@@ -112,19 +139,19 @@ export class LandingPageView extends PureComponent {
   randomRegion = chance.pickone(Object.keys(regions));
 
   /**
+   * Redirect the user to the steam login page.
+   */
+  redirectToSteamAuth = () => {
+    window.location = authUrl;
+  };
+
+  /**
    * Redirect the user to the last gamemode when the user get's logged in automatically.
    */
   onLogin = () => {
     const gamemode = lockr.get(storageKeys.lastGamemode) || '6v6';
 
     this.props.redirect(`/${gamemode}`);
-  };
-
-  /**
-   * Redirect the user to the steam login page.
-   */
-  redirectToSteamAuth = () => {
-    window.location = authUrl;
   };
 
   render() {
@@ -137,11 +164,9 @@ export class LandingPageView extends PureComponent {
         <LandingPageHeader />
 
         <LandingPageSection
-          imgProps={{
-            src: 'http://placehold.it/400x250',
-            className: classes.image,
-          }}
+          imgSrc="http://placehold.it/400x250"
           imagePosition="right"
+          imgProps={{ className: classes.image }}
         >
           High Quality Pugs without worrying about anything.
           <br />
@@ -152,16 +177,9 @@ export class LandingPageView extends PureComponent {
         <Divider className={classes.divider} />
 
         <LandingPageSection
-          imgProps={{
-            src: `${imageUrl}/about/serveme_logo.png`,
-            className: classes.image,
-            style: {
-              borderRadius: '50%',
-              height: 300,
-              width: 300,
-            },
-          }}
+          imgSrc={`${imageUrl}/about/serveme_logo.png`}
           imagePosition="left"
+          imgProps={{ className: `${classes.image} serve-me` }}
         >
           Servers are graciously provided by <Link href="http://serveme.tf">serveme.tf</Link>
           <br />
@@ -177,16 +195,14 @@ export class LandingPageView extends PureComponent {
           />
 
           <div className={classes.regionText}>
-            We currently support {arrayToText(regionDisplays)}
+            We currently support {LandingPage.arrayToText(regionDisplays)}
           </div>
         </section>
 
         <LandingPageSection
-          imgProps={{
-            src: 'http://placehold.it/400x250',
-            className: classes.image,
-          }}
+          imgSrc="http://placehold.it/400x250"
           imagePosition="left"
+          imgProps={{ className: classes.image }}
         >
           As a medic you can pick one of the players as your buddy,
           <br /> which automatically puts him on your team.
@@ -196,16 +212,16 @@ export class LandingPageView extends PureComponent {
           img={`${imageUrl}/background/${this.randomGamemode}.jpg`}
           className={classes.parallax}
         >
-          We currently support {arrayToText(gamemodeDisplays)}
+          We currently support {LandingPage.arrayToText(gamemodeDisplays)}
         </Parallax>
 
         <LandingPageSection
+          imgSrc={`${imageUrl}/steam_large_noborder.png`}
+          imagePosition="right"
           imgProps={{
-            src: `${imageUrl}/steam_large_noborder.png`,
             className: classes.steamButton,
             onClick: this.redirectToSteamAuth,
           }}
-          imagePosition="right"
         >
           To start playing, simply login with your Steam account
         </LandingPageSection>
@@ -216,4 +232,4 @@ export class LandingPageView extends PureComponent {
   }
 }
 
-export default injectSheet(LandingPageView.styles)(LandingPageView);
+export default injectSheet(LandingPage.styles)(LandingPage);

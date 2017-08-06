@@ -6,6 +6,10 @@ import webpack from 'webpack';
 
 import config from '../../webpack.config';
 
+/**
+ * Set up the client code.
+ * Either add the webpack dev middleware or host the client code.
+ */
 export default function client() {
   const that = this;
 

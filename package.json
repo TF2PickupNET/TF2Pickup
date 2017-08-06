@@ -4,9 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start-client": "node start-client",
-    "start-server": "NODE_ENV=\"development\" babel-node src/server",
-    "lint": "eslint src/"
+    "start": "NODE_ENV=\"development\" babel-node src/server",
+    "lint": "eslint src/ --ext js,jsx"
   },
   "dependencies": {
     "@tf2-pickup/configs": "1.0.0",
@@ -32,7 +31,7 @@
     "history": "4.6.3",
     "is_js": "0.9.0",
     "js-cookie": "2.1.4",
-    "jss": "8.1.0",
+    "jss": "9.0.0-pre",
     "jstz": "1.0.10",
     "lockr": "0.8.4",
     "lodash.capitalize": "^4.2.1",
@@ -43,7 +42,7 @@
     "mdi": "2.0.46",
     "moment": "2.18.1",
     "moment-timezone": "0.5.13",
-    "mongoose": "4.11.4",
+    "mongoose": "4.11.5",
     "ms": "2.0.0",
     "normalize.css": "7.0.0",
     "passport-steam": "1.0.8",
@@ -60,20 +59,20 @@
     "socket.io-client": "2.0.3",
     "steamcommunity": "3.31.0",
     "steamid": "1.1.0",
-    "uws": "8.14.0"
+    "uws": "8.14.1"
   },
   "devDependencies": {
     "@tf2-pickup/babel-preset": "1.0.2",
-    "@tf2-pickup/eslint-config": "2.8.1",
+    "@tf2-pickup/eslint-config": "6.0.1",
     "babel-cli": "6.24.1",
     "babel-loader": "7.1.1",
     "css-loader": "0.28.4",
-    "eslint": "4.2.0",
+    "eslint": "4.3.0",
     "file-loader": "0.11.2",
-    "html-webpack-plugin": "2.29.0",
+    "html-webpack-plugin": "2.30.1",
     "redux-devtools-extension": "2.13.2",
     "style-loader": "0.18.2",
     "webpack": "3.4.1",
-    "webpack-dev-middleware": "1.11.0"
+    "webpack-dev-middleware": "1.12.0"
   }
 }

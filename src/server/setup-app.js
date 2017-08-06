@@ -6,11 +6,16 @@ import hooks from 'feathers-hooks';
 import rest from 'feathers-rest';
 import socketio from 'feathers-socketio';
 import handler from 'feathers-errors/handler';
-import authentication from './services/authentication/index';
 import services from './services';
 import globalHooks from './global-hooks';
 import client from './client';
 
+/**
+ * Setup the feathers app and configure all of the parts.
+ *
+ * @param {Object} config - The config with the env keys.
+ * @returns {JSX} - Returns the app.
+ */
 export default function setupApp(config) {
   const app = feathers();
 
@@ -35,7 +40,6 @@ export default function setupApp(config) {
 
   app
     .hooks(globalHooks)
-    .configure(authentication)
     .configure(services)
     .configure(client);
 
@@ -47,7 +51,7 @@ export default function setupApp(config) {
         environment: 'server',
       });
 
-      res.send('Something went wrong :(', JSON.stringify(error));
+      res.send(`Something went wrong :(', ${JSON.stringify(error.message)}`);
     },
   }));
 

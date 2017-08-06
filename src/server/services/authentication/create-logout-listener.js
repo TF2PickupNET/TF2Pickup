@@ -1,3 +1,9 @@
+/**
+ * Create a logout listener to set online to false and emit events.
+ *
+ * @param {Object} app - The feathers app object.
+ * @returns {Function} - The actual callback for the logout event.
+ */
 export default function createLogoutListener(app) {
   return async (payload, { connection }) => {
     const logs = app.service('logs');

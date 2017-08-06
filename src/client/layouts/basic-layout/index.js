@@ -5,7 +5,7 @@ import BasicLayout from './basic-layout';
 import { addNotification } from '../../redux/notifications/actions';
 
 /**
- * Pass a addNotification callback to the BasicLayout which will create a notification.
+ * Connect the BasicLayout with redux.
  *
  * @param {Function} dispatch - The dispatch function from redux.
  * @returns {Object} - Returns the props for the BasicLayout component.

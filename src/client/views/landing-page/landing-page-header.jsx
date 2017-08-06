@@ -3,21 +3,26 @@ import Chance from 'chance';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 import {
-  timings,
   colors,
   elevation,
   typography,
 } from 'materialize-react';
 
 import { Logo } from '../../icons';
-import { imageUrl } from '../../config';
+import {
+  imageUrl,
+  breakpoints,
+} from '../../config';
 
 const gamemode = new Chance().pickone(['bball', 'ultiduo']);
-const align = {
-  bball: 'flex-end',
-  ultiduo: 'flex-start',
-};
 
+/**
+ * The header for the Landing page.
+ *
+ * @param {Object} props - The props for the component.
+ * @param {Object} props.classes - Classes provided by Jss for the header.
+ * @returns {JSX} - Returns the headers JSX.
+ */
 function LandingPageHeader({ classes }) {
   return (
     <header className={classes.header}>
@@ -34,20 +39,21 @@ function LandingPageHeader({ classes }) {
   );
 }
 
-LandingPageHeader.propTypes = { classes: PropTypes.object.isRequired };
+LandingPageHeader.propTypes = {
+  classes: PropTypes.shape({
+    header: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    logo: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 LandingPageHeader.styles = {
-  '@keyframes header--fade-in': {
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-  },
-
   header: {
-    animation: `header--fade-in 500ms ${timings.easeInOutQuad}`,
+    composes: gamemode,
+    animationDelay: '250ms',
+    animation: 'fade-in-image 750ms',
     animationFillMode: 'forwards',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: align[gamemode],
     boxShadow: elevation(4),
     width: '100%',
     height: '75vh',
@@ -56,19 +62,53 @@ LandingPageHeader.styles = {
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     position: 'relative',
-    padding: '10% 20%',
+    padding: '10% 5%',
     boxSizing: 'border-box',
     opacity: 0,
+    flexDirection: 'column',
+
+    '&.bball': {
+      alignItems: 'flex-end',
+      justifyContent: 'center',
+    },
+
+    '&.ultiduo': {
+      alignItems: 'flex-start',
+      justifyContent: 'flex-start',
+    },
+
+    [breakpoints.getQuery('medium')]: { padding: '10% 15%' },
+
+    [breakpoints.getQuery('large')]: {
+      padding: '10% 15%',
+      flexDirection: 'row',
+
+      '&.bball': {
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+      },
+
+      '&.ultiduo': {
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+      },
+
+      '& svg': { margin: 0 },
+    },
   },
 
   title: {
     ...typography.display3,
-    padding: 10,
     color: colors.grey200,
     fontSize: 80,
+    lineHeight: '160px',
+    padding: '0 15px',
   },
 
-  logo: { height: 160 },
+  logo: {
+    height: 160,
+    margin: '0 75px',
+  },
 };
 
 export default injectSheet(LandingPageHeader.styles)(LandingPageHeader);

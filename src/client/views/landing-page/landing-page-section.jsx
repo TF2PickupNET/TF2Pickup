@@ -3,6 +3,19 @@ import injectSheet from 'react-jss';
 import { typography } from 'materialize-react';
 import PropTypes from 'prop-types';
 
+import { breakpoints } from '../../config';
+
+/**
+ * A section for the Landing page with an image an some text.
+ *
+ * @param {Object} props - The props for the section.
+ * @param {Object} props.classes - Classes provided by Jss for the component.
+ * @param {String} props.imgSrc - The image source.
+ * @param {Object} props.imgProps - Additional props for the image element.
+ * @param {JSX} props.children - The text for the component.
+ * @param {String} props.imagePosition - The position for the image. Either left or right.
+ * @returns {JSX} - Returns the JSX.
+ */
 function LandingPageSection({
   classes,
   imgSrc,
@@ -14,25 +27,28 @@ function LandingPageSection({
 
   return (
     <section className={`${classes.section} ${imgPositionClass}`}>
+      <span className={classes.text}>
+        {children}
+      </span>
+
       <img
         alt="presentation"
         src={imgSrc}
         {...imgProps}
       />
-
-      <span className={classes.text}>
-        {children}
-      </span>
     </section>
   );
 }
 
 LandingPageSection.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.shape({
+    section: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
+  }).isRequired,
   imgSrc: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
   imagePosition: PropTypes.oneOf(['left', 'right']).isRequired,
-  imgProps: PropTypes.object,
+  imgProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 LandingPageSection.defaultProps = { imgProps: {} };
@@ -41,20 +57,19 @@ LandingPageSection.styles = (theme) => {
   return {
     section: {
       display: 'flex',
+      flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
       width: '100%',
       boxSizing: 'border-box',
       padding: '80px 15%',
-      overflowX: 'hidden',
 
-      '&.image-left': { flexDirection: 'row-reverse' },
+      '&.image-left': { flexDirection: 'column-reverse' },
 
-      '&.image-left $text': {
-        borderLeft: 0,
-        marginLeft: 0,
-        borderRight: `solid 1px ${theme.divider.backgroundColor}`,
-        marginRight: 40,
+      [breakpoints.getQuery('large')]: {
+        flexDirection: 'row',
+
+        '&.image-left': { flexDirection: 'row-reverse' },
       },
     },
 
@@ -62,8 +77,7 @@ LandingPageSection.styles = (theme) => {
       ...typography.display1,
       padding: 40,
       textAlign: 'center',
-      borderLeft: `solid 1px ${theme.divider.backgroundColor}`,
-      marginLeft: 40,
+      borderColor: theme.divider.backgroundColor,
     },
   };
 };

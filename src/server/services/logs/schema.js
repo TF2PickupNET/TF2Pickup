@@ -20,7 +20,7 @@ export default new Schema({
 
   environment: {
     type: String,
-    validate: isInArray(['client', 'server']),
+    validate: isInArray(['client', 'server'], {}),
     required: [true, 'The environment is required in the logs database!'],
   },
 

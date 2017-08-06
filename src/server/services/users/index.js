@@ -5,6 +5,9 @@ import schema from './schema';
 import hooks from './hooks';
 import filters from './filters';
 
+/**
+ * Setup the users service.
+ */
 export default function users() {
   const that = this;
 

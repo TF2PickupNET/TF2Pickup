@@ -1,6 +1,5 @@
 import merge from 'lodash.merge';
 import SteamCommunity from 'steamcommunity';
-import promisify from 'es6-promisify';
 
 import getUserData from './third-party-services';
 import { inviteToSteamGroup } from '../../../config/steam';
@@ -22,7 +21,6 @@ export default {
   after: {
     async create(props) {
       const logs = props.app.service('logs');
-      const promise = promisify(community.inviteUserToGroup, community);
 
       await logs.create({
         message: 'Created a new user',
@@ -30,7 +28,11 @@ export default {
         steamId: props.data.id,
       });
 
-      await promise(props.data.id, inviteToSteamGroup);
+      await new Promise((resolve) => {
+        community.inviteUserToGroup(props.data.id, inviteToSteamGroup, () => {
+          resolve();
+        });
+      });
 
       return props;
     },

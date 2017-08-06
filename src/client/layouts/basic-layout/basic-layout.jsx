@@ -4,6 +4,7 @@ import cookie from 'js-cookie';
 import {
   Theme,
   Background,
+  Animations,
 } from 'materialize-react';
 
 import app from '../../app';
@@ -19,10 +20,6 @@ export default class BasicLayout extends PureComponent {
     children: PropTypes.node.isRequired,
     addNotification: PropTypes.func.isRequired,
   };
-
-  static minWidthView = 1200;
-
-  state = { browserWidth: window.innerWidth };
 
   /**
    * Tries to login with the token from the cookies.
@@ -44,40 +41,13 @@ export default class BasicLayout extends PureComponent {
     }
   }
 
-  /**
-   * Add an event handler to the resize event so we can update the state when the user changes
-   * the windows size.
-   */
-  componentDidMount() {
-    window.addEventListener('resize', this.handleResize);
-  }
-
-  /**
-   * Remove the event listener in case this component unmounts.
-   */
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
-  }
-
-  /**
-   * Change the state when the browser resizes.
-   */
-  handleResize = () => {
-    this.setState({ browserWidth: window.innerWidth });
-  };
-
   render() {
-    const content = this.state.browserWidth < BasicLayout.minWidthView ? (
-      <div>
-        Your browser is to small
-        <br /> Your browser needs to be atleast {BasicLayout.minWidthView}px wide.
-      </div>
-    ) : this.props.children;
-
     return (
       <Theme>
         <Background>
-          {content}
+          <Animations />
+
+          {this.props.children}
         </Background>
       </Theme>
     );

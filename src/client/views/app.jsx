@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-no-bind */
+
 import React, { PureComponent } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
@@ -6,41 +8,57 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Provider } from 'react-redux';
 
-import BasicLayout from '../layouts/basic-layout/index';
-import LandingPageView from './landing-page/index';
 import { titleSuffix } from '../config';
+import BasicLayout from '../layouts/basic-layout';
+import LandingPage from './landing-page';
+import RedirectToPickup from './pickup/redirect-to-pickup';
 
+/**
+ * The main component.
+ *
+ * @class
+ */
 export default class App extends PureComponent {
+  // eslint-disable-next-line react/forbid-prop-types
   static propTypes = { app: PropTypes.object.isRequired };
 
-  state = { location: this.props.app.history.location };
-
-  componentWillMount() {
-    this.props.app.history.listen(() => {
-      this.setState({ location: this.props.app.history.location });
-    });
-  }
-
-  renderGamemodeRoutes() {
+  /**
+   * Render all of the gamemode routes and their corresponding aliases.
+   *
+   * @returns {JSX} - Returns the routes for the gamemodes.
+   */
+  static renderGamemodeRoutes() {
     return Object
       .values(gamemodes)
       .reduce((current, gamemode) => {
-        const aliasRoutes = gamemode.aliases.map(alias => (
+        const routes = gamemode.aliases.map(alias => (
           <Route
             path={`/${alias}`}
             key={`${gamemode.name}-${alias}`}
+            render={() => <RedirectToPickup to={`/${gamemode.name}`} />}
           />
         ));
 
-        aliasRoutes.push((
+        routes.push((
           <Route
             path={`/${gamemode.name}`}
             key={gamemode.name}
           />
         ));
 
-        return current.concat(aliasRoutes);
+        return current.concat(routes);
       }, []);
+  }
+
+  state = { location: this.props.app.history.location };
+
+  /**
+   * Listen for changes in the url.
+   */
+  componentWillMount() {
+    this.props.app.history.listen(() => {
+      this.setState({ location: this.props.app.history.location });
+    });
   }
 
   render() {
@@ -55,10 +73,10 @@ export default class App extends PureComponent {
                 strict
                 exact
                 path="/"
-                component={LandingPageView}
+                component={LandingPage}
               />
 
-              {this.renderGamemodeRoutes()}
+              {App.renderGamemodeRoutes()}
 
               <Route
                 exact

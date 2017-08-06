@@ -3,6 +3,12 @@ const gamemodeNames = {
   Highlander: '9v9',
 };
 
+/**
+ * ETF2L has different gamemode names which means that we have to transform them.
+ *
+ * @param {String} gamemode - The name of the gamemode of etf2l.
+ * @returns {String} - Either returns the initial passed gamemode name or the transformed name.
+ */
 export function transformGamemode(gamemode) {
   return gamemodeNames[gamemode] || gamemode;
 }

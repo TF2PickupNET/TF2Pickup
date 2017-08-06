@@ -1,26 +1,35 @@
-import steamApi from './steam-api';
+import createSteamApi from './create-steam-api';
 
-export default async function updateSteamUser(id, app) {
+/**
+ * Get the users data from steam.
+ *
+ * @param {String} id - The steam id of the user.
+ * @param {Object} app - The feathers app.
+ * @returns {Object} - Returns the data from steam.
+ */
+export default async function getSteamData(id, app) {
   let player = {};
+  const api = createSteamApi();
 
   try {
     const params = { steamids: id };
-    const result = await steamApi.get('ISteamUser/GetPlayerSummaries/v0002/', { params });
+    const result = await api.get('ISteamUser/GetPlayerSummaries/v0002/', { params });
 
     player = result.data.response.players[0];
   } catch (error) {
-    return app.service('logs').create({
+    app.service('logs').create({
       message: 'Error while updating steam info',
       environment: 'server',
       info: error,
       steamId: id,
     });
+
+    return {};
   }
 
   const profileUrl = player.profileurl.match(/http:\/\/steamcommunity.com\/id\/(\w+\d+)/);
 
   return {
-    isInGame: player.gameid === '440',
     services: {
       steam: {
         customUrl: profileUrl[1],

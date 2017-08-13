@@ -16,6 +16,19 @@ export default async function getSteamData(id, app) {
     const result = await api.get('ISteamUser/GetPlayerSummaries/v0002/', { params });
 
     player = result.data.response.players[0];
+
+    return {
+      services: {
+        steam: {
+          customUrl: player.profileurl,
+          avatar: {
+            small: player.avatar,
+            medium: player.avatarmedium,
+            large: player.avatarfull,
+          },
+        },
+      },
+    };
   } catch (error) {
     app.service('logs').create({
       message: 'Error while updating steam info',
@@ -26,19 +39,4 @@ export default async function getSteamData(id, app) {
 
     return {};
   }
-
-  const profileUrl = player.profileurl.match(/http:\/\/steamcommunity.com\/id\/(\w+\d+)/);
-
-  return {
-    services: {
-      steam: {
-        customUrl: profileUrl[1],
-        avatar: {
-          small: player.avatar,
-          medium: player.avatarmedium,
-          large: player.avatarfull,
-        },
-      },
-    },
-  };
 }

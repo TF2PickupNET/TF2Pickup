@@ -16,13 +16,19 @@ export default function setupListeners(app) {
   const users = app.service('users');
 
   app.on('authenticated', async ({ accessToken }) => {
+    console.log(accessToken);
+
     const verifiedToken = await app.passport.verifyJWT(accessToken);
+
+    console.log(verifiedToken);
 
     cookie.set('feathers-jwt', accessToken);
 
     app.set('userId', verifiedToken.id);
 
     const user = await users.get(verifiedToken.id);
+
+    console.log(user);
 
     app.store.dispatch(loginUser(user));
   });

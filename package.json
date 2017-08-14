@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "DEBUG=\"feathers*\" NODE_ENV=\"development\" babel-node src/server",
+    "start": "NODE_ENV=\"development\" babel-node src/server",
     "start2": "babel-node src/server",
     "lint": "eslint src/ --ext js,jsx"
   },

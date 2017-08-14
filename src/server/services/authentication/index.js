@@ -25,12 +25,8 @@ class JWTVerifier extends Verifier {
    * @returns {Promise} - Returns the called done function.
    */
   async verify(req, payload, done) {
-    console.log('Verify JWT token', payload);
-
     try {
       const user = await this.app.service('users').get(payload.id);
-
-      console.log('Verified user: ', user);
 
       return done(null, user, { id: user.id });
     } catch (error) {
@@ -50,11 +46,7 @@ export default function authentication() {
       enabled: true,
       name: 'feathers-jwt',
     },
-    jwt: {
-      audience: 'https://tf2pickup.net',
-      issuer: 'tf2pickup',
-      expiresIn: '7d',
-    },
+    jwt: { expiresIn: '7d' },
   };
 
   that.configure(auth(options));
@@ -68,9 +60,8 @@ export default function authentication() {
     }, async (identifier, profile, done) => {
       const [, id] = identifier.match(/https?:\/\/steamcommunity\.com\/openid\/id\/(\d+)/);
       const usersService = that.service('users');
-      const users = await usersService.find({ id });
-
-      console.log(id);
+      const query = { id };
+      const users = await usersService.find(query);
 
       // Return the user if exactly one was found and if more than were found return an error
       if (users.length === 1) {
@@ -97,7 +88,7 @@ export default function authentication() {
           }
         }
 
-        const newUser = await usersService.create({ id });
+        const newUser = await usersService.create(query);
 
         return done(null, newUser);
       } catch (error) {
@@ -121,8 +112,6 @@ export default function authentication() {
     async (req, res, next) => {
       // Create a new jwt token
       const token = await req.app.passport.createJWT({ id: req.user.id }, that.get('auth'));
-
-      console.log('Created new JWT', token);
 
       // Set the new jwt token as a cookie
       res.cookie(options.cookie.name, token, { maxAge: ms(options.jwt.expiresIn) });

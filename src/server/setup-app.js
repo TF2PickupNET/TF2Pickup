@@ -22,7 +22,7 @@ export default function setupApp(config) {
   app.set('config', config);
 
   mongoose.Promise = global.Promise;
-  mongoose.connect(config.MONGO_URL);
+  mongoose.connect(config.MONGO_URL, { useMongoClient: true });
 
   app
     .options('*', cors())

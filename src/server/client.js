@@ -21,7 +21,7 @@ export default function client() {
     const compiler = webpack(config);
 
     that.use(webpackDevMiddleware(compiler, {
-      noInfo: true,
+      noInfo: false,
       stats: { colors: true },
     }));
   } else {

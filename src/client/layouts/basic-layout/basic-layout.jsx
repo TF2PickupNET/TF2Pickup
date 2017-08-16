@@ -27,16 +27,12 @@ export default class BasicLayout extends PureComponent {
   async componentWillMount() {
     const token = cookie.get('feathers-jwt');
 
-    console.log(token);
-
     if (token) {
       try {
-        const res = await app.authenticate({
+        await app.authenticate({
           strategy: 'jwt',
           accessToken: token,
         });
-
-        console.log(res);
       } catch (error) {
         this.props.addNotification(
           `Something went wrong while trying to authenticate! Error: ${error.message}`,

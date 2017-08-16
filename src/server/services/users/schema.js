@@ -107,6 +107,19 @@ export default new Schema({
       div6v6: etf2lDivSchema('6v6'),
       div9v9: etf2lDivSchema('9v9'),
     },
+
+    ozfortress: {
+      id: Number,
+      name: String,
+      div6v6: {
+        type: String,
+        validate: isInArray(['Premier', 'Intermediate', 'Open'], {
+          msg: '{VALUE} is not a valid ozfortress division',
+          nullIsAllowed: true,
+        }),
+        default: null,
+      },
+    },
   },
 
   friends: {

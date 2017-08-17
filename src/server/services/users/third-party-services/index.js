@@ -2,7 +2,7 @@
 
 import merge from 'lodash.merge';
 
-import updateETF2LData from './etf2l/update-etf2l-data';
+import getETF2LData from './etf2l/get-etf2l-data';
 import getSteamData from './steam/get-steam-data';
 import getSteamFriends from './steam/get-steam-friends';
 import getVACBans from './steam/get-vac-bans';
@@ -22,7 +22,7 @@ export default async function getUserData(steamId, oneDaySinceLastUpdate, app) {
     getSteamData(steamId, app),
     getVACBans(steamId, app),
     getTF2Hours(steamId, app, oneDaySinceLastUpdate),
-    updateETF2LData(steamId, app, oneDaySinceLastUpdate),
+    getETF2LData(steamId, app, oneDaySinceLastUpdate),
     getSteamFriends(steamId, app, oneDaySinceLastUpdate),
     getOZFortressUserData(steamId, app),
   ];

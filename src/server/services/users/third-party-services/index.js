@@ -29,8 +29,6 @@ export default async function getUserData(steamId, oneDaySinceLastUpdate, app) {
 
   const newData = await Promise.all(methods);
 
-  console.log(newData);
-
   return newData
     .concat(oneDaySinceLastUpdate ? { lastUpdate: new Date() } : {})
     .reduce((current, data) => merge({}, current, data), {});

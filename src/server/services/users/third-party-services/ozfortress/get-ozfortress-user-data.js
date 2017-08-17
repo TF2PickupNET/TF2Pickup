@@ -1,5 +1,30 @@
 import axios from 'axios';
 
+const divs = [
+  null,
+  'Open',
+  'Intermediate',
+  'Premier',
+];
+
+/**
+ * Find the highest division the user has played in.
+ * Though this only means that the user was on them team while the team played in the division.
+ *
+ * @param {Object[]} rosters - The roasters the user played in.
+ * @returns {String} - Returns the highest played division.
+ */
+function findHighestDiv(rosters) {
+  return rosters
+    .map(roster => roster.division)
+    .reduce((highestDiv, currentDiv) => {
+      const highestDivIndex = divs.findIndex(div => div === highestDiv);
+      const currentDivIndex = divs.findIndex(div => div === currentDiv);
+
+      return highestDivIndex < currentDivIndex ? currentDiv : highestDiv;
+    }, null);
+}
+
 /**
  * Get the data for the user from ozfortress.
  *
@@ -9,13 +34,26 @@ import axios from 'axios';
  */
 export default async function getOzfortressUserData(id, app) {
   try {
-    await axios.get(
-      `https://warzone.ozfortress.com//users/steam_id/${id}`,
-      { headers: { 'X-API-Key': '' } },
+    const result = await axios.get(
+      `https://warzone.ozfortress.com/api/v1/users/steam_id/${id}`,
+      { headers: { 'X-API-Key': process.env.OZFORTRESS_API_KEY } },
     );
+    const player = result.data.user;
 
-    return {};
+    return {
+      services: {
+        ozfortress: {
+          id: player.id,
+          name: player.name,
+          div6v6: findHighestDiv(player.rosters),
+        },
+      },
+    };
   } catch (error) {
+    if (error.response.status === 404) {
+      return {};
+    }
+
     app.service('logs').create({
       message: 'Error while updating ETF2L player data',
       environment: 'server',

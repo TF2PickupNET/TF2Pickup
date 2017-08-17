@@ -71,22 +71,24 @@ function isMatchValid(match) {
  *
  * @param {String} id - The users steam id.
  * @param {Object} app - The feathers app.
- * @param {Date} oneDaySinceLastUpdate - Whether or not we should update the divisions.
+ * @param {Boolean} oneDaySinceLastUpdate - Whether or not we should update the divisions.
  * We only want to do this once a day.
  * @returns {Object} - Returns the updated data.
  */
-export default async function updateETF2LData(id, app, oneDaySinceLastUpdate) {
+export default async function getETF2LData(id, app, oneDaySinceLastUpdate) {
   let player = null;
 
   try {
     player = await getPlayerData(id);
   } catch (error) {
-    return app.service('logs').create({
+    app.service('logs').create({
       message: 'Error while updating ETF2L player data',
       environment: 'server',
       info: error,
       steamId: id,
     });
+
+    return {};
   }
 
   const result = {
@@ -97,45 +99,6 @@ export default async function updateETF2LData(id, app, oneDaySinceLastUpdate) {
       },
     },
   };
-
-  if (oneDaySinceLastUpdate) {
-    let matches = [];
-
-    try {
-      matches = await getMatches(player.id);
-    } catch (error) {
-      app.service('logs').create({
-        message: 'Error while updating ETF2L divisions',
-        environment: 'server',
-        info: error,
-        steamId: id,
-      });
-    }
-
-    matches
-      .map(addGamemodeToMatch)
-      .filter(isMatchValid)
-      .forEach(({
-        gamemode,
-        division: { name },
-      }) => {
-        const key = `div${gamemode}`;
-        const currentLevel = divs.indexOf(result.services.etf2l[key]) || 0;
-        let divName = name;
-
-        if (name !== null && name.startsWith('Division')) {
-          const divLevel = name.split(' ')[1].charAt(0);
-
-          divName = oldDivsToNewDivs[divLevel];
-        }
-
-        const level = divs.indexOf(divName);
-
-        if (currentLevel < level) {
-          result.services.etf2l[key] = divName;
-        }
-      });
-  }
 
   if (player.bans !== null) {
     player.bans.forEach((ban) => {
@@ -148,6 +111,43 @@ export default async function updateETF2LData(id, app, oneDaySinceLastUpdate) {
         result.services.etf2l.banExpiry = end;
       }
     });
+  }
+
+  if (oneDaySinceLastUpdate) {
+    try {
+      const matches = await getMatches(player.id);
+
+      matches
+        .map(addGamemodeToMatch)
+        .filter(isMatchValid)
+        .forEach(({
+          gamemode,
+          division: { name },
+        }) => {
+          const key = `div${gamemode}`;
+          const currentLevel = divs.indexOf(result.services.etf2l[key]) || 0;
+          let divName = name;
+
+          if (name !== null && name.startsWith('Division')) {
+            const divLevel = name.split(' ')[1].charAt(0);
+
+            divName = oldDivsToNewDivs[divLevel];
+          }
+
+          const level = divs.indexOf(divName);
+
+          if (currentLevel < level) {
+            result.services.etf2l[key] = divName;
+          }
+        });
+    } catch (error) {
+      app.service('logs').create({
+        message: 'Error while updating ETF2L divisions',
+        environment: 'server',
+        info: error,
+        steamId: id,
+      });
+    }
   }
 
   return result;

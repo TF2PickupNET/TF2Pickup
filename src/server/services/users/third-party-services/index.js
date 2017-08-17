@@ -7,6 +7,7 @@ import getSteamData from './steam/get-steam-data';
 import getSteamFriends from './steam/get-steam-friends';
 import getVACBans from './steam/get-vac-bans';
 import getTF2Hours from './steam/get-tf2-hours';
+import getOZFortressUserData from './ozfortress/get-ozfortress-user-data';
 
 /**
  * Get all of the updated user data.
@@ -23,9 +24,12 @@ export default async function getUserData(steamId, oneDaySinceLastUpdate, app) {
     getTF2Hours(steamId, app, oneDaySinceLastUpdate),
     updateETF2LData(steamId, app, oneDaySinceLastUpdate),
     getSteamFriends(steamId, app, oneDaySinceLastUpdate),
+    getOZFortressUserData(steamId, app),
   ];
 
   const newData = await Promise.all(methods);
+
+  console.log(newData);
 
   return newData
     .concat(oneDaySinceLastUpdate ? { lastUpdate: new Date() } : {})

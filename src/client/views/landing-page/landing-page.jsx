@@ -50,13 +50,12 @@ export class LandingPage extends PureComponent {
 
   static styles = {
     image: {
-      borderRadius: 3,
+      borderRadius: 4,
       boxShadow: elevation(4),
 
       '&.serve-me': {
         width: 300,
         height: 300,
-        borderRadius: '50%',
       },
     },
 
@@ -96,8 +95,9 @@ export class LandingPage extends PureComponent {
       boxSizing: 'border-box',
       height: 400,
       padding: '50px 15%',
+      textAlign: 'center',
 
-      '& .parallax--image': { filter: 'blur(5px)' },
+      '& .parallax--image': { filter: 'blur(8px)' },
     },
 
     steamButton: {
@@ -168,10 +168,9 @@ export class LandingPage extends PureComponent {
           imagePosition="right"
           imgProps={{ className: classes.image }}
         >
-          High Quality Pugs without worrying about anything.
-          <br />
-          Simply join and we will take care of everything, <br />
-          from servers to setting the right config.
+          High Quality Team Fortress 2 Pickup Games <br />
+          Sign up with your Steam account, join your preferred game modes, <br />
+          pick your best/favorite class, we will take care of the rest!
         </LandingPageSection>
 
         <Divider className={classes.divider} />
@@ -181,10 +180,7 @@ export class LandingPage extends PureComponent {
           imagePosition="left"
           imgProps={{ className: `${classes.image} serve-me` }}
         >
-          Servers are graciously provided by <Link href="http://serveme.tf">serveme.tf</Link>
-          <br />
-          This means no bad servers <br />
-          like in the old days of TF2Pickup.
+          Powerful American & European Team Fortress 2 servers provided by <Link href="http://serveme.tf">serveme.tf</Link>
         </LandingPageSection>
 
         <section className={classes.regionContainer}>
@@ -195,7 +191,7 @@ export class LandingPage extends PureComponent {
           />
 
           <div className={classes.regionText}>
-            We currently support {LandingPage.arrayToText(regionDisplays)}
+            Currently available in the following regions: <br /> {LandingPage.arrayToText(regionDisplays)}
           </div>
         </section>
 
@@ -204,15 +200,16 @@ export class LandingPage extends PureComponent {
           imagePosition="left"
           imgProps={{ className: classes.image }}
         >
-          As a medic you can pick one of the players as your buddy,
-          <br /> which automatically puts him on your team.
+          Buddy system: pick someone as your buddy
+          <br /> and there is a high chance you will end up with that player on your team!
         </LandingPageSection>
 
         <Parallax
           img={`${imageUrl}/background/${this.randomGamemode}.jpg`}
           className={classes.parallax}
         >
-          We currently support {LandingPage.arrayToText(gamemodeDisplays)}
+          Supporting a wide variety of popular competitive formats: <br />
+          {LandingPage.arrayToText(gamemodeDisplays)}
         </Parallax>
 
         <LandingPageSection

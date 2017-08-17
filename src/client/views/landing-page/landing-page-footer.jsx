@@ -119,7 +119,7 @@ class LandingPageFooter extends PureComponent {
     return (
       <footer className={classes.footer}>
         <div className={classes.socialMediaHeader}>
-          Check us out on our Social Media!
+          You can also find TF2Pickup.net here
         </div>
 
         <div className={classes.container}>

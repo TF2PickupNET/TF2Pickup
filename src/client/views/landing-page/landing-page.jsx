@@ -96,6 +96,7 @@ export class LandingPage extends PureComponent {
       height: 400,
       padding: '50px 15%',
       textAlign: 'center',
+      textShadow: `0 2px 3px ${colors.blackSecondaryText}`,
 
       '& .parallax--image': { filter: 'blur(8px)' },
     },
@@ -191,7 +192,8 @@ export class LandingPage extends PureComponent {
           />
 
           <div className={classes.regionText}>
-            Currently available in the following regions: <br /> {LandingPage.arrayToText(regionDisplays)}
+            Currently available in the following regions: <br />
+            {LandingPage.arrayToText(regionDisplays)}
           </div>
         </section>
 

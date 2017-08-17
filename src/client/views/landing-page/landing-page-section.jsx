@@ -1,9 +1,10 @@
 import React from 'react';
 import injectSheet from 'react-jss';
-import { typography } from 'materialize-react';
+import {
+  typography,
+  breakpoints,
+} from 'materialize-react';
 import PropTypes from 'prop-types';
-
-import { breakpoints } from '../../config';
 
 /**
  * A section for the Landing page with an image an some text.
@@ -66,7 +67,7 @@ LandingPageSection.styles = (theme) => {
 
       '&.image-left': { flexDirection: 'column-reverse' },
 
-      [breakpoints.getQuery('large')]: {
+      [breakpoints.up('desktop')]: {
         flexDirection: 'row',
 
         '&.image-left': { flexDirection: 'row-reverse' },

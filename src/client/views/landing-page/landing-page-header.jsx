@@ -6,13 +6,11 @@ import {
   colors,
   elevation,
   typography,
+  breakpoints,
 } from 'materialize-react';
 
 import { Logo } from '../../icons';
-import {
-  imageUrl,
-  breakpoints,
-} from '../../config';
+import { imageUrl } from '../../config';
 
 const gamemode = new Chance().pickone(['bball', 'ultiduo']);
 
@@ -77,9 +75,9 @@ LandingPageHeader.styles = {
       justifyContent: 'flex-start',
     },
 
-    [breakpoints.getQuery('medium')]: { padding: '10% 15%' },
+    [breakpoints.only('tablet')]: { padding: '10% 15%' },
 
-    [breakpoints.getQuery('large')]: {
+    [breakpoints.only('desktop')]: {
       padding: '10% 15%',
       flexDirection: 'row',
 

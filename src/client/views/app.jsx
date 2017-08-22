@@ -12,6 +12,7 @@ import { titleSuffix } from '../config';
 import BasicLayout from '../layouts/basic-layout';
 import LandingPage from './landing-page';
 import RedirectToPickup from './pickup/redirect-to-pickup';
+import MainLayout from '../layouts/main-layout';
 
 /**
  * The main component.
@@ -81,11 +82,21 @@ export default class App extends PureComponent {
               <Route
                 exact
                 path="/about"
+                render={() => (
+                  <MainLayout>
+                    <Helmet title="About" />
+                  </MainLayout>
+                )}
               />
 
               <Route
                 exact
                 path="/help"
+                render={() => (
+                  <MainLayout>
+                    <Helmet title="Help" />
+                  </MainLayout>
+                )}
               />
 
               <Route

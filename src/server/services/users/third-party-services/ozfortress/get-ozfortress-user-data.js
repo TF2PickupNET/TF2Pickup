@@ -50,12 +50,12 @@ export default async function getOzfortressUserData(id, app) {
       },
     };
   } catch (error) {
-    if (error.response.status === 404) {
+    if (error.response && error.response.status === 404) {
       return {};
     }
 
     app.service('logs').create({
-      message: 'Error while updating ETF2L player data',
+      message: 'Error while updating ozfortress player data',
       environment: 'server',
       info: error,
       steamId: id,

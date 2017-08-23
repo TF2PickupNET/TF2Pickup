@@ -12,8 +12,8 @@ import { addNotification } from '../../redux/notifications/actions';
  */
 function mapDispatchToProps(dispatch) {
   return {
-    addNotification(text, timeout = '30s') {
-      return dispatch(addNotification(text, timeout));
+    addNotification(text) {
+      return dispatch(addNotification(text));
     },
   };
 }

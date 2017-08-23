@@ -155,13 +155,13 @@ export default new Schema({
       },
       default: 0.7,
     },
+  },
 
-    username: {
-      type: String,
-      default: null,
-      unique: true,
-      trim: true,
-    },
+  name: {
+    type: String,
+    default: null,
+    unique: true,
+    trim: true,
   },
 
   lastUpdate: {

@@ -52,6 +52,8 @@ export default function authentication() {
   that.configure(auth(options));
   that.configure(jwt({ Verifier: JWTVerifier }));
 
+  that.service('authentication').hooks({ before: { create: auth.hooks.authenticate(['jwt']) } });
+
   that.passport.use(
     new SteamStrategy({
       returnURL: `${that.get('config').url}${authUrl}/return`,
@@ -75,7 +77,7 @@ export default function authentication() {
 
       // Create a new user when no user was found
       try {
-        if (validateUsersAgainstSteamGroup && that.get('config').env === 'prod') {
+        if (process.env.BETA_MODE && that.get('config').env === 'prod') {
           const groupMembers = await getGroupMembers(validateUsersAgainstSteamGroup, that);
 
           if (!groupMembers.includes(id)) {

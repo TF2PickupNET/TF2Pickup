@@ -1,4 +1,6 @@
 import randomString from 'randomstring';
+import ms from 'ms';
+
 import {
   ADD_NOTIFICATION,
   REMOVE_NOTIFICATION,
@@ -8,17 +10,22 @@ import {
  * Create a notification action object to add a notification to the store.
  *
  * @param {String} text - The string for the notification.
- * @param {Number} [timeout] - The timeout after which the notification should disappear.
+ * @param {Object} options - Additional options for the notification.
+ * @param {String} [options.id] - A custom id to use rather than a randomly generated.
+ * @param {String} [options.timeout] - A custom timeout to close the snackbar after.
  * @returns {Object} - Returns the action object.
  */
-export function addNotification(text, timeout = null) {
+export function addNotification(text, {
+  id = randomString.generate(),
+  timeout = '10s',
+} = {}) {
   return {
     type: ADD_NOTIFICATION,
     payload: {
       notification: {
-        id: randomString.generate(),
+        id,
         text,
-        timeout,
+        timeout: ms(timeout),
       },
     },
   };

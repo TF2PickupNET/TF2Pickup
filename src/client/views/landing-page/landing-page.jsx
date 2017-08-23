@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Chance from 'chance';
+import randomItem from 'random-item';
 import lockr from 'lockr';
 import Helmet from 'react-helmet';
 import injectSheet from 'react-jss';
@@ -27,7 +27,6 @@ import Link from '../../components/link';
 
 const gamemodeDisplays = Object.values(gamemodes).map(gamemode => gamemode.display);
 const regionDisplays = Object.values(regions).map(region => region.fullName);
-const chance = new Chance();
 
 /**
  * Main component for the Landing Page.
@@ -136,8 +135,8 @@ export class LandingPage extends PureComponent {
     app.removeListener('authenticated', this.onLogin);
   }
 
-  randomGamemode = chance.pickone(['6v6', '9v9']);
-  randomRegion = chance.pickone(Object.keys(regions));
+  randomGamemode = randomItem(['6v6', '9v9']);
+  randomRegion = randomItem(Object.keys(regions));
 
   /**
    * Redirect the user to the steam login page.

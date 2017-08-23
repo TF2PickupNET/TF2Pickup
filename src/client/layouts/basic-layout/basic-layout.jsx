@@ -5,9 +5,12 @@ import {
   Theme,
   Background,
   Animations,
+  SnackbarController,
+  SnackbarContainer,
 } from 'materialize-react';
 
 import app from '../../app';
+import Notifications from '../../components/notifications';
 
 /**
  * Render a basic layout which will try login with the token from a cookie and make sure
@@ -44,11 +47,17 @@ export default class BasicLayout extends PureComponent {
   render() {
     return (
       <Theme>
-        <Background>
-          <Animations />
+        <SnackbarController>
+          <Background>
+            <SnackbarContainer />
 
-          {this.props.children}
-        </Background>
+            <Animations />
+
+            <Notifications />
+
+            {this.props.children}
+          </Background>
+        </SnackbarController>
       </Theme>
     );
   }

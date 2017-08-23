@@ -20,9 +20,10 @@ import { authUrl } from '../../../config';
 export class MainToolbar extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
-      container: PropTypes.string.isRequired,
+      row: PropTypes.string.isRequired,
       steamLoginImage: PropTypes.string.isRequired,
       avatar: PropTypes.string.isRequired,
+      rightContainer: PropTypes.string.isRequired,
     }).isRequired,
     user: PropTypes.shape({
       name: PropTypes.string.isRequired,
@@ -33,7 +34,7 @@ export class MainToolbar extends PureComponent {
   static defaultProps = { user: null };
 
   static styles = {
-    container: {
+    row: {
       composes: 'row',
       display: 'flex',
       justifyContent: 'space-between',
@@ -51,6 +52,11 @@ export class MainToolbar extends PureComponent {
       width: 48,
       borderRadius: '50%',
       marginLeft: 16,
+    },
+
+    rightContainer: {
+      display: 'flex',
+      alignItems: 'center',
     },
   };
 
@@ -103,10 +109,11 @@ export class MainToolbar extends PureComponent {
     const { user } = this.props;
 
     return (
-      <div>
-        <Typography typography="headline">{user.name}</Typography>
+      <div className={this.props.classes.rightContainer}>
+        <Typography typography="title">{user.name}</Typography>
 
         <img
+          className={this.props.classes.avatar}
           alt="avatar"
           src={user.services.steam.avatar.large}
         />
@@ -125,7 +132,7 @@ export class MainToolbar extends PureComponent {
       <Toolbar>
         <Helmet onChangeClientState={this.handleClientStateChange} />
 
-        <div className={classes.container}>
+        <div className={classes.row}>
           {title && <Typography typography="headline">{title}</Typography>}
 
           {user ? this.renderUserInfo() : this.renderLoginButton()}

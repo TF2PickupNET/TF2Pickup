@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import 'normalize.css';
 import 'mdi/css/materialdesignicons.min.css';
 

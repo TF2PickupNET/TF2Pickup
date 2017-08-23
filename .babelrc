@@ -1,3 +1,13 @@
 {
-  "presets": ["@tf2-pickup/babel-preset"]
+  "presets": [
+    ["env", {
+      "targets": { "node": 8 },
+      "debug": true
+    }]
+  ],
+  "plugins": [
+    "transform-class-properties",
+    "transform-export-extensions",
+    ["transform-object-rest-spread", { "useBuiltIns": true }]
+  ]
 }

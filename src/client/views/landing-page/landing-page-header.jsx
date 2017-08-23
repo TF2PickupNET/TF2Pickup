@@ -1,5 +1,5 @@
 import React from 'react';
-import Chance from 'chance';
+import randomItem from 'random-item';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 import {
@@ -12,7 +12,7 @@ import {
 import { Logo } from '../../icons';
 import { imageUrl } from '../../config';
 
-const gamemode = new Chance().pickone(['bball', 'ultiduo']);
+const gamemode = randomItem(['bball', 'ultiduo']);
 
 /**
  * The header for the Landing page.

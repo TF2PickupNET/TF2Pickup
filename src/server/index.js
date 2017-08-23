@@ -1,5 +1,3 @@
-import 'babel-polyfill';
-
 import dotenv from 'dotenv';
 import path from 'path';
 import setupApp from './setup-app';

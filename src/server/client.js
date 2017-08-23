@@ -37,5 +37,14 @@ export default function client() {
 
       next();
     });
+
+    // When the user requests a svg file, we serve the gzipped file to the user
+    that.get('*.svg', (req, res, next) => {
+      req.url += '.gz'; // eslint-disable-line no-param-reassign
+
+      res.set('Content-Encoding', 'gzip');
+
+      next();
+    });
   }
 }

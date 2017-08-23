@@ -13,8 +13,11 @@ module.exports = merge(common, {
   },
 
   plugins: common.plugins.concat([
+    // Launch the analyzer when we set the env variable 'analyze' to 'true'
     process.env.analyze ? new BundleAnalyzerPlugin() : () => {},
+    // Babel minify plugin
     new BabiliPlugin({}, { comments: false }),
+    // Set the node_env to production
     new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"production"' }),
 
     // Extract the node modules into it's own chunk
@@ -37,6 +40,7 @@ module.exports = merge(common, {
     }),
     new webpack.NamedModulesPlugin(),
 
+    // Create gzipped versions of html, js and svg files
     new CompressionPlugin({
       asset: '[path].gz[query]',
       algorithm: 'gzip',

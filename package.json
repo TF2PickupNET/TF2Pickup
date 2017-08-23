@@ -75,6 +75,7 @@
     "babel-cli": "6.26.0",
     "babel-loader": "7.1.2",
     "babili-webpack-plugin": "0.1.2",
+    "compression-webpack-plugin": "1.0.0",
     "css-loader": "0.28.5",
     "eslint": "4.5.0",
     "file-loader": "0.11.2",

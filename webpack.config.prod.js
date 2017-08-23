@@ -1,37 +1,48 @@
 const path = require('path');
 const webpack = require('webpack');
-const HTMLWebpackPlugin = require('html-webpack-plugin');
-const config = require('./webpack.common');
+const merge = require('lodash.merge');
+const common = require('./webpack.common');
 const BabiliPlugin = require('babili-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
-  template: path.resolve(__dirname, 'src/client/index.html'),
-  filename: 'index.html',
-  inject: 'body',
-});
-
-module.exports = {
-  entry: path.resolve(__dirname, 'src/client/index.js'),
+module.exports = merge(common, {
   output: {
     path: path.resolve(__dirname, 'dist/client'),
-    filename: 'bundle.[chunkhash].js',
+    filename: '[name].[chunkhash].js',
   },
-  module: { loaders: config.loaders },
-  plugins: [
-    process.env.analyze ? new BundleAnalyzerPlugin() : () => {},
-    new webpack.NoEmitOnErrorsPlugin(),
-    HTMLWebpackPluginConfig,
-    new webpack.NamedModulesPlugin(),
-    new BabiliPlugin(),
-    new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"production"' }),
-    new webpack.ContextReplacementPlugin(
-      // The path to directory which should be handled by this plugin
-      /moment[/\\]locale/,
-      // A regular expression matching files that should be included
-      /(en-gb)\.js/
-    ),
-  ],
 
-  resolve: { extensions: ['.js', '.jsx'] },
-};
+  plugins: common.plugins.concat([
+    process.env.analyze ? new BundleAnalyzerPlugin() : () => {},
+    new BabiliPlugin({}, { comments: false }),
+    new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"production"' }),
+
+    // Extract the node modules into it's own chunk
+    // as they don't change as often as code so they can be cached
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks(module) {
+        if (module.resource && (/\.js$/).test(module.resource)) {
+          return module.context && module.context.indexOf('node_modules') >= 0;
+        }
+
+        return false;
+      },
+    }),
+
+    // Extract the webpack bootstrap logic into it's own file
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'runtime',
+      minChunks: Infinity,
+    }),
+    new webpack.NamedModulesPlugin(),
+
+    new CompressionPlugin({
+      asset: '[path].gz[query]',
+      algorithm: 'gzip',
+      test: /\.(js|html|svg)$/,
+      threshold: 0,
+      minRatio: 0.9,
+    }),
+  ]),
+});

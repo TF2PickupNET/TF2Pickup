@@ -13,20 +13,29 @@ import config from '../../webpack.config.dev';
 export default function client() {
   const that = this;
 
+  // When no previous
   that.use(fallback({ index: '/' }));
 
+  // Serve the assets under /assets
   that.use('/assets', feathers.static(path.resolve(__dirname, '../assets')));
 
   if (that.get('env') === 'development') {
-    const compiler = webpack(config);
-
-    that.use(webpackDevMiddleware(compiler, {
+    // Use the webpack middleware in dev mode to recompile when a file changes
+    that.use(webpackDevMiddleware(webpack(config), {
       noInfo: true,
       stats: { colors: true },
     }));
   } else {
-    const clientPath = path.resolve(__dirname, '../client');
+    // Serve the client code
+    that.use('/', feathers.static(path.resolve(__dirname, '../client')));
 
-    that.use('/', feathers.static(clientPath));
+    // When the user requests a javascript file, we serve the gzipped file to the user
+    that.get('*.js', (req, res, next) => {
+      req.url += '.gz'; // eslint-disable-line no-param-reassign
+
+      res.set('Content-Encoding', 'gzip');
+
+      next();
+    });
   }
 }

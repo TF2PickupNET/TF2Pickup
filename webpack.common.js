@@ -46,7 +46,7 @@ module.exports = {
           plugins: [
             'transform-class-properties',
             'transform-export-extensions',
-            'transform-object-rest-spread'
+            ['transform-object-rest-spread', { useBuiltIns: true }],
           ],
         },
       },

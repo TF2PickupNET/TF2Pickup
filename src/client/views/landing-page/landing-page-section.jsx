@@ -1,8 +1,8 @@
 import React from 'react';
 import injectSheet from 'react-jss';
 import {
-  typography,
   breakpoints,
+  Typography,
 } from 'materialize-react';
 import PropTypes from 'prop-types';
 
@@ -28,9 +28,12 @@ function LandingPageSection({
 
   return (
     <section className={`${classes.section} ${imgPositionClass}`}>
-      <span className={classes.text}>
+      <Typography
+        className={classes.text}
+        typography="display1"
+      >
         {children}
-      </span>
+      </Typography>
 
       <img
         alt="presentation"
@@ -54,33 +57,29 @@ LandingPageSection.propTypes = {
 
 LandingPageSection.defaultProps = { imgProps: {} };
 
-LandingPageSection.styles = (theme) => {
-  return {
-    section: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '100%',
-      boxSizing: 'border-box',
-      padding: '80px 15%',
+LandingPageSection.styles = {
+  section: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    boxSizing: 'border-box',
+    padding: '80px 15%',
 
-      '&.image-left': { flexDirection: 'column-reverse' },
+    '&.image-left': { flexDirection: 'column-reverse' },
 
-      [breakpoints.up('desktop')]: {
-        flexDirection: 'row',
+    [breakpoints.up('desktop')]: {
+      flexDirection: 'row',
 
-        '&.image-left': { flexDirection: 'row-reverse' },
-      },
+      '&.image-left': { flexDirection: 'row-reverse' },
     },
+  },
 
-    text: {
-      ...typography.display1,
-      padding: 40,
-      textAlign: 'center',
-      borderColor: theme.divider.backgroundColor,
-    },
-  };
+  text: {
+    padding: 40,
+    textAlign: 'center',
+  },
 };
 
 export default injectSheet(LandingPageSection.styles)(LandingPageSection);

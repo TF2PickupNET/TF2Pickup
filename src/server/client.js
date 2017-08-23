@@ -4,7 +4,7 @@ import path from 'path';
 import fallback from 'connect-history-api-fallback';
 import webpack from 'webpack';
 
-import config from '../../webpack.config';
+import config from '../../webpack.config.dev';
 
 /**
  * Set up the client code.
@@ -25,7 +25,7 @@ export default function client() {
       stats: { colors: true },
     }));
   } else {
-    const clientPath = path.resolve(__dirname, '../../dist/client');
+    const clientPath = path.resolve(__dirname, '../client');
 
     that.use('/', feathers.static(clientPath));
   }

@@ -49,13 +49,13 @@ export default class BasicLayout extends PureComponent {
       <Theme>
         <SnackbarController>
           <Background>
-            <SnackbarContainer />
-
             <Animations />
 
             <Notifications />
 
             {this.props.children}
+
+            <SnackbarContainer />
           </Background>
         </SnackbarController>
       </Theme>

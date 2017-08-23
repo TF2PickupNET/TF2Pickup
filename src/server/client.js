@@ -2,6 +2,7 @@ import feathers from 'feathers';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import path from 'path';
 import fallback from 'connect-history-api-fallback';
+import gzipStatic from 'connect-gzip-static';
 import webpack from 'webpack';
 
 import config from '../../webpack.config.dev';
@@ -26,25 +27,7 @@ export default function client() {
       stats: { colors: true },
     }));
   } else {
-    // Serve the client code
-    that.use('/', feathers.static(path.resolve(__dirname, '../client')));
-
-    // When the user requests a javascript file, we serve the gzipped file to the user
-    that.get('*.js', (req, res, next) => {
-      req.url += '.gz'; // eslint-disable-line no-param-reassign
-
-      res.set('Content-Encoding', 'gzip');
-
-      next();
-    });
-
-    // When the user requests a svg file, we serve the gzipped file to the user
-    that.get('*.svg', (req, res, next) => {
-      req.url += '.gz'; // eslint-disable-line no-param-reassign
-
-      res.set('Content-Encoding', 'gzip');
-
-      next();
-    });
+    // Serve the client code and when possible, serve gzipped files
+    that.use('/', gzipStatic(path.resolve(__dirname, '../client')));
   }
 }

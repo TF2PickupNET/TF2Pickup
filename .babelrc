@@ -1,28 +1,10 @@
 {
   "presets": [
     ["env", {
-      "targets": {
-        "chrome": 60,
-        "firefox": 55,
-        "edge": 15,
-        "node": 8
-      },
-      "modules": false,
+      "targets": { "node": 8 },
       "debug": true
-    }],
-    "react"
+    }]
   ],
-  "env": {
-    "production": {
-      "plugins": [
-        ["transform-react-remove-prop-types", {
-          "mode": "wrap",
-          "removeImport": true,
-          "ignoreFilenames": ["node_modules/materialize-react"]
-        }]
-      ]
-    }
-  },
   "plugins": [
     "transform-class-properties",
     "transform-export-extensions",

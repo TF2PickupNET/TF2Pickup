@@ -16,7 +16,40 @@ module.exports = {
     loaders: [{
       test: /\.jsx?$/,
       exclude: /node_modules/,
-      loaders: ['babel-loader'],
+      use: {
+        loader: 'babel-loader',
+        options: {
+          babelrc: false,
+          presets: [
+            ['env', {
+              targets: {
+                chrome: 60,
+                firefox: 55,
+                edge: 15,
+              },
+              modules: false,
+              debug: true,
+            }],
+            'react'
+          ],
+          env: {
+            production: {
+              plugins: [
+                ['transform-react-remove-prop-types', {
+                  mode: 'wrap',
+                  removeImport: true,
+                  ignoreFilenames: ['node_modules/materialize-react']
+                }],
+              ],
+            },
+          },
+          plugins: [
+            'transform-class-properties',
+            'transform-export-extensions',
+            'transform-object-rest-spread'
+          ],
+        },
+      },
     }, {
       test: /\.css$/,
       loaders: [

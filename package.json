@@ -14,6 +14,7 @@
     "lint": "eslint src/ --ext js,jsx"
   },
   "dependencies": {
+    "@tf2-pickup/configs": "1.0.0",
     "axios": "0.16.2",
     "body-parser": "1.17.2",
     "classnames": "2.2.5",
@@ -70,7 +71,6 @@
     "uws": "8.14.1"
   },
   "devDependencies": {
-    "@tf2-pickup/babel-preset": "1.0.2",
     "@tf2-pickup/eslint-config": "6.0.1",
     "babel-cli": "6.26.0",
     "babel-loader": "7.1.2",

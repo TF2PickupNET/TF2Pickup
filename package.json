@@ -8,7 +8,7 @@
     "start-prod": "NODE_ENV=\"production\" node dist/server",
     "clear-dist": "rm -rf dist/",
     "build-server": "babel src/ -d dist --copy-files --ignore client/",
-    "build-client": "webpack --config webpack.config.prod.js --progress",
+    "build-client": "NODE_ENV=\"production\" webpack --config webpack.config.prod.js --progress",
     "build": "yarn run build-server && yarn run build-client",
     "prebuild": "yarn run clear-dist",
     "lint": "eslint src/ --ext js,jsx"
@@ -77,6 +77,7 @@
     "babel-plugin-transform-class-properties": "6.24.1",
     "babel-plugin-transform-export-extensions": "6.22.0",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
+    "babel-plugin-transform-react-remove-prop-types": "0.4.8",
     "babel-preset-env": "1.6.0",
     "babel-preset-react": "6.24.1",
     "babili-webpack-plugin": "0.1.2",

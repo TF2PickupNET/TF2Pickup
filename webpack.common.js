@@ -9,9 +9,7 @@ const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
 });
 
 module.exports = {
-  entry: {
-    app: path.resolve(__dirname, 'src/client/index.js'),
-  },
+  entry: { app: path.resolve(__dirname, 'src/client/index.js') },
   module: {
     loaders: [{
       test: /\.jsx?$/,
@@ -23,20 +21,22 @@ module.exports = {
           presets: [
             ['env', {
               targets: {
-                chrome: 60,
+                chrome: 62,
                 firefox: 55,
                 edge: 15,
+                safari: 11,
               },
               modules: false,
               debug: true,
+              loose: true,
             }],
-            'react'
+            'react',
           ],
           env: {
             production: {
               plugins: [
                 ['transform-react-remove-prop-types', {
-                  mode: 'wrap',
+                  mode: 'remove',
                   removeImport: true,
                   ignoreFilenames: ['node_modules/materialize-react']
                 }],

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { colors } from 'materialize-react';
 
 export default function Engineer({
   color,
@@ -30,8 +31,11 @@ export default function Engineer({
 }
 
 Engineer.propTypes = {
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   size: PropTypes.number,
 };
 
-Engineer.defaultProps = { size: 48 };
+Engineer.defaultProps = {
+  color: colors.blackIcons,
+  size: 48,
+};

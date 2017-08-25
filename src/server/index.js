@@ -5,7 +5,7 @@ import setupApp from './setup-app';
 const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
 const { parsed: config } = dotenv.load({ path: path.resolve(__dirname, `../../.env-${env}`) });
 const port = config.PORT;
-const ip = config.IP || 'localhost';
+const ip = config.IP;
 const protocol = env === 'prod' ? 'https' : 'http';
 const url = `${protocol}://${ip}${env === 'dev' ? `:${port}` : ''}`;
 const app = setupApp(

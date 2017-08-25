@@ -159,7 +159,7 @@ export class LandingPage extends PureComponent {
 
     return (
       <div>
-        <Helmet title="Welcome" />
+        <Helmet><title>Welcome</title></Helmet>
 
         <LandingPageHeader />
 

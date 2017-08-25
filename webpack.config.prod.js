@@ -4,7 +4,8 @@ const merge = require('lodash.merge');
 const common = require('./webpack.common');
 const BabiliPlugin = require('babili-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
 module.exports = merge(common, {
   output: {
@@ -47,6 +48,14 @@ module.exports = merge(common, {
       test: /\.(js|html|svg)$/,
       threshold: 0,
       minRatio: 0.9,
+    }),
+    // Service worker
+    new SWPrecacheWebpackPlugin({
+      cacheId: 'tf2pickup-app',
+      filename: 'service-worker.js',
+      minify: true,
+      navigateFallback: common.output.publicPath + 'index.html',
+      staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/],
     }),
   ]),
 });

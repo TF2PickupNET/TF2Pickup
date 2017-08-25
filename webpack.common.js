@@ -1,15 +1,22 @@
 const path = require('path');
 const webpack = require('webpack');
+const dotenv = require('dotenv');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
+const { colors } = require('materialize-react');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
   template: path.resolve(__dirname, 'src/client/index.html'),
   filename: 'index.html',
   inject: 'body',
 });
+const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
+const { parsed: config } = dotenv.load({ path: path.resolve(__dirname, `./.env-${env}`) });
+const url = env === 'dev' ? `http://localhost:${config.PORT}/` : `https://${config.IP}/`;
 
 module.exports = {
   entry: { app: path.resolve(__dirname, 'src/client/index.js') },
+  output: { publicPath: url },
   module: {
     loaders: [{
       test: /\.jsx?$/,
@@ -66,6 +73,19 @@ module.exports = {
     HTMLWebpackPluginConfig,
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new WebpackPwaManifest({
+      name: 'TF2Pickup',
+      short_name: 'TF2Pickup',
+      description: 'Pickup system for TF2',
+      background_color: colors.blue500,
+      theme_color: colors.blue500,
+      'theme-color': colors.blue500,
+      start_url: '/',
+      icons: [ {
+        src: path.resolve(__dirname, env === 'dev' ? 'src' : 'dist', 'assets/images/icons/logo.png'),
+        sizes: [64, 128, 256, 512, 1024]
+      }]
+    })
   ],
 
   resolve: { extensions: ['.js', '.jsx'] },

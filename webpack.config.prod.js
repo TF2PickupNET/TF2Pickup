@@ -7,13 +7,10 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
-const PUBLIC_PATH = 'https://tf2pickup.net/';
-
 module.exports = merge(common, {
   output: {
     path: path.resolve(__dirname, 'dist/client'),
     filename: '[name].[chunkhash].js',
-    publicPath: PUBLIC_PATH,
   },
 
   plugins: common.plugins.concat([
@@ -57,7 +54,7 @@ module.exports = merge(common, {
       cacheId: 'tf2pickup-app',
       filename: 'service-worker.js',
       minify: true,
-      navigateFallback: PUBLIC_PATH + 'index.html',
+      navigateFallback: common.output.publicPath + 'index.html',
       staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/],
     }),
   ]),

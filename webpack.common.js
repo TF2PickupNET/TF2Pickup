@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const dotenv = require('dotenv');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const { colors } = require('materialize-react');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
@@ -9,9 +10,13 @@ const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
   filename: 'index.html',
   inject: 'body',
 });
+const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
+const { parsed: config } = dotenv.load({ path: path.resolve(__dirname, `./.env-${env}`) });
+const url = env === 'dev' ? `http://localhost:${config.PORT}/` : `https://${config.IP}/`;
 
 module.exports = {
   entry: { app: path.resolve(__dirname, 'src/client/index.js') },
+  output: { publicPath: url },
   module: {
     loaders: [{
       test: /\.jsx?$/,
@@ -76,6 +81,10 @@ module.exports = {
       theme_color: colors.blue500,
       'theme-color': colors.blue500,
       start_url: '/',
+      icons: [ {
+        src: path.resolve(__dirname, env === 'dev' ? 'src' : 'dist', 'assets/images/icons/logo.png'),
+        sizes: [64, 128, 256, 512, 1024]
+      }]
     })
   ],
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { colors } from 'materialize-react';
 
 export default function Soldier({
   color,
@@ -48,8 +49,11 @@ export default function Soldier({
 }
 
 Soldier.propTypes = {
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   size: PropTypes.number,
 };
 
-Soldier.defaultProps = { size: 48 };
+Soldier.defaultProps = {
+  color: colors.blackIcons,
+  size: 48,
+};

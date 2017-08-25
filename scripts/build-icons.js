@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import React from 'react';
+import svgToPng from 'svg-to-png';
 import ReactDom from 'react-dom/server';
 
 // Ensure that the output dir exists
@@ -24,3 +25,24 @@ fs.readdirSync('./src/client/icons')
       ReactDom.renderToString(React.createElement(Icon.default, { xmlns: 'http://www.w3.org/2000/svg' })),
     );
   });
+
+/**
+ * This for the web app manifest.
+ * Convert the logo from svg to png.
+ */
+async function convertLogo() {
+  try {
+    await svgToPng.convert(
+      path.resolve(__dirname, '../src/assets/images/icons/logo.svg'),
+      path.resolve(__dirname, '../src/assets/images/icons'),
+      {
+        defaultHeight: 128,
+        defaultWidth: 128,
+      },
+    );
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+convertLogo();

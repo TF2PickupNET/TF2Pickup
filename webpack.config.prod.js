@@ -4,12 +4,16 @@ const merge = require('lodash.merge');
 const common = require('./webpack.common');
 const BabiliPlugin = require('babili-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+
+const PUBLIC_PATH = 'https://tf2pickup.net/';
 
 module.exports = merge(common, {
   output: {
     path: path.resolve(__dirname, 'dist/client'),
     filename: '[name].[chunkhash].js',
+    publicPath: PUBLIC_PATH,
   },
 
   plugins: common.plugins.concat([
@@ -47,6 +51,14 @@ module.exports = merge(common, {
       test: /\.(js|html|svg)$/,
       threshold: 0,
       minRatio: 0.9,
+    }),
+    // Service worker
+    new SWPrecacheWebpackPlugin({
+      cacheId: 'tf2pickup-app',
+      filename: 'service-worker.js',
+      minify: true,
+      navigateFallback: PUBLIC_PATH + 'index.html',
+      staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/],
     }),
   ]),
 });

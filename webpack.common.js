@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
+const { colors } = require('materialize-react');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
   template: path.resolve(__dirname, 'src/client/index.html'),
@@ -66,6 +68,15 @@ module.exports = {
     HTMLWebpackPluginConfig,
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new WebpackPwaManifest({
+      name: 'TF2Pickup',
+      short_name: 'TF2Pickup',
+      description: 'Pickup system for TF2',
+      background_color: colors.blue500,
+      theme_color: colors.blue500,
+      'theme-color': colors.blue500,
+      start_url: '/',
+    })
   ],
 
   resolve: { extensions: ['.js', '.jsx'] },

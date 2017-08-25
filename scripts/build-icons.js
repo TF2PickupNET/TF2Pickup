@@ -29,8 +29,6 @@ fs.readdirSync('./src/client/icons')
 /**
  * This for the web app manifest.
  * Convert the logo from svg to png.
- *
- * @returns {Promise} - Returns a promise.
  */
 async function convertLogo() {
   try {
@@ -40,7 +38,7 @@ async function convertLogo() {
       {
         defaultHeight: 128,
         defaultWidth: 128,
-      }
+      },
     );
   } catch (error) {
     throw new Error(error);

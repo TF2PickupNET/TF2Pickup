@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { colors } from 'materialize-react';
 
 export default function Pyro({
   color,
@@ -32,8 +33,11 @@ export default function Pyro({
 }
 
 Pyro.propTypes = {
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   size: PropTypes.number,
 };
 
-Pyro.defaultProps = { size: 48 };
+Pyro.defaultProps = {
+  color: colors.blackIcons,
+  size: 48,
+};

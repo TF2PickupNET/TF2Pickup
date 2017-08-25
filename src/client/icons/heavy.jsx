@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { colors } from 'materialize-react';
 
 export default function Heavy({
   color,
@@ -36,8 +37,12 @@ export default function Heavy({
 }
 
 Heavy.propTypes = {
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   size: PropTypes.number,
 };
 
-Heavy.defaultProps = { size: 48 };
+Heavy.defaultProps = {
+  color: colors.blackIcons,
+  size: 48,
+};
+

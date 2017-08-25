@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { colors } from 'materialize-react';
 
 export default function Demoman({
   color,
@@ -61,8 +62,11 @@ export default function Demoman({
 }
 
 Demoman.propTypes = {
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   size: PropTypes.number,
 };
 
-Demoman.defaultProps = { size: 48 };
+Demoman.defaultProps = {
+  color: colors.blackIcons,
+  size: 48,
+};

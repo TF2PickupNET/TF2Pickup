@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { colors } from 'materialize-react';
 
 export default function Sniper({
   color,
@@ -40,8 +41,11 @@ export default function Sniper({
 }
 
 Sniper.propTypes = {
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   size: PropTypes.number,
 };
 
-Sniper.defaultProps = { size: 48 };
+Sniper.defaultProps = {
+  color: colors.blackIcons,
+  size: 48,
+};

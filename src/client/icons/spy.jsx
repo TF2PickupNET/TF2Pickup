@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { colors } from 'materialize-react';
 
 export default function Spy({
   color,
@@ -55,8 +56,11 @@ export default function Spy({
 }
 
 Spy.propTypes = {
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   size: PropTypes.number,
 };
 
-Spy.defaultProps = { size: 48 };
+Spy.defaultProps = {
+  color: colors.blackIcons,
+  size: 48,
+};

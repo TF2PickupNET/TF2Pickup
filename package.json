@@ -7,11 +7,12 @@
     "start-dev": "NODE_ENV=\"development\" babel-node src/server",
     "start-prod": "NODE_ENV=\"production\" node dist/server",
     "clear-dist": "rm -rf dist/",
+    "build": "yarn run build-icons && yarn run build-server && yarn run build-client",
+    "build-icons": "babel src/client/icons --presets react,env -d .temp-icons && babel-node scripts/build-icons.js",
     "build-server": "babel src/ -d dist --copy-files --ignore client/",
-    "build-client": "webpack --config webpack.config.prod.js --progress",
-    "build": "yarn run build-server && yarn run build-client",
+    "build-client": "NODE_ENV=\"production\" webpack --config webpack.config.prod.js --progress",
     "prebuild": "yarn run clear-dist",
-    "lint": "eslint src/ --ext js,jsx"
+    "lint": "eslint src/ scripts/ --ext js,jsx"
   },
   "dependencies": {
     "@tf2-pickup/configs": "1.0.0",
@@ -77,6 +78,7 @@
     "babel-plugin-transform-class-properties": "6.24.1",
     "babel-plugin-transform-export-extensions": "6.22.0",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
+    "babel-plugin-transform-react-remove-prop-types": "0.4.8",
     "babel-preset-env": "1.6.0",
     "babel-preset-react": "6.24.1",
     "babili-webpack-plugin": "0.1.2",
@@ -84,11 +86,15 @@
     "css-loader": "0.28.5",
     "eslint": "4.5.0",
     "file-loader": "0.11.2",
+    "fs-extra": "4.0.1",
     "html-webpack-plugin": "2.30.1",
     "redux-devtools-extension": "2.13.2",
     "style-loader": "0.18.2",
+    "sw-precache-webpack-plugin": "0.11.4",
+    "svg-to-png": "3.1.2",
     "webpack": "3.5.5",
     "webpack-bundle-analyzer": "2.9.0",
-    "webpack-dev-middleware": "1.12.0"
+    "webpack-dev-middleware": "1.12.0",
+    "webpack-pwa-manifest": "3.2.0"
   }
 }

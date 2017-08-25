@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { colors } from 'materialize-react';
 
 export default function Medic({
   color,
@@ -31,8 +32,12 @@ export default function Medic({
 }
 
 Medic.propTypes = {
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   size: PropTypes.number,
 };
 
-Medic.defaultProps = { size: 48 };
+Medic.defaultProps = {
+  color: colors.blackIcons,
+  size: 48,
+};
+

@@ -3,37 +3,18 @@ import fs from 'fs-extra';
 import React from 'react';
 import ReactDom from 'react-dom/server';
 
-function getFiles() {
-  const iconDirPath = path.resolve(__dirname, '../src/client/icons');
+// Ensure that the output dir exists
+fs.ensureDirSync('./src/assets/images/icons');
 
-  return new Promise((resolve, reject) => {
-    fs.readdir(iconDirPath, (err, files) => {
-      if (err) {
-        reject(err);
-      }
+// Remove all the contents from the output dir
+fs.emptyDirSync('./src/assets/images/icons');
 
-      // Filter the files for actual jsx files which contain an Icon
-      // and slice off the extension
-      resolve(
-        files
-          .filter(fileName => fileName.endsWith('.jsx'))
-          .map(fileName => fileName.slice(0, fileName.length - 4))
-      );
-    })
-  });
-}
-
-async function build() {
-  const files = await getFiles();
-
-  // Ensure that the output dir exists
-  fs.ensureDirSync('../src/assets/images/icons');
-
-  // Remove all the contents from the output dir
-  fs.emptyDirSync('../src/assets/images/icons');
-
-  files.forEach((fileName) => {
+fs.readdirSync('./src/client/icons')
+  .filter(fileName => fileName.endsWith('.jsx'))
+  .map(fileName => fileName.slice(0, fileName.length - 4))
+  .forEach((fileName) => {
     // Get the compiled image version
+    // eslint-disable-next-line import/no-dynamic-require, global-require
     const Icon = require(path.join('../.temp-icons', `${fileName}.js`));
 
     // Write the file to the assets location
@@ -43,8 +24,3 @@ async function build() {
       ReactDom.renderToString(React.createElement(Icon.default, { xmlns: 'http://www.w3.org/2000/svg' })),
     );
   });
-}
-
-build();
-
-

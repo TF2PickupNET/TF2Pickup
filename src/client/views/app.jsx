@@ -151,6 +151,13 @@ export default class App extends PureComponent {
                 name="twitter:image"
                 content="/assets/images/icons/logo.png"
               />
+
+              <link
+                rel="shortcut icon"
+                type="image/x-icon"
+                href="/assets/images/favicon.ico"
+              />
+
             </Helmet>
           </BasicLayout>
         </ConnectedRouter>

@@ -6,6 +6,7 @@ import hooks from 'feathers-hooks';
 import rest from 'feathers-rest';
 import socketio from 'feathers-socketio';
 import handler from 'feathers-errors/handler';
+
 import services from './services';
 import globalHooks from './global-hooks';
 import client from './client';

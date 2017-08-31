@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 
-import BasicLayout from './basic-layout';
-
 import { addNotification } from '../../redux/notifications/actions';
+
+import BasicLayout from './basic-layout';
 
 /**
  * Connect the BasicLayout with redux.

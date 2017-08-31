@@ -1,8 +1,9 @@
 import merge from 'lodash.merge';
 import SteamCommunity from 'steamcommunity';
 
-import getUserData from './third-party-services';
 import { inviteToSteamGroup } from '../../../config/steam';
+
+import getUserData from './third-party-services';
 
 const community = new SteamCommunity();
 

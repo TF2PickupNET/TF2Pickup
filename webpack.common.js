@@ -14,6 +14,8 @@ const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
 const { parsed: config } = dotenv.load({ path: path.resolve(__dirname, `./.env-${env}`) });
 const url = env === 'dev' ? `http://localhost:${config.PORT}/` : `https://${config.IP}/`;
 
+module.exports.config = config;
+
 module.exports = {
   entry: { app: path.resolve(__dirname, 'src/client/index.js') },
   output: { publicPath: url },
@@ -72,6 +74,10 @@ module.exports = {
   plugins: [
     HTMLWebpackPluginConfig,
     new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.DefinePlugin({
+      DEV: JSON.stringify(env === 'dev'),
+      BETA_MODE: JSON.stringify(config.BETA_MODE),
+    }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new WebpackPwaManifest({
       name: 'TF2Pickup',

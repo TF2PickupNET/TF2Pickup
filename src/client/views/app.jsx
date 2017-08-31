@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Provider } from 'react-redux';
 
-import { titleSuffix } from '../config';
 import BasicLayout from '../layouts/basic-layout';
 import LandingPage from './landing-page';
 import RedirectToPickup from './pickup/redirect-to-pickup';
@@ -114,7 +113,7 @@ export default class App extends PureComponent {
               />
             </Switch>
 
-            <Helmet titleTemplate={`%s ${titleSuffix}`}>
+            <Helmet titleTemplate="%s | TF2Pickup.net">
               <link
                 rel="stylesheet"
                 href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700"

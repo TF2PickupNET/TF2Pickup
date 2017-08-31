@@ -2,7 +2,6 @@ import merge from 'lodash.merge';
 import SteamCommunity from 'steamcommunity';
 
 import getUserData from './third-party-services';
-import { inviteToSteamGroup } from '../../../config/steam';
 
 const community = new SteamCommunity();
 
@@ -29,7 +28,7 @@ export default {
       });
 
       await new Promise((resolve) => {
-        community.inviteUserToGroup(props.data.id, inviteToSteamGroup, () => {
+        community.inviteUserToGroup(props.data.id, '103582791435021680', () => {
           resolve();
         });
       });

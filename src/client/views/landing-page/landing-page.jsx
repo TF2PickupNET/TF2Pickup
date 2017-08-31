@@ -14,10 +14,7 @@ import {
 } from 'materialize-react';
 import Parallax from 'react-smart-parallax';
 
-import {
-  storageKeys,
-  imageUrl,
-} from '../../config';
+import { imageUrl } from '../../../config/client';
 import { authUrl } from '../../../config';
 import app from '../../app';
 import LandingPageHeader from './landing-page-header';
@@ -149,7 +146,7 @@ export class LandingPage extends PureComponent {
    * Redirect the user to the last gamemode when the user get's logged in automatically.
    */
   onLogin = () => {
-    const gamemode = lockr.get(storageKeys.lastGamemode) || '6v6';
+    const gamemode = lockr.get('lastGamemode') || '6v6';
 
     this.props.redirect(`/${gamemode}`);
   };

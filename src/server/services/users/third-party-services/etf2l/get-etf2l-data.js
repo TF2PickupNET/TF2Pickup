@@ -5,9 +5,9 @@ import moment from 'moment';
 import {
   transformGamemode,
   oldDivsToNewDivs,
+  divs,
 } from './utils';
 import { displayGamemodeDivs } from '../../../../../config';
-import { divs } from '../../../../../config/etf2l';
 
 /**
  * Get the player data from etf2l.

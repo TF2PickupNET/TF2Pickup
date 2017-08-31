@@ -21,3 +21,11 @@ export const oldDivsToNewDivs = {
   5: 'Open',
   6: 'Open',
 };
+
+export const divs = [
+  'N/A',
+  'Open',
+  'Mid',
+  'High',
+  'Prem',
+];

@@ -2,7 +2,8 @@ import SteamID from 'steamid';
 import { Schema } from 'mongoose';
 import regions from '@tf2-pickup/configs/regions';
 
-import { divs } from '../../../config/etf2l';
+import { divs as etf2lDivs } from './third-party-services/etf2l/utils';
+import { divs as ozfortressDivs } from './third-party-services/ozfortress/get-ozfortress-user-data';
 import {
   url,
   steamId,
@@ -32,7 +33,7 @@ function avatarSchema(name) {
 function etf2lDivSchema(gamemode) {
   return {
     type: String,
-    validate: isInArray(divs, {
+    validate: isInArray(etf2lDivs, {
       msg: `{VALUE} is not a valid etf2l ${gamemode} division`,
       nullIsAllowed: true,
     }),
@@ -113,7 +114,7 @@ export default new Schema({
       name: String,
       div6v6: {
         type: String,
-        validate: isInArray(['Premier', 'Intermediate', 'Open'], {
+        validate: isInArray(ozfortressDivs, {
           msg: '{VALUE} is not a valid ozfortress division',
           nullIsAllowed: true,
         }),

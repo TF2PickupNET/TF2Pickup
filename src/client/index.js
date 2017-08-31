@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 
 import app from './app';
 import App from './views/app';
-import { isDev } from './config';
+import { isDev } from '../config/client';
 
 /**
  * Register the service worker.

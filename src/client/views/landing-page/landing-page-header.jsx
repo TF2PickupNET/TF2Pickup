@@ -10,7 +10,7 @@ import {
 } from 'materialize-react';
 
 import { Logo } from '../../icons';
-import { imageUrl } from '../../config';
+import { imageUrl } from '../../../config/client';
 
 const gamemode = randomItem(['bball', 'ultiduo']);
 

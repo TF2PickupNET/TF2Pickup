@@ -5,7 +5,6 @@ import ms from 'ms';
 
 import { authUrl } from '../../../config/index';
 import getGroupMembers from '../users/third-party-services/steam/get-group-members';
-import { validateUsersAgainstSteamGroup } from '../../../config/steam';
 
 import createLoginListener from './create-login-listener';
 import createLogoutListener from './create-logout-listener';
@@ -78,8 +77,11 @@ export default function authentication() {
 
       // Create a new user when no user was found
       try {
-        if (process.env.BETA_MODE && that.get('config').env === 'prod') {
-          const groupMembers = await getGroupMembers(validateUsersAgainstSteamGroup, that);
+        if (process.env.BETA_MODE) {
+          const groupMembers = await getGroupMembers(
+            process.env.VALIDATE_AGAINST_STEAM_GROUP,
+            that,
+          );
 
           if (!groupMembers.includes(id)) {
             return done(

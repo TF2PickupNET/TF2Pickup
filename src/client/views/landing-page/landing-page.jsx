@@ -16,10 +16,7 @@ import regions from '@tf2-pickup/configs/regions';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
-import {
-  storageKeys,
-  imageUrl,
-} from '../../config';
+import { imageUrl } from '../../../config/client';
 import { authUrl } from '../../../config';
 import app from '../../app';
 import Link from '../../components/link';
@@ -152,7 +149,7 @@ export class LandingPage extends PureComponent {
    * Redirect the user to the last gamemode when the user get's logged in automatically.
    */
   onLogin = () => {
-    const gamemode = lockr.get(storageKeys.lastGamemode) || '6v6';
+    const gamemode = lockr.get('lastGamemode') || '6v6';
 
     this.props.redirect(`/${gamemode}`);
   };

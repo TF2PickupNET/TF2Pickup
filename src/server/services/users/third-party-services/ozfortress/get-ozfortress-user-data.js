@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const divs = [
+export const divs = [
   null,
   'Open',
   'Intermediate',

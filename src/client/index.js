@@ -6,9 +6,10 @@ import 'mdi/css/materialdesignicons.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { isDev } from '../config/client';
+
 import app from './app';
 import App from './views/app';
-import { isDev } from '../config/client';
 
 /**
  * Register the service worker.

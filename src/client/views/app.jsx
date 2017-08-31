@@ -9,7 +9,6 @@ import { Provider } from 'react-redux';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
-import { titleSuffix } from '../config';
 import BasicLayout from '../layouts/basic-layout';
 
 import LandingPage from './landing-page';

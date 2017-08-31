@@ -3,14 +3,12 @@ import axios from 'axios';
 import moment from 'moment';
 
 import { displayGamemodeDivs } from '../../../../../config';
-import { divs } from '../../../../../config/etf2l';
 
 import {
   transformGamemode,
   oldDivsToNewDivs,
   divs,
 } from './utils';
-import { displayGamemodeDivs } from '../../../../../config';
 
 /**
  * Get the player data from etf2l.

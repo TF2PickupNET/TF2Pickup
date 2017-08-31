@@ -3,11 +3,6 @@ import {
   logoutUser,
 } from './actions';
 
-import {
-  loginUser,
-  logoutUser,
-} from './actions';
-
 /**
  * Setup the event listeners for the online users.
  *

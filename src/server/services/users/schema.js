@@ -3,13 +3,14 @@ import { Schema } from 'mongoose';
 
 import regions from '@tf2-pickup/configs/regions';
 
-import { divs as etf2lDivs } from './third-party-services/etf2l/utils';
-import { divs as ozfortressDivs } from './third-party-services/ozfortress/get-ozfortress-user-data';
 import {
   url,
   steamId,
   isInArray,
 } from '../validators';
+
+import { divs as etf2lDivs } from './third-party-services/etf2l/utils';
+import { divs as ozfortressDivs } from './third-party-services/ozfortress/get-ozfortress-user-data';
 
 /**
  * Create the schema for the avatar urls.

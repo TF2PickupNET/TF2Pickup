@@ -15,7 +15,7 @@ import Parallax from 'react-smart-parallax';
 import regions from '@tf2-pickup/configs/regions';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
-        
+
 import { imageUrl } from '../../../config/client';
 import { authUrl } from '../../../config';
 import app from '../../app';

@@ -4,8 +4,6 @@ import randomItem from 'random-item';
 import lockr from 'lockr';
 import Helmet from 'react-helmet';
 import injectSheet from 'react-jss';
-import regions from '@tf2-pickup/configs/regions';
-import gamemodes from '@tf2-pickup/configs/gamemodes';
 import {
   Divider,
   colors,
@@ -14,16 +12,21 @@ import {
 } from 'materialize-react';
 import Parallax from 'react-smart-parallax';
 
+import regions from '@tf2-pickup/configs/regions';
+
+import gamemodes from '@tf2-pickup/configs/gamemodes';
+
 import {
   storageKeys,
   imageUrl,
 } from '../../config';
 import { authUrl } from '../../../config';
 import app from '../../app';
+import Link from '../../components/link';
+
 import LandingPageHeader from './landing-page-header';
 import LandingPageSection from './landing-page-section';
 import LandingPageFooter from './landing-page-footer';
-import Link from '../../components/link';
 
 const gamemodeDisplays = Object.values(gamemodes).map(gamemode => gamemode.display);
 const regionDisplays = Object.values(regions).map(region => region.fullName);

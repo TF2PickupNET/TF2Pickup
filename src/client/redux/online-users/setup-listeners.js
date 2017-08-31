@@ -1,11 +1,12 @@
 import {
-  loginUser,
-  logoutUser,
-} from './actions';
-import {
   onlineUsersLogin,
   onlineUsersLogout,
 } from '../../../config/event-names';
+
+import {
+  loginUser,
+  logoutUser,
+} from './actions';
 
 /**
  * Setup the event listeners for the online users.

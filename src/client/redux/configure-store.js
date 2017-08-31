@@ -4,6 +4,7 @@ import { createBrowserHistory } from 'history';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { isDev } from '../config';
+
 import reducers from './reducers';
 
 /**

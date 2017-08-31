@@ -2,13 +2,16 @@
 
 import React, { PureComponent } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import gamemodes from '@tf2-pickup/configs/gamemodes';
 import { ConnectedRouter } from 'react-router-redux';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Provider } from 'react-redux';
 
+import gamemodes from '@tf2-pickup/configs/gamemodes';
+
+import { titleSuffix } from '../config';
 import BasicLayout from '../layouts/basic-layout';
+
 import LandingPage from './landing-page';
 import RedirectToPickup from './pickup/redirect-to-pickup';
 

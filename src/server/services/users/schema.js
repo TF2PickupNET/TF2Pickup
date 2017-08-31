@@ -1,5 +1,6 @@
 import SteamID from 'steamid';
 import { Schema } from 'mongoose';
+
 import regions from '@tf2-pickup/configs/regions';
 
 import { divs as etf2lDivs } from './third-party-services/etf2l/utils';

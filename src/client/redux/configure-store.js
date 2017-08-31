@@ -3,7 +3,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { createBrowserHistory } from 'history';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { isDev } from '../config';
+import { isDev } from '../../config/client';
 
 import reducers from './reducers';
 

@@ -1,6 +1,7 @@
 import auth from 'feathers-authentication';
 import SteamStrategy from 'passport-steam';
 import jwt, { Verifier } from 'feathers-authentication-jwt';
+import errors from 'feathers-errors';
 import ms from 'ms';
 
 import { authUrl } from '../../../config/index';
@@ -70,7 +71,7 @@ export default function authentication() {
         return done(null, users[0]);
       } else if (users.length > 1) {
         return done(
-          new Error(`Multiple users found with the steamId ${id}! Please contact a system admin.`),
+          new errors.Conflict(`Multiple users found with the steamId ${id}! Please contact a system admin!`),
           null,
         );
       }
@@ -85,7 +86,7 @@ export default function authentication() {
 
           if (!groupMembers.includes(id)) {
             return done(
-              new Error(
+              new error.Forbidden(
                 'The site is currently in beta mode and you are not in the required Steam Group',
               ),
               null,

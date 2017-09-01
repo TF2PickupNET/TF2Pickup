@@ -93,6 +93,7 @@
     "style-loader": "0.18.2",
     "svg-to-png": "3.1.2",
     "sw-precache-webpack-plugin": "0.11.4",
+    "url-loader": "^0.5.9",
     "webpack": "3.5.5",
     "webpack-bundle-analyzer": "2.9.0",
     "webpack-dev-middleware": "1.12.0",

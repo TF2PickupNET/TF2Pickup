@@ -3,6 +3,13 @@ import { Card } from 'materialize-react';
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import injectSheet from 'react-jss';
+import randomItem from 'random-item';
+
+import sixes from '../../../assets/images/background/6v6.jpg';
+import hl from '../../../assets/images/background/9v9.jpg';
+import bball from '../../../assets/images/background/bball.jpg';
+import ultiduo from '../../../assets/images/background/ultiduo.jpg';
 
 /**
  * The error page when an error occurs on the server.
@@ -13,11 +20,14 @@ import Helmet from 'react-helmet';
  * Passed by React Router.
  * @returns {JSX} - Returns the jsx.
  */
-export default function Error({ location }) {
+export function Error({
+  location,
+  classes,
+}) {
   const query = queryString.parse(location.search);
 
   return (
-    <div>
+    <div className={classes.container}>
       <Helmet><title>Error</title></Helmet>
 
       <Card>
@@ -29,3 +39,18 @@ export default function Error({ location }) {
 }
 
 Error.propTypes = { location: PropTypes.shape({ search: PropTypes.string.isRequired }).isRequired };
+
+Error.styles = {
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
+    backgroundImage: `url(${randomItem([ sixes, hl, bball, ultiduo ])})`,
+    backgroundPosition: 'center center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+  },
+};
+
+export default injectSheet(Error.styles)(Error);

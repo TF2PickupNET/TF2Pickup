@@ -1,4 +1,6 @@
-export const isDev = window.location.hostname === 'localhost';
+export const isDev = DEV; // eslint-disable-line no-undef
+
+export const isInBetaMode = BETA_MODE; // eslint-disable-line no-undef
 
 export const cdnUrl = '/assets';
 

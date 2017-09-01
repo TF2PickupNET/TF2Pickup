@@ -72,6 +72,10 @@ module.exports = {
   plugins: [
     HTMLWebpackPluginConfig,
     new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.DefinePlugin({
+      DEV: JSON.stringify(env === 'dev'),
+      BETA_MODE: config.BETA_MODE,
+    }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new WebpackPwaManifest({
       name: 'TF2Pickup',

@@ -33,7 +33,6 @@ module.exports = {
                 safari: 11,
               },
               modules: false,
-              debug: true,
               loose: true,
             }],
             'react',

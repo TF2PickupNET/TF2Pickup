@@ -45,14 +45,14 @@ export default function setupApp(config) {
     .configure(client);
 
   app.use(handler({
-    html(error, req, res) {
-      app.service('logs').create({
+    async html(error, req, res) {
+      const { _id } = await app.service('logs').create({
         message: 'Something went wrong on the server!',
         info: error,
         environment: 'server',
       });
 
-      res.send(`Something went wrong :(', ${JSON.stringify(error.message)}`);
+      res.redirect(`/error?message=${error.message}&code=${error.code}&_id=${_id}`);
     },
   }));
 

@@ -13,6 +13,7 @@ import BasicLayout from '../layouts/basic-layout';
 
 import LandingPage from './landing-page';
 import RedirectToPickup from './pickup/redirect-to-pickup';
+import Error from './error';
 
 /**
  * The main component.
@@ -112,6 +113,12 @@ export default class App extends PureComponent {
               <Route
                 exact
                 path="/settings"
+              />
+
+              <Route
+                exact
+                path="/error"
+                component={Error}
               />
             </Switch>
 

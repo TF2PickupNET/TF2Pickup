@@ -12,11 +12,10 @@ const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
 });
 const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
 const { parsed: config } = dotenv.load({ path: path.resolve(__dirname, `./.env-${env}`) });
-const url = env === 'dev' ? `http://localhost:${config.PORT}/` : `https://${config.IP}/`;
 
 module.exports = {
   entry: { app: path.resolve(__dirname, 'src/client/index.js') },
-  output: { publicPath: url },
+  output: { publicPath: '/' },
   module: {
     loaders: [{
       test: /\.jsx?$/,

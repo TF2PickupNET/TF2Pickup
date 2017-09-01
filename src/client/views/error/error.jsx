@@ -2,6 +2,7 @@ import React from 'react';
 import { Card } from 'materialize-react';
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
+import Helmet from 'react-helmet';
 
 /**
  * The error page when an error occurs on the server.
@@ -16,10 +17,14 @@ export default function Error({ location }) {
   const query = queryString.parse(location.search);
 
   return (
-    <Card>
-      <Card.Header>An error occured</Card.Header>
-      <Card.Content>{query.message}</Card.Content>
-    </Card>
+    <div>
+      <Helmet><title>Error</title></Helmet>
+
+      <Card>
+        <Card.Header>An error occured</Card.Header>
+        <Card.Content>{query.message}</Card.Content>
+      </Card>
+    </div>
   );
 }
 

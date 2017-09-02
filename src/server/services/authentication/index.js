@@ -82,7 +82,7 @@ export default function authentication() {
         return done(
           new Error([
             'Something went wrong while trying to get your played hours in TF2!',
-            'Please try again. If the problem persists concat a developer over discord.'
+            'Please try again. If the problem persists concat a developer over discord.',
           ].join(' ')),
           null,
         );
@@ -92,7 +92,7 @@ export default function authentication() {
         return done(
           new Error([
             'You don\'t have the required minimum hours in TF2 to play TF2Pickup',
-            `You will atleast need ${process.env.REQUIRED_TF2_HOURS} in TF2.`
+            `You will atleast need ${process.env.REQUIRED_TF2_HOURS} in TF2.`,
           ].join(' ')),
           null,
         );

@@ -6,7 +6,6 @@ import getETF2LData from './etf2l/get-etf2l-data';
 import getSteamData from './steam/get-steam-data';
 import getSteamFriends from './steam/get-steam-friends';
 import getVACBans from './steam/get-vac-bans';
-import getTF2Hours from './steam/get-tf2-hours';
 import getOZFortressUserData from './ozfortress/get-ozfortress-user-data';
 
 /**
@@ -21,7 +20,6 @@ export default async function getUserData(steamId, oneDaySinceLastUpdate, app) {
   const methods = [
     getSteamData(steamId, app),
     getVACBans(steamId, app),
-    getTF2Hours(steamId, app, oneDaySinceLastUpdate),
     getETF2LData(steamId, app, oneDaySinceLastUpdate),
     getSteamFriends(steamId, app, oneDaySinceLastUpdate),
     getOZFortressUserData(steamId, app),

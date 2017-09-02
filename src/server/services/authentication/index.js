@@ -4,10 +4,10 @@ import jwt, { Verifier } from 'feathers-authentication-jwt';
 import ms from 'ms';
 
 import { authUrl } from '../../../config/index';
-import getGroupMembers from '../users/third-party-services/steam/get-group-members';
 
 import createLoginListener from './create-login-listener';
 import createLogoutListener from './create-logout-listener';
+import getGroupMembers from './get-group-members';
 
 /**
  * A utility class which makes sure the id from the jwt get's mapped to the correct user.

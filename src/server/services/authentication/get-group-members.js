@@ -23,8 +23,6 @@ export default async function getGroupMembers(groupName, app) {
 
       cachedMembers = members.map(member => member.getSteamID64());
     } catch (error) {
-      console.log(error);
-
       app.service('logs').create({
         message: `Error while getting group members for ${groupName}`,
         environment: 'server',
@@ -32,8 +30,6 @@ export default async function getGroupMembers(groupName, app) {
       });
     }
   }
-
-  console.log(cachedMembers);
 
   return cachedMembers;
 }

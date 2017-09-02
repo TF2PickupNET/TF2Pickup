@@ -12,11 +12,10 @@ const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
 });
 const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
 const { parsed: config } = dotenv.load({ path: path.resolve(__dirname, `./.env-${env}`) });
-const url = env === 'dev' ? `http://localhost:${config.PORT}/` : `https://${config.IP}/`;
 
 module.exports = {
   entry: { app: path.resolve(__dirname, 'src/client/index.js') },
-  output: { publicPath: url },
+  output: { publicPath: '/' },
   module: {
     loaders: [{
       test: /\.jsx?$/,
@@ -34,7 +33,6 @@ module.exports = {
                 safari: 11,
               },
               modules: false,
-              debug: true,
               loose: true,
             }],
             'react',
@@ -72,6 +70,10 @@ module.exports = {
   plugins: [
     HTMLWebpackPluginConfig,
     new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.DefinePlugin({
+      DEV: JSON.stringify(env === 'dev'),
+      BETA_MODE: config.BETA_MODE,
+    }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new WebpackPwaManifest({
       name: 'TF2Pickup',

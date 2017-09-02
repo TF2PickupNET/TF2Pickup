@@ -3,11 +3,11 @@ import SteamStrategy from 'passport-steam';
 import jwt, { Verifier } from 'feathers-authentication-jwt';
 import ms from 'ms';
 
-import createLoginListener from './create-login-listener';
-import createLogoutListener from './create-logout-listener';
 import { authUrl } from '../../../config/index';
 import getGroupMembers from '../users/third-party-services/steam/get-group-members';
-import { validateUsersAgainstSteamGroup } from '../../../config/steam';
+
+import createLoginListener from './create-login-listener';
+import createLogoutListener from './create-logout-listener';
 
 /**
  * A utility class which makes sure the id from the jwt get's mapped to the correct user.
@@ -77,8 +77,11 @@ export default function authentication() {
 
       // Create a new user when no user was found
       try {
-        if (process.env.BETA_MODE && that.get('config').env === 'prod') {
-          const groupMembers = await getGroupMembers(validateUsersAgainstSteamGroup, that);
+        if (process.env.BETA_MODE) {
+          const groupMembers = await getGroupMembers(
+            process.env.VALIDATE_AGAINST_STEAM_GROUP,
+            that,
+          );
 
           if (!groupMembers.includes(id)) {
             return done(

@@ -8,7 +8,10 @@ import { isDev } from '../config/client';
 
 import configureStore from './redux/configure-store';
 
-const socket = io(window.location.origin, { path: '/ws/' });
+const socket = io(window.location.origin, {
+  path: '/ws/',
+  transports: ['websocket'],
+});
 const app = feathers();
 
 app

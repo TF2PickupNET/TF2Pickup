@@ -5062,14 +5062,14 @@ marked@0.3.6:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.3.6.tgz#b2c6c618fccece4ef86c4fc6cb8a7cbf5aeda8d7"
 
-materialize-react@0.1.0-alpha.5:
-  version "0.1.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/materialize-react/-/materialize-react-0.1.0-alpha.5.tgz#bbf7f3da615f949f5eb4263794d507c81bde62f6"
+materialize-react@0.1.0-alpha.6:
+  version "0.1.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/materialize-react/-/materialize-react-0.1.0-alpha.6.tgz#83d849ca15d1cf59a5d1ab3beb000c6e895b514a"
   dependencies:
     classnames "2.2.5"
     lodash.omit "4.5.0"
     lodash.pick "4.4.0"
-    polished "1.4.0"
+    polished "1.7.0"
     prop-types "15.5.10"
     randomstring "1.1.5"
     react "15.6.1"
@@ -5908,9 +5908,9 @@ pngquant-bin@^3.0.0:
     bin-wrapper "^3.0.0"
     logalot "^2.0.0"
 
-polished@1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/polished/-/polished-1.4.0.tgz#748ef6e83ac84e1257a5c9cec9ed95aeba7c0c7e"
+polished@1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/polished/-/polished-1.7.0.tgz#cfc55113f52e9ecec7c84dbd0c708b9a3235d7c3"
 
 postcss-calc@^5.2.0:
   version "5.3.1"

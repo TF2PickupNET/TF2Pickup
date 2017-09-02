@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import Helmet from 'react-helmet';
 
-import { imageUrl } from '../../config';
+import { imageUrl } from '../../../config/client';
 import { authUrl } from '../../../config';
 
 /**
@@ -43,7 +43,7 @@ export class MainToolbar extends PureComponent {
     },
 
     steamLoginImage: {
-      height: 48,
+      height: 40,
       cursor: 'pointer',
     },
 
@@ -67,10 +67,9 @@ export class MainToolbar extends PureComponent {
    * we want to reflect the change in the toolbar.
    *
    * @param {Object} props - The new props from react-helmet.
-   * @param {Object} props.title - The new document title.
    */
-  handleClientStateChange = ({ title }) => {
-    this.setState({ title });
+  handleClientStateChange = (props) => {
+    this.setState({ title: props.title.split('|')[0].trim() });
   };
 
   /**
@@ -110,7 +109,7 @@ export class MainToolbar extends PureComponent {
 
     return (
       <div className={this.props.classes.rightContainer}>
-        <Typography typography="title">{user.name}</Typography>
+        <Typography typography="title">Kampfkeks</Typography>
 
         <img
           className={this.props.classes.avatar}

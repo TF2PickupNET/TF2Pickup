@@ -52,7 +52,7 @@ export default function setupApp(config) {
         environment: 'server',
       });
 
-      res.redirect(`/error?message=${error.message}&code=${error.code}&_id=${_id}`);
+      res.redirect(`/error?message=${error.message}&code=${error.code}&id=${_id}`);
     },
   }));
 

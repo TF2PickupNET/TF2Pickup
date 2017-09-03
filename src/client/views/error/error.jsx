@@ -44,7 +44,13 @@ export function Error({
 
       <Card>
         <Card.Header>An error occured (Code: {query.code})</Card.Header>
-        <Card.Content>{query.message}</Card.Content>
+        <Card.Content>
+          {query.message}
+
+          <br />
+          <br />
+          Error ID: {query.id}
+        </Card.Content>
 
         <Card.Actions>
           <Button onRelease={redirect}>

@@ -1,5 +1,5 @@
 // eslint-disable-next-line filenames/match-exported
-import createSteamApi from './create-steam-api';
+import createSteamApi from '../users/third-party-services/steam/create-steam-api';
 
 const tf2AppId = 440;
 
@@ -8,16 +8,9 @@ const tf2AppId = 440;
  *
  * @param {String} id - The users steamId.
  * @param {Object} app - The feathers app object.
- * @param {Boolean} oneDaySinceLastUpdate - If the last update is at least one day ago.
- * @returns {Object} - The updated data for the user.
+ * @returns {Number} - The updated data for the user.
  */
-export default async function getTF2Hours(id, app, oneDaySinceLastUpdate) {
-  if (!oneDaySinceLastUpdate) {
-    return {};
-  }
-
-  let games = [];
-
+export default async function getTF2Hours(id, app) {
   try {
     const result = await createSteamApi().get('IPlayerService/GetOwnedGames/v0001/', {
       params: {
@@ -25,8 +18,9 @@ export default async function getTF2Hours(id, app, oneDaySinceLastUpdate) {
         include_played_free_games: 1, // eslint-disable-line camelcase
       },
     });
+    const game = result.data.response.games.find(({ appid }) => appid === tf2AppId);
 
-    games = result.data.response.games;
+    return Math.floor(game.playtime_forever / 60);
   } catch (error) {
     app.service('logs').create({
       message: 'Error while getting tf2 hours',
@@ -35,11 +29,6 @@ export default async function getTF2Hours(id, app, oneDaySinceLastUpdate) {
       steamId: id,
     });
 
-    return {};
+    return null;
   }
-
-  const tf2 = games.find(({ appid }) => appid === tf2AppId);
-  const tf2Hours = Math.floor(tf2.playtime_forever / 60);
-
-  return { services: { steam: { tf2Hours } } };
 }

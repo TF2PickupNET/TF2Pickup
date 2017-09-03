@@ -72,7 +72,10 @@ export default function authentication() {
         return done(null, users[0]);
       } else if (users.length > 1) {
         return done(
-          new errors.Conflict(`Multiple users found with the steamId ${id}! Please contact a system admin!`),
+          new errors.Conflict([
+            `Multiple users found with the steamId ${id}!`,
+            'Please contact a system admin!',
+          ].join(' ')),
           null,
         );
       }
@@ -81,7 +84,7 @@ export default function authentication() {
 
       if (tf2Hours === null) {
         return done(
-          new Error([
+          new errors.Timeout([
             'Something went wrong while trying to get your played hours in TF2!',
             'Please try again. If the problem persists concat a developer over discord.',
           ].join(' ')),
@@ -91,7 +94,7 @@ export default function authentication() {
 
       if (tf2Hours < process.env.REQUIRED_TF2_HOURS) {
         return done(
-          new Error([
+          new errors.Forbidden([
             'You don\'t have the required minimum hours in TF2 to play TF2Pickup',
             `You will atleast need ${process.env.REQUIRED_TF2_HOURS} in TF2.`,
           ].join(' ')),
@@ -107,7 +110,7 @@ export default function authentication() {
 
         if (!groupMembers.includes(id)) {
           return done(
-            new error.Forbidden(
+            new errors.Forbidden(
               'The site is currently in beta mode and you are not in the required Steam Group',
             ),
             null,

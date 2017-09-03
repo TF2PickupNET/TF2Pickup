@@ -1,5 +1,4 @@
 import SteamCommunity from 'steamcommunity';
-import moment from 'moment';
 import promisify from 'es6-promisify';
 
 const community = new SteamCommunity();

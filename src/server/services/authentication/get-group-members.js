@@ -18,8 +18,8 @@ export default async function getGroupMembers(groupName, app) {
     lastCache = new Date();
 
     try {
-      const steamGroup = await promisify(community.getSteamGroup)(groupName);
-      const members = await promisify(steamGroup.getMembers)();
+      const steamGroup = await promisify(community.getSteamGroup, community)(groupName);
+      const members = await promisify(steamGroup.getMembers, steamGroup)();
 
       cachedMembers = members.map(member => member.getSteamID64());
     } catch (error) {

@@ -57,17 +57,6 @@ export default new Schema({
 
   services: {
     steam: {
-      tf2Hours: {
-        type: Number,
-        min: 0,
-        default: null,
-      },
-
-      isInBetaGroup: {
-        type: Boolean,
-        default: false,
-      },
-
       avatar: {
         small: avatarSchema('Small'),
         medium: avatarSchema('Medium'),
@@ -88,11 +77,6 @@ export default new Schema({
           message: '{VALUE} is not a valid customUrl',
         },
         default: null,
-      },
-
-      isInGroup: {
-        type: Boolean,
-        default: false,
       },
     },
 

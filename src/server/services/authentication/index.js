@@ -5,10 +5,11 @@ import errors from 'feathers-errors';
 import ms from 'ms';
 
 import { authUrl } from '../../../config/index';
-import getGroupMembers from '../users/third-party-services/steam/get-group-members';
 
 import createLoginListener from './create-login-listener';
 import createLogoutListener from './create-logout-listener';
+import getGroupMembers from './get-group-members';
+import getTF2Hours from './get-tf2-hours';
 
 /**
  * A utility class which makes sure the id from the jwt get's mapped to the correct user.
@@ -76,24 +77,46 @@ export default function authentication() {
         );
       }
 
+      const tf2Hours = await getTF2Hours(id, that);
+
+      if (tf2Hours === null) {
+        return done(
+          new Error([
+            'Something went wrong while trying to get your played hours in TF2!',
+            'Please try again. If the problem persists concat a developer over discord.',
+          ].join(' ')),
+          null,
+        );
+      }
+
+      if (tf2Hours < process.env.REQUIRED_TF2_HOURS) {
+        return done(
+          new Error([
+            'You don\'t have the required minimum hours in TF2 to play TF2Pickup',
+            `You will atleast need ${process.env.REQUIRED_TF2_HOURS} in TF2.`,
+          ].join(' ')),
+          null,
+        );
+      }
+
+      if (process.env.BETA_MODE) {
+        const groupMembers = await getGroupMembers(
+          process.env.VALIDATE_AGAINST_STEAM_GROUP,
+          that,
+        );
+
+        if (!groupMembers.includes(id)) {
+          return done(
+            new error.Forbidden(
+              'The site is currently in beta mode and you are not in the required Steam Group',
+            ),
+            null,
+          );
+        }
+      }
+
       // Create a new user when no user was found
       try {
-        if (process.env.BETA_MODE) {
-          const groupMembers = await getGroupMembers(
-            process.env.VALIDATE_AGAINST_STEAM_GROUP,
-            that,
-          );
-
-          if (!groupMembers.includes(id)) {
-            return done(
-              new error.Forbidden(
-                'The site is currently in beta mode and you are not in the required Steam Group',
-              ),
-              null,
-            );
-          }
-        }
-
         const newUser = await usersService.create(query);
 
         return done(null, newUser);

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import {
   Toolbar,
   Typography,
@@ -26,9 +27,10 @@ export class MainToolbar extends PureComponent {
       rightContainer: PropTypes.string.isRequired,
     }).isRequired,
     user: PropTypes.shape({
-      name: PropTypes.string.isRequired,
+      name: PropTypes.string,
       services: PropTypes.object.isRequired,
     }),
+    redirect: PropTypes.func.isRequired,
   };
 
   static defaultProps = { user: null };
@@ -79,6 +81,10 @@ export class MainToolbar extends PureComponent {
     window.location = authUrl;
   };
 
+  handleProfileRedirect = () => {
+    this.props.redirect('/profile');
+  };
+
   /**
    * Render the steam login button.
    *
@@ -108,7 +114,11 @@ export class MainToolbar extends PureComponent {
     const { user } = this.props;
 
     return (
-      <div className={this.props.classes.rightContainer}>
+      <EventHandler
+        component="span"
+        className={this.props.classes.rightContainer}
+        onPress={this.handleProfileRedirect}
+      >
         <Typography typography="title">Kampfkeks</Typography>
 
         <img
@@ -116,7 +126,7 @@ export class MainToolbar extends PureComponent {
           alt="avatar"
           src={user.services.steam.avatar.large}
         />
-      </div>
+      </EventHandler>
     );
   }
 
@@ -144,5 +154,8 @@ export class MainToolbar extends PureComponent {
 export default connect(
   (state) => {
     return { user: state.user };
+  },
+  (dispatch) => {
+    return { redirect: url => dispatch(push(url)) };
   },
 )(injectSheet(MainToolbar.styles)(MainToolbar));

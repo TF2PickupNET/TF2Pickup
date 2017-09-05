@@ -11,6 +11,8 @@ import {
 import app from '../../app';
 import Notifications from '../../components/notifications';
 
+import Head from './head';
+
 /**
  * Render a basic layout which will try login with the token from a cookie and make sure
  * the windows view is wide enough.
@@ -36,9 +38,7 @@ export default class BasicLayout extends PureComponent {
           accessToken: token,
         });
       } catch (error) {
-        this.props.addNotification(
-          `Something went wrong while trying to authenticate! Error: ${error.message}`,
-        );
+        this.props.addNotification(error.message);
       }
     }
   }
@@ -48,13 +48,15 @@ export default class BasicLayout extends PureComponent {
       <Theme>
         <Snackbar.Controller>
           <Background>
+            <Head />
+
             <Animations />
+
+            <Snackbar.Container />
 
             <Notifications />
 
             {this.props.children}
-
-            <Snackbar.Container />
           </Background>
         </Snackbar.Controller>
       </Theme>

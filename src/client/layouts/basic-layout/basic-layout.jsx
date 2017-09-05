@@ -6,6 +6,7 @@ import {
   Background,
   Animations,
   Snackbar,
+  Dialog,
 } from 'materialize-react';
 
 import app from '../../app';
@@ -46,19 +47,21 @@ export default class BasicLayout extends PureComponent {
   render() {
     return (
       <Theme>
-        <Snackbar.Controller>
-          <Background>
-            <Head />
+        <Dialog.Controller>
+          <Snackbar.Controller>
+            <Background>
+              <Head />
 
-            <Animations />
+              <Animations />
 
-            <Snackbar.Container />
+              <Snackbar.Container />
 
-            <Notifications />
+              <Notifications />
 
-            {this.props.children}
-          </Background>
-        </Snackbar.Controller>
+              {this.props.children}
+            </Background>
+          </Snackbar.Controller>
+        </Dialog.Controller>
       </Theme>
     );
   }

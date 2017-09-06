@@ -1,4 +1,8 @@
+import debug from 'debug';
+
 import createSteamApi from './create-steam-api';
+
+const log = debug('TF2Pickup:users:steam:data');
 
 /**
  * Get the users data from steam.
@@ -11,9 +15,13 @@ export default async function getSteamData(id, app) {
   let player = {};
   const api = createSteamApi();
 
+  log('Requesting steam data for user', id);
+
   try {
     const params = { steamids: id };
     const result = await api.get('ISteamUser/GetPlayerSummaries/v0002/', { params });
+
+    log('Finished request for steam data for user', id);
 
     player = result.data.response.players[0];
 
@@ -30,6 +38,8 @@ export default async function getSteamData(id, app) {
       },
     };
   } catch (error) {
+    log('Error while requesting steam data for user', id, error);
+
     app.service('logs').create({
       message: 'Error while updating steam info',
       environment: 'server',

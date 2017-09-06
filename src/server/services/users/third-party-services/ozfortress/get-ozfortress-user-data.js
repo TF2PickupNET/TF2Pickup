@@ -1,4 +1,5 @@
 import axios from 'axios';
+import debug from 'debug';
 
 export const divs = [
   null,
@@ -6,6 +7,8 @@ export const divs = [
   'Intermediate',
   'Premier',
 ];
+
+const log = debug('TF2Pickup:users:ozfortress');
 
 /**
  * Find the highest division the user has played in.
@@ -33,12 +36,16 @@ function findHighestDiv(rosters) {
  * @returns {Object} - Returns the new data.
  */
 export default async function getOzfortressUserData(id, app) {
+  log('Requesting data from ozfortress for user', id);
+
   try {
     const result = await axios.get(
       `https://warzone.ozfortress.com/api/v1/users/steam_id/${id}`,
       { headers: { 'X-API-Key': process.env.OZFORTRESS_API_KEY } },
     );
     const player = result.data.user;
+
+    log('Finished requesting data from ozfortress for user', id);
 
     return {
       services: {
@@ -53,6 +60,8 @@ export default async function getOzfortressUserData(id, app) {
     if (error.response && error.response.status === 404) {
       return {};
     }
+
+    log('Error while requesting data from ozfortress for user', id, error);
 
     app.service('logs').create({
       message: 'Error while updating ozfortress player data',

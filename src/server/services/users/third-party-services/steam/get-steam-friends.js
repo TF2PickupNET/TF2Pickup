@@ -1,4 +1,8 @@
+import debug from 'debug';
+
 import createSteamApi from './create-steam-api';
+
+const log = debug('TF2Pickup:users:steam:friends');
 
 /**
  * Get the steam friends of a user.
@@ -13,6 +17,8 @@ export default async function getSteamFriends(id, app, oneDaySinceLastUpdate) {
     return {};
   }
 
+  log('Requesting steam friends for user', id);
+
   let friends = [];
 
   try {
@@ -23,8 +29,12 @@ export default async function getSteamFriends(id, app, oneDaySinceLastUpdate) {
       },
     });
 
+    log('Finished request for steam friends for user', id);
+
     friends = result.data.friendslist.friends;
   } catch (error) {
+    log('Error while requesting steam friends for user', id, error);
+
     app.service('logs').create({
       message: 'Error while updating steam friends',
       environment: 'server',

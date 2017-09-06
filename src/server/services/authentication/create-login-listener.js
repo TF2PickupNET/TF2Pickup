@@ -16,18 +16,18 @@ export default function createLoginListener(app) {
     const users = app.service('users');
     const logs = app.service('logs');
 
+    log('User logged in', connection.user.id);
+
     try {
       const yesterday = moment().subtract(1, 'day');
       const oneDaySinceLastUpdate = moment(connection.user.lastUpdate).isBefore(yesterday);
       const updatedData = await getNewUserData(connection.user.id, oneDaySinceLastUpdate, app);
 
+      log('Updating third party user data', connection.user.id, updatedData);
+
       updatedData.online = true;
 
-      log('Updating user data for user with id', connection.user.id, updatedData);
-
       await users.patch(connection.user.id, updatedData);
-
-      log('User logged in with id', connection.user.id);
 
       await logs.create({
         message: 'User logged in',
@@ -35,8 +35,10 @@ export default function createLoginListener(app) {
         steamId: connection.user.id,
       });
     } catch (error) {
+      log('Error in login callback', connection.user.id, error);
+
       await logs.create({
-        message: 'Error on login callback',
+        message: 'Error in login callback',
         environment: 'server',
         info: error,
         steamId: connection.user.id,

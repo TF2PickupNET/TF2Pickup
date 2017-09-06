@@ -82,11 +82,11 @@ export default function authentication() {
 
       // Return the user if exactly one was found and if more than were found return an error
       if (users.length === 1) {
-        log('Found one user with id', id);
+        log('Logging in user with id', id);
 
         return done(null, users[0]);
       } else if (users.length > 1) {
-        log('Found multiple users with id', id);
+        log('Found multiple users with id:', id);
 
         return done(
           new errors.Conflict([
@@ -100,7 +100,7 @@ export default function authentication() {
       const tf2Hours = await getTF2Hours(id, that);
 
       if (tf2Hours === null) {
-        log('Unable to fetch tf2 hours for user', id);
+        log('Unable to fetch tf2 hours for user:', id);
 
         return done(
           new errors.Timeout([
@@ -112,7 +112,7 @@ export default function authentication() {
       }
 
       if (tf2Hours < process.env.REQUIRED_TF2_HOURS) {
-        log('TF2 hours do not satisfy the required minimum for user id', id);
+        log('TF2 hours do not satisfy the required minimum', id);
 
         return done(
           new errors.Forbidden([
@@ -124,7 +124,7 @@ export default function authentication() {
       }
 
       if (process.env.BETA_MODE) {
-        log('Validating user against steam group', process.env.VALIDATE_AGAINST_STEAM_GROUP);
+        log('Validating user against steam group:', process.env.VALIDATE_AGAINST_STEAM_GROUP);
 
         const groupMembers = await getGroupMembers(
           process.env.VALIDATE_AGAINST_STEAM_GROUP,
@@ -145,13 +145,13 @@ export default function authentication() {
 
       // Create a new user when no user was found
       try {
-        log('Creating new user with id', id);
+        log('Creating new user with id:', id);
 
         const newUser = await usersService.create(query);
 
         return done(null, newUser);
       } catch (error) {
-        log('Error while creating new user', error.message);
+        log('Error while creating new user:', error.message);
 
         that.service('logs').create({
           message: 'Error while creating new user',
@@ -171,7 +171,7 @@ export default function authentication() {
     `${authUrl}/return`,
     auth.express.authenticate('steam'),
     async (req, res, next) => {
-      log('Creating new JWT token for user', req.user.id);
+      log('Creating new JWT token for user:', req.user.id);
 
       // Create a new jwt token
       const token = await req.app.passport.createJWT({ id: req.user.id }, that.get('auth'));

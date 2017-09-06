@@ -35,7 +35,7 @@ export function DrawerContent({
   const createRedirect = url => () => redirect(url);
   const handleLogoutClick = () => app.logout();
   const handleLoginClick = () => app.redirectToSteamAuth();
-  const redirectToFeedback = () => openWindowInNewTab(discordUrls.suggestions);
+  const createNewTab = url => () => openWindowInNewTab(url);
 
   return (
     <div>
@@ -165,7 +165,7 @@ export function DrawerContent({
       <List inset>
         <List.Item
           leftItem={<Icon icon="message-alert" />}
-          onClick={redirectToFeedback}
+          onClick={createNewTab(discordUrls.suggestions)}
         >
           Send feedback
 
@@ -174,7 +174,7 @@ export function DrawerContent({
 
         <List.Item
           leftItem={<Icon icon="help-circle" />}
-          onClick={createRedirect('/help')}
+          onClick={createNewTab(discordUrls.help)}
         >
           Help
 

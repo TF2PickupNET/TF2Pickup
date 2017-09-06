@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 import hooks from 'feathers-hooks';
 import auth from 'feathers-authentication-client';
 
+import { authUrl } from '../config';
 import { isDev } from '../config/client';
 
 import configureStore from './redux/configure-store';
@@ -19,6 +20,10 @@ app
   .configure(socketio(socket))
   .configure(auth({ storage: window.localStorage }))
   .configure(configureStore);
+
+app.redirectToSteamAuth = () => {
+  window.location = authUrl;
+};
 
 if (isDev) {
   window.app = app;

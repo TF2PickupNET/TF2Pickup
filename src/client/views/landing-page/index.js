@@ -1,7 +1,7 @@
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 
-import LandingPage from './landing-page';
+import LandingPage from './view';
 
 /**
  * Connect the LandingPage with redux.

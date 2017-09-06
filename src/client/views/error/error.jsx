@@ -43,7 +43,7 @@ export function Error({
       <Helmet><title>Error</title></Helmet>
 
       <Card>
-        <Card.Header>{getErrorMessage(code)} <br /> (Code: {code})</Card.Header>
+        <Card.Header>{getErrorMessage(code)} (Code: {code})</Card.Header>
         <Card.Content>
           {query.message}
 

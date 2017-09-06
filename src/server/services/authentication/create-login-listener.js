@@ -1,6 +1,9 @@
 import moment from 'moment';
+import debug from 'debug';
 
 import getNewUserData from '../users/third-party-services/index';
+
+const log = debug('TF2Pickup:authentication:login');
 
 /**
  * Create a login listener to update the user third party data and emit events.
@@ -20,7 +23,11 @@ export default function createLoginListener(app) {
 
       updatedData.online = true;
 
+      log('Updating user data for user with id', connection.user.id, updatedData);
+
       await users.patch(connection.user.id, updatedData);
+
+      log('User logged in with id', connection.user.id);
 
       await logs.create({
         message: 'User logged in',

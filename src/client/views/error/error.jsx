@@ -11,6 +11,7 @@ import injectSheet from 'react-jss';
 import randomItem from 'random-item';
 
 import Link from '../../components/link';
+import openWindowInNewTab from '../../utils/open-window-in-new-tab';
 import sixes from '../../../assets/images/background/6v6.jpg';
 import hl from '../../../assets/images/background/9v9.jpg';
 import bball from '../../../assets/images/background/bball.jpg';
@@ -19,12 +20,6 @@ import ultiduo from '../../../assets/images/background/ultiduo.jpg';
 import getErrorMessage from './get-error-message';
 
 const discordHelpChannelUrl = 'https://discordapp.com/channels/101790253651599360/101807927752409088';
-
-function redirect() {
-  const tab = window.open(discordHelpChannelUrl);
-
-  tab.opener = null;
-}
 
 /**
  * The error page when an error occurs on the server.
@@ -42,6 +37,7 @@ export function Error({
 }) {
   const query = queryString.parse(location.search);
   const code = Number(query.code);
+  const redirectToDiscordHelp = () => openWindowInNewTab(discordHelpChannelUrl);
 
   return (
     <div className={classes.container}>
@@ -71,7 +67,7 @@ export function Error({
         </Card.Content>
 
         <Card.Actions>
-          <Button onRelease={redirect}>
+          <Button onRelease={redirectToDiscordHelp}>
             Get help
           </Button>
         </Card.Actions>

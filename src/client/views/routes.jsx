@@ -16,6 +16,7 @@ import Pickup, { RedirectToPickup } from './pickup';
 import Rules from './rules';
 import Servers from './servers';
 import RecentPickups from './recent-pickups';
+import Error from './error';
 
 /**
  * The main component.
@@ -111,6 +112,12 @@ export default class Routes extends PureComponent {
           exact
           path="/settings"
           render={composeWithMainLayout(Settings)}
+        />
+
+        <Route
+          exact
+          path="/error"
+          component={Error}
         />
       </Switch>
     );

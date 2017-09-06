@@ -21,7 +21,7 @@ const gamemode = randomItem(['bball', 'ultiduo']);
  * @param {Object} props.classes - Classes provided by Jss for the header.
  * @returns {JSX} - Returns the headers JSX.
  */
-function LandingPageHeader({ classes }) {
+function Header({ classes }) {
   return (
     <header className={classes.header}>
       <span className={classes.title}>
@@ -37,7 +37,7 @@ function LandingPageHeader({ classes }) {
   );
 }
 
-LandingPageHeader.propTypes = {
+Header.propTypes = {
   classes: PropTypes.shape({
     header: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -45,7 +45,7 @@ LandingPageHeader.propTypes = {
   }).isRequired,
 };
 
-LandingPageHeader.styles = {
+Header.styles = {
   header: {
     composes: gamemode,
     animationDelay: '250ms',
@@ -109,4 +109,4 @@ LandingPageHeader.styles = {
   },
 };
 
-export default injectSheet(LandingPageHeader.styles)(LandingPageHeader);
+export default injectSheet(Header.styles)(Header);

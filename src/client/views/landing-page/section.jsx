@@ -17,7 +17,7 @@ import PropTypes from 'prop-types';
  * @param {String} props.imagePosition - The position for the image. Either left or right.
  * @returns {JSX} - Returns the JSX.
  */
-function LandingPageSection({
+function Section({
   classes,
   imgSrc,
   imgProps,
@@ -44,7 +44,7 @@ function LandingPageSection({
   );
 }
 
-LandingPageSection.propTypes = {
+Section.propTypes = {
   classes: PropTypes.shape({
     section: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
@@ -55,9 +55,9 @@ LandingPageSection.propTypes = {
   imgProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
-LandingPageSection.defaultProps = { imgProps: {} };
+Section.defaultProps = { imgProps: {} };
 
-LandingPageSection.styles = {
+Section.styles = {
   section: {
     display: 'flex',
     flexDirection: 'column',
@@ -82,4 +82,4 @@ LandingPageSection.styles = {
   },
 };
 
-export default injectSheet(LandingPageSection.styles)(LandingPageSection);
+export default injectSheet(Section.styles)(Section);

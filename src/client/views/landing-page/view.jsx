@@ -21,19 +21,19 @@ import { authUrl } from '../../../config';
 import app from '../../app';
 import Link from '../../components/link';
 
-import LandingPageHeader from './landing-page-header';
-import LandingPageSection from './landing-page-section';
-import LandingPageFooter from './landing-page-footer';
+import LandingPageHeader from './header';
+import LandingPageSection from './section';
+import LandingPageFooter from './footer';
 
 const gamemodeDisplays = Object.values(gamemodes).map(gamemode => gamemode.display);
 const regionDisplays = Object.values(regions).map(region => region.fullName);
 
 /**
- * Main component for the Landing Page.
+ * The view for the Landing Page.
  *
  * @class
  */
-export class LandingPage extends PureComponent {
+export class View extends PureComponent {
   static propTypes = {
     redirect: PropTypes.func.isRequired,
     classes: PropTypes.shape({
@@ -192,7 +192,7 @@ export class LandingPage extends PureComponent {
 
           <div className={classes.regionText}>
             Currently available in the following regions: <br />
-            {LandingPage.arrayToText(regionDisplays)}
+            {View.arrayToText(regionDisplays)}
           </div>
         </section>
 
@@ -210,7 +210,7 @@ export class LandingPage extends PureComponent {
           className={classes.parallax}
         >
           Supporting a wide variety of popular competitive formats: <br />
-          {LandingPage.arrayToText(gamemodeDisplays)}
+          {View.arrayToText(gamemodeDisplays)}
         </Parallax>
 
         <LandingPageSection
@@ -230,4 +230,4 @@ export class LandingPage extends PureComponent {
   }
 }
 
-export default injectSheet(LandingPage.styles)(LandingPage);
+export default injectSheet(View.styles)(View);

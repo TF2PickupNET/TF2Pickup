@@ -18,7 +18,7 @@ import Link from '../../components/link';
  *
  * @class
  */
-class LandingPageFooter extends PureComponent {
+class Footer extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
       footer: PropTypes.string.isRequired,
@@ -82,7 +82,7 @@ class LandingPageFooter extends PureComponent {
    * @returns {JSX[]} - Returns the JSX.
    */
   static renderSocialMediaLinks(classes) {
-    return LandingPageFooter.socialMediaValues.map(data => (
+    return Footer.socialMediaValues.map(data => (
       <Link
         key={data.name}
         href={data.url}
@@ -104,7 +104,7 @@ class LandingPageFooter extends PureComponent {
    * @returns {JSX[]} - Returns the JSX.
    */
   static renderPageLinks(classes) {
-    return LandingPageFooter.pages.map(page => (
+    return Footer.pages.map(page => (
       <Link
         href={`/${page}`}
         key={page}
@@ -125,17 +125,17 @@ class LandingPageFooter extends PureComponent {
         </div>
 
         <div className={classes.container}>
-          {LandingPageFooter.renderSocialMediaLinks(classes)}
+          {Footer.renderSocialMediaLinks(classes)}
         </div>
 
         <Divider className={classes.divider} />
 
         <div className={classes.container}>
-          {LandingPageFooter.renderPageLinks(classes)}
+          {Footer.renderPageLinks(classes)}
         </div>
       </footer>
     );
   }
 }
 
-export default injectSheet(LandingPageFooter.styles)(LandingPageFooter);
+export default injectSheet(Footer.styles)(Footer);

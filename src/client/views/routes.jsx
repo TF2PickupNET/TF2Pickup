@@ -9,7 +9,6 @@ import { composeWithMainLayout } from '../layouts/main-layout';
 import LandingPage from './landing-page';
 import About from './about';
 import Donate from './donate';
-import Help from './help';
 import Settings from './settings';
 import Profile from './profile';
 import Pickup, { RedirectToPickup } from './pickup';
@@ -82,12 +81,6 @@ export default class Routes extends PureComponent {
           exact
           path="/servers"
           render={composeWithMainLayout(Servers)}
-        />
-
-        <Route
-          exact
-          path="/help"
-          render={composeWithMainLayout(Help)}
         />
 
         <Route

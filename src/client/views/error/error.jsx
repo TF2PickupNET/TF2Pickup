@@ -12,14 +12,13 @@ import randomItem from 'random-item';
 
 import Link from '../../components/link';
 import openWindowInNewTab from '../../utils/open-window-in-new-tab';
+import { discordUrls } from '../../../config/client';
 import sixes from '../../../assets/images/background/6v6.jpg';
 import hl from '../../../assets/images/background/9v9.jpg';
 import bball from '../../../assets/images/background/bball.jpg';
 import ultiduo from '../../../assets/images/background/ultiduo.jpg';
 
 import getErrorMessage from './get-error-message';
-
-const discordHelpChannelUrl = 'https://discordapp.com/channels/101790253651599360/101807927752409088';
 
 /**
  * The error page when an error occurs on the server.
@@ -37,7 +36,7 @@ export function Error({
 }) {
   const query = queryString.parse(location.search);
   const code = Number(query.code);
-  const redirectToDiscordHelp = () => openWindowInNewTab(discordHelpChannelUrl);
+  const redirectToDiscordHelp = () => openWindowInNewTab(discordUrls.help);
 
   return (
     <div className={classes.container}>
@@ -57,7 +56,7 @@ export function Error({
 
           If you need more help, check out our
           <Link
-            href={discordHelpChannelUrl}
+            href={discordUrls.help}
             className={classes.link}
           >
             #help

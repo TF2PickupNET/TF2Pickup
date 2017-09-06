@@ -43,13 +43,9 @@ export function Error({
       <Helmet><title>Error</title></Helmet>
 
       <Card>
-        <Card.Header>{getErrorMessage(code)} (Code: {code})</Card.Header>
+        <Card.Header>{code} {getErrorMessage(code)}</Card.Header>
         <Card.Content>
           {query.message}
-
-          <br />
-          <br />
-          Error ID: {query.id}
 
           <br />
           <br />
@@ -63,6 +59,11 @@ export function Error({
           </Link>
           and contact one of the admins.
           Please make sure that you keep your Error ID.
+
+          <br />
+          <br />
+
+          Error ID: {query.id}
         </Card.Content>
 
         <Card.Actions>
@@ -80,6 +81,7 @@ Error.propTypes = {
   classes: PropTypes.shape({
     container: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
+    cardActions: PropTypes.string.isRequired,
   }).isRequired,
 };
 

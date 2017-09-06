@@ -8,9 +8,9 @@ import app from '../app';
 import Routes from './routes';
 
 /**
- * The main component.
+ * The main app component.
  *
- * @class
+ * @returns {JSX} - Returns the app.
  */
 export default function App() {
   return (

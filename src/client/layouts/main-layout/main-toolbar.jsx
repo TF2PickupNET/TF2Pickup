@@ -81,6 +81,9 @@ export class MainToolbar extends PureComponent {
     window.location = authUrl;
   };
 
+  /**
+   * Redirect the user to his profile.
+   */
   handleProfileRedirect = () => {
     this.props.redirect('/profile');
   };

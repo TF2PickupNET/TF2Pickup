@@ -15,7 +15,6 @@ import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import app from '../../app';
 import { Logo } from '../../icons';
-import { authUrl } from '../../../config';
 import openWindowInNewTab from '../../utils/open-window-in-new-tab';
 
 const feedbackDiscordLink = 'https://discordapp.com/channels/101790253651599360/141602413952892928';
@@ -36,9 +35,7 @@ export function DrawerContent({
 }) {
   const createRedirect = url => () => redirect(url);
   const handleLogoutClick = () => app.logout();
-  const handleLoginClick = () => {
-    window.location = authUrl;
-  };
+  const handleLoginClick = () => app.redirectToSteamAuth();
   const redirectToFeedback = () => openWindowInNewTab(feedbackDiscordLink);
 
   return (

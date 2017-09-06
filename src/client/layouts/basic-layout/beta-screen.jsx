@@ -16,6 +16,8 @@ import ultiduo from '../../../assets/images/background/ultiduo.jpg';
 /**
  * The screen to display when the client isn't logged in and the site is in beta mode.
  *
+ * @param {Object} props - The props for the component.
+ * @param {Object} props.classes - The classes for the component. Provided by Jss.
  * @returns {JSX} - Returns the JSX for the screen.
  */
 function BetaScreen({ classes }) {

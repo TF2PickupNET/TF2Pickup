@@ -16,8 +16,7 @@ import gamemodes from '@tf2-pickup/configs/gamemodes';
 import app from '../../app';
 import { Logo } from '../../icons';
 import openWindowInNewTab from '../../utils/open-window-in-new-tab';
-
-const feedbackDiscordLink = 'https://discordapp.com/channels/101790253651599360/141602413952892928';
+import { discordUrls } from '../../../config/client';
 
 /**
  * A component to render the content of the sidebar.
@@ -36,7 +35,7 @@ export function DrawerContent({
   const createRedirect = url => () => redirect(url);
   const handleLogoutClick = () => app.logout();
   const handleLoginClick = () => app.redirectToSteamAuth();
-  const redirectToFeedback = () => openWindowInNewTab(feedbackDiscordLink);
+  const createNewTab = url => () => openWindowInNewTab(url);
 
   return (
     <div>
@@ -166,7 +165,7 @@ export function DrawerContent({
       <List inset>
         <List.Item
           leftItem={<Icon icon="message-alert" />}
-          onClick={redirectToFeedback}
+          onClick={createNewTab(discordUrls.suggestions)}
         >
           Send feedback
 
@@ -175,7 +174,7 @@ export function DrawerContent({
 
         <List.Item
           leftItem={<Icon icon="help-circle" />}
-          onClick={createRedirect('/help')}
+          onClick={createNewTab(discordUrls.help)}
         >
           Help
 

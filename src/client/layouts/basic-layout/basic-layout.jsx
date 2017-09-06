@@ -16,6 +16,7 @@ import Notifications from '../../components/notifications';
 import { addNotification } from '../../redux/notifications/actions';
 
 import Head from './head';
+import BetaScreen from './beta-screen';
 
 /**
  * Render a basic layout which will try login with the token from a cookie and make sure
@@ -64,7 +65,7 @@ class BasicLayout extends PureComponent {
 
               <Notifications />
 
-              {isInBetaMode && !this.props.user ? (<div />) : this.props.children}
+              {isInBetaMode && !this.props.user ? (<BetaScreen />) : this.props.children}
             </Background>
           </Snackbar.Controller>
         </Dialog.Controller>

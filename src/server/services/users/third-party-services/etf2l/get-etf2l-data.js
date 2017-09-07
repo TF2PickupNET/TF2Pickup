@@ -82,12 +82,12 @@ function isMatchValid(match) {
 export default async function getETF2LData(id, app, oneDaySinceLastUpdate) {
   let player = null;
 
-  log('Requesting ETF2L player data for user', id);
+  log('Requesting ETF2L player data', id);
 
   try {
     player = await getPlayerData(id);
 
-    log('Finished requesting data from ETF2L for user', id);
+    log('Finished requesting data from ETF2L', id);
   } catch (error) {
     log('Error while requesting ETF2L player data', id, error);
 
@@ -124,7 +124,7 @@ export default async function getETF2LData(id, app, oneDaySinceLastUpdate) {
   }
 
   if (oneDaySinceLastUpdate) {
-    log('Updating users ETF2L divisions for user', id);
+    log('Updating users ETF2L divisions', id);
 
     try {
       const matches = await getMatches(player.id);

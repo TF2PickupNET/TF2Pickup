@@ -14,16 +14,17 @@ const log = debug('TF2Pickup:users:steam:vac');
 export default async function getVACBans(id, app) {
   let player = {};
 
-  log('Requesting VAC bans for user', id);
+  log('Requesting VAC bans', id);
 
   try {
-    const result = await createSteamApi().get('ISteamUser/GetPlayerBans/v1/', { steamids: id });
+    const params = { steamids: id };
+    const result = await createSteamApi().get('ISteamUser/GetPlayerBans/v1/', { params });
 
-    log('Finished requesting VAC bans for user', id);
+    log('Finished requesting VAC bans', id);
 
     player = result.data.players[0];
   } catch (error) {
-    log('Error while requesting VAC bans for user', id, error);
+    log('Error while requesting VAC bans', id, error);
 
     app.service('logs').create({
       message: 'Error while updating steam vac bans',

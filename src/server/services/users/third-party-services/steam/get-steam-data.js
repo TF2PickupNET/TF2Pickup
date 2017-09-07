@@ -15,13 +15,13 @@ export default async function getSteamData(id, app) {
   let player = {};
   const api = createSteamApi();
 
-  log('Requesting steam data for user', id);
+  log('Requesting steam data', id);
 
   try {
     const params = { steamids: id };
     const result = await api.get('ISteamUser/GetPlayerSummaries/v0002/', { params });
 
-    log('Finished request for steam data for user', id);
+    log('Finished request for steam data', id);
 
     player = result.data.response.players[0];
 
@@ -38,7 +38,7 @@ export default async function getSteamData(id, app) {
       },
     };
   } catch (error) {
-    log('Error while requesting steam data for user', id, error);
+    log('Error while requesting steam data', id, error);
 
     app.service('logs').create({
       message: 'Error while updating steam info',

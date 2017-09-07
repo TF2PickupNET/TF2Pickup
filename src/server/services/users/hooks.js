@@ -12,8 +12,6 @@ export default {
     async create(props) {
       const userData = await getUserData(props.data.id, true, props.app);
 
-      log('Adding third party data to user', props.data.id);
-
       return {
         ...props,
         data: merge({}, props.data, userData, { createdAt: new Date() }),
@@ -25,15 +23,13 @@ export default {
     async create(props) {
       const logs = props.app.service('logs');
 
-      log('Created a new user');
+      log('Created a new user', props.data.id);
 
       await logs.create({
         message: 'Created a new user',
         environment: 'server',
         steamId: props.data.id,
       });
-
-      log('Inviting user to steam group');
 
       await new Promise((resolve) => {
         community.inviteUserToGroup(props.data.id, '103582791435021680', () => {

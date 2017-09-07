@@ -17,7 +17,7 @@ export default async function getSteamFriends(id, app, oneDaySinceLastUpdate) {
     return {};
   }
 
-  log('Requesting steam friends for user', id);
+  log('Requesting steam friends', id);
 
   let friends = [];
 
@@ -29,11 +29,11 @@ export default async function getSteamFriends(id, app, oneDaySinceLastUpdate) {
       },
     });
 
-    log('Finished request for steam friends for user', id);
+    log('Finished request for steam friends', id);
 
     friends = result.data.friendslist.friends;
   } catch (error) {
-    log('Error while requesting steam friends for user', id, error);
+    log('Error while requesting steam friends', id, error);
 
     app.service('logs').create({
       message: 'Error while updating steam friends',

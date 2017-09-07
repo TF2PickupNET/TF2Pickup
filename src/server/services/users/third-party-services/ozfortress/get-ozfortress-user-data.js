@@ -36,7 +36,7 @@ function findHighestDiv(rosters) {
  * @returns {Object} - Returns the new data.
  */
 export default async function getOzfortressUserData(id, app) {
-  log('Requesting data from ozfortress for user', id);
+  log('Requesting data from ozfortress', id);
 
   try {
     const result = await axios.get(
@@ -45,7 +45,7 @@ export default async function getOzfortressUserData(id, app) {
     );
     const player = result.data.user;
 
-    log('Finished requesting data from ozfortress for user', id);
+    log('Finished requesting data from ozfortress', id);
 
     return {
       services: {
@@ -61,7 +61,7 @@ export default async function getOzfortressUserData(id, app) {
       return {};
     }
 
-    log('Error while requesting data from ozfortress for user', id, error);
+    log('Error while requesting data from ozfortress', id, error);
 
     app.service('logs').create({
       message: 'Error while updating ozfortress player data',

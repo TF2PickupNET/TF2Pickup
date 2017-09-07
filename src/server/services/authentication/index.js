@@ -30,16 +30,16 @@ class JWTVerifier extends Verifier {
    * @returns {Promise} - Returns the called done function.
    */
   async verify(req, payload, done) {
-    log('Verifying JWT with user id', payload.id);
+    log('Verifying JWT', payload.id);
 
     try {
       const user = await this.app.service('users').get(payload.id);
 
-      log('Validated JWT token for user', user.id);
+      log('Verified JWT', user);
 
       return done(null, user, { id: user.id });
     } catch (error) {
-      log('Error while verifying user', error.message);
+      log('Error while verifying JWT', payload.id, error);
 
       return done(error, null);
     }
@@ -78,15 +78,15 @@ export default function authentication() {
       const query = { id };
       const users = await usersService.find(query);
 
-      log('New steam login with user id', id);
+      log('New steam login', id);
 
       // Return the user if exactly one was found and if more than were found return an error
       if (users.length === 1) {
-        log('Logging in user with id', id);
+        log('Logging in user', id);
 
         return done(null, users[0]);
       } else if (users.length > 1) {
-        log('Found multiple users with id:', id);
+        log('Found multiple users', id);
 
         return done(
           new errors.Conflict([
@@ -100,7 +100,7 @@ export default function authentication() {
       const tf2Hours = await getTF2Hours(id, that);
 
       if (tf2Hours === null) {
-        log('Unable to fetch tf2 hours for user:', id);
+        log('Unable to fetch tf2 hours', id);
 
         return done(
           new errors.Timeout([
@@ -123,8 +123,8 @@ export default function authentication() {
         );
       }
 
-      if (process.env.BETA_MODE) {
-        log('Validating user against steam group:', process.env.VALIDATE_AGAINST_STEAM_GROUP);
+      if (process.env.BETA_MODE && process.env.VALIDATE_AGAINST_STEAM_GROUP) {
+        log('Validating user against steam group', process.env.VALIDATE_AGAINST_STEAM_GROUP);
 
         const groupMembers = await getGroupMembers(
           process.env.VALIDATE_AGAINST_STEAM_GROUP,
@@ -132,7 +132,7 @@ export default function authentication() {
         );
 
         if (!groupMembers.includes(id)) {
-          log('User is not allowed to join', id);
+          log('User is not in the steam group', id);
 
           return done(
             new errors.Forbidden(
@@ -145,13 +145,13 @@ export default function authentication() {
 
       // Create a new user when no user was found
       try {
-        log('Creating new user with id:', id);
+        log('Creating new user', id);
 
         const newUser = await usersService.create(query);
 
         return done(null, newUser);
       } catch (error) {
-        log('Error while creating new user:', error.message);
+        log('Error while creating new user', id, error);
 
         that.service('logs').create({
           message: 'Error while creating new user',
@@ -171,7 +171,7 @@ export default function authentication() {
     `${authUrl}/return`,
     auth.express.authenticate('steam'),
     async (req, res, next) => {
-      log('Creating new JWT token for user:', req.user.id);
+      log('Creating new JWT', req.user.id);
 
       // Create a new jwt token
       const token = await req.app.passport.createJWT({ id: req.user.id }, that.get('auth'));

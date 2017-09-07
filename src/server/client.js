@@ -30,6 +30,24 @@ export default function client() {
     that.use(webpackDevMiddleware(webpack(config), {
       noInfo: true,
       stats: { colors: true },
+      reporter({
+        state,
+        stats,
+      }) {
+        if (state) {
+          if (stats.hasErrors()) {
+            log('Error while building client');
+            log(stats.toString());
+          } else if (stats.hasWarnings()) {
+            log('Warning while building client');
+            log(stats.toString());
+          } else {
+            log('Finished building client');
+          }
+        } else {
+          log('Rebuilding client');
+        }
+      },
     }));
   } else {
     log('Serving client code');

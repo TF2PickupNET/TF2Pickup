@@ -60,7 +60,7 @@ Header.styles = {
     boxShadow: elevation(4),
     width: '100%',
     height: '75vh',
-    backgroundImage: images[gamemodeImage],
+    backgroundImage: `url(${images[gamemodeImage]})`,
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',

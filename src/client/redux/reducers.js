@@ -4,6 +4,7 @@ import { routerReducer } from 'react-router-redux';
 import user from './user/reducer';
 import notifications from './notifications/reducer';
 import onlineUsers from './online-users/reducer';
+import connected from './connected/reducer';
 
 /**
  * Combine the reducers and setup all of the event listeners for the stores.
@@ -15,11 +16,13 @@ export default function reducers(app) {
   user.setupListeners(app);
   notifications.setupListeners(app);
   onlineUsers.setupListeners(app);
+  connected.setupListeners(app);
 
   return combineReducers({
     user,
     notifications,
     onlineUsers,
+    connected,
     router: routerReducer,
   });
 }

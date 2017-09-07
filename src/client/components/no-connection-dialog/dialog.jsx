@@ -8,6 +8,11 @@ import {
 
 import app from '../../app';
 
+/**
+ * A dialog which will open when the user looses the connection to the server.
+ *
+ * @class
+ */
 class NoConnectionDialog extends PureComponent {
   static propTypes = { connected: PropTypes.bool.isRequired };
 
@@ -18,13 +23,11 @@ class NoConnectionDialog extends PureComponent {
       <Dialog.Header>No connection</Dialog.Header>
 
       <Dialog.Content>
-        Please make sure you have a internet connection.
-
+        Please make sure you have a working internet connection.
         <br />
-
-        If you have one, our server might be down currently.
-        If you can't reconnect to our server in a few minutes
-        contact an admin.
+        If you have a internet connection, we are most likely restarting the server.
+        <br />
+        If the server {'isn\'t'} back online in a few minutes, please contact one of the admins.
       </Dialog.Content>
 
       <Dialog.Buttons>
@@ -35,6 +38,11 @@ class NoConnectionDialog extends PureComponent {
     </div>
   );
 
+  /**
+   * Create a timeout after which the dialog will be opened.
+   * This is used for the initial connect so when the user didn't connect after 1 second
+   * to the server, we open the dialog.
+   */
   componentDidMount() {
     this.timeout = setTimeout(() => {
       if (!this.props.connected) {
@@ -45,6 +53,9 @@ class NoConnectionDialog extends PureComponent {
     }, 1000);
   }
 
+  /**
+   * Close the dialog when the connected prop changes.
+   */
   componentDidUpdate(prevProps) {
     if (prevProps.connected !== this.props.connected) {
       if (this.props.connected) {

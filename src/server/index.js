@@ -1,7 +1,10 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import debug from 'debug';
 
 import setupApp from './setup-app';
+
+const log = debug('TF2Pickup');
 
 const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
 const { parsed: config } = dotenv.load({ path: path.resolve(__dirname, `../../.env-${env}`) });

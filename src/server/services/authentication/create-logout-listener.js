@@ -1,3 +1,7 @@
+import debug from 'debug';
+
+const log = debug('TF2Pickup:authentication:logout');
+
 /**
  * Create a logout listener to set online to false and emit events.
  *
@@ -13,6 +17,8 @@ export default function createLogoutListener(app) {
       lastOnline: Date.now(),
     };
 
+    log('User logged out', connection.user.id);
+
     try {
       await users.patch(connection.user.id, update);
 
@@ -22,8 +28,10 @@ export default function createLogoutListener(app) {
         steamId: connection.user.id,
       });
     } catch (error) {
+      log('Error in logout callback', connection.user.id, error);
+
       await logs.create({
-        message: 'Error on logout callback',
+        message: 'Error in logout callback',
         environment: 'server',
         info: error,
         steamId: connection.user.id,

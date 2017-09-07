@@ -1,6 +1,9 @@
 import moment from 'moment';
+import debug from 'debug';
 
 import getNewUserData from '../users/third-party-services/index';
+
+const log = debug('TF2Pickup:authentication:login');
 
 /**
  * Create a login listener to update the user third party data and emit events.
@@ -13,10 +16,14 @@ export default function createLoginListener(app) {
     const users = app.service('users');
     const logs = app.service('logs');
 
+    log('User logged in', connection.user.id);
+
     try {
       const yesterday = moment().subtract(1, 'day');
       const oneDaySinceLastUpdate = moment(connection.user.lastUpdate).isBefore(yesterday);
       const updatedData = await getNewUserData(connection.user.id, oneDaySinceLastUpdate, app);
+
+      log('Updating third party user data', connection.user.id, updatedData);
 
       updatedData.online = true;
 
@@ -28,8 +35,10 @@ export default function createLoginListener(app) {
         steamId: connection.user.id,
       });
     } catch (error) {
+      log('Error in login callback', connection.user.id, error);
+
       await logs.create({
-        message: 'Error on login callback',
+        message: 'Error in login callback',
         environment: 'server',
         info: error,
         steamId: connection.user.id,

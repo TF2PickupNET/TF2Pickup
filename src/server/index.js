@@ -27,20 +27,22 @@ async function startServer() {
     const server = app.listen(port);
 
     server.on('listening', () => {
+      log('Server started on port', port);
+
       app.service('logs').create({
         message: `Feather server started on ${url}`,
         environment: 'server',
       });
     });
   } catch (error) {
-    console.log('Error while setting up app', error);
+    log(error.message);
 
-    process.exit();
+    process.exit(); // eslint-disable-line no-process-exit
   }
 }
 
 process.on('unhandledRejection', (reason, promise) => {
-  console.log('Unhandled rejection', promise);
+  log('Unhandled promise rejection', promise);
 });
 
 startServer();

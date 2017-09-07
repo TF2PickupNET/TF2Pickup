@@ -20,7 +20,7 @@ const log = debug('TF2Pickup');
  * @param {Object} config - The config with the env keys.
  * @returns {JSX} - Returns the app.
  */
-export default function setupApp(config) {
+export default async function setupApp(config) {
   log('Creating Feathers app');
 
   const app = feathers();
@@ -28,7 +28,12 @@ export default function setupApp(config) {
   app.set('config', config);
 
   mongoose.Promise = global.Promise;
-  mongoose.connect(config.MONGO_URL, { useMongoClient: true });
+
+  try {
+    await mongoose.connect(config.MONGO_URL, { useMongoClient: true });
+  } catch (error) { // eslint-disable-line no-unused-vars
+    throw new Error(`Can't connect to MongoDB server with url: ${config.MONGO_URL}`);
+  }
 
   app
     .options('*', cors())

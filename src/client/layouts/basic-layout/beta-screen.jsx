@@ -27,11 +27,11 @@ function BetaScreen({ classes }) {
     <div className={classes.container}>
       <Card>
         <Card.Header>
-          The site is currently in beta mode!
+          TF2Pickup is currently in beta
         </Card.Header>
 
         <Card.Content>
-          You will need to login to check if you have access to the website.
+          You will need to login to check if you have access to TF2Pickup.
         </Card.Content>
 
         <Card.Actions className={classes.cardActions}>

@@ -14,6 +14,7 @@ import app from '../../app';
 import { isInBetaMode } from '../../../config/client';
 import Notifications from '../../components/notifications';
 import { addNotification } from '../../redux/notifications/actions';
+import NoConnectionDialog from '../../components/no-connection-dialog';
 
 import Head from './head';
 import BetaScreen from './beta-screen';
@@ -59,9 +60,13 @@ class BasicLayout extends PureComponent {
             <Background>
               <Head />
 
+              <Dialog.Container />
+
               <Animations />
 
               <Snackbar.Container />
+
+              <NoConnectionDialog />
 
               <Notifications />
 

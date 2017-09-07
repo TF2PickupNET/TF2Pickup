@@ -31,7 +31,7 @@ export default async function setupApp(config) {
 
   try {
     await mongoose.connect(config.MONGO_URL, { useMongoClient: true });
-  } catch (error) {
+  } catch (error) { // eslint-disable-line no-unused-vars
     throw new Error(`Can't connect to MongoDB server with url: ${config.MONGO_URL}`);
   }
 

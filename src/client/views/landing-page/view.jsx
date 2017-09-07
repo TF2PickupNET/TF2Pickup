@@ -4,11 +4,13 @@ import randomItem from 'random-item';
 import lockr from 'lockr';
 import Helmet from 'react-helmet';
 import injectSheet from 'react-jss';
+import { push } from 'react-router-redux';
+import { connect } from 'react-redux';
 import {
   Divider,
   colors,
   elevation,
-  typography,
+  Typography,
 } from 'materialize-react';
 import Parallax from 'react-smart-parallax';
 
@@ -16,10 +18,15 @@ import regions from '@tf2-pickup/configs/regions';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
-import { imageUrl } from '../../../config/client';
-import { authUrl } from '../../../config';
 import app from '../../app';
 import Link from '../../components/link';
+import sixes from '../../../assets/images/background/6v6.jpg';
+import hl from '../../../assets/images/background/9v9.jpg';
+import eu from '../../../assets/images/flags/eu.jpg';
+import na from '../../../assets/images/flags/na.jpg';
+import oc from '../../../assets/images/flags/oc.jpg';
+import servemeLogo from '../../../assets/images/about/serveme_logo.png';
+import steamLoginButton from '../../../assets/images/steam_large_noborder.png';
 
 import LandingPageHeader from './header';
 import LandingPageSection from './section';
@@ -43,9 +50,13 @@ export class View extends PureComponent {
       regionImage: PropTypes.string.isRequired,
       regionText: PropTypes.string.isRequired,
       parallax: PropTypes.string.isRequired,
+      parallaxText: PropTypes.string.isRequired,
       steamButton: PropTypes.string.isRequired,
     }).isRequired,
+    user: PropTypes.shape({}),
   };
+
+  static defaultProps = { user: null };
 
   static styles = {
     image: {
@@ -74,11 +85,10 @@ export class View extends PureComponent {
     },
 
     regionText: {
-      ...typography.display2,
       boxShadow: elevation(4),
       width: '100%',
       backgroundColor: colors.grey900,
-      color: colors.grey200,
+      color: colors.whiteText,
       boxSizing: 'border-box',
       textAlign: 'center',
       padding: '40px 15%',
@@ -86,18 +96,20 @@ export class View extends PureComponent {
     },
 
     parallax: {
-      ...typography.display2,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      color: colors.grey200,
       boxSizing: 'border-box',
       height: 400,
       padding: '50px 15%',
       textAlign: 'center',
-      textShadow: `0 2px 3px ${colors.blackSecondaryText}`,
 
       '& .parallax--image': { filter: 'blur(8px)' },
+    },
+
+    parallaxText: {
+      textShadow: `0 2px 3px ${colors.blackSecondaryText}`,
+      color: colors.whiteText,
     },
 
     steamButton: {
@@ -122,37 +134,18 @@ export class View extends PureComponent {
   }
 
   /**
-   * Add a event listener to when the user logs in.
+   * Redirect the user when he logs in.
    */
-  componentWillMount() {
-    app.on('authenticated', this.onLogin);
+  componentDidUpdate(prevProps) {
+    if (prevProps.user === null && this.props.user !== null) {
+      const gamemode = lockr.get('lastGamemode') || '6v6';
+
+      this.props.redirect(`/${gamemode}`);
+    }
   }
 
-  /**
-   * Remove the event listener again when the component unmounts.
-   */
-  componentWillUnmount() {
-    app.removeListener('authenticated', this.onLogin);
-  }
-
-  randomGamemode = randomItem(['6v6', '9v9']);
-  randomRegion = randomItem(Object.keys(regions));
-
-  /**
-   * Redirect the user to the steam login page.
-   */
-  redirectToSteamAuth = () => {
-    window.location = authUrl;
-  };
-
-  /**
-   * Redirect the user to the last gamemode when the user get's logged in automatically.
-   */
-  onLogin = () => {
-    const gamemode = lockr.get('lastGamemode') || '6v6';
-
-    this.props.redirect(`/${gamemode}`);
-  };
+  randomGamemode = randomItem([sixes, hl]);
+  randomRegion = randomItem([eu, na, oc]);
 
   render() {
     const { classes } = this.props;
@@ -164,7 +157,7 @@ export class View extends PureComponent {
         <LandingPageHeader />
 
         <LandingPageSection
-          imgSrc="http://placehold.it/400x250"
+          imgSrc="https://placehold.it/400x250"
           imagePosition="right"
           imgProps={{ className: classes.image }}
         >
@@ -176,7 +169,7 @@ export class View extends PureComponent {
         <Divider className={classes.divider} />
 
         <LandingPageSection
-          imgSrc={`${imageUrl}/about/serveme_logo.png`}
+          imgSrc={servemeLogo}
           imagePosition="left"
           imgProps={{ className: `${classes.image} serve-me` }}
         >
@@ -185,19 +178,22 @@ export class View extends PureComponent {
 
         <section className={classes.regionContainer}>
           <img
-            src={`${imageUrl}/flags/${this.randomRegion}.jpg`}
+            src={this.randomRegion}
             alt="region-flag"
             className={classes.regionImage}
           />
 
-          <div className={classes.regionText}>
+          <Typography
+            typography="display1"
+            className={classes.regionText}
+          >
             Currently available in the following regions: <br />
             {View.arrayToText(regionDisplays)}
-          </div>
+          </Typography>
         </section>
 
         <LandingPageSection
-          imgSrc="http://placehold.it/400x250"
+          imgSrc="https://placehold.it/400x250"
           imagePosition="left"
           imgProps={{ className: classes.image }}
         >
@@ -206,19 +202,24 @@ export class View extends PureComponent {
         </LandingPageSection>
 
         <Parallax
-          img={`${imageUrl}/background/${this.randomGamemode}.jpg`}
+          img={this.randomGamemode}
           className={classes.parallax}
         >
-          Supporting a wide variety of popular competitive formats: <br />
-          {View.arrayToText(gamemodeDisplays)}
+          <Typography
+            typography="display2"
+            className={classes.parallaxText}
+          >
+            Supporting a wide variety of popular competitive formats: <br />
+            {View.arrayToText(gamemodeDisplays)}
+          </Typography>
         </Parallax>
 
         <LandingPageSection
-          imgSrc={`${imageUrl}/steam_large_noborder.png`}
+          imgSrc={steamLoginButton}
           imagePosition="right"
           imgProps={{
             className: classes.steamButton,
-            onClick: this.redirectToSteamAuth,
+            onClick: app.redirectToSteamAuth,
           }}
         >
           To start playing, simply login with your Steam account
@@ -230,4 +231,11 @@ export class View extends PureComponent {
   }
 }
 
-export default injectSheet(View.styles)(View);
+export default connect(
+  (state) => {
+    return { user: state.user };
+  },
+  (dispatch) => {
+    return { redirect: url => dispatch(push(url)) };
+  },
+)(injectSheet(View.styles)(View));

@@ -12,6 +12,9 @@ import configureStore from './redux/configure-store';
 const socket = io(window.location.origin, {
   path: '/ws/',
   transports: ['websocket'],
+  reconnectionDelay: 5 * 1000,
+  reconnectionDelayMax: 60 * 1000,
+  timeout: 2000,
 });
 const app = feathers();
 

@@ -28,7 +28,12 @@ export default function setupListeners(app) {
   });
 
   users.on('patched', (data) => {
-    app.store.dispatch(updateUser(data));
+    // Only update when the user is actually online
+    // This event is still emitted when we change online to false in the server
+    // when the user logs out, which results in a wrong state
+    if (data.online) {
+      app.store.dispatch(updateUser(data));
+    }
   });
 
   app.on('logout', () => {

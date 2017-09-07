@@ -9,28 +9,35 @@ const port = config.PORT;
 const ip = config.IP;
 const protocol = env === 'prod' ? 'https' : 'http';
 const url = `${protocol}://${ip}${env === 'dev' ? `:${port}` : ''}`;
-const app = setupApp(
-  Object.assign({}, config, {
-    ip,
-    env,
-    url,
-  }),
-);
-const server = app.listen(port);
 
-server.on('listening', () => {
-  app.service('logs').create({
-    message: `Feather server started on ${url}`,
-    environment: 'server',
-  });
-});
+/**
+ * Start the server.
+ */
+async function startServer() {
+  try {
+    const app = await setupApp({
+      ...config,
+      ip,
+      env,
+      url,
+    });
+    const server = app.listen(port);
+
+    server.on('listening', () => {
+      app.service('logs').create({
+        message: `Feather server started on ${url}`,
+        environment: 'server',
+      });
+    });
+  } catch (error) {
+    console.log('Error while setting up app', error);
+
+    process.exit();
+  }
+}
 
 process.on('unhandledRejection', (reason, promise) => {
-  app.service('logs').create({
-    message: `Unhandled Rejection at: Promise ${promise}`,
-    info: reason,
-    environment: 'server',
-  });
+  console.log('Unhandled rejection', promise);
 });
 
-export default server;
+startServer();

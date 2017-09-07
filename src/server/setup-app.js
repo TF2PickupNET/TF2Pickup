@@ -17,13 +17,18 @@ import client from './client';
  * @param {Object} config - The config with the env keys.
  * @returns {JSX} - Returns the app.
  */
-export default function setupApp(config) {
+export default async function setupApp(config) {
   const app = feathers();
 
   app.set('config', config);
 
   mongoose.Promise = global.Promise;
-  mongoose.connect(config.MONGO_URL, { useMongoClient: true });
+
+  try {
+    await mongoose.connect(config.MONGO_URL, { useMongoClient: true });
+  } catch (error) {
+    throw new Error(`Can't connect to MongoDB server with url: ${config.MONGO_URL}`);
+  }
 
   app
     .options('*', cors())

@@ -4,6 +4,8 @@ import randomItem from 'random-item';
 import lockr from 'lockr';
 import Helmet from 'react-helmet';
 import injectSheet from 'react-jss';
+import { push } from 'react-router-redux';
+import { connect } from 'react-redux';
 import {
   Divider,
   colors,
@@ -50,7 +52,10 @@ export class View extends PureComponent {
       parallax: PropTypes.string.isRequired,
       steamButton: PropTypes.string.isRequired,
     }).isRequired,
+    user: PropTypes.shape({}),
   };
+
+  static defaultProps = { user: null };
 
   static styles = {
     image: {
@@ -127,30 +132,18 @@ export class View extends PureComponent {
   }
 
   /**
-   * Add a event listener to when the user logs in.
+   * Redirect the user when he logs in.
    */
-  componentWillMount() {
-    app.on('authenticated', this.onLogin);
-  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.user === null && this.props.user !== null) {
+      const gamemode = lockr.get('lastGamemode') || '6v6';
 
-  /**
-   * Remove the event listener again when the component unmounts.
-   */
-  componentWillUnmount() {
-    app.removeListener('authenticated', this.onLogin);
+      this.props.redirect(`/${gamemode}`);
+    }
   }
 
   randomGamemode = randomItem([sixes, hl]);
   randomRegion = randomItem([eu, na, oc]);
-
-  /**
-   * Redirect the user to the last gamemode when the user get's logged in automatically.
-   */
-  onLogin = () => {
-    const gamemode = lockr.get('lastGamemode') || '6v6';
-
-    this.props.redirect(`/${gamemode}`);
-  };
 
   render() {
     const { classes } = this.props;
@@ -228,4 +221,11 @@ export class View extends PureComponent {
   }
 }
 
-export default injectSheet(View.styles)(View);
+export default connect(
+  (state) => {
+    return { user: state.user };
+  },
+  (dispatch) => {
+    return { redirect: url => dispatch(push(url)) };
+  },
+)(injectSheet(View.styles)(View));

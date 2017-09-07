@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'js-cookie';
+import { connect } from 'react-redux';
 import {
   Theme,
   Background,
@@ -10,10 +11,13 @@ import {
 } from 'materialize-react';
 
 import app from '../../app';
+import { isInBetaMode } from '../../../config/client';
 import Notifications from '../../components/notifications';
+import { addNotification } from '../../redux/notifications/actions';
 import NoConnectionDialog from '../../components/no-connection-dialog';
 
 import Head from './head';
+import BetaScreen from './beta-screen';
 
 /**
  * Render a basic layout which will try login with the token from a cookie and make sure
@@ -21,11 +25,14 @@ import Head from './head';
  *
  * @class
  */
-export default class BasicLayout extends PureComponent {
+class BasicLayout extends PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
     addNotification: PropTypes.func.isRequired,
+    user: PropTypes.shape({}),
   };
+
+  static defaultProps = { user: null };
 
   /**
    * Tries to login with the token from the cookies.
@@ -63,7 +70,7 @@ export default class BasicLayout extends PureComponent {
 
               <Notifications />
 
-              {this.props.children}
+              {isInBetaMode && !this.props.user ? (<BetaScreen />) : this.props.children}
             </Background>
           </Snackbar.Controller>
         </Dialog.Controller>
@@ -71,3 +78,13 @@ export default class BasicLayout extends PureComponent {
     );
   }
 }
+
+export default connect(
+  (state) => {
+    return { user: state.user };
+  },
+  (dispatch) => {
+    return { addNotification: (...args) => dispatch(addNotification(...args)) };
+  },
+)(BasicLayout);
+

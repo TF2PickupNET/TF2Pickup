@@ -1,6 +1,7 @@
 // eslint-disable-next-line filenames/match-exported
 import axios from 'axios';
 import moment from 'moment';
+import debug from 'debug';
 
 import { displayGamemodeDivs } from '../../../../../config';
 
@@ -9,6 +10,8 @@ import {
   oldDivsToNewDivs,
   divs,
 } from './utils';
+
+const log = debug('TF2Pickup:users:etf2l');
 
 /**
  * Get the player data from etf2l.
@@ -79,9 +82,15 @@ function isMatchValid(match) {
 export default async function getETF2LData(id, app, oneDaySinceLastUpdate) {
   let player = null;
 
+  log('Requesting ETF2L player data', id);
+
   try {
     player = await getPlayerData(id);
+
+    log('Finished requesting data from ETF2L', id);
   } catch (error) {
+    log('Error while requesting ETF2L player data', id, error);
+
     app.service('logs').create({
       message: 'Error while updating ETF2L player data',
       environment: 'server',
@@ -115,6 +124,8 @@ export default async function getETF2LData(id, app, oneDaySinceLastUpdate) {
   }
 
   if (oneDaySinceLastUpdate) {
+    log('Updating users ETF2L divisions', id);
+
     try {
       const matches = await getMatches(player.id);
 
@@ -142,6 +153,8 @@ export default async function getETF2LData(id, app, oneDaySinceLastUpdate) {
           }
         });
     } catch (error) {
+      log('Error while updating ETF2L Divisions', id, error);
+
       app.service('logs').create({
         message: 'Error while updating ETF2L divisions',
         environment: 'server',

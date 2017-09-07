@@ -6,10 +6,13 @@ import hooks from 'feathers-hooks';
 import rest from 'feathers-rest';
 import socketio from 'feathers-socketio';
 import handler from 'feathers-errors/handler';
+import debug from 'debug';
 
 import services from './services';
 import globalHooks from './global-hooks';
 import client from './client';
+
+const log = debug('TF2Pickup');
 
 /**
  * Setup the feathers app and configure all of the parts.
@@ -18,6 +21,8 @@ import client from './client';
  * @returns {JSX} - Returns the app.
  */
 export default function setupApp(config) {
+  log('Creating Feathers app');
+
   const app = feathers();
 
   app.set('config', config);
@@ -46,6 +51,8 @@ export default function setupApp(config) {
 
   app.use(handler({
     async html(error, req, res) {
+      log('An error occurred!', error.message);
+
       const { _id } = await app.service('logs').create({
         message: 'Something went wrong on the server!',
         info: error,

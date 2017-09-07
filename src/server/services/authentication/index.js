@@ -3,6 +3,7 @@ import SteamStrategy from 'passport-steam';
 import jwt, { Verifier } from 'feathers-authentication-jwt';
 import errors from 'feathers-errors';
 import ms from 'ms';
+import debug from 'debug';
 
 import { authUrl } from '../../../config/index';
 
@@ -10,6 +11,8 @@ import createLoginListener from './create-login-listener';
 import createLogoutListener from './create-logout-listener';
 import getGroupMembers from './get-group-members';
 import getTF2Hours from './get-tf2-hours';
+
+const log = debug('TF2Pickup:authentication');
 
 /**
  * A utility class which makes sure the id from the jwt get's mapped to the correct user.
@@ -27,11 +30,17 @@ class JWTVerifier extends Verifier {
    * @returns {Promise} - Returns the called done function.
    */
   async verify(req, payload, done) {
+    log('Verifying JWT', payload.id);
+
     try {
       const user = await this.app.service('users').get(payload.id);
 
+      log('Verified JWT', user);
+
       return done(null, user, { id: user.id });
     } catch (error) {
+      log('Error while verifying JWT', payload.id, error);
+
       return done(error, null);
     }
   }
@@ -41,6 +50,8 @@ class JWTVerifier extends Verifier {
  * Initialize the authentication service.
  */
 export default function authentication() {
+  log('Setting up authentication service');
+
   const that = this;
   const options = {
     secret: that.get('config').SECRET,
@@ -67,10 +78,16 @@ export default function authentication() {
       const query = { id };
       const users = await usersService.find(query);
 
+      log('New steam login', id);
+
       // Return the user if exactly one was found and if more than were found return an error
       if (users.length === 1) {
+        log('Logging in user', id);
+
         return done(null, users[0]);
       } else if (users.length > 1) {
+        log('Found multiple users', id);
+
         return done(
           new errors.Conflict([
             `Multiple users found with the steamId ${id}!`,
@@ -83,6 +100,8 @@ export default function authentication() {
       const tf2Hours = await getTF2Hours(id, that);
 
       if (tf2Hours === null) {
+        log('Unable to fetch tf2 hours', id);
+
         return done(
           new errors.Timeout([
             'Something went wrong while trying to get your played hours in TF2!',
@@ -93,6 +112,8 @@ export default function authentication() {
       }
 
       if (tf2Hours < process.env.REQUIRED_TF2_HOURS) {
+        log('TF2 hours do not satisfy the required minimum', id);
+
         return done(
           new errors.Forbidden([
             'You don\'t have the required minimum hours in TF2 to play TF2Pickup',
@@ -102,13 +123,17 @@ export default function authentication() {
         );
       }
 
-      if (process.env.BETA_MODE) {
+      if (process.env.BETA_MODE && process.env.VALIDATE_AGAINST_STEAM_GROUP) {
+        log('Validating user against steam group', process.env.VALIDATE_AGAINST_STEAM_GROUP);
+
         const groupMembers = await getGroupMembers(
           process.env.VALIDATE_AGAINST_STEAM_GROUP,
           that,
         );
 
         if (!groupMembers.includes(id)) {
+          log('User is not in the steam group', id);
+
           return done(
             new errors.Forbidden(
               'The site is currently in beta mode and you are not in the required Steam Group',
@@ -120,10 +145,14 @@ export default function authentication() {
 
       // Create a new user when no user was found
       try {
+        log('Creating new user', id);
+
         const newUser = await usersService.create(query);
 
         return done(null, newUser);
       } catch (error) {
+        log('Error while creating new user', id, error);
+
         that.service('logs').create({
           message: 'Error while creating new user',
           environment: 'server',
@@ -142,6 +171,8 @@ export default function authentication() {
     `${authUrl}/return`,
     auth.express.authenticate('steam'),
     async (req, res, next) => {
+      log('Creating new JWT', req.user.id);
+
       // Create a new jwt token
       const token = await req.app.passport.createJWT({ id: req.user.id }, that.get('auth'));
 

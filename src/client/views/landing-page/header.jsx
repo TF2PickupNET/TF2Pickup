@@ -10,9 +10,14 @@ import {
 } from 'materialize-react';
 
 import { Logo } from '../../icons';
-import { imageUrl } from '../../../config/client';
+import bball from '../../../assets/images/background/bball.jpg';
+import ultiduo from '../../../assets/images/background/ultiduo.jpg';
 
-const gamemode = randomItem(['bball', 'ultiduo']);
+const images = {
+  bball,
+  ultiduo,
+};
+const gamemodeImage = randomItem(Object.keys(images));
 
 /**
  * The header for the Landing page.
@@ -47,7 +52,7 @@ Header.propTypes = {
 
 Header.styles = {
   header: {
-    composes: gamemode,
+    composes: gamemodeImage,
     animationDelay: '250ms',
     animation: 'fade-in-image 750ms',
     animationFillMode: 'forwards',
@@ -55,7 +60,7 @@ Header.styles = {
     boxShadow: elevation(4),
     width: '100%',
     height: '75vh',
-    backgroundImage: `url(${imageUrl}/background/${gamemode}.jpg)`,
+    backgroundImage: images[gamemodeImage],
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',

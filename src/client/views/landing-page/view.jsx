@@ -18,9 +18,15 @@ import regions from '@tf2-pickup/configs/regions';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
-import { imageUrl } from '../../../config/client';
-import { authUrl } from '../../../config';
+import app from '../../app';
 import Link from '../../components/link';
+import sixes from '../../../assets/images/background/6v6.jpg';
+import hl from '../../../assets/images/background/9v9.jpg';
+import eu from '../../../assets/images/flags/eu.jpg';
+import na from '../../../assets/images/flags/na.jpg';
+import oc from '../../../assets/images/flags/oc.jpg';
+import servemeLogo from '../../../assets/images/about/serveme_logo.png';
+import steamLoginButton from '../../../assets/images/steam_large_noborder.png';
 
 import LandingPageHeader from './header';
 import LandingPageSection from './section';
@@ -136,15 +142,8 @@ export class View extends PureComponent {
     }
   }
 
-  randomGamemode = randomItem(['6v6', '9v9']);
-  randomRegion = randomItem(Object.keys(regions));
-
-  /**
-   * Redirect the user to the steam login page.
-   */
-  redirectToSteamAuth = () => {
-    window.location = authUrl;
-  };
+  randomGamemode = randomItem([sixes, hl]);
+  randomRegion = randomItem([eu, na, oc]);
 
   render() {
     const { classes } = this.props;
@@ -156,7 +155,7 @@ export class View extends PureComponent {
         <LandingPageHeader />
 
         <LandingPageSection
-          imgSrc="http://placehold.it/400x250"
+          imgSrc="https://placehold.it/400x250"
           imagePosition="right"
           imgProps={{ className: classes.image }}
         >
@@ -168,7 +167,7 @@ export class View extends PureComponent {
         <Divider className={classes.divider} />
 
         <LandingPageSection
-          imgSrc={`${imageUrl}/about/serveme_logo.png`}
+          imgSrc={servemeLogo}
           imagePosition="left"
           imgProps={{ className: `${classes.image} serve-me` }}
         >
@@ -177,7 +176,7 @@ export class View extends PureComponent {
 
         <section className={classes.regionContainer}>
           <img
-            src={`${imageUrl}/flags/${this.randomRegion}.jpg`}
+            src={this.randomRegion}
             alt="region-flag"
             className={classes.regionImage}
           />
@@ -189,7 +188,7 @@ export class View extends PureComponent {
         </section>
 
         <LandingPageSection
-          imgSrc="http://placehold.it/400x250"
+          imgSrc="https://placehold.it/400x250"
           imagePosition="left"
           imgProps={{ className: classes.image }}
         >
@@ -198,7 +197,7 @@ export class View extends PureComponent {
         </LandingPageSection>
 
         <Parallax
-          img={`${imageUrl}/background/${this.randomGamemode}.jpg`}
+          img={this.randomGamemode}
           className={classes.parallax}
         >
           Supporting a wide variety of popular competitive formats: <br />
@@ -206,11 +205,11 @@ export class View extends PureComponent {
         </Parallax>
 
         <LandingPageSection
-          imgSrc={`${imageUrl}/steam_large_noborder.png`}
+          imgSrc={steamLoginButton}
           imagePosition="right"
           imgProps={{
             className: classes.steamButton,
-            onClick: this.redirectToSteamAuth,
+            onClick: app.redirectToSteamAuth,
           }}
         >
           To start playing, simply login with your Steam account

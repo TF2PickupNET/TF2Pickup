@@ -10,8 +10,8 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import Helmet from 'react-helmet';
 
-import { imageUrl } from '../../../config/client';
-import { authUrl } from '../../../config';
+import app from '../../app';
+import steamLoginButton from '../../../assets/images/steam_large_noborder.png';
 
 /**
  * The main toolbar above the actual content.
@@ -78,7 +78,7 @@ export class MainToolbar extends PureComponent {
    * Redirect the user to the steam login page upon clicking on the login button.
    */
   handleSteamRedirect = () => {
-    window.location = authUrl;
+    app.redirectToSteamAuth();
   };
 
   /**
@@ -102,7 +102,7 @@ export class MainToolbar extends PureComponent {
         <img
           className={this.props.classes.steamLoginImage}
           alt="steam login"
-          src={`${imageUrl}/steam_large_noborder.png`}
+          src={steamLoginButton}
         />
       </EventHandler>
     );

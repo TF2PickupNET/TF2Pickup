@@ -11,6 +11,7 @@ import {
 
 import app from '../../app';
 import Notifications from '../../components/notifications';
+import NoConnectionDialog from '../../components/no-connection-dialog';
 
 import Head from './head';
 
@@ -52,9 +53,13 @@ export default class BasicLayout extends PureComponent {
             <Background>
               <Head />
 
+              <Dialog.Container />
+
               <Animations />
 
               <Snackbar.Container />
+
+              <NoConnectionDialog />
 
               <Notifications />
 

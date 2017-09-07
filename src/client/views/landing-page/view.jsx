@@ -10,7 +10,7 @@ import {
   Divider,
   colors,
   elevation,
-  typography,
+  Typography,
 } from 'materialize-react';
 import Parallax from 'react-smart-parallax';
 
@@ -50,6 +50,7 @@ export class View extends PureComponent {
       regionImage: PropTypes.string.isRequired,
       regionText: PropTypes.string.isRequired,
       parallax: PropTypes.string.isRequired,
+      parallaxText: PropTypes.string.isRequired,
       steamButton: PropTypes.string.isRequired,
     }).isRequired,
     user: PropTypes.shape({}),
@@ -84,11 +85,10 @@ export class View extends PureComponent {
     },
 
     regionText: {
-      ...typography.display2,
       boxShadow: elevation(4),
       width: '100%',
       backgroundColor: colors.grey900,
-      color: colors.grey200,
+      color: colors.whiteText,
       boxSizing: 'border-box',
       textAlign: 'center',
       padding: '40px 15%',
@@ -96,18 +96,20 @@ export class View extends PureComponent {
     },
 
     parallax: {
-      ...typography.display2,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      color: colors.grey200,
       boxSizing: 'border-box',
       height: 400,
       padding: '50px 15%',
       textAlign: 'center',
-      textShadow: `0 2px 3px ${colors.blackSecondaryText}`,
 
       '& .parallax--image': { filter: 'blur(8px)' },
+    },
+
+    parallaxText: {
+      textShadow: `0 2px 3px ${colors.blackSecondaryText}`,
+      color: colors.whiteText,
     },
 
     steamButton: {
@@ -181,10 +183,13 @@ export class View extends PureComponent {
             className={classes.regionImage}
           />
 
-          <div className={classes.regionText}>
+          <Typography
+            typography="display1"
+            className={classes.regionText}
+          >
             Currently available in the following regions: <br />
             {View.arrayToText(regionDisplays)}
-          </div>
+          </Typography>
         </section>
 
         <LandingPageSection
@@ -200,8 +205,13 @@ export class View extends PureComponent {
           img={this.randomGamemode}
           className={classes.parallax}
         >
-          Supporting a wide variety of popular competitive formats: <br />
-          {View.arrayToText(gamemodeDisplays)}
+          <Typography
+            typography="display2"
+            className={classes.parallaxText}
+          >
+            Supporting a wide variety of popular competitive formats: <br />
+            {View.arrayToText(gamemodeDisplays)}
+          </Typography>
         </Parallax>
 
         <LandingPageSection

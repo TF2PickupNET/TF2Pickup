@@ -46,7 +46,10 @@ export class View extends PureComponent {
       parallax: PropTypes.string.isRequired,
       steamButton: PropTypes.string.isRequired,
     }).isRequired,
+    user: PropTypes.shape({}),
   };
+
+  static defaultProps = { user: null };
 
   static styles = {
     image: {

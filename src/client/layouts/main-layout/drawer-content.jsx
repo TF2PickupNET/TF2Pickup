@@ -25,17 +25,31 @@ import { discordUrls } from '../../../config/client';
  * @param {Object} props.classes - The classes for the component provided by Jss.
  * @param {Object} props.user - The currently logged in user.
  * @param {Function} props.redirect - A function which will change the url.
+ * @param {Function} props.closeDrawer - A function which will close the drawer.
+ * This is used for closing the drawer when the user clicks on a list item.
  * @returns {JSX} - Returns the sidebar content.
  */
 export function DrawerContent({
   classes,
   user,
   redirect,
+  closeDrawer,
 }) {
   const createRedirect = url => () => redirect(url);
   const handleLogoutClick = () => app.logout();
   const handleLoginClick = () => app.redirectToSteamAuth();
   const createNewTab = url => () => openWindowInNewTab(url);
+  /**
+   * Create a callback which will call a passed in function and the closeDrawer prop function.
+   *
+   * @param {Function} func - An additional function to call.
+   * @returns {Function} - Returns the callback for the event.
+   */
+  const handleItemPress = func => () => {
+    func();
+
+    closeDrawer();
+  };
 
   return (
     <div>
@@ -49,7 +63,7 @@ export function DrawerContent({
         {Object.values(gamemodes).map(gamemode => (
           <List.Item
             key={gamemode.name}
-            onClick={createRedirect(`/${gamemode.name}`)}
+            onClick={handleItemPress(createRedirect(`/${gamemode.name}`))}
           >
             {gamemode.display}
 
@@ -63,7 +77,7 @@ export function DrawerContent({
       <List inset>
         <List.Item
           leftItem={<Icon icon="history" />}
-          onClick={createRedirect('/recent-pickups')}
+          onClick={handleItemPress(createRedirect('/recent-pickups'))}
         >
           Recent Pickups
 
@@ -72,7 +86,7 @@ export function DrawerContent({
 
         <List.Item
           leftItem={<Icon icon="server" />}
-          onClick={createRedirect('/servers')}
+          onClick={handleItemPress(createRedirect('/servers'))}
         >
           Servers
 
@@ -81,7 +95,7 @@ export function DrawerContent({
 
         <List.Item
           leftItem={<Icon icon="format-list-bulleted" />}
-          onClick={createRedirect('/rules')}
+          onClick={handleItemPress(createRedirect('/rules'))}
         >
           Rules
 
@@ -90,7 +104,7 @@ export function DrawerContent({
 
         <List.Item
           leftItem={<Icon icon="information" />}
-          onClick={createRedirect('/about')}
+          onClick={handleItemPress(createRedirect('/about'))}
         >
           About
 
@@ -99,7 +113,7 @@ export function DrawerContent({
 
         <List.Item
           leftItem={<Icon icon="currency-usd" />}
-          onClick={createRedirect('/donate')}
+          onClick={handleItemPress(createRedirect('/donate'))}
         >
           Donate
 
@@ -113,7 +127,7 @@ export function DrawerContent({
         <List inset>
           <List.Item
             leftItem={<Icon icon="gamepad" />}
-            onClick={createRedirect('/last-pickup')}
+            onClick={handleItemPress(createRedirect('/last-pickup'))}
           >
             Last Pickup
 
@@ -122,7 +136,7 @@ export function DrawerContent({
 
           <List.Item
             leftItem={<Icon icon="account-circle" />}
-            onClick={createRedirect('/profile')}
+            onClick={handleItemPress(createRedirect('/profile'))}
           >
             Profile
 
@@ -131,7 +145,7 @@ export function DrawerContent({
 
           <List.Item
             leftItem={<Icon icon="settings" />}
-            onClick={createRedirect('/settings')}
+            onClick={handleItemPress(createRedirect('/settings'))}
           >
             Settings
 
@@ -140,7 +154,7 @@ export function DrawerContent({
 
           <List.Item
             leftItem={<Icon icon="logout" />}
-            onClick={handleLogoutClick}
+            onClick={handleItemPress(handleLogoutClick)}
           >
             Logout
 
@@ -151,7 +165,7 @@ export function DrawerContent({
         <List inset>
           <List.Item
             leftItem={<Icon icon="login" />}
-            onClick={handleLoginClick}
+            onClick={handleItemPress(handleLoginClick)}
           >
             Login
 
@@ -165,7 +179,7 @@ export function DrawerContent({
       <List inset>
         <List.Item
           leftItem={<Icon icon="message-alert" />}
-          onClick={createNewTab(discordUrls.suggestions)}
+          onClick={handleItemPress(createNewTab(discordUrls.suggestions))}
         >
           Send feedback
 
@@ -174,7 +188,7 @@ export function DrawerContent({
 
         <List.Item
           leftItem={<Icon icon="help-circle" />}
-          onClick={createNewTab(discordUrls.help)}
+          onClick={handleItemPress(createNewTab(discordUrls.help))}
         >
           Help
 
@@ -192,6 +206,7 @@ DrawerContent.propTypes = {
   }).isRequired,
   user: PropTypes.shape({}),
   redirect: PropTypes.func.isRequired,
+  closeDrawer: PropTypes.func.isRequired,
 };
 
 DrawerContent.defaultProps = { user: null };

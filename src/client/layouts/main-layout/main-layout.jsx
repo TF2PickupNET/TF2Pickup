@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Drawer } from 'materialize-react';
+import { devices } from 'materialize-react/lib/styles/breakpoints';
 
 import DrawerContent from './drawer-content';
 import MainToolbar from './main-toolbar';
@@ -8,26 +9,44 @@ import MainToolbar from './main-toolbar';
 /**
  * The main layout for all the routes except the landing page.
  *
- * @param {Object} props - The props for the component.
- * @param {JSX} props.children - The content to render inside the layout.
- * @returns {JSX} - Returns the main layout.
+ * @class
  */
-export default function MainLayout({ children }) {
-  return (
-    <Drawer>
-      <Drawer.DrawerContent>
-        <DrawerContent />
-      </Drawer.DrawerContent>
+export default class MainLayout extends PureComponent {
+  static propTypes = { children: PropTypes.node.isRequired };
 
-      <Drawer.MainContent>
-        <MainToolbar />
+  /**
+   * Close the drawer.
+   */
+  closeDrawer = () => {
+    this.drawer.close();
+  };
 
-        <div>
-          {children}
-        </div>
-      </Drawer.MainContent>
-    </Drawer>
-  );
+  /**
+   * Open the drawer when the menu button is pressed.
+   */
+  handleMenuButtonPress = () => {
+    this.drawer.open();
+  };
+
+  render() {
+    return (
+      <Drawer
+        closeOnBackdropClick
+        responsiveWidth={devices.tablet[1]}
+        ref={(element) => { this.drawer = element; }}
+      >
+        <Drawer.DrawerContent>
+          <DrawerContent closeDrawer={this.closeDrawer} />
+        </Drawer.DrawerContent>
+
+        <Drawer.MainContent>
+          <MainToolbar onMenuButtonPress={this.handleMenuButtonPress} />
+
+          <div>
+            {this.props.children}
+          </div>
+        </Drawer.MainContent>
+      </Drawer>
+    );
+  }
 }
-
-MainLayout.propTypes = { children: PropTypes.node.isRequired };

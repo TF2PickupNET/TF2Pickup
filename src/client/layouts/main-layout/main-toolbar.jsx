@@ -5,6 +5,8 @@ import {
   Toolbar,
   Typography,
   EventHandler,
+  IconButton,
+  breakpoints,
 } from 'materialize-react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
@@ -31,6 +33,7 @@ export class MainToolbar extends PureComponent {
       services: PropTypes.object.isRequired,
     }),
     redirect: PropTypes.func.isRequired,
+    onMenuButtonPress: PropTypes.func.isRequired,
   };
 
   static defaultProps = { user: null };
@@ -59,6 +62,12 @@ export class MainToolbar extends PureComponent {
     rightContainer: {
       display: 'flex',
       alignItems: 'center',
+    },
+
+    menuIcon: {
+      display: 'inline-block',
+      marginRight: 8,
+      [breakpoints.up('desktop')]: { display: 'none' },
     },
   };
 
@@ -137,6 +146,7 @@ export class MainToolbar extends PureComponent {
     const {
       classes,
       user,
+      onMenuButtonPress,
     } = this.props;
     const { title } = this.state;
 
@@ -145,7 +155,15 @@ export class MainToolbar extends PureComponent {
         <Helmet onChangeClientState={this.handleClientStateChange} />
 
         <div className={classes.row}>
-          {title && <Typography typography="headline">{title}</Typography>}
+          <div>
+            <IconButton
+              icon="menu"
+              className={classes.menuIcon}
+              onRelease={onMenuButtonPress}
+            />
+
+            {title && <Typography typography="headline">{title}</Typography>}
+          </div>
 
           {user ? this.renderUserInfo() : this.renderLoginButton()}
         </div>

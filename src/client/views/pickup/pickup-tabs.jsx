@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import {
   Tabs,
   Tab,
+  breakpoints,
 } from 'materialize-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -21,6 +22,8 @@ class PickupTabs extends PureComponent {
     tabs: {
       justifyContent: 'center',
       flexWrap: 'nowrap',
+
+      [breakpoints.down('tablet')]: { display: 'none' },
     },
   };
 

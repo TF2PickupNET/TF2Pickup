@@ -13,7 +13,10 @@ import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 class PickupTabs extends PureComponent {
   static propTypes = {
-    classes: PropTypes.shape({ tabs: PropTypes.string.isRequired }).isRequired,
+    classes: PropTypes.shape({
+      tabs: PropTypes.string.isRequired,
+      tab: PropTypes.string.isRequired,
+    }).isRequired,
     gamemode: PropTypes.oneOf(Object.keys(gamemodes)).isRequired,
     redirect: PropTypes.func.isRequired,
   };
@@ -25,6 +28,8 @@ class PickupTabs extends PureComponent {
 
       [breakpoints.down('tablet')]: { display: 'none' },
     },
+
+    tab: { '& > .tab--content': { textTransform: 'none' } },
   };
 
   componentDidUpdate(prevProps) {
@@ -49,6 +54,7 @@ class PickupTabs extends PureComponent {
           <Tab
             key={gamemode.name}
             name={gamemode.name}
+            className={this.props.classes.tab}
           >
             {gamemode.display}
           </Tab>

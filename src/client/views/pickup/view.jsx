@@ -6,6 +6,7 @@ import lockr from 'lockr';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import PickupTabs from './pickup-tabs';
+import Classes from './classes';
 
 /**
  * The view for the pickup page.
@@ -58,13 +59,17 @@ class View extends PureComponent {
   }
 
   render() {
+    const gamemode = this.getCurrentGamemode();
+
     return (
       <div className={this.props.classes.container}>
         <Helmet>
           <title>{this.getTitle()}</title>
         </Helmet>
 
-        <PickupTabs gamemode={this.getCurrentGamemode()} />
+        <PickupTabs gamemode={gamemode} />
+
+        <Classes gamemode={gamemode} />
       </div>
     );
   }

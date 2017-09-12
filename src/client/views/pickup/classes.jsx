@@ -18,20 +18,19 @@ class Classes extends PureComponent {
 
     return Object
       .keys(slots)
-      .map(slot => capitalize(slot))
       .map((slot) => {
-        const Icon = Icons[slot];
+        const name = capitalize(slot);
+        const Icon = Icons[name];
 
         return (
           <Card
             key={slot}
-            className={this.props.classes.slot}
-            style={{ gridArea: slot }}
+            className={`${this.props.classes.slot} ${slot}`}
           >
             <List inset>
-              <List.Item leftItem={<Icon size={40} />}>
+              <List.Item leftItem={<Icon size={36} />}>
                 <Typography typography="headline">
-                  {slot}
+                  {name}
                 </Typography>
               </List.Item>
             </List>
@@ -42,104 +41,92 @@ class Classes extends PureComponent {
 
   static styles = {
     container: {
-      display: 'grid',
-      paddingTop: 16,
-      gridTemplateColumns: '1fr',
+      [breakpoints.only('mobile')]: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
 
-      '&.6v6': {
-        gridTemplateRows: 'auto auto auto auto',
-        gridTemplateAreas: `
-          "Scout"
-          "Soldier"
-          "Demoman"
-          "Medic"
-        `,
+        '& > *': { width: '100%' },
       },
 
-      '&.9v9': {
-        gridTemplateRows: 'auto auto auto auto auto auto auto auto auto',
-        gridTemplateAreas: `
-          "Scout"
-          "Soldier"
-          "Pyro"
-          "Demoman"
-          "Heavy"
-          "Engineer"
-          "Medic"
-          "Sniper"
-          "Spy"
-        `,
-      },
+      [breakpoints.only('desktop')]: { paddingTop: 16 },
+    },
 
-      '&.bball': {
-        gridTemplateAreas: `
-          "Soldier"
-        `,
-      },
+    sixvsix: {
+      [breakpoints.only('tablet')]: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gridTemplateRows: 'auto auto',
 
-      '&.ultiduo': {
-        gridTemplateAreas: `
-          "Soldier"
-          "Medic"
-        `,
-      },
-
-      [breakpoints.up('tablet')]: {
-        '&.6v6, &.9v9, &.ultiduo': { gridTemplateColumns: '1fr 1fr' },
-
-        '&.6v6': {
-          gridTemplateAreas: `
-          "Scout" "Soldier"
-          "Demoman" "Medic"
-        `,
-        },
-
-        '&.9v9': {
-          gridTemplateAreas: `
-          "Scout" "Soldier"
-          "Pyro" "Demoman"
-          "Heavy" "Engineer"
-          "Medic" "Sniper"
-          "Spy" "Spy"
-        `,
-        },
-
-        '&.ultiduo': {
-          gridTemplateAreas: `
-          "Soldier" "Medic"
-        `,
+        '& > .scout, .demoman': {
+          justifySelf: 'end',
+          width: '100%',
         },
       },
 
-      [breakpoints.up('desktop')]: {
-        '&.6v6': {
-          gridTemplateColumns: '1fr 1fr 1fr 1fr',
-          gridTemplateRows: 'auto',
-          gridTemplateAreas: `
-          "Scout" "Soldier" "Demoman" "Medic"
-        `,
-        },
+      [breakpoints.only('desktop')]: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        flexWrap: 'nowrap',
 
-        '&.9v9': {
-          gridTemplateColumns: '1fr 1fr 1fr',
-          gridTemplateRows: 'auto',
-          gridTemplateAreas: `
-          "Scout" "Soldier" "Pyro"
-          "Demoman" "Heavy" "Engineer"
-          "Medic" "Sniper" "Spy"
-        `,
-        },
+        '& > *': { width: '100%' },
       },
     },
 
-    slot: { margin: 12 },
+    ninevnine: {
+      [breakpoints.only('tablet')]: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gridTemplateRows: 'auto'.repeat(5),
+
+        '& > *': { width: '100%' },
+        '& > *:nth-child(odd)': { justifySelf: 'end' },
+      },
+
+      [breakpoints.only('desktop')]: {
+        display: 'grid',
+        gridTemplateColumns: '1fr auto 1fr',
+        gridTemplateRows: 'auto'.repeat(3),
+
+        '& > *': { width: '100%' },
+      },
+    },
+
+    bball: {
+      display: 'flex',
+      justifyContent: 'center',
+
+      '& > *': { width: '100%' },
+    },
+
+    ultiduo: {
+      [breakpoints.up('tablet')]: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+
+        '& > *': { width: '100%' },
+      },
+    },
+
+    slot: { margin: 8 },
   };
+
+  static getGamemodeClassname(gamemode) {
+    switch (gamemode) {
+      case '6v6': return 'sixvsix';
+      case '9v9': return 'ninevnine';
+      default: return gamemode;
+    }
+  }
 
   render() {
     const { classes } = this.props;
+    const gamemodeClassName = Classes.getGamemodeClassname(this.props.gamemode);
 
     return (
-      <div className={`${classes.container} ${this.props.gamemode}`}>
+      <div className={`${classes.container} ${classes[gamemodeClassName]}`}>
         {this.renderCards()}
       </div>
     );

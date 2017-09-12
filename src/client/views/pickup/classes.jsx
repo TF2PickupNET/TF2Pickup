@@ -5,6 +5,8 @@ import {
   List,
   Typography,
   breakpoints,
+  Icon,
+  Ripple,
 } from 'materialize-react';
 import capitalize from 'lodash.capitalize';
 
@@ -46,7 +48,7 @@ class Classes extends PureComponent {
       .keys(slots)
       .map((slot) => {
         const name = capitalize(slot);
-        const Icon = Icons[name];
+        const ClassIcon = Icons[name];
 
         return (
           <Card
@@ -54,10 +56,18 @@ class Classes extends PureComponent {
             className={this.props.classes.slot}
           >
             <List inset>
-              <List.Item leftItem={<Icon size={36} />}>
+              <List.Item leftItem={<ClassIcon size={36} />}>
                 <Typography typography="headline">
                   {name}
                 </Typography>
+              </List.Item>
+
+              <List.Divider />
+
+              <List.Item leftItem={<Icon icon="plus" />}>
+                Join Class
+
+                <Ripple />
               </List.Item>
             </List>
           </Card>

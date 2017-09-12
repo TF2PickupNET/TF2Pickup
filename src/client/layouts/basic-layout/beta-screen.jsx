@@ -22,12 +22,18 @@ import ultiduo from '../../../assets/images/background/ultiduo.jpg';
 class BetaScreen extends PureComponent {
   state = { showBetaPage: false };
 
+  /**
+   * Create a timeout to show the beta page after.
+   */
   componentWillMount() {
     this.timeout = setTimeout(() => {
       this.setState({ showBetaPage: true });
     }, 500);
   }
 
+  /**
+   * Clear the timeout when the component unmounts.
+   */
   componentWillUnmount() {
     clearTimeout(this.timeout);
   }

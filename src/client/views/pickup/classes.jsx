@@ -24,7 +24,11 @@ class Classes extends PureComponent {
 
       [breakpoints.up('mobile')]: { gridTemplateColumns: 'minmax(240px, 420px)' },
 
-      [breakpoints.up('tablet')]: { gridTemplateColumns: 'minmax(240px, 420px) '.repeat(2) },
+      [breakpoints.up('tablet')]: {
+        gridTemplateColumns: 'minmax(240px, 420px) '.repeat(2),
+
+        '&[data-gamemode="bball"]': { gridTemplateColumns: 'minmax(240px, 420px)' },
+      },
 
       [breakpoints.up('desktop')]: {
         paddingTop: 24,

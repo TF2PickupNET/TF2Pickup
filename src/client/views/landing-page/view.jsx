@@ -136,8 +136,8 @@ export class View extends PureComponent {
   /**
    * Redirect the user when he logs in.
    */
-  componentDidUpdate(prevProps) {
-    if (prevProps.user === null && this.props.user !== null) {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.user === null && nextProps.user !== null) {
       const gamemode = lockr.get('lastGamemode') || '6v6';
 
       this.props.redirect(`/${gamemode}`);

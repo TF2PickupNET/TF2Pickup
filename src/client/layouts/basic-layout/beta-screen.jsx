@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 import randomItem from 'random-item';
 import {
   Card,
   Button,
+  Spinner,
 } from 'materialize-react';
 
 import app from '../../app';
@@ -16,32 +17,60 @@ import ultiduo from '../../../assets/images/background/ultiduo.jpg';
 /**
  * The screen to display when the client isn't logged in and the site is in beta mode.
  *
- * @param {Object} props - The props for the component.
- * @param {Object} props.classes - The classes for the component. Provided by Jss.
- * @returns {JSX} - Returns the JSX for the screen.
+ * @class
  */
-function BetaScreen({ classes }) {
-  const handleLoginRedirect = () => app.redirectToSteamAuth();
+class BetaScreen extends PureComponent {
+  state = { showBetaPage: false };
 
-  return (
-    <div className={classes.container}>
-      <Card>
-        <Card.Header>
-          TF2Pickup is currently in beta
-        </Card.Header>
+  /**
+   * Create a timeout to show the beta page after.
+   */
+  componentWillMount() {
+    this.timeout = setTimeout(() => {
+      this.setState({ showBetaPage: true });
+    }, 500);
+  }
 
-        <Card.Content>
-          You will need to login to check if you have access to TF2Pickup.
-        </Card.Content>
+  /**
+   * Clear the timeout when the component unmounts.
+   */
+  componentWillUnmount() {
+    clearTimeout(this.timeout);
+  }
 
-        <Card.Actions className={classes.cardActions}>
-          <Button onPress={handleLoginRedirect}>
-            Login with Steam
-          </Button>
-        </Card.Actions>
-      </Card>
-    </div>
-  );
+  handleLoginRedirect = () => app.redirectToSteamAuth();
+
+  render() {
+    const { classes } = this.props;
+
+    if (this.state.showBetaPage) {
+      return (
+        <div className={`${classes.container} ${classes.backgroundImage}`}>
+          <Card>
+            <Card.Header>
+              TF2Pickup is currently in beta
+            </Card.Header>
+
+            <Card.Content>
+              You will need to login to check if you have access to TF2Pickup.
+            </Card.Content>
+
+            <Card.Actions className={classes.cardActions}>
+              <Button onPress={this.handleLoginRedirect}>
+                Login with Steam
+              </Button>
+            </Card.Actions>
+          </Card>
+        </div>
+      );
+    }
+
+    return (
+      <div className={classes.container}>
+        <Spinner active />
+      </div>
+    );
+  }
 }
 
 BetaScreen.propTypes = {
@@ -57,6 +86,9 @@ BetaScreen.styles = {
     alignItems: 'center',
     justifyContent: 'center',
     height: '100vh',
+  },
+
+  backgroundImage: {
     backgroundImage: `url(${randomItem([sixes, hl, bball, ultiduo])})`,
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',

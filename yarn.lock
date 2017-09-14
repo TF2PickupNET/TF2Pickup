@@ -5066,9 +5066,9 @@ marked@0.3.6:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.3.6.tgz#b2c6c618fccece4ef86c4fc6cb8a7cbf5aeda8d7"
 
-materialize-react@0.1.0-alpha.8:
-  version "0.1.0-alpha.8"
-  resolved "https://registry.yarnpkg.com/materialize-react/-/materialize-react-0.1.0-alpha.8.tgz#d3d80c4722798adcf2bd2aebaf4f5eff2aca7eff"
+materialize-react@0.1.0-alpha.9:
+  version "0.1.0-alpha.9"
+  resolved "https://registry.yarnpkg.com/materialize-react/-/materialize-react-0.1.0-alpha.9.tgz#2f0cf79c97ac5ee3afe702d9266b1c5a19061e51"
   dependencies:
     classnames "2.2.5"
     lodash.omit "4.5.0"

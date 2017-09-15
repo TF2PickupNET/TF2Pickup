@@ -17,7 +17,7 @@ import { isInBetaMode } from '../../../config/client';
 import Notifications from '../../components/notifications';
 import { addNotification } from '../../redux/notifications/actions';
 import NoConnectionDialog from '../../components/no-connection-dialog';
-import PostLoginDialog from '../../components/post-login-dialog';
+import PostUserCreationDialog from '../../components/post-user-creation-dialog';
 
 import Head from './head';
 import BetaScreen from './beta-screen';
@@ -92,7 +92,7 @@ class BasicLayout extends PureComponent {
 
               <NoConnectionDialog />
 
-              <PostLoginDialog />
+              <PostUserCreationDialog />
 
               <Notifications />
 

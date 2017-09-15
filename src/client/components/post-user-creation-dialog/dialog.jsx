@@ -13,7 +13,7 @@ import {
 
 import regions from '@tf2-pickup/configs/regions';
 
-class PostLoginDialog extends PureComponent {
+class PostUserCreationDialog extends PureComponent {
   static Dialog = (props) => ({ close }) => (
     <Stepper
       headerAtBottom
@@ -102,7 +102,7 @@ class PostLoginDialog extends PureComponent {
         ref={(element) => { this.dialog = element; }}
         closeOnOutsideClick={false}
         className={this.props.classes.dialog}
-        component={PostLoginDialog.Dialog(this.props)}
+        component={PostUserCreationDialog.Dialog(this.props)}
       />
     );
   }
@@ -112,4 +112,4 @@ export default connect(
   (state) => {
     return { user: state.user };
   },
-)(injectSheet(PostLoginDialog.styles)(PostLoginDialog));
+)(injectSheet(PostUserCreationDialog.styles)(PostUserCreationDialog));

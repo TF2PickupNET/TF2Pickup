@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 import randomItem from 'random-item';
+import Helmet from 'react-helmet';
 import {
   Card,
   Button,
@@ -46,6 +47,10 @@ class BetaScreen extends PureComponent {
     if (this.state.showBetaPage) {
       return (
         <div className={`${classes.container} ${classes.backgroundImage}`}>
+          <Helmet>
+            <title>Beta Mode</title>
+          </Helmet>
+
           <Card>
             <Card.Header>
               TF2Pickup is currently in beta
@@ -67,6 +72,10 @@ class BetaScreen extends PureComponent {
 
     return (
       <div className={classes.container}>
+        <Helmet>
+          <title>Beta Mode</title>
+        </Helmet>
+
         <Spinner active />
       </div>
     );

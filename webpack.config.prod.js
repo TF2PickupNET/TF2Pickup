@@ -56,7 +56,7 @@ module.exports = merge(common, {
       minify: true,
       navigateFallback: common.output.publicPath + 'index.html',
       staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/],
-      navigateFallbackWhitelist: [/^\/(?!auth)/],
+      navigateFallbackWhitelist: [/^\/(?!auth|api)/],
     }),
   ]),
 });

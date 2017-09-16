@@ -2,14 +2,19 @@ import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 import randomItem from 'random-item';
+import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import queryString from 'query-string';
 import {
   Card,
   Button,
   Spinner,
+  Divider,
+  Typography,
 } from 'materialize-react';
 
 import app from '../../app';
+import getErrorMessage from '../../views/error/get-error-message';
 import sixes from '../../../assets/images/background/6v6.jpg';
 import hl from '../../../assets/images/background/9v9.jpg';
 import bball from '../../../assets/images/background/bball.jpg';
@@ -29,7 +34,7 @@ class BetaScreen extends PureComponent {
   componentWillMount() {
     this.timeout = setTimeout(() => {
       this.setState({ showBetaPage: true });
-    }, 500);
+    }, 1000);
   }
 
   /**
@@ -42,7 +47,13 @@ class BetaScreen extends PureComponent {
   handleLoginRedirect = () => app.redirectToSteamAuth();
 
   render() {
-    const { classes } = this.props;
+    const {
+      classes,
+      router,
+    } = this.props;
+
+    const hasError = router.location.pathname === '/error';
+    const query = queryString.parse(router.location.search);
 
     if (this.state.showBetaPage) {
       return (
@@ -65,6 +76,18 @@ class BetaScreen extends PureComponent {
                 Login with Steam
               </Button>
             </Card.Actions>
+
+            {hasError && (
+              <Card.Content className={classes.errorContainer}>
+                <Divider className={classes.errorDivider} />
+
+                <Typography typography="title">
+                  {query.code} {getErrorMessage(Number(query.code))}
+                </Typography>
+
+                <div className={classes.errorText}>{query.message}</div>
+              </Card.Content>
+            )}
           </Card>
         </div>
       );
@@ -105,6 +128,16 @@ BetaScreen.styles = {
   },
 
   cardActions: { justifyContent: 'flex-end' },
+
+  errorDivider: { marginBottom: 12 },
+
+  errorText: { marginTop: 4 },
+
+  errorContainer: { marginTop: 4 },
 };
 
-export default injectSheet(BetaScreen.styles)(BetaScreen);
+export default connect(
+  (state) => {
+    return { router: state.router };
+  },
+)(injectSheet(BetaScreen.styles)(BetaScreen));

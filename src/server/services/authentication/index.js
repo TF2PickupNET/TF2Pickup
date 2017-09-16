@@ -35,7 +35,7 @@ class JWTVerifier extends Verifier {
     try {
       const user = await this.app.service('users').get(payload.id);
 
-      log('Verified JWT', user);
+      log('Verified JWT', user.id);
 
       return done(null, user, { id: user.id });
     } catch (error) {
@@ -59,7 +59,11 @@ export default function authentication() {
       enabled: true,
       name: 'feathers-jwt',
     },
-    jwt: { expiresIn: '7d' },
+    jwt: {
+      expiresIn: '7d',
+      issuer: 'tf2pickup',
+      audience: that.get('config').IP,
+    },
   };
 
   that.configure(auth(options));

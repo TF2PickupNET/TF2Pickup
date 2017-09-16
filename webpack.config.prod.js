@@ -8,6 +8,8 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
 module.exports = merge(common, {
+  entry: { babelHelpers: path.resolve(__dirname, 'src/client/babel-helpers.js') },
+
   output: {
     path: path.resolve(__dirname, 'dist/client'),
     filename: '[name].[chunkhash].js',
@@ -26,11 +28,7 @@ module.exports = merge(common, {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks(module) {
-        if (module.resource && (/\.js$/).test(module.resource)) {
-          return module.context && module.context.indexOf('node_modules') >= 0;
-        }
-
-        return false;
+        return module.context && module.context.indexOf('node_modules') >= 0;
       },
     }),
 
@@ -53,6 +51,7 @@ module.exports = merge(common, {
     new SWPrecacheWebpackPlugin({
       cacheId: 'tf2pickup-app',
       filename: 'service-worker.js',
+      dontCacheBustUrlsMatching: /./,
       minify: true,
       navigateFallback: common.output.publicPath + 'index.html',
       staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/],

@@ -16,7 +16,23 @@ import App from './views/app';
  */
 async function registerServiceWorker() {
   try {
-    await navigator.serviceWorker.register('/service-worker.js', { scope: '/' });
+    const worker = await navigator.serviceWorker.register('/service-worker.js', { scope: '/' });
+
+    worker.onupdatefound = () => {
+      console.log('Update found for service worker');
+
+      // The updatefound event implies that reg.installing is set; see
+      // https://slightlyoff.github.io/ServiceWorker/spec/service_worker/index.html#service-worker-container-updatefound-event
+      const installingWorker = worker.installing;
+
+      installingWorker.onstatechange = () => {
+        if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          // At this point, the old content will have been purged and the fresh content will
+          // have been added to the cache.
+          window.location.reload();
+        }
+      };
+    };
 
     console.log('Service Worker registered successfully.');
   } catch (error) {

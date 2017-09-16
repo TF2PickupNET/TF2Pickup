@@ -8,8 +8,6 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
 module.exports = merge(common, {
-  entry: { babelHelpers: path.resolve(__dirname, 'src/client/babel-helpers.js') },
-
   output: {
     path: path.resolve(__dirname, 'dist/client'),
     filename: '[name].[chunkhash].js',

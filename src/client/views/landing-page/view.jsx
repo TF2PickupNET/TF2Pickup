@@ -134,15 +134,31 @@ export class View extends PureComponent {
   }
 
   /**
+   * Redirect the user when the initial prop user is not null.
+   */
+  componentWillMount() {
+    if (this.props.user) {
+      this.redirect();
+    }
+  }
+
+  /**
    * Redirect the user when he logs in.
    */
   componentWillReceiveProps(nextProps) {
     if (this.props.user === null && nextProps.user !== null) {
-      const gamemode = lockr.get('lastGamemode') || '6v6';
-
-      this.props.redirect(`/${gamemode}`);
+      this.redirect();
     }
   }
+
+  /**
+   * Redirect the user to one of the pickups.
+   */
+  redirect = () => {
+    const gamemode = lockr.get('lastGamemode') || '6v6';
+
+    this.props.redirect(`/${gamemode}`);
+  };
 
   randomGamemode = randomItem([sixes, hl]);
   randomRegion = randomItem([eu, na, oc]);

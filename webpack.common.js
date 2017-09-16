@@ -19,7 +19,7 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.jsx?$/,
-      exclude: /node_modules/,
+      exclude: /(node_modules)/,
       use: {
         loader: 'babel-loader',
         options: {
@@ -43,8 +43,9 @@ module.exports = {
                 ['transform-react-remove-prop-types', {
                   mode: 'remove',
                   removeImport: true,
-                  ignoreFilenames: ['node_modules/materialize-react']
+                  ignoreFilenames: ['node_modules/materialize-react'],
                 }],
+                'external-helpers',
               ],
             },
           },
@@ -59,7 +60,10 @@ module.exports = {
       test: /\.css$/,
       loaders: [
         'style-loader',
-        { loader: 'css-loader', options: { minimize: true } },
+        {
+          loader: 'css-loader',
+          options: { minimize: true },
+        },
       ],
     }, {
       test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
@@ -91,9 +95,9 @@ module.exports = {
       start_url: '/',
       icons: [ {
         src: path.resolve(__dirname, env === 'dev' ? 'src' : 'dist', 'assets/images/icons/logo.png'),
-        sizes: [64, 128, 256, 512, 1024]
-      }]
-    })
+        sizes: [64, 128, 256, 512, 1024],
+      }],
+    }),
   ],
 
   resolve: { extensions: ['.js', '.jsx'] },

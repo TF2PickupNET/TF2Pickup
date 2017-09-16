@@ -135,12 +135,8 @@ export class View extends PureComponent {
 
   /**
    * Redirect the user when the initial prop user is not null.
-   *
-   * @param {Object} props - The props for the component.
    */
-  constructor(props) {
-    super(props);
-
+  componentWillMount() {
     if (this.props.user) {
       this.redirect();
     }

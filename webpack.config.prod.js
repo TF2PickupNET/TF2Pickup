@@ -51,6 +51,7 @@ module.exports = merge(common, {
     new SWPrecacheWebpackPlugin({
       cacheId: 'tf2pickup-app',
       filename: 'service-worker.js',
+      dontCacheBustUrlsMatching: /./,
       minify: true,
       navigateFallback: common.output.publicPath + 'index.html',
       staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/],

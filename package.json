@@ -55,8 +55,6 @@
     "ms": "2.0.0",
     "normalize.css": "7.0.0",
     "passport-steam": "1.0.8",
-    "preact": "^8.2.5",
-    "preact-compat": "^3.17.0",
     "prop-types": "15.5.10",
     "query-string": "5.0.0",
     "random-item": "1.0.0",

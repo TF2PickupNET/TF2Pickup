@@ -3,6 +3,7 @@ import service from 'feathers-mongoose';
 import debug from 'debug';
 
 import schema from './schema';
+import setupDb from './setup-db';
 
 const log = debug('TF2Pickup:pickup-queue');
 
@@ -18,4 +19,6 @@ export default function pickupQueue() {
     Model: mongoose.model('PickupQueue', schema),
     id: 'id',
   }));
+
+  setupDb(that.service('pickup-queue'));
 }

@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
 
 export default new Schema({
-  id: Schema.Number.ObjectId,
+  id: Number,
 
   region: {},
 

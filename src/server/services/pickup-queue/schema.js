@@ -5,10 +5,7 @@ export default new Schema({
 
   gamemode: {},
 
-  maps: {
-    type: Array,
-    required: true,
-  },
+  maps: { type: Array },
 
   readyUp: {
     type: Date,

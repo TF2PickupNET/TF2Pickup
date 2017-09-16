@@ -2,6 +2,7 @@
 
 import 'normalize.css';
 import 'mdi/css/materialdesignicons.min.css';
+import './babel-helpers';
 
 import React from 'react';
 import ReactDOM from 'react-dom';

@@ -25,8 +25,9 @@ class PickupTabs extends PureComponent {
     tabs: {
       justifyContent: 'center',
       flexWrap: 'nowrap',
+      marginBottom: 24,
 
-      [breakpoints.down('tablet')]: { display: 'none' },
+      [breakpoints.down('mobile')]: { display: 'none' },
     },
 
     tab: { '& > .tab--content': { textTransform: 'none' } },

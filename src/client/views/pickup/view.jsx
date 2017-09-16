@@ -6,7 +6,7 @@ import lockr from 'lockr';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import PickupTabs from './pickup-tabs';
-import Classes from './classes';
+import Classes from './gamemode-container';
 
 /**
  * The view for the pickup page.
@@ -16,7 +16,7 @@ import Classes from './classes';
 class View extends PureComponent {
   static styles = {
     container: {
-      padding: '40px 25px',
+      padding: 24,
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',

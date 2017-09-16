@@ -26,6 +26,35 @@ import ultiduo from '../../../assets/images/background/ultiduo.jpg';
  * @class
  */
 class BetaScreen extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({}).isRequired,
+    router: PropTypes.shape({}).isRequired,
+  };
+
+  static styles = {
+    container: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100vh',
+    },
+
+    backgroundImage: {
+      backgroundImage: `url(${randomItem([sixes, hl, bball, ultiduo])})`,
+      backgroundPosition: 'center center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+    },
+
+    cardActions: { justifyContent: 'flex-end' },
+
+    errorDivider: { marginBottom: 12 },
+
+    errorText: { marginTop: 4 },
+
+    errorContainer: { marginTop: 4 },
+  };
+
   state = { showBetaPage: false };
 
   /**
@@ -104,37 +133,6 @@ class BetaScreen extends PureComponent {
     );
   }
 }
-
-BetaScreen.propTypes = {
-  classes: PropTypes.shape({
-    container: PropTypes.string.isRequired,
-    cardActions: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
-BetaScreen.styles = {
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
-  },
-
-  backgroundImage: {
-    backgroundImage: `url(${randomItem([sixes, hl, bball, ultiduo])})`,
-    backgroundPosition: 'center center',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-  },
-
-  cardActions: { justifyContent: 'flex-end' },
-
-  errorDivider: { marginBottom: 12 },
-
-  errorText: { marginTop: 4 },
-
-  errorContainer: { marginTop: 4 },
-};
 
 export default connect(
   (state) => {

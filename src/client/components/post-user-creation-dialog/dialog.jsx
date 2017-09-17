@@ -1,84 +1,26 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
 import {
-  Dialog,
   Stepper,
   Button,
-  RadioButton,
-  RadioButtonGroup,
   Typography,
   breakpoints,
 } from 'materialize-react';
+import { connect } from 'react-redux';
 
-import regions from '@tf2-pickup/configs/regions';
+import RulesSection from './rules-section';
+import RegionSection from './region-section';
 
-class PostUserCreationDialog extends PureComponent {
-  static Dialog = (props) => ({ close }) => (
-    <Stepper
-      headerAtBottom
-      className={props.classes.dialog}
-      header={<Stepper.Headers.Progress />}
-    >
-      <Stepper.Section name="region">
-        <Typography typography="title">
-          Select a region
-        </Typography>
-
-        <RadioButtonGroup name="region">
-          {Object
-            .values(regions)
-            .map(region => (
-              <RadioButton
-                key={region.name}
-                name={region.name}
-              >
-                {region.fullName}
-              </RadioButton>
-            ))
-          }
-        </RadioButtonGroup>
-      </Stepper.Section>
-
-      <Stepper.Section name="username">
-        <Typography typography="title">
-          Select a username
-        </Typography>
-      </Stepper.Section>
-
-      <Stepper.Section name="accept-rules">
-        <Typography typography="title">
-          Accept the rules
-        </Typography>
-
-        <div>
-          some rules here
-        </div>
-
-        <div>
-          <Button>
-            Accept
-          </Button>
-        </div>
-      </Stepper.Section>
-
-      <Stepper.Section name="finish">
-        <Button onRelease={close}>
-          Finish
-        </Button>
-      </Stepper.Section>
-    </Stepper>
-  );
-
+class Dialog extends PureComponent {
   static styles = {
     dialog: {
       height: '80vh',
-      width: '85vh',
+      width: '85vw',
       paddingTop: 25,
 
       [breakpoints.up('tablet')]: {
         height: '60vh',
-        width: '50vh',
+        width: '50vw',
       },
 
       [breakpoints.up('desktop')]: {
@@ -86,24 +28,84 @@ class PostUserCreationDialog extends PureComponent {
         width: 400,
       },
     },
+
+    sectionContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'start',
+    },
+
+    finishSection: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.user === null && nextProps.user !== null) {
-      if (nextProps.user.name === null) {
-        this.dialog.open();
-      }
+  disableBackButton = () => true;
+  disableNextButton = (index, section) => {
+    if (section.name === 'accept-rules') {
+      return !this.props.user.hasAcceptedTheRules;
     }
-  }
+
+    return false;
+  };
+
+  handleClose = () => this.props.close();
+
+  handleChange = (newSection) => {
+    if (newSection === 1) {
+      this.regionSection.setRegion();
+    } else if (newSection === 2) {
+      console.log('Set username');
+    }
+  };
 
   render() {
     return (
-      <Dialog
-        ref={(element) => { this.dialog = element; }}
-        closeOnOutsideClick={false}
+      <Stepper
+        headerAtBottom
         className={this.props.classes.dialog}
-        component={PostUserCreationDialog.Dialog(this.props)}
-      />
+        header={(
+          <Stepper.Headers.Progress
+            disableBackButton={this.disableBackButton}
+            disableNextButton={this.disableNextButton}
+          />
+        )}
+        onChange={this.handleChange}
+      >
+        <Stepper.Section name="region">
+          <RegionSection
+            className={this.props.classes.sectionContainer}
+            ref={(element) => { this.regionSection = element; }}
+          />
+        </Stepper.Section>
+
+        <Stepper.Section
+          name="username"
+          className={this.props.classes.sectionContainer}
+        >
+          <Typography typography="title">
+            Select a username
+          </Typography>
+        </Stepper.Section>
+
+        <Stepper.Section
+          name="accept-rules"
+          className={this.props.classes.sectionContainer}
+        >
+          <RulesSection />
+        </Stepper.Section>
+
+        <Stepper.Section
+          name="finish"
+          className={this.props.classes.finishSection}
+        >
+          <Button onRelease={this.handleClose}>
+            You are ready to go
+          </Button>
+        </Stepper.Section>
+      </Stepper>
     );
   }
 }
@@ -112,4 +114,4 @@ export default connect(
   (state) => {
     return { user: state.user };
   },
-)(injectSheet(PostUserCreationDialog.styles)(PostUserCreationDialog));
+)(injectSheet(Dialog.styles)(Dialog));

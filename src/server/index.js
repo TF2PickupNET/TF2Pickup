@@ -27,6 +27,8 @@ async function startServer() {
     const server = app.listen(port);
 
     server.on('listening', () => {
+      app.emit('listening');
+
       log('Server started on port', port);
 
       app.service('logs').create({

@@ -55,7 +55,7 @@ class RulesSection extends PureComponent {
     });
   }
 
-  handleAcceptRules = () => app.io.emit('user.accept-rule');
+  handleAcceptRules = () => app.io.emit('user.accept-rules');
 
   render() {
     const { classes } = this.props;

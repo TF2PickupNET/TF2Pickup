@@ -82,7 +82,7 @@ export default new Schema({
 
     etf2l: {
       id: Number,
-      username: String,
+      name: String,
       banned: {
         type: Boolean,
         default: false,

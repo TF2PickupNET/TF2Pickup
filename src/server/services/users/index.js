@@ -5,6 +5,7 @@ import debug from 'debug';
 import schema from './schema';
 import hooks from './hooks';
 import filters from './filters';
+import socketMethods from './socket-methods';
 
 const log = debug('TF2Pickup:users');
 
@@ -23,4 +24,8 @@ export default function users() {
 
   that.service('users').hooks(hooks);
   that.service('users').filter(filters);
+
+  that.on('listening', () => {
+    that.io.on('connection', socket => socketMethods(that, socket));
+  });
 }

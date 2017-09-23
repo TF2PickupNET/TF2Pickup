@@ -105,7 +105,7 @@ export default async function getETF2LData(id, app, oneDaySinceLastUpdate) {
     services: {
       etf2l: {
         id: player.id,
-        username: player.name,
+        name: player.name,
       },
     },
   };

@@ -2,13 +2,19 @@ import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 import randomItem from 'random-item';
+import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
+import queryString from 'query-string';
 import {
   Card,
   Button,
   Spinner,
+  Divider,
+  Typography,
 } from 'materialize-react';
 
 import app from '../../app';
+import getErrorMessage from '../../views/error/get-error-message';
 import sixes from '../../../assets/images/background/6v6.jpg';
 import hl from '../../../assets/images/background/9v9.jpg';
 import bball from '../../../assets/images/background/bball.jpg';
@@ -20,6 +26,35 @@ import ultiduo from '../../../assets/images/background/ultiduo.jpg';
  * @class
  */
 class BetaScreen extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({}).isRequired,
+    router: PropTypes.shape({}).isRequired,
+  };
+
+  static styles = {
+    container: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100vh',
+    },
+
+    backgroundImage: {
+      backgroundImage: `url(${randomItem([sixes, hl, bball, ultiduo])})`,
+      backgroundPosition: 'center center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+    },
+
+    cardActions: { justifyContent: 'flex-end' },
+
+    errorDivider: { marginBottom: 12 },
+
+    errorText: { marginTop: 4 },
+
+    errorContainer: { marginTop: 4 },
+  };
+
   state = { showBetaPage: false };
 
   /**
@@ -28,7 +63,7 @@ class BetaScreen extends PureComponent {
   componentWillMount() {
     this.timeout = setTimeout(() => {
       this.setState({ showBetaPage: true });
-    }, 500);
+    }, 1000);
   }
 
   /**
@@ -41,11 +76,21 @@ class BetaScreen extends PureComponent {
   handleLoginRedirect = () => app.redirectToSteamAuth();
 
   render() {
-    const { classes } = this.props;
+    const {
+      classes,
+      router,
+    } = this.props;
+
+    const hasError = router.location.pathname === '/error';
+    const query = queryString.parse(router.location.search);
 
     if (this.state.showBetaPage) {
       return (
         <div className={`${classes.container} ${classes.backgroundImage}`}>
+          <Helmet>
+            <title>Beta Mode</title>
+          </Helmet>
+
           <Card>
             <Card.Header>
               TF2Pickup is currently in beta
@@ -60,6 +105,18 @@ class BetaScreen extends PureComponent {
                 Login with Steam
               </Button>
             </Card.Actions>
+
+            {hasError && (
+              <Card.Content className={classes.errorContainer}>
+                <Divider className={classes.errorDivider} />
+
+                <Typography typography="title">
+                  {query.code} {getErrorMessage(Number(query.code))}
+                </Typography>
+
+                <div className={classes.errorText}>{query.message}</div>
+              </Card.Content>
+            )}
           </Card>
         </div>
       );
@@ -67,35 +124,18 @@ class BetaScreen extends PureComponent {
 
     return (
       <div className={classes.container}>
+        <Helmet>
+          <title>Beta Mode</title>
+        </Helmet>
+
         <Spinner active />
       </div>
     );
   }
 }
 
-BetaScreen.propTypes = {
-  classes: PropTypes.shape({
-    container: PropTypes.string.isRequired,
-    cardActions: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
-BetaScreen.styles = {
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
+export default connect(
+  (state) => {
+    return { router: state.router };
   },
-
-  backgroundImage: {
-    backgroundImage: `url(${randomItem([sixes, hl, bball, ultiduo])})`,
-    backgroundPosition: 'center center',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-  },
-
-  cardActions: { justifyContent: 'flex-end' },
-};
-
-export default injectSheet(BetaScreen.styles)(BetaScreen);
+)(injectSheet(BetaScreen.styles)(BetaScreen));

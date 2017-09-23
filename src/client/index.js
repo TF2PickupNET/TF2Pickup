@@ -2,6 +2,7 @@
 
 import 'normalize.css';
 import 'mdi/css/materialdesignicons.min.css';
+import './babel-helpers';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -16,9 +17,37 @@ import App from './views/app';
  */
 async function registerServiceWorker() {
   try {
-    await navigator.serviceWorker.register('/service-worker.js', { scope: '/' });
+    const worker = await navigator.serviceWorker.register('/service-worker.js', { scope: '/' });
 
-    console.log('Service Worker registered successfully.');
+    console.log('Service Worker registered successfully');
+
+    let prevState = app.store.getState();
+
+    // Try updating the service worker after reconnecting
+    // We need this because we might have pushed a new version
+    app.store.subscribe(async () => {
+      const newState = app.store.getState();
+
+      if (newState.connected === true && prevState.connected === false) {
+        await worker.update();
+      }
+
+      prevState = newState;
+    });
+
+    worker.onupdatefound = async () => {
+      console.log('Update found for service worker');
+
+      await worker.update();
+
+      const installingWorker = worker.installing;
+
+      installingWorker.onstatechange = () => {
+        if (installingWorker.state === 'activated') {
+          window.location.reload(true);
+        }
+      };
+    };
   } catch (error) {
     console.log('Service Worker registration failed:', error);
   }

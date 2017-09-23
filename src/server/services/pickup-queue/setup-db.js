@@ -24,29 +24,26 @@ export default function setupDb(service) {
               region,
             };
           }),
-      ), [])
+      ),
+      [],
+    )
     .forEach(async (queue) => {
       const gamemodeQueue = await service.find({ query: queue });
+      const classes = Object
+        .keys(gamemodes[queue.gamemode].slots)
+        .reduce((current, slotName) => Object.assign({}, current, { [slotName]: [] }), {});
 
       switch (gamemodeQueue.length) {
         case 0: {
           await service.create({
             ...queue,
-            classes: Object
-              .keys(gamemodes[queue.gamemode].slots)
-              .reduce((current, slotName) => Object.assign({}, current, { [slotName]: [] }), {}),
+            classes,
           });
 
           break;
         }
         case 1: {
-          await service.patch(gamemodeQueue.id, {
-            classes: Object
-              .keys(gamemodes[queue.gamemode].slots)
-              .reduce((current, slotName) => {
-                return Object.assign({}, current, { [slotName]: [] });
-              }, {}),
-          });
+          await service.patch(gamemodeQueue.id, { classes });
 
           break;
         }

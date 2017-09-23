@@ -131,7 +131,11 @@ export class MainToolbar extends PureComponent {
         className={this.props.classes.rightContainer}
         onPress={this.handleProfileRedirect}
       >
-        <Typography typography="title">Kampfkeks</Typography>
+        {user.name && (
+          <Typography typography="title">
+            {user.name}
+          </Typography>
+        )}
 
         <img
           className={this.props.classes.avatar}

@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 
 import RulesSection from './rules-section';
 import RegionSection from './region-section';
+import UsernameSection from './username-section';
 
 class Dialog extends PureComponent {
   static styles = {
@@ -46,6 +47,8 @@ class Dialog extends PureComponent {
   disableNextButton = (index, section) => {
     if (section.name === 'accept-rules') {
       return !this.props.user.hasAcceptedTheRules;
+    } else if (section.name === 'username') {
+      return !this.props.user.name;
     }
 
     return false;
@@ -56,8 +59,6 @@ class Dialog extends PureComponent {
   handleChange = (newSection) => {
     if (newSection === 1) {
       this.regionSection.setRegion();
-    } else if (newSection === 2) {
-      console.log('Set username');
     }
   };
 
@@ -85,9 +86,7 @@ class Dialog extends PureComponent {
           name="username"
           className={this.props.classes.sectionContainer}
         >
-          <Typography typography="title">
-            Select a username
-          </Typography>
+          <UsernameSection />
         </Stepper.Section>
 
         <Stepper.Section
@@ -102,7 +101,7 @@ class Dialog extends PureComponent {
           className={this.props.classes.finishSection}
         >
           <Button onRelease={this.handleClose}>
-            You are ready to go
+            Finish
           </Button>
         </Stepper.Section>
       </Stepper>

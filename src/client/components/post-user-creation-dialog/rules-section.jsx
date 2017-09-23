@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 import ReactMarkdown from 'react-markdown';
+import { connect } from 'react-redux';
 import {
   Button,
   Typography,
@@ -75,7 +76,10 @@ class RulesSection extends PureComponent {
         </div>
 
         <div className={classes.buttonContainer}>
-          <Button onPress={this.handleAcceptRules}>
+          <Button
+            disabled={this.props.user.hasAcceptedTheRules}
+            onPress={this.handleAcceptRules}
+          >
             Accept Rules
           </Button>
         </div>
@@ -84,4 +88,8 @@ class RulesSection extends PureComponent {
   }
 }
 
-export default injectSheet(RulesSection.styles)(RulesSection);
+export default connect(
+  ({ user }) => {
+    return { user };
+  },
+)(injectSheet(RulesSection.styles)(RulesSection));

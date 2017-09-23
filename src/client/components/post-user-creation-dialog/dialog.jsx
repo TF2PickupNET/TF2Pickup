@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 import {
   Stepper,
   Button,
-  Typography,
   breakpoints,
 } from 'materialize-react';
 import { connect } from 'react-redux';
@@ -12,7 +12,27 @@ import RulesSection from './rules-section';
 import RegionSection from './region-section';
 import UsernameSection from './username-section';
 
+/**
+ * The actual dialog which will be rendered.
+ *
+ * @class
+ */
 class Dialog extends PureComponent {
+  static propTypes = {
+    close: PropTypes.func.isRequired,
+    classes: PropTypes.shape({
+      dialog: PropTypes.string.isRequired,
+      sectionContainer: PropTypes.string.isRequired,
+      finishSection: PropTypes.string.isRequired,
+    }).isRequired,
+    user: PropTypes.shape({
+      hasAcceptedTheRules: PropTypes.bool,
+      name: PropTypes.string,
+    }),
+  };
+
+  static defaultProps = { user: null };
+
   static styles = {
     dialog: {
       height: '80vh',
@@ -44,6 +64,14 @@ class Dialog extends PureComponent {
   };
 
   disableBackButton = () => true;
+
+  /**
+   * Whether or not to disable the next button in the stepper header.
+   *
+   * @param {Number} index - The current section index.
+   * @param {Object} section - The props of the current section.
+   * @returns {Boolean} - Returns the disabled prop for the next button.
+   */
   disableNextButton = (index, section) => {
     if (section.name === 'accept-rules') {
       return !this.props.user.hasAcceptedTheRules;
@@ -56,6 +84,11 @@ class Dialog extends PureComponent {
 
   handleClose = () => this.props.close();
 
+  /**
+   * Set the region when the section changes.
+   *
+   * @param {Number} newSection - The index of the new index.
+   */
   handleChange = (newSection) => {
     if (newSection === 1) {
       this.regionSection.setRegion();

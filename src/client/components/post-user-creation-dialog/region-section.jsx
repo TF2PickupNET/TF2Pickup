@@ -10,11 +10,19 @@ import regions from '@tf2-pickup/configs/regions';
 
 import app from '../../app';
 
+/**
+ * The section for the setting the initial region.
+ *
+ * @class
+ */
 export default class RegionSection extends PureComponent {
   static propTypes = { className: PropTypes.string.isRequired };
 
+  /**
+   * Set the region for the user.
+   */
   setRegion = () => {
-    const region = this.regionRadioButton.selected;
+    const region = this.radioButtonGroup.selected;
 
     app.io.emit('user.change-region', { region });
   };
@@ -30,7 +38,7 @@ export default class RegionSection extends PureComponent {
           name="region"
           label=""
           defaultSelected="eu"
-          ref={(element) => { this.regionRadioButton = element; }}
+          ref={(element) => { this.radioButtonGroup = element; }}
         >
           {Object
             .values(regions)

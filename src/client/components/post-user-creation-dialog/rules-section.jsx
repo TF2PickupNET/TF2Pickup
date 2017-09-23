@@ -12,6 +12,11 @@ import axios from 'axios';
 
 import app from '../../app';
 
+/**
+ * The section for accepting the rules.
+ *
+ * @class
+ */
 class RulesSection extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
@@ -19,7 +24,10 @@ class RulesSection extends PureComponent {
       buttonContainer: PropTypes.string.isRequired,
       rules: PropTypes.string.isRequired,
     }).isRequired,
+    user: PropTypes.shape({ hasAcceptedTheRules: PropTypes.bool }),
   };
+
+  static defaultProps = { user: {} };
 
   static styles = {
     rulesContainer: {
@@ -47,6 +55,9 @@ class RulesSection extends PureComponent {
     rules: null,
   };
 
+  /**
+   * Get the rules from GitHub.
+   */
   async componentWillMount() {
     const rules = await axios.get('https://raw.githubusercontent.com/TF2PickupNET/Info/master/RULES.md');
 

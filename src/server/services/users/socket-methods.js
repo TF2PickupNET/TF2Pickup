@@ -1,9 +1,10 @@
-import errors from 'feathers-errors';
+/* eslint-disable promise/prefer-await-to-callbacks */
 
 /**
  * Setup the socket methods for the users.
  *
- * @returns {null} - Returns null.
+ * @param {Object} app - The feathers app object.
+ * @param {Object} socket - The socket connection.
  */
 export default function socketMethods(app, socket) {
   const users = app.service('users');

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   Typography,
@@ -14,7 +15,24 @@ import Link from '../../components/link';
 import app from '../../app';
 import { discordUrls } from '../../../config/client';
 
+/**
+ * The section for setting the username.
+ *
+ * @class
+ */
 class UsernameSection extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({
+      container: PropTypes.string.isRequired,
+      verticalCenter: PropTypes.string.isRequired,
+      link: PropTypes.string.isRequired,
+      errorText: PropTypes.string.isRequired,
+    }).isRequired,
+    user: PropTypes.shape({ name: PropTypes.string }),
+  };
+
+  static defaultProps = { user: {} };
+
   static styles = {
     container: {
       display: 'grid',
@@ -45,6 +63,9 @@ class UsernameSection extends PureComponent {
     error: null,
   };
 
+  /**
+   * Get the valid names for the current user.
+   */
   componentWillMount() {
     app.io.emit('user.get-valid-names', (names) => {
       this.setState({
@@ -54,6 +75,9 @@ class UsernameSection extends PureComponent {
     });
   }
 
+  /**
+   * Try setting the user name.
+   */
   handleSetUsername = () => {
     const name = this.radioButtonGroup.selected;
 

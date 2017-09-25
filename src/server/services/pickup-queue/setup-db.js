@@ -14,43 +14,38 @@ const log = debug('TF2Pickup:pickup-queue:setup-db');
 export default function setupDb(service) {
   Object
     .keys(regions)
-    .reduce(
-      (current, region) => current.concat(
-        Object
-          .keys(gamemodes)
-          .map((gamemode) => {
-            return {
-              gamemode,
-              region,
-            };
-          }),
-      ),
-      [],
-    )
-    .forEach(async (queue) => {
-      const gamemodeQueue = await service.find({ query: queue });
+    .reduce((current, region) => current.concat(
+      Object
+        .keys(gamemodes)
+        .map((gamemode) => {
+          return {
+            gamemode,
+            region,
+          };
+        }),
+    ), [])
+    .forEach(async ({
+      gamemode,
+      region,
+    }) => {
+      const gamemodeQueue = await service.get(`${region}-${gamemode}`);
       const classes = Object
-        .keys(gamemodes[queue.gamemode].slots)
+        .keys(gamemodes[gamemode].slots)
         .reduce((current, slotName) => Object.assign({}, current, { [slotName]: [] }), {});
 
-      switch (gamemodeQueue.length) {
-        case 0: {
-          await service.create({
-            ...queue,
-            classes,
-          });
+      if (gamemodeQueue) {
+        log('Resetting classes for pickup queue', region, gamemode);
 
-          break;
-        }
-        case 1: {
-          await service.patch(gamemodeQueue.id, { classes });
+        await service.patch(gamemodeQueue.id, { $set: { classes } });
+      } else {
+        log('Creating new pickup queue', region, gamemode);
 
-          break;
-        }
-        default: {
-          log('Found multiple db entries for', queue);
-          break;
-        }
+        await service.create({
+          region,
+          gamemode,
+          id: `${region}-${gamemode}`,
+          classes,
+        });
       }
     });
 }

@@ -4992,7 +4992,7 @@ lodash.findlastindex@4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.findlastindex/-/lodash.findlastindex-4.6.0.tgz#b8375ac0f02e9b926375cdf8dc3ea814abf9c6ac"
 
-lodash.flatten@^4.2.0:
+lodash.flatten@4.4.0, lodash.flatten@^4.2.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.flatten/-/lodash.flatten-4.4.0.tgz#f31c22225a9632d2bbf8e4addbef240aa765a61f"
 
@@ -5204,9 +5204,9 @@ marked@0.3.6:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.3.6.tgz#b2c6c618fccece4ef86c4fc6cb8a7cbf5aeda8d7"
 
-materialize-react@0.1.0-alpha.10:
-  version "0.1.0-alpha.10"
-  resolved "https://registry.yarnpkg.com/materialize-react/-/materialize-react-0.1.0-alpha.10.tgz#e086509594246de3c1aed1115aad6f6413aab20e"
+materialize-react@0.1.0-alpha.11:
+  version "0.1.0-alpha.11"
+  resolved "https://registry.yarnpkg.com/materialize-react/-/materialize-react-0.1.0-alpha.11.tgz#09c54d4187dde00e956c2eae0ce0bd15ea31255d"
   dependencies:
     classnames "2.2.5"
     lodash.omit "4.5.0"
@@ -6529,7 +6529,7 @@ react-jss@7.2.0:
     prop-types "^15.5.8"
     theming "^1.1.0"
 
-react-markdown@^2.5.0:
+react-markdown@2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/react-markdown/-/react-markdown-2.5.0.tgz#b1c61904fee5895886803bd9df7db23c3dc3a89e"
   dependencies:

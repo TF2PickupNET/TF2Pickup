@@ -7,12 +7,18 @@ import {
   breakpoints,
   Icon,
   Ripple,
+  Spinner,
 } from 'materialize-react';
 import capitalize from 'lodash.capitalize';
+import get from 'lodash.get';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
+// eslint-disable-next-line import/no-namespace
 import * as Icons from '../../icons';
+import openWindowInNewTab from '../../utils/open-window-in-new-tab';
+
+import GamemodeInfo from './gamemode-info';
 
 class Gamemode extends PureComponent {
   static styles = {
@@ -27,34 +33,68 @@ class Gamemode extends PureComponent {
       gridGap: '16px',
       boxSizing: 'border-box',
 
-      [breakpoints.up('mobile')]: { gridTemplateColumns: 'minmax(240px, 420px)' },
+      [breakpoints.down('tablet')]: { width: '100%' },
 
-      [breakpoints.up('tablet')]: {
-        gridTemplateColumns: 'minmax(240px, 420px) '.repeat(2),
+      '&[data-gamemode="bball"]': { gridTemplateColumns: 'minmax(816px, 1fr)' },
 
-        '&[data-gamemode="bball"]': { gridTemplateColumns: 'minmax(240px, 420px)' },
+      '&[data-gamemode="6v6"]': {
+        [breakpoints.up('mobile')]: { gridTemplateColumns: '1fr' },
+
+        [breakpoints.up('tablet')]: { gridTemplateColumns: '1fr 1fr' },
+
+        [breakpoints.up('desktop')]: { gridTemplateColumns: 'minmax(220px, 400px) '.repeat(4) },
       },
 
-      [breakpoints.up('desktop')]: {
-        '&[data-gamemode="6v6"]': { gridTemplateColumns: 'minmax(240px, 420px) '.repeat(4) },
+      '&[data-gamemode="9v9"]': {
+        [breakpoints.up('mobile')]: { gridTemplateColumns: '1fr' },
 
-        '&[data-gamemode="9v9"]': { gridTemplateColumns: 'minmax(240px, 420px) '.repeat(3) },
+        [breakpoints.up('tablet')]: { gridTemplateColumns: '1fr 1fr' },
+
+        [breakpoints.up('desktop')]: { gridTemplateColumns: 'minmax(220px, 400px) '.repeat(3) },
+      },
+
+      '&[data-gamemode="ultiduo"]': {
+        [breakpoints.up('mobile')]: { gridTemplateColumns: '1fr' },
+
+        [breakpoints.up('tablet')]: { gridTemplateColumns: '1fr 1fr' },
+
+        [breakpoints.up('desktop')]: { gridTemplateColumns: 'minmax(220px, 400px) '.repeat(2) },
       },
     },
 
     slot: {
       width: '100%',
       margin: 0,
+      height: 'auto',
+    },
+
+    listHeader: {
+      display: 'flex',
+      justifyContent: 'space-between',
     },
 
     hidden: { display: 'none' },
+
+    avatar: {
+      height: 40,
+      width: 40,
+      borderRadius: '50%',
+    },
   };
+
+  redirectToUser = id => () => {
+    openWindowInNewTab(`/profile/${id}`);
+  };
+
+  handleJoinClass = className => () => this.props.join(className);
+  handleLeaveClass = () => this.props.remove();
 
   renderClasses() {
     const {
       classes,
       gamemode,
       user,
+      pickup,
     } = this.props;
 
     return Object
@@ -62,6 +102,11 @@ class Gamemode extends PureComponent {
       .map((slot) => {
         const name = capitalize(slot);
         const ClassIcon = Icons[name];
+        const players = get(pickup, `classes.${slot}`, []);
+        const userId = get(user, 'id', null);
+        const isInSlot = players.some(player => player.id === userId);
+        const requiredPlayers = gamemodes[gamemode].slots[slot];
+        const playerCount = players.length;
 
         return (
           <Card
@@ -70,18 +115,47 @@ class Gamemode extends PureComponent {
           >
             <List inset>
               <List.Item leftItem={<ClassIcon size={36} />}>
-                <Typography typography="headline">
-                  {name}
-                </Typography>
+                <span className={classes.listHeader}>
+                  <Typography typography="headline">
+                    {name}
+                  </Typography>
+
+                  <Typography typography="title">
+                    {playerCount} / {requiredPlayers}
+                  </Typography>
+                </span>
               </List.Item>
+
+              <List.Divider className={players.length === 0 ? classes.hidden : ''} />
+
+              {players.map(player => (
+                <List.Item
+                  key={player.id}
+                  leftItem={(
+                    <List.Item.Avatar>
+                      <img
+                        src={player.avatar}
+                        alt="avatar"
+                        className={classes.avatar}
+                      />
+                    </List.Item.Avatar>
+                  )}
+                  onClick={this.redirectToUser(player.id)}
+                >
+                  {player.name}
+
+                  <Ripple />
+                </List.Item>
+              ))}
 
               <List.Divider className={user ? '' : classes.hidden} />
 
               <List.Item
                 className={user ? '' : classes.hidden}
-                leftItem={<Icon icon="plus" />}
+                leftItem={<Icon icon={isInSlot ? 'close' : 'plus'} />}
+                onClick={isInSlot ? this.handleLeaveClass : this.handleJoinClass(slot)}
               >
-                Join Class
+                {isInSlot ? 'Remove' : 'Join Class'}
 
                 <Ripple />
               </List.Item>
@@ -94,18 +168,27 @@ class Gamemode extends PureComponent {
   render() {
     const { classes } = this.props;
 
+    if (this.props.pickup) {
+      return (
+        <div className={classes.container}>
+          <GamemodeInfo
+            pickup={this.props.pickup}
+            isInPickup={this.props.isInPickup}
+          />
+
+          <div
+            className={classes.classContainer}
+            data-gamemode={this.props.gamemode}
+          >
+            {this.renderClasses()}
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className={classes.container}>
-        <div>
-          Info
-        </div>
-
-        <div
-          className={classes.classContainer}
-          data-gamemode={this.props.gamemode}
-        >
-          {this.renderClasses()}
-        </div>
+        <Spinner active />
       </div>
     );
   }

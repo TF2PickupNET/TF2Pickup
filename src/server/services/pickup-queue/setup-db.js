@@ -28,24 +28,31 @@ export default function setupDb(service) {
       gamemode,
       region,
     }) => {
-      const gamemodeQueue = await service.get(`${region}-${gamemode}`);
       const classes = Object
         .keys(gamemodes[gamemode].slots)
         .reduce((current, slotName) => Object.assign({}, current, { [slotName]: [] }), {});
 
-      if (gamemodeQueue) {
+      try {
+        const gamemodeQueue = await service.get(`${region}-${gamemode}`);
+
         log('Resetting classes for pickup queue', region, gamemode);
 
         await service.patch(gamemodeQueue.id, { $set: { classes } });
-      } else {
-        log('Creating new pickup queue', region, gamemode);
+      } catch (error) {
+        if (error.code === 404) {
+          log('Creating new pickup queue', region, gamemode);
 
-        await service.create({
-          region,
-          gamemode,
-          id: `${region}-${gamemode}`,
-          classes,
-        });
+          await service.create({
+            region,
+            gamemode,
+            id: `${region}-${gamemode}`,
+            classes,
+          });
+
+          return;
+        }
+
+        log('Unknown error while getting pickup queue', region, gamemode, error);
       }
     });
 }

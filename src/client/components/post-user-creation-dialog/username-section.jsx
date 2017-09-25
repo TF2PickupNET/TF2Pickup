@@ -89,11 +89,9 @@ class UsernameSection extends PureComponent {
   };
 
   render() {
-    const { classes } = this.props;
-
     if (this.state.isLoading) {
       return (
-        <div className={classes.container}>
+        <div className={this.props.classes.container}>
           <Typography typography="title">
             Select a username
           </Typography>
@@ -104,7 +102,7 @@ class UsernameSection extends PureComponent {
     }
 
     return (
-      <div className={classes.container}>
+      <div className={this.props.classes.container}>
         <Typography typography="title">
           Select a username
         </Typography>
@@ -127,7 +125,7 @@ class UsernameSection extends PureComponent {
               ))}
             </RadioButtonGroup>
           ) : (
-            <div className={classes.verticalCenter}>
+            <div className={this.props.classes.verticalCenter}>
               <span>
                 No username from your external services is free.
                 <br />
@@ -135,7 +133,7 @@ class UsernameSection extends PureComponent {
                 Until then, please contact a developer on
                 <Link
                   href={discordUrls.help}
-                  className={classes.link}
+                  className={this.props.classes.link}
                 >
                   Discord
                 </Link>
@@ -145,14 +143,14 @@ class UsernameSection extends PureComponent {
           )}
 
           {this.state.error && (
-            <div className={classes.errorText}>
+            <div className={this.props.classes.errorText}>
               {this.state.error}
             </div>
           )}
 
         </div>
 
-        <div className={classes.verticalCenter}>
+        <div className={this.props.classes.verticalCenter}>
           <Button
             disabled={this.state.names.length === 0 || Boolean(this.props.user.name)}
             onPress={this.handleSetUsername}

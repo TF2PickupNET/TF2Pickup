@@ -78,15 +78,14 @@ class Footer extends PureComponent {
   /**
    * Render the links and icons to the social media accounts.
    *
-   * @param {Object} classes - The classes object from Jss.
    * @returns {JSX[]} - Returns the JSX.
    */
-  static renderSocialMediaLinks(classes) {
+  static renderSocialMediaLinks() {
     return Footer.socialMediaValues.map(data => (
       <Link
         key={data.name}
         href={data.url}
-        className={classes.socialMediaLink}
+        className={this.props.classes.socialMediaLink}
       >
         <Icon
           icon={data.icon}
@@ -100,15 +99,14 @@ class Footer extends PureComponent {
   /**
    * Render the links for different internal page links like help and about.
    *
-   * @param {Object} classes - The classes object from Jss.
    * @returns {JSX[]} - Returns the JSX.
    */
-  static renderPageLinks(classes) {
+  static renderPageLinks() {
     return Footer.pages.map(page => (
       <Link
         href={`/${page}`}
         key={page}
-        className={classes.pageLink}
+        className={this.props.classes.pageLink}
       >
         {capitalize(page)}
       </Link>
@@ -116,22 +114,20 @@ class Footer extends PureComponent {
   }
 
   render() {
-    const { classes } = this.props;
-
     return (
-      <footer className={classes.footer}>
-        <div className={classes.socialMediaHeader}>
+      <footer className={this.props.classes.footer}>
+        <div className={this.props.classes.socialMediaHeader}>
           You can also find TF2Pickup.net here
         </div>
 
-        <div className={classes.container}>
-          {Footer.renderSocialMediaLinks(classes)}
+        <div className={this.props.classes.container}>
+          {Footer.renderSocialMediaLinks()}
         </div>
 
-        <Divider className={classes.divider} />
+        <Divider className={this.props.classes.divider} />
 
-        <div className={classes.container}>
-          {Footer.renderPageLinks(classes)}
+        <div className={this.props.classes.container}>
+          {Footer.renderPageLinks()}
         </div>
       </footer>
     );

@@ -23,20 +23,19 @@ const gamemodeImage = randomItem(Object.keys(images));
  * The header for the Landing page.
  *
  * @param {Object} props - The props for the component.
- * @param {Object} props.classes - Classes provided by Jss for the header.
  * @returns {JSX} - Returns the headers JSX.
  */
-function Header({ classes }) {
+function Header(props) {
   return (
-    <header className={classes.header}>
-      <span className={classes.title}>
+    <header className={props.classes.header}>
+      <span className={props.classes.title}>
         Welcome to
       </span>
 
       <Logo
         circleColor={colors.grey200}
         pickupColor={colors.grey500}
-        className={classes.logo}
+        className={props.classes.logo}
       />
     </header>
   );

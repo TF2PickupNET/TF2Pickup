@@ -164,8 +164,6 @@ export class View extends PureComponent {
   randomRegion = randomItem([eu, na, oc]);
 
   render() {
-    const { classes } = this.props;
-
     return (
       <div>
         <Helmet><title>Welcome</title></Helmet>
@@ -175,33 +173,33 @@ export class View extends PureComponent {
         <LandingPageSection
           imgSrc="https://placehold.it/400x250"
           imagePosition="right"
-          imgProps={{ className: classes.image }}
+          imgProps={{ className: this.props.classes.image }}
         >
           High Quality Team Fortress 2 Pickup Games <br />
           Sign up with your Steam account, join your preferred game modes, <br />
           pick your best/favorite class, we will take care of the rest!
         </LandingPageSection>
 
-        <Divider className={classes.divider} />
+        <Divider className={this.props.classes.divider} />
 
         <LandingPageSection
           imgSrc={servemeLogo}
           imagePosition="left"
-          imgProps={{ className: `${classes.image} serve-me` }}
+          imgProps={{ className: `${this.props.classes.image} serve-me` }}
         >
           Powerful American & European Team Fortress 2 servers provided by <Link href="http://serveme.tf">serveme.tf</Link>
         </LandingPageSection>
 
-        <section className={classes.regionContainer}>
+        <section className={this.props.classes.regionContainer}>
           <img
             src={this.randomRegion}
             alt="region-flag"
-            className={classes.regionImage}
+            className={this.props.classes.regionImage}
           />
 
           <Typography
             typography="display1"
-            className={classes.regionText}
+            className={this.props.classes.regionText}
           >
             Currently available in the following regions: <br />
             {View.arrayToText(regionDisplays)}
@@ -211,7 +209,7 @@ export class View extends PureComponent {
         <LandingPageSection
           imgSrc="https://placehold.it/400x250"
           imagePosition="left"
-          imgProps={{ className: classes.image }}
+          imgProps={{ className: this.props.classes.image }}
         >
           Buddy system: pick someone as your buddy
           <br /> and there is a high chance you will end up with that player on your team!
@@ -219,11 +217,11 @@ export class View extends PureComponent {
 
         <Parallax
           img={this.randomGamemode}
-          className={classes.parallax}
+          className={this.props.classes.parallax}
         >
           <Typography
             typography="display2"
-            className={classes.parallaxText}
+            className={this.props.classes.parallaxText}
           >
             Supporting a wide variety of popular competitive formats: <br />
             {View.arrayToText(gamemodeDisplays)}
@@ -234,7 +232,7 @@ export class View extends PureComponent {
           imgSrc={steamLoginButton}
           imagePosition="right"
           imgProps={{
-            className: classes.steamButton,
+            className: this.props.classes.steamButton,
             onClick: app.redirectToSteamAuth,
           }}
         >

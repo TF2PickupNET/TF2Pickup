@@ -70,15 +70,13 @@ class RulesSection extends PureComponent {
   handleAcceptRules = () => app.io.emit('user.accept-rules');
 
   render() {
-    const { classes } = this.props;
-
     return (
-      <div className={classes.rulesContainer}>
+      <div className={this.props.classes.rulesContainer}>
         <Typography typography="title">
           Rules
         </Typography>
 
-        <div className={classes.rules}>
+        <div className={this.props.classes.rules}>
           {this.state.loadingRules ? (
             <Spinner active />
           ) : (
@@ -86,7 +84,7 @@ class RulesSection extends PureComponent {
           )}
         </div>
 
-        <div className={classes.buttonContainer}>
+        <div className={this.props.classes.buttonContainer}>
           <Button
             disabled={this.props.user.hasAcceptedTheRules}
             onPress={this.handleAcceptRules}

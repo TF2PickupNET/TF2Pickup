@@ -9,13 +9,7 @@ import { Snackbar } from 'materialize-react';
  */
 export default class Notifications extends PureComponent {
   static propTypes = {
-    snackbars: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        timeout: PropTypes.number.isRequired,
-        text: PropTypes.string.isRequired,
-      }).isRequired,
-    ).isRequired,
+    snackbars: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
     removeNotification: PropTypes.func.isRequired,
   };
 

@@ -29,12 +29,11 @@ import { discordUrls } from '../../../config/client';
  * This is used for closing the drawer when the user clicks on a list item.
  * @returns {JSX} - Returns the sidebar content.
  */
-export function DrawerContent({
-  classes,
-  user,
-  redirect,
-  closeDrawer,
-}) {
+export function DrawerContent(props) {
+  const {
+    redirect,
+    closeDrawer,
+  } = props;
   const createRedirect = url => () => redirect(url);
   const handleLogoutClick = () => app.logout();
   const handleLoginClick = () => app.redirectToSteamAuth();
@@ -53,8 +52,8 @@ export function DrawerContent({
 
   return (
     <div>
-      <Toolbar className={classes.toolbar}>
-        <Logo className={classes.logo} />
+      <Toolbar className={props.classes.toolbar}>
+        <Logo className={props.classes.logo} />
       </Toolbar>
 
       <List>
@@ -123,7 +122,7 @@ export function DrawerContent({
 
       <Divider />
 
-      {user ? (
+      {props.user ? (
         <List inset>
           <List.Item
             leftItem={<Icon icon="gamepad" />}

@@ -46,6 +46,8 @@ class BetaScreen extends PureComponent {
       backgroundSize: 'cover',
     },
 
+    card: { maxWidth: 480 },
+
     cardActions: { justifyContent: 'flex-end' },
 
     errorDivider: { marginBottom: 12 },
@@ -91,7 +93,7 @@ class BetaScreen extends PureComponent {
             <title>Beta Mode</title>
           </Helmet>
 
-          <Card>
+          <Card className={classes.card}>
             <Card.Header>
               TF2Pickup is currently in beta
             </Card.Header>

@@ -27,6 +27,7 @@ export class MainToolbar extends PureComponent {
       steamLoginImage: PropTypes.string.isRequired,
       avatar: PropTypes.string.isRequired,
       rightContainer: PropTypes.string.isRequired,
+      menuIcon: PropTypes.string.isRequired,
     }).isRequired,
     user: PropTypes.shape({
       name: PropTypes.string,
@@ -123,24 +124,22 @@ export class MainToolbar extends PureComponent {
    * @returns {JSX} - Returns the JSX.
    */
   renderUserInfo() {
-    const { user } = this.props;
-
     return (
       <EventHandler
         component="span"
         className={this.props.classes.rightContainer}
         onPress={this.handleProfileRedirect}
       >
-        {user.name && (
+        {this.props.user.name && (
           <Typography typography="title">
-            {user.name}
+            {this.props.user.name}
           </Typography>
         )}
 
         <img
           className={this.props.classes.avatar}
           alt="avatar"
-          src={user.services.steam.avatar.large}
+          src={this.props.user.services.steam.avatar.large}
         />
       </EventHandler>
     );
@@ -148,7 +147,6 @@ export class MainToolbar extends PureComponent {
 
   render() {
     const {
-      classes,
       user,
       onMenuButtonPress,
     } = this.props;
@@ -158,11 +156,11 @@ export class MainToolbar extends PureComponent {
       <Toolbar>
         <Helmet onChangeClientState={this.handleClientStateChange} />
 
-        <div className={classes.row}>
+        <div className={this.props.classes.row}>
           <div>
             <IconButton
               icon="menu"
-              className={classes.menuIcon}
+              className={this.props.classes.menuIcon}
               onRelease={onMenuButtonPress}
             />
 

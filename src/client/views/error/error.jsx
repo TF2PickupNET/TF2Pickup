@@ -25,24 +25,18 @@ import getErrorMessage from './get-error-message';
  * The server will redirect the user to this page then.
  *
  * @param {Object} props - The props for the component.
- * @param {Object} props.location - The current location including the search string.
- * @param {Object} props.classes - The classes for the styles. Provided by Jss.
- * Passed by React Router.
  * @returns {JSX} - Returns the jsx.
  */
-export function Error({
-  location,
-  classes,
-}) {
-  const query = queryString.parse(location.search);
+export function Error(props) {
+  const query = queryString.parse(props.location.search);
   const code = Number(query.code);
   const redirectToDiscordHelp = () => openWindowInNewTab(discordUrls.help);
 
   return (
-    <div className={classes.container}>
+    <div className={props.classes.container}>
       <Helmet><title>Error</title></Helmet>
 
-      <Card>
+      <Card className={props.classes.card}>
         <Card.Header>{code} {getErrorMessage(code)}</Card.Header>
         <Card.Content>
           {query.message}
@@ -53,7 +47,7 @@ export function Error({
           If you need more help, check out our
           <Link
             href={discordUrls.help}
-            className={classes.link}
+            className={props.classes.link}
           >
             #help
           </Link>
@@ -81,7 +75,7 @@ Error.propTypes = {
   classes: PropTypes.shape({
     container: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
-    cardActions: PropTypes.string.isRequired,
+    card: PropTypes.string.isRequired,
   }).isRequired,
 };
 
@@ -102,6 +96,8 @@ Error.styles = () => {
       padding: '0 4px',
       color: colors.blue500,
     },
+
+    card: { maxWidth: 480 },
   };
 };
 

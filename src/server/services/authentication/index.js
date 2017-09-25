@@ -79,26 +79,21 @@ export default function authentication() {
     }, async (identifier, profile, done) => {
       const [, id] = identifier.match(/https?:\/\/steamcommunity\.com\/openid\/id\/(\d+)/);
       const usersService = that.service('users');
-      const query = { id };
-      const users = await usersService.find(query);
 
       log('New steam login', id);
 
-      // Return the user if exactly one was found and if more than were found return an error
-      if (users.length === 1) {
+      try {
+        const user = await usersService.get(id);
+
         log('Logging in user', id);
 
-        return done(null, users[0]);
-      } else if (users.length > 1) {
-        log('Found multiple users', id);
+        return done(null, user);
+      } catch (error) {
+        if (error.code !== 404) {
+          log('Unknown error while getting user', id, error);
 
-        return done(
-          new errors.Conflict([
-            `Multiple users found with the steamId ${id}!`,
-            'Please contact a system admin!',
-          ].join(' ')),
-          null,
-        );
+          return done(error, null);
+        }
       }
 
       const tf2Hours = await getTF2Hours(id, that);
@@ -151,7 +146,7 @@ export default function authentication() {
       try {
         log('Creating new user', id);
 
-        const newUser = await usersService.create(query);
+        const newUser = await usersService.create({ id });
 
         return done(null, newUser);
       } catch (error) {

@@ -3,10 +3,12 @@ import {
   Tabs,
   Tab,
   breakpoints,
+  Typography,
 } from 'materialize-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import flatten from 'lodash.flatten';
 import injectSheet from 'react-jss';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
@@ -31,7 +33,20 @@ class PickupTabs extends PureComponent {
     },
 
     tab: { '& > .tab--content': { textTransform: 'none' } },
+
+    playerCount: {
+      padding: '0 4px',
+      lineHeight: 1,
+    },
   };
+
+  static countPlayers(pickup) {
+    if (!pickup) {
+      return 0;
+    }
+
+    return flatten(Object.values(pickup.classes)).length;
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.gamemode !== this.props.gamemode) {
@@ -42,8 +57,9 @@ class PickupTabs extends PureComponent {
   handleChange = (gamemode) => {
     this.props.redirect(`/${gamemode}`);
   };
-
   render() {
+    const { pickups } = this.props;
+
     return (
       <Tabs
         initialTab={this.props.gamemode}
@@ -58,6 +74,14 @@ class PickupTabs extends PureComponent {
             className={this.props.classes.tab}
           >
             {gamemode.display}
+
+            <Typography
+              secondary
+              typography="body1"
+              className={this.props.classes.playerCount}
+            >
+              ({PickupTabs.countPlayers(pickups[gamemode.name])} / {gamemode.maxPlayers})
+            </Typography>
           </Tab>
         ))}
       </Tabs>

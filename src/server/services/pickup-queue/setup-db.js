@@ -37,7 +37,12 @@ export default function setupDb(service) {
 
         log('Resetting classes for pickup queue', region, gamemode);
 
-        await service.patch(gamemodeQueue.id, { $set: { classes } });
+        await service.patch(gamemodeQueue.id, {
+          $set: {
+            classes,
+            status: 'waiting',
+          },
+        });
       } catch (error) {
         if (error.code === 404) {
           log('Creating new pickup queue', region, gamemode);
@@ -45,6 +50,7 @@ export default function setupDb(service) {
           await service.create({
             region,
             gamemode,
+            status: 'waiting',
             id: `${region}-${gamemode}`,
             classes,
           });

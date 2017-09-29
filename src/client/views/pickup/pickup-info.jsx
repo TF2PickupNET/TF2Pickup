@@ -1,12 +1,14 @@
 import React from 'react';
 import injectSheet from 'react-jss';
 import {
-  elevation,
   Button,
+  Card,
   breakpoints,
 } from 'materialize-react';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
+
+import statuses from '@tf2-pickup/configs/pickup-status';
 
 export function GamemodeInfo({
   classes,
@@ -22,12 +24,12 @@ export function GamemodeInfo({
     }, 0);
 
   return (
-    <div
+    <Card
       className={classes.container}
       data-gamemode={pickup.gamemode}
     >
       <span className={classes.item}>
-        Status: Some status
+        Status: {statuses[pickup.status].display}
       </span>
 
       <span className={classes.item}>
@@ -39,19 +41,15 @@ export function GamemodeInfo({
       <span className={classes.item}>
         Players: {playerCount} / {gamemodes[pickup.gamemode].maxPlayers}
       </span>
-    </div>
+    </Card>
   );
 }
 
 GamemodeInfo.styles = {
   container: {
-    boxShadow: elevation(3),
-    borderRadius: 2,
-    backgroundColor: '#ffffff',
     display: 'flex',
     height: 64,
     padding: '8px 0',
-    fontSize: 16,
     marginBottom: 24,
     width: '100%',
     boxSizing: 'border-box',

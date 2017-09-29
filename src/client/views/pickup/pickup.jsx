@@ -18,8 +18,6 @@ import gamemodes from '@tf2-pickup/configs/gamemodes';
 import * as Icons from '../../icons';
 import openWindowInNewTab from '../../utils/open-window-in-new-tab';
 
-import GamemodeInfo from './gamemode-info';
-
 class Gamemode extends PureComponent {
   static styles = {
     container: {
@@ -170,18 +168,11 @@ class Gamemode extends PureComponent {
 
     if (this.props.pickup) {
       return (
-        <div className={classes.container}>
-          <GamemodeInfo
-            pickup={this.props.pickup}
-            isInPickup={this.props.isInPickup}
-          />
-
-          <div
-            className={classes.classContainer}
-            data-gamemode={this.props.gamemode}
-          >
-            {this.renderClasses()}
-          </div>
+        <div
+          className={classes.classContainer}
+          data-gamemode={this.props.gamemode}
+        >
+          {this.renderClasses()}
         </div>
       );
     }

@@ -2,13 +2,18 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
 import flatten from 'lodash.flatten';
+import { Spinner } from 'materialize-react';
+
+import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import app from '../../app';
 import { updatePickup } from '../../redux/pickup-queue/actions';
 
-import Gamemode from './gamemode';
+import Pickup from './pickup';
+import PickupTabs from './pickup-tabs';
+import PickupInfo from './pickup-info';
 
-class GamemodeContainer extends PureComponent {
+class PickupContainer extends PureComponent {
   componentWillMount() {
     this.updateRegion(get(this.props, 'user.settings.region', 'eu'));
   }
@@ -24,9 +29,16 @@ class GamemodeContainer extends PureComponent {
 
   async updateRegion(region) {
     const pickupQueue = app.service('pickup-queue');
-    const pickups = await pickupQueue.find({ query: { region } });
 
-    pickups.forEach(pickup => this.props.updatePickup(pickup));
+    const pickups = await Promise.all(
+      Object
+        .keys(gamemodes)
+        .map(gamemode => pickupQueue.get(`${region}-${gamemode}`)),
+    );
+
+    pickups.forEach((pickup) => {
+      this.props.updatePickup(pickup);
+    });
   }
 
   get pickup() {
@@ -55,15 +67,43 @@ class GamemodeContainer extends PureComponent {
   };
 
   render() {
+    const pickup = this.pickup;
+    const isInPickup = this.isInPickup;
+
+    if (pickup) {
+      return (
+        <div
+          // TODO: Move those into JSS or solve this through a common layout component
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <PickupTabs
+            gamemode={this.props.gamemode}
+            pickups={this.props.pickups}
+          />
+
+          <PickupInfo
+            pickup={pickup}
+            isInPickup={isInPickup}
+          />
+
+          <Pickup
+            join={this.join}
+            remove={this.remove}
+            gamemode={this.props.gamemode}
+            pickup={pickup}
+            isInPickup={isInPickup}
+            user={this.props.user}
+          />
+        </div>
+      );
+    }
+
     return (
-      <Gamemode
-        join={this.join}
-        remove={this.remove}
-        gamemode={this.props.gamemode}
-        pickup={this.pickup}
-        isInPickup={this.isInPickup}
-        user={this.props.user}
-      />
+      <Spinner active />
     );
   }
 }
@@ -82,4 +122,4 @@ export default connect(
       },
     };
   },
-)(GamemodeContainer);
+)(PickupContainer);

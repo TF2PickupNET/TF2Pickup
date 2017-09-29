@@ -2,15 +2,9 @@ import hooks from 'feathers-hooks-common';
 
 export default {
   before: {
-    find(props) {
-      if (props.path === 'pickup-queue') {
-        return props;
-      }
-
-      return hooks.disallow('external')(props);
-    },
+    find: hooks.disallow('external'),
     get(props) {
-      if (props.path === 'users') {
+      if (props.path === 'users' || props.path === 'pickup-queue') {
         return props;
       }
 

@@ -1,5 +1,7 @@
 /* eslint-disable promise/prefer-await-to-callbacks */
 
+import gamemodes from '@tf2-pickup/configs/gamemodes';
+
 function queueWithoutPlayer(queue, playerId) {
   return Object.assign({}, queue, {
     classes: Object
@@ -52,6 +54,28 @@ export default function socketMethods(app, socket) {
       const newQueue = queueWithoutPlayer(queue, userId);
 
       await pickupQueue.patch(queue.id, { $set: { classes: newQueue.classes } });
+    }
+  });
+
+  socket.on('disconnect', () => {
+    if (socket.feathers.user) {
+      const userId = socket.feathers.user.id;
+
+      setTimeout(async () => {
+        const user = await app.service('users').get(userId);
+
+        if (!user.online) {
+          Object
+            .keys(gamemodes)
+            .forEach(async (gamemode) => {
+              const queue = await pickupQueue.get(`${user.settings.region}-${gamemode}`);
+
+              const newQueue = queueWithoutPlayer(queue, userId);
+
+              await pickupQueue.patch(queue.id, { $set: { classes: newQueue.classes } });
+            });
+        }
+      }, 60 * 1000);
     }
   });
 }

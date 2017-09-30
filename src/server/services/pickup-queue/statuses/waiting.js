@@ -15,7 +15,7 @@ export default async function waiting(props) {
           ...current,
           [className]: pickup.classes[className].length >= min,
         };
-      }),
+      }, {}),
   ).every(value => value);
 
   const newData = props.data;

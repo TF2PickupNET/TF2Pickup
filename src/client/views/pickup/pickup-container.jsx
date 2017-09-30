@@ -12,6 +12,7 @@ import { updatePickup } from '../../redux/pickup-queue/actions';
 import Pickup from './pickup';
 import PickupTabs from './pickup-tabs';
 import PickupInfo from './pickup-info';
+import ReadyUpDialog from './ready-up-dialog';
 
 class PickupContainer extends PureComponent {
   componentWillMount() {
@@ -66,6 +67,11 @@ class PickupContainer extends PureComponent {
     app.io.emit('pickup-queue.remove', { gamemode: this.props.gamemode });
   };
 
+  readyUp = () => {
+    app.io.emit('pickup-queue.ready-up', { gamemode: this.props.gamemode });
+
+  };
+
   render() {
     const pickup = this.pickup;
     const isInPickup = this.isInPickup;
@@ -97,6 +103,13 @@ class PickupContainer extends PureComponent {
             pickup={pickup}
             isInPickup={isInPickup}
             user={this.props.user}
+          />
+
+          <ReadyUpDialog
+            pickup={pickup}
+            isInPickup={isInPickup}
+            remove={this.remove}
+            readyUp={this.readyUp}
           />
         </div>
       );

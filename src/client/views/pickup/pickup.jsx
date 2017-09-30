@@ -8,9 +8,11 @@ import {
   Icon,
   Ripple,
   Spinner,
+  colors,
 } from 'materialize-react';
 import capitalize from 'lodash.capitalize';
 import get from 'lodash.get';
+import { rgba } from 'polished';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
@@ -78,6 +80,8 @@ class Gamemode extends PureComponent {
       width: 40,
       borderRadius: '50%',
     },
+
+    ready: { backgroundColor: rgba(colors.green500, 0.3) },
   };
 
   redirectToUser = id => () => {
@@ -129,6 +133,7 @@ class Gamemode extends PureComponent {
               {players.map(player => (
                 <List.Item
                   key={player.id}
+                  className={player.ready && this.props.classes.ready}
                   leftItem={(
                     <List.Item.Avatar>
                       <img

@@ -1,5 +1,8 @@
 /* eslint-disable promise/prefer-await-to-callbacks */
 
+import mapValues from 'lodash.mapvalues';
+import sleep from 'sleep-promise';
+
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 function queueWithoutPlayer(queue, playerId) {
@@ -36,7 +39,7 @@ export default function socketMethods(app, socket) {
 
       newQueue.classes[className].push({
         id: userId,
-        ready: false,
+        ready: pickupQueue.status === 'ready-up',
         map: null,
         preReady: null,
       });
@@ -57,25 +60,47 @@ export default function socketMethods(app, socket) {
     }
   });
 
-  socket.on('disconnect', () => {
+  socket.on('pickup-queue.ready-up', async ({ gamemode }) => {
+    if (socket.feathers.user) {
+      const region = socket.feathers.user.settings.region;
+      const userId = socket.feathers.user.id;
+      const queue = await pickupQueue.get(`${region}-${gamemode}`);
+
+      const setReady = players => players.map((player) => {
+        if (player.id === userId) {
+          return Object.assign({}, player, { ready: true });
+        }
+
+        return player;
+      });
+
+      await pickupQueue.patch(queue.id, { $set: { classes: mapValues(queue.classes, setReady) } });
+    }
+  });
+
+  socket.on('disconnect', async () => {
     if (socket.feathers.user) {
       const userId = socket.feathers.user.id;
 
-      setTimeout(async () => {
-        const user = await app.service('users').get(userId);
+      await sleep(60 * 1000);
 
-        if (!user.online) {
+      const user = await app.service('users').get(userId);
+
+      if (!user.online) {
+        const pickups = await Promise.all(
           Object
             .keys(gamemodes)
-            .forEach(async (gamemode) => {
-              const queue = await pickupQueue.get(`${user.settings.region}-${gamemode}`);
+            .map(gamemode => pickupQueue.get(`${user.settings.region}-${gamemode}`)),
+        );
 
-              const newQueue = queueWithoutPlayer(queue, userId);
+        await Promise.all(
+          pickups.map((pickup) => {
+            const newQueue = queueWithoutPlayer(pickup, userId);
 
-              await pickupQueue.patch(queue.id, { $set: { classes: newQueue.classes } });
-            });
-        }
-      }, 60 * 1000);
+            return pickupQueue.patch(pickup.id, { $set: { classes: newQueue.classes } });
+          }),
+        );
+      }
     }
   });
 }

@@ -1,12 +1,12 @@
 import flatten from 'lodash.flatten';
 
-async function populatePickup(pickup, app) {
-  const newPickup = { ...pickup };
+import statuses from './statuses';
+
+async function populatePickup(props) {
+  const newPickup = { ...props.result };
   const classNames = Object.keys(newPickup.classes);
-  const usersService = app.service('users');
-  const playerIds = flatten(
-    Object.values(newPickup.classes),
-  ).map(player => player.id);
+  const usersService = props.app.service('users');
+  const playerIds = flatten(Object.values(newPickup.classes)).map(player => player.id);
   const allUsers = await Promise.all(playerIds.map(playerId => usersService.get(playerId)));
   const users = allUsers.reduce((current, user) => {
     return {
@@ -26,26 +26,30 @@ async function populatePickup(pickup, app) {
     });
   });
 
-  return newPickup;
+  return {
+    ...props,
+    result: newPickup,
+  };
 }
 
 export default {
-  after: {
-    async get(props) {
-      const pickup = await populatePickup(props.result, props.app);
-
-      return {
-        ...props,
-        result: pickup,
-      };
-    },
+  before: {
     async patch(props) {
-      const pickup = await populatePickup(props.result, props.app);
+      const pickupId = props.id;
+      const pickup = await props.app.service('pickup-queue').get(pickupId);
 
-      return {
-        ...props,
-        result: pickup,
-      };
-    },
+      switch (pickup.status) {
+        case 'waiting': {
+          return statuses.waiting(props);
+        }
+
+        default: return props;
+      }
+    }
+  },
+
+  after: {
+    get: populatePickup,
+    patch: populatePickup,
   },
 };

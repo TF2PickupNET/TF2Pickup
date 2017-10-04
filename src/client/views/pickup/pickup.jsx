@@ -111,59 +111,58 @@ class Gamemode extends PureComponent {
         const playerCount = players.length;
 
         return (
-          <Card
-            key={slot}
-            className={classes.slot}
-          >
-            <List inset>
-              <List.Item leftItem={<ClassIcon size={36} />}>
-                <span className={classes.listHeader}>
-                  <Typography typography="headline">
-                    {name}
-                  </Typography>
+          <div key={slot}>
+            <Card className={classes.slot}>
+              <List inset>
+                <List.Item leftItem={<ClassIcon size={36} />}>
+                  <span className={classes.listHeader}>
+                    <Typography typography="headline">
+                      {name}
+                    </Typography>
 
-                  <Typography typography="title">
-                    {playerCount} / {requiredPlayers}
-                  </Typography>
-                </span>
-              </List.Item>
+                    <Typography typography="title">
+                      {playerCount} / {requiredPlayers}
+                    </Typography>
+                  </span>
+                </List.Item>
 
-              <List.Divider className={players.length === 0 ? classes.hidden : ''} />
+                <List.Divider className={players.length === 0 ? classes.hidden : ''} />
 
-              {players.map(player => (
+                {players.map(player => (
+                  <List.Item
+                    key={player.id}
+                    className={player.ready && this.props.classes.ready}
+                    leftItem={(
+                      <List.Item.Avatar>
+                        <img
+                          src={player.avatar}
+                          alt="avatar"
+                          className={classes.avatar}
+                        />
+                      </List.Item.Avatar>
+                    )}
+                    onClick={this.redirectToUser(player.id)}
+                  >
+                    {player.name}
+
+                    <Ripple />
+                  </List.Item>
+                ))}
+
+                <List.Divider className={user ? '' : classes.hidden} />
+
                 <List.Item
-                  key={player.id}
-                  className={player.ready && this.props.classes.ready}
-                  leftItem={(
-                    <List.Item.Avatar>
-                      <img
-                        src={player.avatar}
-                        alt="avatar"
-                        className={classes.avatar}
-                      />
-                    </List.Item.Avatar>
-                  )}
-                  onClick={this.redirectToUser(player.id)}
+                  className={user ? '' : classes.hidden}
+                  leftItem={<Icon icon={isInSlot ? 'close' : 'plus'} />}
+                  onClick={isInSlot ? this.handleLeaveClass : this.handleJoinClass(slot)}
                 >
-                  {player.name}
+                  {isInSlot ? 'Remove' : 'Join Class'}
 
                   <Ripple />
                 </List.Item>
-              ))}
-
-              <List.Divider className={user ? '' : classes.hidden} />
-
-              <List.Item
-                className={user ? '' : classes.hidden}
-                leftItem={<Icon icon={isInSlot ? 'close' : 'plus'} />}
-                onClick={isInSlot ? this.handleLeaveClass : this.handleJoinClass(slot)}
-              >
-                {isInSlot ? 'Remove' : 'Join Class'}
-
-                <Ripple />
-              </List.Item>
-            </List>
-          </Card>
+              </List>
+            </Card>
+          </div>
         );
       });
   }

@@ -1,5 +1,4 @@
 import { create } from 'jss';
-import { jss as reactJss } from 'react-jss';
 import cache from 'jss-cache';
 import nested from 'jss-nested';
 import compose from 'jss-compose';

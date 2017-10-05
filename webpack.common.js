@@ -34,17 +34,13 @@ module.exports = {
               },
               modules: false,
               loose: true,
+              useBuiltIns: true,
             }],
             'react',
           ],
           env: {
             production: {
               plugins: [
-                ['transform-react-remove-prop-types', {
-                  mode: 'remove',
-                  removeImport: true,
-                  ignoreFilenames: ['node_modules/materialize-react'],
-                }],
                 'external-helpers',
               ],
             },

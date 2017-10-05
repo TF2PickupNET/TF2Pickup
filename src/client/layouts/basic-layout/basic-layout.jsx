@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cookie from 'js-cookie';
 import lockr from 'lockr';
 import { connect } from 'react-redux';
+import queryString from 'query-string';
 import {
   Theme,
   Background,
@@ -33,9 +34,13 @@ class BasicLayout extends PureComponent {
     children: PropTypes.node.isRequired,
     addNotification: PropTypes.func.isRequired,
     user: PropTypes.shape({}),
+    location: PropTypes.shape({ search: PropTypes.string }),
   };
 
-  static defaultProps = { user: null };
+  static defaultProps = {
+    user: null,
+    location: { search: '' },
+  };
 
   /**
    * Tries to login with the token from the cookies.
@@ -77,8 +82,12 @@ class BasicLayout extends PureComponent {
   };
 
   render() {
+    // TODO: Eventually this should be set in the users data
+    const query = queryString.parse(this.props.location.search);
+    const themeType = query.dark ? 'dark' : 'light';
+
     return (
-      <Theme>
+      <Theme type={themeType}>
         <Dialog.Controller>
           <Snackbar.Controller>
             <Background>
@@ -118,7 +127,10 @@ class BasicLayout extends PureComponent {
 
 export default connect(
   (state) => {
-    return { user: state.user };
+    return {
+      user: state.user,
+      location: state.router.location,
+    };
   },
   (dispatch) => {
     return { addNotification: (...args) => dispatch(addNotification(...args)) };

@@ -34,9 +34,13 @@ class BasicLayout extends PureComponent {
     children: PropTypes.node.isRequired,
     addNotification: PropTypes.func.isRequired,
     user: PropTypes.shape({}),
+    location: PropTypes.shape({ search: PropTypes.string }),
   };
 
-  static defaultProps = { user: null };
+  static defaultProps = {
+    user: null,
+    location: { search: '' },
+  };
 
   /**
    * Tries to login with the token from the cookies.

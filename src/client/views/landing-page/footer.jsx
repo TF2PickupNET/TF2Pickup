@@ -80,7 +80,7 @@ class Footer extends PureComponent {
    *
    * @returns {JSX[]} - Returns the JSX.
    */
-  static renderSocialMediaLinks() {
+  renderSocialMediaLinks() {
     return Footer.socialMediaValues.map(data => (
       <Link
         key={data.name}
@@ -101,7 +101,7 @@ class Footer extends PureComponent {
    *
    * @returns {JSX[]} - Returns the JSX.
    */
-  static renderPageLinks() {
+  renderPageLinks() {
     return Footer.pages.map(page => (
       <Link
         href={`/${page}`}
@@ -121,13 +121,13 @@ class Footer extends PureComponent {
         </div>
 
         <div className={this.props.classes.container}>
-          {Footer.renderSocialMediaLinks()}
+          {this.renderSocialMediaLinks()}
         </div>
 
         <Divider className={this.props.classes.divider} />
 
         <div className={this.props.classes.container}>
-          {Footer.renderPageLinks()}
+          {this.renderPageLinks()}
         </div>
       </footer>
     );

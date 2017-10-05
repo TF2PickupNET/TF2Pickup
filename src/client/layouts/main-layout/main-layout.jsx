@@ -31,7 +31,6 @@ export default class MainLayout extends PureComponent {
   render() {
     return (
       <Drawer
-        closeOnBackdropClick
         responsiveWidth={devices.tablet[1]}
         ref={(element) => { this.drawer = element; }}
       >

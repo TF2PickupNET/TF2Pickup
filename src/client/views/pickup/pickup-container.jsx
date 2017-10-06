@@ -56,22 +56,6 @@ class PickupContainer extends PureComponent {
     return false;
   }
 
-  join = (className) => {
-    app.io.emit('pickup-queue.join', {
-      className,
-      gamemode: this.props.gamemode,
-    });
-  };
-
-  remove = () => {
-    app.io.emit('pickup-queue.remove', { gamemode: this.props.gamemode });
-  };
-
-  readyUp = () => {
-    app.io.emit('pickup-queue.ready-up', { gamemode: this.props.gamemode });
-
-  };
-
   render() {
     const pickup = this.pickup;
     const isInPickup = this.isInPickup;
@@ -97,8 +81,6 @@ class PickupContainer extends PureComponent {
           />
 
           <Pickup
-            join={this.join}
-            remove={this.remove}
             gamemode={this.props.gamemode}
             pickup={pickup}
             isInPickup={isInPickup}
@@ -106,10 +88,9 @@ class PickupContainer extends PureComponent {
           />
 
           <ReadyUpDialog
+            gamemode={this.props.gamemode}
             pickup={pickup}
             isInPickup={isInPickup}
-            remove={this.remove}
-            readyUp={this.readyUp}
           />
         </div>
       );

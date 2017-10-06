@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import Helmet from 'react-helmet';
-import injectSheet from 'react-jss';
 import lockr from 'lockr';
+import Aux from 'react-aux';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
@@ -12,16 +12,7 @@ import PickupContainer from './pickup-container';
  *
  * @class
  */
-class View extends PureComponent {
-  static styles = {
-    container: {
-      padding: 24,
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-    },
-  };
-
+export default class View extends PureComponent {
   /**
    * Set the last gamemode property in the local storage on mount.
    */
@@ -61,15 +52,13 @@ class View extends PureComponent {
     const gamemode = this.getCurrentGamemode();
 
     return (
-      <div className={this.props.classes.container}>
+      <Aux>
         <Helmet>
           <title>{this.getTitle()}</title>
         </Helmet>
 
         <PickupContainer gamemode={gamemode} />
-      </div>
+      </Aux>
     );
   }
 }
-
-export default injectSheet(View.styles)(View);

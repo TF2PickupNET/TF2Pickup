@@ -18,23 +18,23 @@ class GamemodeInfo extends PureComponent {
     container: {
       display: 'flex',
       height: 64,
-      padding: '8px 0',
+      padding: 8,
       marginBottom: 24,
       width: '100%',
       boxSizing: 'border-box',
       position: 'relative',
 
       [breakpoints.up('desktop')]: {
-        '&[data-gamemode="6v6"]': { maxWidth: 400 * 4 + 3 * 16 },
+        '&[data-gamemode="6v6"]': { maxWidth: 360 * 4 + 3 * 16 },
 
-        '&[data-gamemode="9v9"]': { maxWidth: 400 * 3 + 2 * 16 },
+        '&[data-gamemode="9v9"]': { maxWidth: 360 * 3 + 2 * 16 },
 
-        '&[data-gamemode="bball"], &[data-gamemode="ultiduo"]': { maxWidth: 400 * 2 + 16 },
+        '&[data-gamemode="bball"], &[data-gamemode="ultiduo"]': { maxWidth: 360 * 2 + 16 },
       },
     },
 
     item: {
-      padding: '0 16px',
+      padding: '0 8px',
       height: 48,
       flex: 1,
       textAlign: 'center',

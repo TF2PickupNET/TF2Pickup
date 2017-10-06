@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
-import get from 'lodash.get';
 import {
   Dialog,
   Button,
-  colors,
 } from 'materialize-react';
+
+import app from '../../app';
 
 export default class ReadyUpDialog extends PureComponent {
   Component = () => (
@@ -14,18 +14,24 @@ export default class ReadyUpDialog extends PureComponent {
       </Dialog.Header>
 
       <Dialog.Buttons>
-        <Button onPress={this.handlePress(this.props.remove)}>
+        <Button onPress={this.handleNoPress}>
           No
         </Button>
 
-        <Button onPress={this.handlePress(this.props.readyUp)}>
+        <Button onPress={this.handleYesPress}>
           Yes
         </Button>
       </Dialog.Buttons>
     </div>
   );
 
-  handlePress = func => () => func();
+  handleYesPress = () => {
+    app.io.emit('pickup-queue.ready-up', { gamemode: this.props.gamemode });
+  };
+
+  handleNoPress = () => {
+    app.io.emit('pickup-queue.remove', { gamemode: this.props.gamemode });
+  };
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.isInPickup) {

@@ -1,33 +1,16 @@
 import React, { PureComponent } from 'react';
-import injectSheet from 'react-jss';
-import {
-  Card,
-  List,
-  Typography,
-  breakpoints,
-  Icon,
-  Ripple,
-  Spinner,
-  colors,
-} from 'materialize-react';
-import capitalize from 'lodash.capitalize';
+import injectSheet, { withTheme } from 'react-jss';
+import { breakpoints } from 'materialize-react';
 import get from 'lodash.get';
-import { rgba } from 'polished';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
-// eslint-disable-next-line import/no-namespace
-import * as Icons from '../../icons';
-import openWindowInNewTab from '../../utils/open-window-in-new-tab';
+import ClassList from './class-list';
+
+const minmax = 'minmax(240px, 360px) ';
 
 class Gamemode extends PureComponent {
   static styles = {
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-
     classContainer: {
       display: 'grid',
       gridGap: '16px',
@@ -35,65 +18,24 @@ class Gamemode extends PureComponent {
 
       [breakpoints.down('tablet')]: { width: '100%' },
 
-      '&[data-gamemode="bball"]': { gridTemplateColumns: 'minmax(816px, 1fr)' },
+      [breakpoints.up('mobile')]: { gridTemplateColumns: '1fr' },
 
-      '&[data-gamemode="6v6"]': {
-        [breakpoints.up('mobile')]: { gridTemplateColumns: '1fr' },
+      [breakpoints.up('tablet')]: { gridTemplateColumns: '1fr 1fr' },
 
-        [breakpoints.up('tablet')]: { gridTemplateColumns: '1fr 1fr' },
+      [breakpoints.up('desktop')]: {
+        '&[data-gamemode="6v6"]': { gridTemplateColumns: minmax.repeat(4) },
 
-        [breakpoints.up('desktop')]: { gridTemplateColumns: 'minmax(220px, 400px) '.repeat(4) },
+        '&[data-gamemode="9v9"]': { gridTemplateColumns: minmax.repeat(3) },
+
+        '&[data-gamemode="ultiduo"]': { gridTemplateColumns: minmax.repeat(2) },
       },
 
-      '&[data-gamemode="9v9"]': {
-        [breakpoints.up('mobile')]: { gridTemplateColumns: '1fr' },
-
-        [breakpoints.up('tablet')]: { gridTemplateColumns: '1fr 1fr' },
-
-        [breakpoints.up('desktop')]: { gridTemplateColumns: 'minmax(220px, 400px) '.repeat(3) },
-      },
-
-      '&[data-gamemode="ultiduo"]': {
-        [breakpoints.up('mobile')]: { gridTemplateColumns: '1fr' },
-
-        [breakpoints.up('tablet')]: { gridTemplateColumns: '1fr 1fr' },
-
-        [breakpoints.up('desktop')]: { gridTemplateColumns: 'minmax(220px, 400px) '.repeat(2) },
-      },
+      '&[data-gamemode="bball"]': { gridTemplateColumns: 'minmax(736px, 1fr)' },
     },
-
-    slot: {
-      width: '100%',
-      margin: 0,
-      height: 'auto',
-    },
-
-    listHeader: {
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-
-    hidden: { display: 'none' },
-
-    avatar: {
-      height: 40,
-      width: 40,
-      borderRadius: '50%',
-    },
-
-    ready: { backgroundColor: rgba(colors.green500, 0.3) },
   };
-
-  redirectToUser = id => () => {
-    openWindowInNewTab(`/profile/${id}`);
-  };
-
-  handleJoinClass = className => () => this.props.join(className);
-  handleLeaveClass = () => this.props.remove();
 
   renderClasses() {
     const {
-      classes,
       gamemode,
       user,
       pickup,
@@ -102,67 +44,16 @@ class Gamemode extends PureComponent {
     return Object
       .keys(gamemodes[gamemode].slots)
       .map((slot) => {
-        const name = capitalize(slot);
-        const ClassIcon = Icons[name];
         const players = get(pickup, `classes.${slot}`, []);
-        const userId = get(user, 'id', null);
-        const isInSlot = players.some(player => player.id === userId);
-        const requiredPlayers = gamemodes[gamemode].slots[slot];
-        const playerCount = players.length;
 
         return (
-          <div key={slot}>
-            <Card className={classes.slot}>
-              <List inset>
-                <List.Item leftItem={<ClassIcon size={36} />}>
-                  <span className={classes.listHeader}>
-                    <Typography typography="headline">
-                      {name}
-                    </Typography>
-
-                    <Typography typography="title">
-                      {playerCount} / {requiredPlayers}
-                    </Typography>
-                  </span>
-                </List.Item>
-
-                <List.Divider className={players.length === 0 ? classes.hidden : ''} />
-
-                {players.map(player => (
-                  <List.Item
-                    key={player.id}
-                    className={player.ready && this.props.classes.ready}
-                    leftItem={(
-                      <List.Item.Avatar>
-                        <img
-                          src={player.avatar}
-                          alt="avatar"
-                          className={classes.avatar}
-                        />
-                      </List.Item.Avatar>
-                    )}
-                    onClick={this.redirectToUser(player.id)}
-                  >
-                    {player.name}
-
-                    <Ripple />
-                  </List.Item>
-                ))}
-
-                <List.Divider className={user ? '' : classes.hidden} />
-
-                <List.Item
-                  className={user ? '' : classes.hidden}
-                  leftItem={<Icon icon={isInSlot ? 'close' : 'plus'} />}
-                  onClick={isInSlot ? this.handleLeaveClass : this.handleJoinClass(slot)}
-                >
-                  {isInSlot ? 'Remove' : 'Join Class'}
-
-                  <Ripple />
-                </List.Item>
-              </List>
-            </Card>
-          </div>
+          <ClassList
+            key={slot}
+            slotName={slot}
+            players={players}
+            gamemode={gamemode}
+            user={user}
+          />
         );
       });
   }
@@ -170,23 +61,15 @@ class Gamemode extends PureComponent {
   render() {
     const { classes } = this.props;
 
-    if (this.props.pickup) {
-      return (
-        <div
-          className={classes.classContainer}
-          data-gamemode={this.props.gamemode}
-        >
-          {this.renderClasses()}
-        </div>
-      );
-    }
-
     return (
-      <div className={classes.container}>
-        <Spinner active />
+      <div
+        className={classes.classContainer}
+        data-gamemode={this.props.gamemode}
+      >
+        {this.renderClasses()}
       </div>
     );
   }
 }
 
-export default injectSheet(Gamemode.styles)(Gamemode);
+export default injectSheet(Gamemode.styles)(withTheme(Gamemode));

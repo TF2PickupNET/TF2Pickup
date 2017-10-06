@@ -1,6 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Drawer } from 'materialize-react';
+import injectSheet from 'react-jss';
+import {
+  Drawer,
+  breakpoints,
+} from 'materialize-react';
 import { devices } from 'materialize-react/lib/styles/breakpoints';
 
 import DrawerContent from './drawer-content';
@@ -11,8 +15,19 @@ import MainToolbar from './main-toolbar';
  *
  * @class
  */
-export default class MainLayout extends PureComponent {
+class MainLayout extends PureComponent {
   static propTypes = { children: PropTypes.node.isRequired };
+
+  static styles = {
+    container: {
+      padding: 16,
+      display: 'flex',
+      flexDirection: 'column',
+      overflowX: 'hidden',
+
+      [breakpoints.up('tablet')]: { padding: 24 },
+    },
+  };
 
   /**
    * Close the drawer.
@@ -41,7 +56,7 @@ export default class MainLayout extends PureComponent {
         <Drawer.MainContent>
           <MainToolbar onMenuButtonPress={this.handleMenuButtonPress} />
 
-          <div>
+          <div className={this.props.classes.container}>
             {this.props.children}
           </div>
         </Drawer.MainContent>
@@ -49,3 +64,5 @@ export default class MainLayout extends PureComponent {
     );
   }
 }
+
+export default injectSheet(MainLayout.styles)(MainLayout);

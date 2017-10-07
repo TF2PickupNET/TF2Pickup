@@ -75,8 +75,6 @@ class ClassList extends PureComponent {
     const requiredPlayers = gamemodes[gamemode].slots[slotName];
     const playerCount = players.length;
 
-    console.log(players);
-
     return (
       <div>
         <Card className={classes.card}>
@@ -103,12 +101,11 @@ class ClassList extends PureComponent {
               </span>
             </List.Item>
 
-            <List.Divider className={players.length === 0 ? classes.hidden : ''} />
-
-            {players.map(player => (
+            {players.map(player => [
+              <List.Divider key={`${player.id}-divider`} />,
               <List.Item
                 key={player.id}
-                className={player.ready && classes.ready}
+                className={player.ready ? classes.ready : ''}
                 leftItem={(
                   <List.Item.Avatar>
                     <img
@@ -123,8 +120,8 @@ class ClassList extends PureComponent {
                 {player.name}
 
                 <Ripple />
-              </List.Item>
-            ))}
+              </List.Item>,
+            ])}
 
             <List.Divider className={user ? '' : classes.hidden} />
 

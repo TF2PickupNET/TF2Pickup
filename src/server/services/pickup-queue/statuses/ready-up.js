@@ -30,7 +30,7 @@ export default async function readyUp(props) {
         .slice(0, min);
     });
 
-    // Generate teams with players
+    // Generate teams with players here
 
     // Remove players from the queue
     // TODO: Generate a new sets of maps to be picked from

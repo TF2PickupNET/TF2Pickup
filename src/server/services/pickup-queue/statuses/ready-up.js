@@ -1,6 +1,9 @@
 import mapValues from 'lodash.mapvalues';
+import debug from 'debug';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
+
+const log = debug('TF2Pickup:pickup-queue:statuses:ready-up');
 
 export default async function readyUp(props) {
   const pickupId = props.id;
@@ -15,6 +18,8 @@ export default async function readyUp(props) {
   ).every(value => value);
 
   if (enoughPlayersAreReady) {
+    log('Enough players are ready, creating teams', pickupId);
+
     await service.patch(pickupId, {
       $set: {
         status: 'making-teams',
@@ -34,6 +39,8 @@ export default async function readyUp(props) {
 
     // Remove players from the queue
     // TODO: Generate a new sets of maps to be picked from
+    log('Setting queue back to waiting status', pickupId);
+
     await service.patch(pickupId, {
       $set: {
         status: 'waiting',

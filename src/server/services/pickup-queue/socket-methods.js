@@ -2,8 +2,11 @@
 
 import mapValues from 'lodash.mapvalues';
 import sleep from 'sleep-promise';
+import debug from 'debug';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
+
+const log = debug('TF2Pickup:pickup-queue:socket-methods');
 
 function queueWithoutPlayer(queue, playerId) {
   return Object.assign({}, queue, {
@@ -44,6 +47,8 @@ export default function socketMethods(app, socket) {
         preReady: null,
       });
 
+      log('Adding user to pickup', userId);
+
       await pickupQueue.patch(queue.id, { $set: { classes: newQueue.classes } });
     }
   });
@@ -55,6 +60,8 @@ export default function socketMethods(app, socket) {
       const queue = await pickupQueue.get(`${region}-${gamemode}`);
 
       const newQueue = queueWithoutPlayer(queue, userId);
+
+      log('Removing user from pickup', userId);
 
       await pickupQueue.patch(queue.id, { $set: { classes: newQueue.classes } });
     }
@@ -74,6 +81,8 @@ export default function socketMethods(app, socket) {
         return player;
       });
 
+      log('Readying user uo', userId);
+
       await pickupQueue.patch(queue.id, { $set: { classes: mapValues(queue.classes, setReady) } });
     }
   });
@@ -87,6 +96,8 @@ export default function socketMethods(app, socket) {
       const user = await app.service('users').get(userId);
 
       if (!user.online) {
+        log('Removing user from pickup because of disconnect', userId);
+
         const pickups = await Promise.all(
           Object
             .keys(gamemodes)

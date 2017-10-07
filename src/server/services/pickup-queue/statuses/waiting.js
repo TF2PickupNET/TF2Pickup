@@ -1,6 +1,9 @@
 import mapValues from 'lodash.mapvalues';
+import debug from 'debug';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
+
+const log = debug('TF2Pickup:pickup-queue:statuses:waiting');
 
 export default async function waiting(props) {
   const pickupId = props.id;
@@ -15,6 +18,8 @@ export default async function waiting(props) {
   ).every(value => value);
 
   if (hasEnoughPlayers) {
+    log('Setting pickup into ready up state', pickupId);
+
     await service.patch(pickupId, {
       $set: {
         status: 'ready-up',
@@ -27,6 +32,8 @@ export default async function waiting(props) {
 
       // Still in ready up mode
       if (newPickup.status === 'ready-up') {
+        log('Resetting pickup into waiting state', pickupId);
+
         const filterPlayers = players => players
           .filter(player => player.ready)
           .map(player => Object.assign({}, player, { ready: false }));

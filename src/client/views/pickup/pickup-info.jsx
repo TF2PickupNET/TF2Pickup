@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import classnames from 'classnames';
-import moment from 'moment';
+import { differenceInMilliseconds } from 'date-fns';
 import {
   Button,
   Card,
@@ -59,26 +59,33 @@ class GamemodeInfo extends PureComponent {
 
   state = { progress: 0 };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.pickup.status === 'ready-up' && this.props.pickup.status !== 'ready-up') {
-      this.calculateProgress(nextProps);
+  interval = null;
 
-      this.readyUp = moment(nextProps.pickup.readyUp);
-      this.readyUpTime = gamemodes[nextProps.pickup.gamemode].readyUpTime * 1000;
+  componentDidMount() {
+    if (this.props.pickup.status === 'ready-up') {
+      this.interval = setInterval(this.calculateProgress, 180);
     }
   }
 
-  calculateProgress(props = this.props) {
+  componentDidUpdate(prevProps) {
+    if (this.props.pickup.status === 'ready-up' && prevProps.pickup.status !== 'ready-up') {
+
+      this.interval = setInterval(this.calculateProgress, 150);
+    }
+  }
+
+  calculateProgress = (props = this.props) => {
     if (props.pickup.status !== 'ready-up') {
-      return this.setState({ progress: 0 });
+      this.setState({ progress: 0 });
+
+      return window.clearInterval(this.interval);
     }
 
-    const current = moment();
-    const diff = current.diff(this.readyUp);
+    return this.setState({ progress: differenceInMilliseconds(new Date(), props.pickup.readyUp) });
+  };
 
-    return this.setState({ progress: diff / this.readyUpTime * 100 }, () => {
-      setTimeout(() => this.calculateProgress(), 140);
-    });
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   render() {
@@ -124,7 +131,7 @@ class GamemodeInfo extends PureComponent {
 
         <Progress
           className={progressClasses}
-          progress={this.state.progress}
+          progress={this.state.progress / (gamemodes[pickup.gamemode].readyUpTime * 1000) * 100}
         />
       </Card>
     );

@@ -3,6 +3,8 @@ import {
   Dialog,
   Button,
 } from 'materialize-react';
+import Helmet from 'react-helmet';
+import Aux from 'react-aux';
 
 import app from '../../app';
 
@@ -33,37 +35,46 @@ export default class ReadyUpDialog extends PureComponent {
     app.io.emit('pickup-queue.remove', { gamemode: this.props.gamemode });
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.isInPickup) {
-      if (this.props.isInPickup && this.props.pickup.status === 'ready-up') {
-        this.dialog.close();
-      }
+  static getDialogStatus(props) {
+    return props.pickup.status === 'ready-up'
+           && props.isInPickup
+           && !props.isInPickup.ready;
+  }
 
-      return;
+  componentDidMount() {
+    if (ReadyUpDialog.getDialogStatus(this.props)) {
+      this.dialog.open();
     }
+  }
 
-    const nextStatus = nextProps.pickup.status;
-    const currentStatus = this.props.pickup.status;
+  componentWillReceiveProps(nextProps) {
+    const nextStatus = ReadyUpDialog.getDialogStatus(nextProps);
+    const currentStatus = ReadyUpDialog.getDialogStatus(this.props);
 
-    if (nextStatus === 'ready-up' && currentStatus !== 'ready-up') {
-      if (!nextProps.isInPickup.ready) {
-        this.dialog.close();
-
+    if (nextStatus !== currentStatus) {
+      if (nextStatus) {
         this.dialog.open();
+      } else {
+        this.dialog.close();
       }
-    } else if (nextProps.isInPickup.ready && !this.props.isInPickup.ready) {
-      this.dialog.close();
-    } else if (nextStatus !== 'ready-up' && currentStatus === 'ready-up') {
-      this.dialog.close();
     }
   }
 
   render() {
     return (
-      <Dialog
-        ref={(element) => { this.dialog = element; }}
-        component={this.Component}
-      />
+      <Aux>
+        {this.props.pickup.status === 'ready-up' && (
+          <Helmet>
+            <title>Ready Up</title>
+          </Helmet>
+        )}
+
+        <Dialog
+          ref={(element) => { this.dialog = element; }}
+          closeOnOutsideClick={false}
+          component={this.Component}
+        />
+      </Aux>
     );
   }
 }

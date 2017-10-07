@@ -7,16 +7,11 @@ export default async function waiting(props) {
   const service = props.app.service('pickup-queue');
   const pickup = props.result;
   const hasEnoughPlayers = Object.values(
-    Object
-      .keys(pickup.classes)
-      .reduce((current, className) => {
-        const min = gamemodes[pickup.gamemode].slots[className];
+    mapValues(pickup.classes, (players, className) => {
+      const min = gamemodes[pickup.gamemode].slots[className];
 
-        return {
-          ...current,
-          [className]: pickup.classes[className].length >= min,
-        };
-      }, {}),
+      return players.length >= min;
+    }),
   ).every(value => value);
 
   if (hasEnoughPlayers) {

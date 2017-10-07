@@ -1,3 +1,5 @@
+import mapValues from 'lodash.mapvalues';
+
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 export default async function readyUp(props) {
@@ -5,16 +7,11 @@ export default async function readyUp(props) {
   const service = props.app.service('pickup-queue');
   const pickup = props.result;
   const enoughPlayersAreReady = Object.values(
-    Object
-      .keys(pickup.classes)
-      .reduce((current, className) => {
-        const min = gamemodes[pickup.gamemode].slots[className];
+    mapValues(pickup.classes, (players, className) => {
+      const min = gamemodes[pickup.gamemode].slots[className];
 
-        return {
-          ...current,
-          [className]: pickup.classes[className].filter(player => player.ready) >= min,
-        };
-      }, {}),
+      return players.filter(player => player.ready) >= min;
+    }),
   ).every(value => value);
 
   if (enoughPlayersAreReady) {
@@ -25,7 +22,29 @@ export default async function readyUp(props) {
       },
     });
 
-    // Create teams here
+    const players = mapValues(pickup.classes, (classPlayers, className) => {
+      const min = gamemodes[pickup.gamemode].slots[className];
+
+      return classPlayers
+        .filter(player => player.ready)
+        .slice(0, min);
+    });
+
+    // Generate teams with players
+
+    // Remove players from the queue
+    // TODO: Generate a new sets of maps to be picked from
+    await service.patch(pickupId, {
+      $set: {
+        status: 'waiting',
+        classes: mapValues(
+          pickup.classes,
+          (classPlayers, className) => classPlayers.filter(
+            player => players[className].includes(player.id),
+          ),
+        ),
+      },
+    });
   }
 
   return props;

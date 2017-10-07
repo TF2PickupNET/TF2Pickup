@@ -33,23 +33,23 @@ async function populatePickup(props) {
 }
 
 export default {
-  before: {
-    async patch(props) {
-      const pickupId = props.id;
-      const pickup = await props.app.service('pickup-queue').get(pickupId);
-
-      switch (pickup.status) {
-        case 'waiting': {
-          return statuses.waiting(props);
-        }
-
-        default: return props;
-      }
-    }
-  },
-
   after: {
     get: populatePickup,
-    patch: populatePickup,
+    patch: [
+      (props) => {
+        switch (props.result.status) {
+          case 'waiting': {
+            return statuses.waiting(props);
+          }
+
+          case 'ready-up': {
+            return statuses.readyUp(props);
+          }
+
+          default: return props;
+        }
+      },
+      populatePickup,
+    ],
   },
 };

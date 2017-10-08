@@ -10,8 +10,11 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import flatten from 'lodash.flatten';
 import injectSheet from 'react-jss';
+import get from 'lodash.get';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
+
+import createNotification from '../../utils/create-notification';
 
 class PickupTabs extends PureComponent {
   static propTypes = {
@@ -48,6 +51,32 @@ class PickupTabs extends PureComponent {
     return flatten(Object.values(pickup.classes)).length;
   }
 
+  componentWillReceiveProps(nextProps) {
+    Object
+      .values(nextProps.pickups)
+      .forEach((pickup) => {
+        const oldPickup = this.props.pickups[pickup.gamemode];
+
+        if (pickup.status === 'ready-up' && oldPickup.status === 'waiting') {
+          const userId = get(this.props, 'user.id', null);
+          const players = flatten(Object.values(pickup.classes));
+          const isInPickup = players.some(({ id }) => id === userId);
+          const gamemode = gamemodes[pickup.gamemode];
+
+          if (isInPickup) {
+            if (this.props.gamemode !== pickup.gamemode) {
+              this.props.redirect(`/${pickup.gamemode}`);
+            }
+
+            createNotification('Ready Up', {
+              timeout: gamemode.readyUpTime * 1000,
+              body: `Your ${gamemode.display} is ready`,
+            });
+          }
+        }
+      });
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.gamemode !== this.props.gamemode) {
       this.tabs.currentTab = this.props.gamemode;
@@ -57,6 +86,7 @@ class PickupTabs extends PureComponent {
   handleChange = (gamemode) => {
     this.props.redirect(`/${gamemode}`);
   };
+
   render() {
     const { pickups } = this.props;
 
@@ -90,7 +120,12 @@ class PickupTabs extends PureComponent {
 }
 
 export default connect(
-  null,
+  (state) => {
+    return {
+      user: state.user,
+      pickups: state.pickupQueue,
+    };
+  },
   (dispatch) => {
     return { redirect: url => dispatch(push(url)) };
   },

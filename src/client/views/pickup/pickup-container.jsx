@@ -70,10 +70,7 @@ class PickupContainer extends PureComponent {
             alignItems: 'center',
           }}
         >
-          <PickupTabs
-            gamemode={this.props.gamemode}
-            pickups={this.props.pickups}
-          />
+          <PickupTabs gamemode={this.props.gamemode} />
 
           <PickupInfo
             pickup={pickup}

@@ -69,7 +69,6 @@ class GamemodeInfo extends PureComponent {
 
   componentDidUpdate(prevProps) {
     if (this.props.pickup.status === 'ready-up' && prevProps.pickup.status !== 'ready-up') {
-
       this.interval = setInterval(this.calculateProgress, 150);
     }
   }

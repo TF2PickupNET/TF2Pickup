@@ -4,12 +4,25 @@ import {
   Button,
   colors,
 } from 'materialize-react';
+import PropTypes from 'prop-types';
 
 import createNotification from '../../utils/create-notification';
 
+/**
+ * Renders a bar at the top to ask the user about notification permissions.
+ *
+ * @class
+ */
 class NotificationRequester extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({
+      bar: PropTypes.string.isRequired,
+      button: PropTypes.string.isRequired,
+    }).isRequired,
+  };
+
   static styles = {
-    container: {
+    bar: {
       height: 48,
       padding: '4px 16px',
       display: 'flex',
@@ -26,6 +39,9 @@ class NotificationRequester extends PureComponent {
 
   state = { hideBar: Notification.permission !== 'default' };
 
+  /**
+   * Request the permission whether or not we can create notifications.
+   */
   async requestPermission() {
     const permission = await Notification.requestPermission();
 
@@ -39,6 +55,9 @@ class NotificationRequester extends PureComponent {
     this.setState({ hideBar: true });
   }
 
+  /**
+   * When the user clicks the button, we request the permission from the user.
+   */
   handlePress = () => {
     this.requestPermission();
   };
@@ -49,7 +68,7 @@ class NotificationRequester extends PureComponent {
     }
 
     return (
-      <div className={this.props.classes.container}>
+      <div className={this.props.classes.bar}>
         TF2Pickup works better with Desktop Notifications
 
         <Button

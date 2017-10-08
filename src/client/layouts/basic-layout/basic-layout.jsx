@@ -22,6 +22,7 @@ import PostUserCreationDialog from '../../components/post-user-creation-dialog';
 
 import Head from './head';
 import BetaScreen from './beta-screen';
+import NotificationRequester from './notification-requester';
 
 /**
  * Render a basic layout which will try login with the token from a cookie and make sure
@@ -115,6 +116,8 @@ class BasicLayout extends PureComponent {
                   Ok
                 </Button>
               </Snackbar>
+
+              <NotificationRequester />
 
               {isInBetaMode && !this.props.user ? (<BetaScreen />) : this.props.children}
             </Background>

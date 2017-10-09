@@ -81,7 +81,7 @@ export default function socketMethods(app, socket) {
         return player;
       });
 
-      log('Readying user uo', userId);
+      log('Readying user up', userId);
 
       await pickupQueue.patch(queue.id, { $set: { classes: mapValues(queue.classes, setReady) } });
     }

@@ -23,7 +23,7 @@ class Gamemode extends PureComponent {
       [breakpoints.up('tablet')]: { gridTemplateColumns: '1fr 1fr' },
 
       [breakpoints.up('desktop')]: {
-        '&[data-gamemode="6v6"]': { gridTemplateColumns: minmax.repeat(4) },
+        '&[data-gamemode="6v6"]': { gridTemplateColumns: 'minmax(240px, 300px) '.repeat(5) },
 
         '&[data-gamemode="9v9"]': { gridTemplateColumns: minmax.repeat(3) },
 

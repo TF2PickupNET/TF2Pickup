@@ -1,7 +1,5 @@
 import { Schema } from 'mongoose';
 
-import statuses from '@tf2-pickup/configs/pickup-status';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import regions from '@tf2-pickup/configs/regions';

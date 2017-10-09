@@ -11,8 +11,6 @@ import {
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
-import statuses from '@tf2-pickup/configs/pickup-status';
-
 class GamemodeInfo extends PureComponent {
   static styles = {
     container: {
@@ -25,7 +23,7 @@ class GamemodeInfo extends PureComponent {
       position: 'relative',
 
       [breakpoints.up('desktop')]: {
-        '&[data-gamemode="6v6"]': { maxWidth: 360 * 4 + 3 * 16 },
+        '&[data-gamemode="6v6"]': { maxWidth: 300 * 5 + 4 * 16 },
 
         '&[data-gamemode="9v9"]': { maxWidth: 360 * 3 + 2 * 16 },
 
@@ -79,12 +77,21 @@ class GamemodeInfo extends PureComponent {
 
       return window.clearInterval(this.interval);
     }
-
+creating
     return this.setState({ progress: differenceInMilliseconds(new Date(), props.pickup.readyUp) });
   };
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  }
+
+  getStatus() {
+    switch (this.props.pickup.status) {
+      case 'waiting': return 'Waiting';
+      case 'ready-up': return 'Ready Up';
+      case 'making-teams': return 'Making Teams';
+      default: return 'Unknown status';
+    }
   }
 
   render() {
@@ -109,7 +116,7 @@ class GamemodeInfo extends PureComponent {
         data-gamemode={this.props.pickup.gamemode}
       >
         <span className={this.props.classes.item}>
-          Status: {statuses[pickup.status].display}
+          Status: {this.getStatus()}
         </span>
 
         <span className={this.props.classes.item}>

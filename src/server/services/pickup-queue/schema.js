@@ -27,7 +27,11 @@ export default new Schema({
 
   status: {
     type: String,
-    validate: isInArray(Object.keys(statuses), {}),
+    validate: isInArray([
+      'waiting',
+      'ready-up',
+      'creating-teams',
+    ], {}),
     required: true,
   },
 

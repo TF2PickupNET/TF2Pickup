@@ -10,13 +10,10 @@ const log = debug('TF2Pickup:pickup-queue:socket-methods');
 
 function queueWithoutPlayer(queue, playerId) {
   return Object.assign({}, queue, {
-    classes: Object
-      .keys(queue.classes)
-      .reduce((classes, className) => Object.assign(
-        {},
-        classes,
-        { [className]: queue.classes[className].filter(player => player.id !== playerId) },
-      ), {}),
+    classes: mapValues(
+      queue.classes,
+      classPlayers => classPlayers.filter(player => player.id !== playerId),
+    ),
   });
 }
 

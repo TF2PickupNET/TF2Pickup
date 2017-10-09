@@ -22,8 +22,9 @@ class PickupContainer extends PureComponent {
   componentWillReceiveProps(nextProps) {
     const nextRegion = get(nextProps, 'user.settings.region');
     const region = get(this.props, 'user.settings.region');
+    const isConnectedAgain = !this.props.connected && nextProps.connected;
 
-    if (region !== nextRegion) {
+    if (region !== nextRegion || isConnectedAgain) {
       this.updateRegion(nextRegion);
     }
   }
@@ -104,6 +105,7 @@ export default connect(
     return {
       pickups: state.pickupQueue,
       user: state.user,
+      connected: state.connected,
     };
   },
   (dispatch) => {

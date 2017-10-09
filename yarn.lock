@@ -6,9 +6,9 @@
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@doctormckay/stats-reporter/-/stats-reporter-1.0.2.tgz#22d28f110370286ea3d32baa5efc67e28523a28b"
 
-"@tf2-pickup/configs@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@tf2-pickup/configs/-/configs-1.0.0.tgz#1b710b180a0a309ecaf09791fcf93be464512d47"
+"@tf2-pickup/configs@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@tf2-pickup/configs/-/configs-2.0.0.tgz#128697ff26faf979e9730a054aa8cd0749f70c5e"
 
 "@tf2-pickup/eslint-config@6.2.1":
   version "6.2.1"

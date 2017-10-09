@@ -15,7 +15,7 @@
     "lint": "eslint src/ scripts/ --ext js,jsx"
   },
   "dependencies": {
-    "@tf2-pickup/configs": "1.0.0",
+    "@tf2-pickup/configs": "2.0.0",
     "axios": "0.16.2",
     "body-parser": "1.18.2",
     "classnames": "2.2.5",

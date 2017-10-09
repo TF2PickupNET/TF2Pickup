@@ -3,11 +3,11 @@ Web App for TF2Pickup
 
 ## Installation
 
-### Mongo DB
+### MongoDB
 
 First you will need to install MongoDB. You will find the instructions [here](https://docs.mongodb.com/manual/installation/).
 
-You will also need to make sure the mongodb server is runnning before starting the server.
+You will also need to make sure the MongoDB server is running before starting the server.
 
 ### Yarn (optional)
 
@@ -16,11 +16,15 @@ You can find the instructions [here](https://yarnpkg.com/lang/en/docs/install/);
 
 ### Installing dependencies
 
-```sh yarn install```
+```sh
+$ yarn install
+```
 
 ### Starting the server
 
-```yarn run start-dev```
+```sh
+$ yarn run start-dev
+```
 
 This will start the server on port 3000.
 You can go then to http://localhost:3000 and access the site.

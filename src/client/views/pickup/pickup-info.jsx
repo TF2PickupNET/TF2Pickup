@@ -57,8 +57,6 @@ class GamemodeInfo extends PureComponent {
 
   state = { progress: 0 };
 
-  interval = null;
-
   componentDidMount() {
     if (this.props.pickup.status === 'ready-up') {
       this.interval = setInterval(this.calculateProgress, 180);
@@ -71,19 +69,21 @@ class GamemodeInfo extends PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  interval = null;
+
   calculateProgress = (props = this.props) => {
     if (props.pickup.status !== 'ready-up') {
       this.setState({ progress: 0 });
 
       return window.clearInterval(this.interval);
     }
-creating
+
     return this.setState({ progress: differenceInMilliseconds(new Date(), props.pickup.readyUp) });
   };
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
 
   getStatus() {
     switch (this.props.pickup.status) {

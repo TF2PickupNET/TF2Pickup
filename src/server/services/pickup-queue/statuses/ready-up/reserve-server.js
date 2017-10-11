@@ -22,6 +22,10 @@ const strategies = {
 
 export default async function reserveServer(props) {
   const pickupId = props.result.id;
-  console.log(pickupId);
+  const serverService = props.app.get('servers');
+  const server = await strategies[props.result.region](props);
 
+  return serverService.create({
+
+  });
 }

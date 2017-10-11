@@ -4,6 +4,7 @@ import debug from 'debug';
 
 import schema from './schema';
 import hooks from './hooks';
+import filters from './filters';
 import setupDb from './setup-db';
 import socketMethods from './socket-methods';
 
@@ -23,6 +24,7 @@ export default function pickupQueue() {
   }));
 
   that.service('pickup-queue').hooks(hooks);
+  that.service('pickup-queue').filter(filters);
 
   setupDb(that.service('pickup-queue'));
 

@@ -3,6 +3,8 @@ import debug from 'debug';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
+import createPickup from './ready-up/create-pickup';
+
 const log = debug('TF2Pickup:pickup-queue:statuses:ready-up');
 
 export default async function readyUp(props) {
@@ -27,31 +29,7 @@ export default async function readyUp(props) {
       },
     });
 
-    const players = mapValues(pickup.classes, (classPlayers, className) => {
-      const min = gamemodes[pickup.gamemode].slots[className];
-
-      return classPlayers
-        .filter(player => player.ready)
-        .slice(0, min);
-    });
-
-    // Generate teams with players here
-
-    // Remove players from the queue
-    // TODO: Generate a new sets of maps to be picked from
-    log('Setting queue back to waiting status', pickupId);
-
-    await service.patch(pickupId, {
-      $set: {
-        status: 'waiting',
-        classes: mapValues(
-          pickup.classes,
-          (classPlayers, className) => classPlayers.filter(
-            player => players[className].includes(player.id),
-          ),
-        ),
-      },
-    });
+    createPickup(props);
   }
 
   return props;

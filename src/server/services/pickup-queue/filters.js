@@ -1,9 +1,9 @@
+import get from 'lodash.get';
+
 export default {
   patched(data, connection) {
-    if (connection.user) {
-      return data.region === connection.user.settings.region;
-    }
+    const region = get(connection, 'user.settings.region', 'eu');
 
-    return false;
+    return data.region === region;
   },
 };

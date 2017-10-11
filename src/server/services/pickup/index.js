@@ -3,7 +3,6 @@ import service from 'feathers-mongoose';
 import debug from 'debug';
 
 import schema from './schema';
-import hooks from './hooks';
 
 const log = debug('TF2Pickup:pickup');
 
@@ -19,6 +18,4 @@ export default function pickup() {
     Model: mongoose.model('Pickup', schema),
     id: 'id',
   }));
-
-  that.service('pickup').hooks(hooks);
 }

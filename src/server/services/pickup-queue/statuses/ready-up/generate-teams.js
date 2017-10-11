@@ -1,3 +1,3 @@
-export default async function generateTeams() {
+export default async function generateTeams(players) {
   return {};
 }

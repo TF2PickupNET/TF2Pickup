@@ -1,12 +1,12 @@
 import flatten from 'lodash.flatten';
+import mapValues from 'lodash.mapvalues';
 
 import statuses from './statuses';
 
 async function populatePickup(props) {
-  const newPickup = { ...props.result };
-  const classNames = Object.keys(newPickup.classes);
+  const pickup = props.result;
   const usersService = props.app.service('users');
-  const playerIds = flatten(Object.values(newPickup.classes)).map(player => player.id);
+  const playerIds = flatten(Object.values(pickup.classes)).map(player => player.id);
   const allUsers = await Promise.all(playerIds.map(playerId => usersService.get(playerId)));
   const users = allUsers.reduce((current, user) => {
     return {
@@ -15,20 +15,23 @@ async function populatePickup(props) {
     };
   }, {});
 
-  classNames.forEach((className) => {
-    newPickup.classes[className] = newPickup.classes[className].map((player) => {
-      const user = users[player.id];
-
-      return Object.assign({}, player, {
-        name: user.name,
-        avatar: user.services.steam.avatar.medium,
-      });
-    });
-  });
-
   return {
     ...props,
-    result: newPickup,
+    result: {
+      ...pickup,
+      classes: mapValues(
+        pickup.classes,
+        classPlayers => classPlayers.map((player) => {
+          const user = users[player.id];
+
+          return {
+            ...player,
+            name: user.name,
+            avatar: user.services.steam.avatar.medium,
+          };
+        }),
+      ),
+    },
   };
 }
 

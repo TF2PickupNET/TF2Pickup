@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';
-import path from 'path';
 import debug from 'debug';
 import config from 'config';
 
@@ -8,8 +6,8 @@ import setupApp from './setup-app';
 const log = debug('TF2Pickup');
 
 const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
-const port = config.get("server.port");
-const ip = config.get("server.ip");
+const port = config.get('server.port');
+const ip = config.get('server.ip');
 const protocol = env === 'prod' ? 'https' : 'http';
 const url = `${protocol}://${ip}${env === 'dev' ? `:${port}` : ''}`;
 

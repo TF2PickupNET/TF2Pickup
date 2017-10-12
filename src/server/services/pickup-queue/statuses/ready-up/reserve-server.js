@@ -1,18 +1,19 @@
-import servemeStrategy from './serveme-strategy';
 import config from 'config';
 
+import servemeStrategy from './serveme-strategy';
+
 const strategies = {
-  eu(props) {
+  eu() {
     return servemeStrategy(
       'http://serveme.tf',
-      config.get("service.serveme.apikey-eu"),
+      config.get('service.serveme.apikey-eu'),
     );
   },
 
-  na(props) {
+  na() {
     return servemeStrategy(
       'http://na.serveme.tf',
-      config.get("service.serveme.apikey-na"),
+      config.get('service.serveme.apikey-na'),
     );
   },
 

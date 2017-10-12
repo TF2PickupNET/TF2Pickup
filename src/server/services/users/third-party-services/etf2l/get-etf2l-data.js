@@ -4,7 +4,6 @@ import moment from 'moment';
 import debug from 'debug';
 import config from 'config';
 
-
 import {
   transformGamemode,
   oldDivsToNewDivs,

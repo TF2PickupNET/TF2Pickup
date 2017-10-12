@@ -25,9 +25,9 @@ export default async function setupApp(url) {
   log('Creating Feathers app');
 
   const app = feathers();
-  const mongourl = config.get("server.mongourl");
+  const mongourl = config.get('server.mongourl');
 
-  app.set("url", url);
+  app.set('url', url);
 
   mongoose.Promise = global.Promise;
 

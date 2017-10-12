@@ -110,7 +110,7 @@ export default function authentication() {
         );
       }
 
-      if (tf2Hours < config.get('server.auth.required_hours') ) {
+      if (tf2Hours < config.get('server.auth.required_hours')) {
         log('TF2 hours do not satisfy the required minimum', id);
 
         return done(

@@ -42,7 +42,7 @@ export default async function getOzfortressUserData(id, app) {
   try {
     const result = await axios.get(
       `https://warzone.ozfortress.com/api/v1/users/steam_id/${id}`,
-      { headers: { 'X-API-Key':  config.get("service.ozfortress.apikey") } },
+      { headers: { 'X-API-Key': config.get('service.ozfortress.apikey') } },
     );
     const player = result.data.user;
 

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import injectSheet, { withTheme } from 'react-jss';
+import PropTypes from 'prop-types';
 import {
   Card,
   List,
@@ -19,7 +20,29 @@ import * as Icons from '../../icons';
 import app from '../../app';
 import openWindowInNewTab from '../../utils/open-window-in-new-tab';
 
+/**
+ * The component which renders all of the players that joined the class.
+ *
+ * @class
+ */
 class ClassList extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({
+      card: PropTypes.string.isRequired,
+      listHeader: PropTypes.string.isRequired,
+      hidden: PropTypes.string.isRequired,
+      avatar: PropTypes.string.isRequired,
+      classIcon: PropTypes.string.isRequired,
+      icon: PropTypes.string.isRequired,
+      ready: PropTypes.string.isRequired,
+    }).isRequired,
+    players: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    theme: PropTypes.shape({}).isRequired,
+    user: PropTypes.shape({}).isRequired,
+    slotName: PropTypes.string.isRequired,
+    gamemode: PropTypes.string.isRequired,
+  };
+
   static styles = {
     card: { margin: 0 },
 
@@ -28,7 +51,7 @@ class ClassList extends PureComponent {
       justifyContent: 'space-between',
     },
 
-    hidden: { display: 'none'   },
+    hidden: { display: 'none' },
 
     avatar: {
       height: 40,
@@ -44,6 +67,13 @@ class ClassList extends PureComponent {
     ready: { backgroundColor: rgba(colors.green500, 0.25) },
   };
 
+  redirectToUser = id => () => {
+    openWindowInNewTab(`/profile/${id}`);
+  };
+
+  /**
+   * Emit the join event.
+   */
   handleJoinClass = () => {
     app.io.emit('pickup-queue.join', {
       className: this.props.slotName,
@@ -51,12 +81,11 @@ class ClassList extends PureComponent {
     });
   };
 
+  /**
+   * Emit the remove event.
+   */
   handleLeaveClass = () => {
     app.io.emit('pickup-queue.remove', { gamemode: this.props.gamemode });
-  };
-
-  redirectToUser = id => () => {
-    openWindowInNewTab(`/profile/${id}`);
   };
 
   render() {
@@ -66,7 +95,6 @@ class ClassList extends PureComponent {
       user,
       slotName,
       gamemode,
-      classes,
     } = this.props;
     const name = capitalize(slotName);
     const ClassIcon = Icons[name];
@@ -77,7 +105,7 @@ class ClassList extends PureComponent {
 
     return (
       <div>
-        <Card className={classes.card}>
+        <Card className={this.props.classes.card}>
           <List inset>
             <List.Item
               leftItem={(
@@ -85,12 +113,12 @@ class ClassList extends PureComponent {
                   <ClassIcon
                     size={40}
                     color={theme.iconColor}
-                    className={classes.classIcon}
+                    className={this.props.classes.classIcon}
                   />
                 </List.Item.Avatar>
               )}
             >
-              <span className={classes.listHeader}>
+              <span className={this.props.classes.listHeader}>
                 <Typography typography="headline">
                   {name}
                 </Typography>
@@ -105,13 +133,13 @@ class ClassList extends PureComponent {
               <List.Divider key={`${player.id}-divider`} />,
               <List.Item
                 key={player.id}
-                className={player.ready ? classes.ready : ''}
+                className={player.ready ? this.props.classes.ready : ''}
                 leftItem={(
                   <List.Item.Avatar>
                     <img
                       src={player.avatar}
                       alt="avatar"
-                      className={classes.avatar}
+                      className={this.props.classes.avatar}
                     />
                   </List.Item.Avatar>
                 )}
@@ -123,14 +151,14 @@ class ClassList extends PureComponent {
               </List.Item>,
             ])}
 
-            <List.Divider className={user ? '' : classes.hidden} />
+            <List.Divider className={user ? '' : this.props.classes.hidden} />
 
             <List.Item
-              className={user ? '' : classes.hidden}
+              className={user ? '' : this.props.classes.hidden}
               leftItem={(
                 <Icon
                   icon={isInSlot ? 'close' : 'plus'}
-                  className={classes.icon}
+                  className={this.props.classes.icon}
                 />
               )}
               onClick={isInSlot ? this.handleLeaveClass : this.handleJoinClass}

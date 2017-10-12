@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import injectSheet, { withTheme } from 'react-jss';
 import { breakpoints } from 'materialize-react';
+import PropTypes from 'prop-types';
 import get from 'lodash.get';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
@@ -9,7 +10,21 @@ import ClassList from './class-list';
 
 const minmax = 'minmax(240px, 360px) ';
 
-class Gamemode extends PureComponent {
+/**
+ * Render the classes for the current gamemode.
+ *
+ * @class
+ */
+class Pickup extends PureComponent {
+  static propTypes = {
+    gamemode: PropTypes.string.isRequired,
+    pickup: PropTypes.shape({}).isRequired,
+    classes: PropTypes.shape({ classContainer: PropTypes.string }).isRequired,
+    user: PropTypes.shape({}),
+  };
+
+  static defaultProps = { user: null };
+
   static styles = {
     classContainer: {
       display: 'grid',
@@ -34,6 +49,11 @@ class Gamemode extends PureComponent {
     },
   };
 
+  /**
+   * Render the class list with the players.
+   *
+   * @returns {JSX[]} - Returns the JSX.
+   */
   renderClasses() {
     const {
       gamemode,
@@ -59,11 +79,9 @@ class Gamemode extends PureComponent {
   }
 
   render() {
-    const { classes } = this.props;
-
     return (
       <div
-        className={classes.classContainer}
+        className={this.props.classes.classContainer}
         data-gamemode={this.props.gamemode}
       >
         {this.renderClasses()}
@@ -72,4 +90,4 @@ class Gamemode extends PureComponent {
   }
 }
 
-export default injectSheet(Gamemode.styles)(withTheme(Gamemode));
+export default injectSheet(Pickup.styles)(withTheme(Pickup));

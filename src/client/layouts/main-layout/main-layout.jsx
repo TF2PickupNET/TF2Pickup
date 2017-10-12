@@ -16,7 +16,10 @@ import MainToolbar from './main-toolbar';
  * @class
  */
 class MainLayout extends PureComponent {
-  static propTypes = { children: PropTypes.node.isRequired };
+  static propTypes = {
+    children: PropTypes.node.isRequired,
+    classes: PropTypes.shape({ container: PropTypes.string }).isRequired,
+  };
 
   static styles = {
     container: {

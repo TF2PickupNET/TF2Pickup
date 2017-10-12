@@ -7,6 +7,14 @@ import randomstring from 'randomstring';
 
 const STV_PASSWORD = 'tf2pickuptv';
 
+/**
+ * Reserve a server from serveme.tf.
+ *
+ * @param {String} url - The base url for the request.
+ * This is needed because of different urls for na and eu.
+ * @param {String} key - The api key for the requests.
+ * @returns {Object} - Returns the data for the server and reservation.
+ */
 export default async function servemeStrategy(url, key) {
   const serveme = axios.create({
     baseURL: url,

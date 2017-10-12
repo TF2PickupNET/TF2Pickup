@@ -82,10 +82,6 @@ class BasicLayout extends PureComponent {
     this.cookieSnackbar.close();
   };
 
-  componentDidCatch(error) {
-    console.log(error);
-  }
-
   render() {
     // TODO: Eventually this should be set in the users data
     const query = queryString.parse(this.props.location.search);

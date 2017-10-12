@@ -3,6 +3,12 @@ import mapValues from 'lodash.mapvalues';
 
 import statuses from './statuses';
 
+/**
+ * Populate the pickup with the correct user data.
+ *
+ * @param {Object} props - The props from the hook.
+ * @returns {Object} - Returns the new populated hook data.
+ */
 async function populatePickup(props) {
   const pickup = props.result;
   const usersService = props.app.service('users');

@@ -16,11 +16,17 @@ const strategies = {
   },
 
   // TODO: Create a strategy to get the server from ozfortress
-  au() {
-
-  },
+  au: () => {},
 };
 
+/**
+ * Reserve a server for a new pickup.
+ * This will create a new server in the servers database.
+ * This will call the appropriate handler for the different regions.
+ *
+ * @param {Object} props - The props from the hook.
+ * @returns {Object} - Returns an object with the server id and the logsecret.
+ */
 export default async function reserveServer(props) {
   const { region } = props.result;
   const serverService = props.app.service('servers');
@@ -28,7 +34,6 @@ export default async function reserveServer(props) {
     data,
     logSecret,
   } = await strategies[region](props);
-  console.log(serverService);
   const lastServer = serverService.find({
     limit: 1,
     sort: { id: -1 },

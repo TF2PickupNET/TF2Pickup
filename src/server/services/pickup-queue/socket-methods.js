@@ -8,6 +8,13 @@ import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 const log = debug('TF2Pickup:pickup-queue:socket-methods');
 
+/**
+ * Remove the player from the queue.
+ *
+ * @param {Object} queue - The queue object.
+ * @param {String} playerId - The player to remove from the queue.
+ * @returns {Object} - Returns the new queue.
+ */
 function queueWithoutPlayer(queue, playerId) {
   return Object.assign({}, queue, {
     classes: mapValues(

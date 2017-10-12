@@ -8,7 +8,7 @@ import hooks from './hooks';
 const log = debug('TF2Pickup:servers');
 
 /**
- * Setup the users service.
+ * Setup the servers service.
  */
 export default function servers() {
   const that = this;

@@ -5,6 +5,12 @@ import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 const log = debug('TF2Pickup:pickup-queue:statuses:waiting');
 
+/**
+ * The after hook handler for the waiting status.
+ *
+ * @param {Object} props - The props passed to the hook.
+ * @returns {Object} - Returns the not modified props.
+ */
 export default async function waiting(props) {
   const pickupId = props.id;
   const service = props.app.service('pickup-queue');

@@ -64,6 +64,11 @@ export default new Schema({
     },
   },
 
+  logSecret: {
+    type: String,
+    required: true,
+  },
+
   teams: {
     type: Object,
 

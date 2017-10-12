@@ -1,4 +1,5 @@
 import mapValues from 'lodash.mapvalues';
+import flatten from 'lodash.flatten';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
@@ -17,48 +18,51 @@ export default async function createPickup(props) {
       .slice(0, min);
   });
 
-  const [
-    server,
-    teams,
-  ] = Promise.all(
-    reserveServer(props),
-    generateTeams(players),
-  );
-
-  let pickupId = 1;
-
   try {
+    const [
+      server,
+      teams,
+    ] = Promise.all(
+      reserveServer(props),
+      generateTeams(players),
+    );
     const lastPickup = await pickupService.find({
       limit: 1,
-      sort: { launchedOn: -1 },
+      sort: { id: -1 },
+    });
+    const pickupId = lastPickup[0] ? lastPickup[0].id + 1 : 1;
+
+    // Create a new pickup
+    await pickupService.create({
+      id: pickupId,
+      teams,
+      status: 'setting-up-server',
+      serverId: server.id,
+      logSecret: server.logSecret,
     });
 
-    pickupId = lastPickup.id + 1;
+    // Reset the pickup queue to waiting status and remove the players from the queue
+    await pickupQueueService.patch(props.id, {
+      $set: {
+        status: 'waiting',
+        classes: mapValues(
+          pickupQueue.classes,
+          classPlayers => classPlayers.filter(player => !players.includes(player.id)),
+        ),
+      },
+    });
+
+    props.app.io.emit('pickup.redirect', {
+      pickupId,
+      players,
+    });
   } catch (error) {
+    // Reset the pickup queue to waiting status and remove the players from the queue
+    await pickupQueueService.patch(props.id, { $set: { status: 'waiting' } });
 
+    props.app.io.emit('notifications.add', {
+      forUsers: flatten(Object.values(players)),
+      message: error.message,
+    });
   }
-
-  // Create a new pickup
-  await pickupService.create({
-    id: pickupId,
-    teams,
-    status: 'setting-up-server',
-    serverId: server.id,
-  });
-
-  // Reset the pickup queue to waiting status and remove the players from the queue
-  await pickupQueueService.patch(props.id, {
-    $set: {
-      status: 'waiting',
-      classes: mapValues(
-        pickupQueue.classes,
-        classPlayers => classPlayers.filter(player => !players.includes(player.id)),
-      ),
-    },
-  });
-
-  props.app.io.emit('pickup.redirect', {
-    pickupId,
-    players,
-  });
 }

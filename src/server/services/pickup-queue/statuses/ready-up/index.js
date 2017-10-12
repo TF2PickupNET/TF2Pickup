@@ -3,7 +3,7 @@ import debug from 'debug';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
-import createPickup from './ready-up/create-pickup';
+import createPickup from './create-pickup';
 
 const log = debug('TF2Pickup:pickup-queue:statuses:ready-up');
 

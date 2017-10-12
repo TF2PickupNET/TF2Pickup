@@ -9,19 +9,18 @@ const RULES_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/RU
 /**
  * The view for the rules page.
  *
- * @returns {JSX} - Returns the view.
+ * @class
  */
-export default class View extends PureComponent  {
+export default class View extends PureComponent {
+  state = { rules: null };
 
-  state = {
-    rules: null,
-  };
+  /**
+   * Fetch rules from GitHub.
+   */
+  async componentWillMount() {
+    const response = await axios.get(RULES_URL);
 
-  componentDidMount() {
-    axios.get(RULES_URL)
-      .then((response) => {
-        this.setState({ rules: response.data });
-      });
+    this.setState({ rules: response.data });
   }
 
   render() {
@@ -31,7 +30,7 @@ export default class View extends PureComponent  {
           <title>Rules</title>
         </Helmet>
 
-        {this.state.rules == null ? (
+        {this.state.rules === null ? (
           <Spinner active />
         ) : (
           <ReactMarkdown source={this.state.rules} />

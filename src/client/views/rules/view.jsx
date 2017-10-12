@@ -1,21 +1,10 @@
 import React, { PureComponent } from 'react';
 import Helmet from 'react-helmet';
 import ReactMarkdown from 'react-markdown';
+import axios from 'axios';
+import { Spinner } from 'materialize-react';
 
-// TODO Read content from a file
-var content = `
-## TF2Pickup very important rules
-1. First rule
-2. Second
-
-   Properly indented paragraph
-
-   [ETF2L](http://etf2l.org/) account is rqeuired (testing links);
-
-3. Third
-  * Whatever
-  * whatever
-`;
+const RULES_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/RULES.md';
 
 /**
  * The view for the rules page.
@@ -24,6 +13,17 @@ var content = `
  */
 export default class View extends PureComponent  {
 
+  state = {
+    rules: null,
+  };
+
+  componentDidMount() {
+    axios.get(RULES_URL)
+      .then((response) => {
+        this.setState({ rules: response.data });
+      });
+  }
+
   render() {
     return (
       <div>
@@ -31,7 +31,11 @@ export default class View extends PureComponent  {
           <title>Rules</title>
         </Helmet>
 
-        <ReactMarkdown source={content} />
+        {this.state.rules == null ? (
+          <Spinner active />
+        ) : (
+          <ReactMarkdown source={this.state.rules} />
+        )}
       </div>
     );
   }

@@ -7,6 +7,7 @@ import rest from 'feathers-rest';
 import socketio from 'feathers-socketio';
 import handler from 'feathers-errors/handler';
 import debug from 'debug';
+import config from 'config';
 
 import services from './services';
 import globalHooks from './global-hooks';
@@ -17,22 +18,23 @@ const log = debug('TF2Pickup');
 /**
  * Setup the feathers app and configure all of the parts.
  *
- * @param {Object} config - The config with the env keys.
+ * @param {String} url - URL for the app.
  * @returns {JSX} - Returns the app.
  */
-export default async function setupApp(config) {
+export default async function setupApp(url) {
   log('Creating Feathers app');
 
   const app = feathers();
+  const mongourl = config.get("server.mongourl");
 
-  app.set('config', config);
+  app.set("url", url);
 
   mongoose.Promise = global.Promise;
 
   try {
-    await mongoose.connect(config.MONGO_URL, { useMongoClient: true });
+    await mongoose.connect(mongourl, { useMongoClient: true });
   } catch (error) { // eslint-disable-line no-unused-vars
-    throw new Error(`Can't connect to MongoDB server with url: ${config.MONGO_URL}`);
+    throw new Error(`Can't connect to MongoDB server with url: ${mongourl}`);
   }
 
   app

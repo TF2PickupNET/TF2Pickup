@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const { colors } = require('materialize-react');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
+const config = require('config');
 
 const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
   template: path.resolve(__dirname, 'src/client/index.html'),
@@ -11,7 +12,6 @@ const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
   inject: 'body',
 });
 const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
-const { parsed: config } = dotenv.load({ path: path.resolve(__dirname, `./.env-${env}`) });
 
 module.exports = {
   entry: { app: path.resolve(__dirname, 'src/client/index.js') },
@@ -78,7 +78,7 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       DEV: JSON.stringify(env === 'dev'),
-      BETA_MODE: config.BETA_MODE,
+      BETA_MODE: config.has("server.beta"),
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new WebpackPwaManifest({

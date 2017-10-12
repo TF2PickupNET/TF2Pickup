@@ -1,15 +1,15 @@
 import dotenv from 'dotenv';
 import path from 'path';
 import debug from 'debug';
+import config from 'config';
 
 import setupApp from './setup-app';
 
 const log = debug('TF2Pickup');
 
 const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
-const { parsed: config } = dotenv.load({ path: path.resolve(__dirname, `../../.env-${env}`) });
-const port = config.PORT;
-const ip = config.IP;
+const port = config.get("server.port");
+const ip = config.get("server.ip");
 const protocol = env === 'prod' ? 'https' : 'http';
 const url = `${protocol}://${ip}${env === 'dev' ? `:${port}` : ''}`;
 
@@ -18,12 +18,7 @@ const url = `${protocol}://${ip}${env === 'dev' ? `:${port}` : ''}`;
  */
 async function startServer() {
   try {
-    const app = await setupApp({
-      ...config,
-      ip,
-      env,
-      url,
-    });
+    const app = await setupApp(url);
     const server = app.listen(port);
 
     server.on('listening', () => {

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import debug from 'debug';
+import config from 'config';
 
 export const divs = [
   null,
@@ -41,7 +42,7 @@ export default async function getOzfortressUserData(id, app) {
   try {
     const result = await axios.get(
       `https://warzone.ozfortress.com/api/v1/users/steam_id/${id}`,
-      { headers: { 'X-API-Key': process.env.OZFORTRESS_API_KEY } },
+      { headers: { 'X-API-Key':  config.get("service.ozfortress.apikey") } },
     );
     const player = result.data.user;
 

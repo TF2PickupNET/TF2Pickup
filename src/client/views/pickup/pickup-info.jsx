@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import { differenceInMilliseconds } from 'date-fns';
 import {
   Button,
@@ -11,7 +12,27 @@ import {
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
-class GamemodeInfo extends PureComponent {
+/**
+ * A component which renders info about the current pickup.
+ *
+ * @class
+ */
+class PickupInfo extends PureComponent {
+  static propTypes = {
+    pickup: PropTypes.shape({
+      status: PropTypes.string.isRequired,
+      gamemode: PropTypes.string.isRequired,
+      readyUp: PropTypes.instanceOf(Date),
+    }).isRequired,
+    classes: Progress.shape({
+      container: PropTypes.string.isRequired,
+      item: PropTypes.string.isRequired,
+      progress: PropTypes.string.isRequired,
+      showProgress: PropTypes.string.isRequired,
+    }).isRequired,
+    isInPickup: PropTypes.shape({}).isRequired,
+  };
+
   static styles = {
     container: {
       display: 'flex',
@@ -57,34 +78,54 @@ class GamemodeInfo extends PureComponent {
 
   state = { progress: 0 };
 
+  /**
+   * When the initial pickup is in ready up state, we need to create a new interval.
+   */
   componentDidMount() {
     if (this.props.pickup.status === 'ready-up') {
       this.interval = setInterval(this.calculateProgress, 180);
     }
   }
 
+  /**
+   * Check if the current pickup entered the ready up phase and create a new interval.
+   *
+   * @param prevProps
+   */
   componentDidUpdate(prevProps) {
     if (this.props.pickup.status === 'ready-up' && prevProps.pickup.status !== 'ready-up') {
       this.interval = setInterval(this.calculateProgress, 150);
     }
   }
 
+  /**
+   * Clear the interval when the component unmounts.
+   */
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
   interval = null;
 
-  calculateProgress = (props = this.props) => {
-    if (props.pickup.status !== 'ready-up') {
+  /**
+   * Calculate the progress of the current ready up phase.
+   */
+  calculateProgress = () => {
+    if (this.props.pickup.status === 'ready-up') {
+      this.setState({ progress: differenceInMilliseconds(new Date(), this.props.pickup.readyUp) });
+    } else {
+      // Reset the status and clear the interval
       this.setState({ progress: 0 });
 
-      return window.clearInterval(this.interval);
+      window.clearInterval(this.interval);
     }
-
-    return this.setState({ progress: differenceInMilliseconds(new Date(), props.pickup.readyUp) });
   };
 
+  /**
+   * Get the pretty status to show.
+   *
+   * @returns {String} - Returns the pretty status.
+   */
   getStatus() {
     switch (this.props.pickup.status) {
       case 'waiting': return 'Waiting';
@@ -144,4 +185,4 @@ class GamemodeInfo extends PureComponent {
   }
 }
 
-export default injectSheet(GamemodeInfo.styles)(GamemodeInfo);
+export default injectSheet(PickupInfo.styles)(PickupInfo);

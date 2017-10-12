@@ -6,6 +6,11 @@ import gamemodes from '@tf2-pickup/configs/gamemodes';
 import generateTeams from './generate-teams';
 import reserveServer from './reserve-server';
 
+/**
+ * Create a new pickup when enough players are ready.
+ *
+ * @param {Object} props - The props from the hook.
+ */
 export default async function createPickup(props) {
   const pickupQueue = props.result;
   const pickupService = props.app.service('pickup');

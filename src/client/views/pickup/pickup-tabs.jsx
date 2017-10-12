@@ -16,13 +16,20 @@ import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import createNotification from '../../utils/create-notification';
 
+/**
+ * Render the tabs for the different gamemodes.
+ *
+ * @class
+ */
 class PickupTabs extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
       tabs: PropTypes.string.isRequired,
       tab: PropTypes.string.isRequired,
+      playerCount: PropTypes.string.isRequired,
     }).isRequired,
     gamemode: PropTypes.oneOf(Object.keys(gamemodes)).isRequired,
+    pickups: PropTypes.shape({}).isRequired,
     redirect: PropTypes.func.isRequired,
   };
 
@@ -43,6 +50,12 @@ class PickupTabs extends PureComponent {
     },
   };
 
+  /**
+   * Count the players for a pickup.
+   *
+   * @param {Object} pickup - The pickup to count the players for.
+   * @returns {Number} - Returns the total players.
+   */
   static countPlayers(pickup) {
     if (!pickup) {
       return 0;
@@ -51,6 +64,9 @@ class PickupTabs extends PureComponent {
     return flatten(Object.values(pickup.classes)).length;
   }
 
+  /**
+   * Switch the tab when one of the pickups changes into ready-up mode.
+   */
   componentWillReceiveProps(nextProps) {
     Object
       .values(nextProps.pickups)
@@ -77,12 +93,20 @@ class PickupTabs extends PureComponent {
       });
   }
 
+  /**
+   * When we receive a new gamemode we need to update the tabs.
+   */
   componentDidUpdate(prevProps) {
     if (prevProps.gamemode !== this.props.gamemode) {
       this.tabs.currentTab = this.props.gamemode;
     }
   }
 
+  /**
+   * Redirect the user when he clicks one of the tabs.
+   *
+   * @param {String} gamemode - The gamemode to redirect to.
+   */
   handleChange = (gamemode) => {
     this.props.redirect(`/${gamemode}`);
   };

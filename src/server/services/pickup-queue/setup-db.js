@@ -14,43 +14,51 @@ const log = debug('TF2Pickup:pickup-queue:setup-db');
 export default function setupDb(service) {
   Object
     .keys(regions)
-    .reduce(
-      (current, region) => current.concat(
-        Object
-          .keys(gamemodes)
-          .map((gamemode) => {
-            return {
-              gamemode,
-              region,
-            };
-          }),
-      ),
-      [],
-    )
-    .forEach(async (queue) => {
-      const gamemodeQueue = await service.find({ query: queue });
+    .reduce((current, region) => current.concat(
+      Object
+        .keys(gamemodes)
+        .map((gamemode) => {
+          return {
+            gamemode,
+            region,
+          };
+        }),
+    ), [])
+    .forEach(async ({
+      gamemode,
+      region,
+    }) => {
       const classes = Object
-        .keys(gamemodes[queue.gamemode].slots)
+        .keys(gamemodes[gamemode].slots)
         .reduce((current, slotName) => Object.assign({}, current, { [slotName]: [] }), {});
 
-      switch (gamemodeQueue.length) {
-        case 0: {
+      try {
+        const gamemodeQueue = await service.get(`${region}-${gamemode}`);
+
+        log('Resetting classes for pickup queue', region, gamemode);
+
+        await service.patch(gamemodeQueue.id, {
+          $set: {
+            classes,
+            status: 'waiting',
+          },
+        });
+      } catch (error) {
+        if (error.code === 404) {
+          log('Creating new pickup queue', region, gamemode);
+
           await service.create({
-            ...queue,
+            region,
+            gamemode,
+            status: 'waiting',
+            id: `${region}-${gamemode}`,
             classes,
           });
 
-          break;
+          return;
         }
-        case 1: {
-          await service.patch(gamemodeQueue.id, { classes });
 
-          break;
-        }
-        default: {
-          log('Found multiple db entries for', queue);
-          break;
-        }
+        log('Unknown error while getting pickup queue', region, gamemode, error);
       }
     });
 }

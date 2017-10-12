@@ -1,7 +1,20 @@
 import { Schema } from 'mongoose';
 
+import { isInArray } from '../validators';
+
 export default new Schema({
   id: Number,
+
+  status: {
+    type: String,
+    validate: isInArray([
+      'setting-up-server',
+      'waiting-for-game-to-start',
+      'game-is-live',
+      'game-finished',
+    ], {}),
+    required: true,
+  },
 
   region: {},
 
@@ -49,6 +62,11 @@ export default new Schema({
       type: Number,
       default: 0,
     },
+  },
+
+  logSecret: {
+    type: String,
+    required: true,
   },
 
   teams: {

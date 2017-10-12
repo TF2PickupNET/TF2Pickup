@@ -4,7 +4,7 @@ export default {
   before: {
     find: hooks.disallow('external'),
     get(props) {
-      if (props.path === 'users') {
+      if (props.path === 'users' || props.path === 'pickup-queue') {
         return props;
       }
 

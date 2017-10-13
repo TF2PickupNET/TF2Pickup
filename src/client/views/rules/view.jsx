@@ -2,7 +2,10 @@ import React, { PureComponent } from 'react';
 import Helmet from 'react-helmet';
 import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
-import { Spinner } from 'materialize-react';
+import injectSheet from 'react-jss';
+import { Card, Spinner } from 'materialize-react';
+import Aux from 'react-aux';
+import PropTypes from 'prop-types';
 
 const RULES_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/RULES.md';
 
@@ -11,7 +14,28 @@ const RULES_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/RU
  *
  * @class
  */
-export default class View extends PureComponent {
+class View extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({
+      container: PropTypes.string.isRequired,
+      rules: PropTypes.string.isRequired,
+    }).isRequired,
+    isInPickup: PropTypes.shape({}).isRequired,
+  };
+
+  static styles = {
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+
+    rules: {
+      width: '100%',
+      maxWidth: 1000,
+    },
+  }
+
   state = { rules: null };
 
   /**
@@ -25,7 +49,7 @@ export default class View extends PureComponent {
 
   render() {
     return (
-      <div>
+      <Aux>
         <Helmet>
           <title>Rules</title>
         </Helmet>
@@ -33,9 +57,15 @@ export default class View extends PureComponent {
         {this.state.rules === null ? (
           <Spinner active />
         ) : (
-          <ReactMarkdown source={this.state.rules} />
+          <div className={this.props.classes.container}>
+            <Card className={this.props.classes.rules}>
+              <ReactMarkdown source={this.state.rules} />
+            </Card>
+          </div>
         )}
-      </div>
+      </Aux>
     );
   }
 }
+
+export default injectSheet(View.styles)(View);

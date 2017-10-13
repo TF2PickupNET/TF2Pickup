@@ -20,7 +20,6 @@ class View extends PureComponent {
       container: PropTypes.string.isRequired,
       rules: PropTypes.string.isRequired,
     }).isRequired,
-    isInPickup: PropTypes.shape({}).isRequired,
   };
 
   static styles = {

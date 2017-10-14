@@ -12,7 +12,7 @@ import getGroupMembers from './get-group-members';
 import getTF2Hours from './get-tf2-hours';
 
 const log = debug('TF2Pickup:authentication');
-const authUrl = config.get('server.auth.url');
+const authUrl = "/auth/steam";  
 
 /**
  * A utility class which makes sure the id from the jwt get's mapped to the correct user.

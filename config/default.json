@@ -5,8 +5,7 @@
         "mongourl": "mongodb://localhost:27017/tf2pickup",
         "auth": {
             "required_hours": 1000,
-            "secret": "someamazingsecret",
-            "url": "/auth/steam"
+            "secret": "someamazingsecret"
         }
     },
     "service": {

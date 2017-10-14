@@ -2,3 +2,7 @@ node_modules/
 .idea/
 dist/
 .temp-icons/
+
+config/*.json
+
+!config/default.json

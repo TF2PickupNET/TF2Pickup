@@ -6,13 +6,14 @@ import ms from 'ms';
 import debug from 'debug';
 import config from 'config';
 
+import { authUrl } from '../../../config/index';
+
 import createLoginListener from './create-login-listener';
 import createLogoutListener from './create-logout-listener';
 import getGroupMembers from './get-group-members';
 import getTF2Hours from './get-tf2-hours';
 
 const log = debug('TF2Pickup:authentication');
-const authUrl = '/auth/steam';
 
 /**
  * A utility class which makes sure the id from the jwt get's mapped to the correct user.

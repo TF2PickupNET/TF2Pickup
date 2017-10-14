@@ -1,0 +1,29 @@
+{
+    "server": {
+        "port": 3000,
+        "ip": "localhost",
+        "mongourl": "mongodb://localhost:27017/tf2pickup",
+        "auth": {
+            "required_hours": 1000,
+            "secret": "someamazingsecret"
+        }
+    },
+    "service": {
+        "steam": {
+            "apikey": "E890985873267CCBF3B200A3C96D42AB"
+        },
+        "ozfortress": {
+            "apikey": ""
+        },
+        "etf2l": {
+            "divs": [
+                "6v6",
+                "9v9"
+            ]
+        },
+        "serveme": {
+            "apikey-eu": "",
+            "apikey-na": ""
+        }
+    }
+}

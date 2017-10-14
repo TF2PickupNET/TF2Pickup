@@ -4,6 +4,7 @@ import jwt, { Verifier } from 'feathers-authentication-jwt';
 import errors from 'feathers-errors';
 import ms from 'ms';
 import debug from 'debug';
+import config from 'config';
 
 import { authUrl } from '../../../config/index';
 
@@ -54,7 +55,7 @@ export default function authentication() {
 
   const that = this;
   const options = {
-    secret: that.get('config').SECRET,
+    secret: config.get('server.auth.secret'),
     cookie: {
       enabled: true,
       name: 'feathers-jwt',
@@ -62,7 +63,7 @@ export default function authentication() {
     jwt: {
       expiresIn: '7d',
       issuer: 'tf2pickup',
-      audience: that.get('config').IP,
+      audience: config.get('server.ip'),
     },
   };
 
@@ -73,8 +74,8 @@ export default function authentication() {
 
   that.passport.use(
     new SteamStrategy({
-      returnURL: `${that.get('config').url}${authUrl}/return`,
-      realm: that.get('config').url,
+      returnURL: `${that.get('url')}${authUrl}/return`,
+      realm: that.get('url'),
       profile: false,
     }, async (identifier, profile, done) => {
       const [, id] = identifier.match(/https?:\/\/steamcommunity\.com\/openid\/id\/(\d+)/);
@@ -110,23 +111,23 @@ export default function authentication() {
         );
       }
 
-      if (tf2Hours < process.env.REQUIRED_TF2_HOURS) {
+      if (tf2Hours < config.get('server.auth.required_hours')) {
         log('TF2 hours do not satisfy the required minimum', id);
 
         return done(
           new errors.Forbidden([
             'You don\'t have the required minimum hours in TF2 to play TF2Pickup',
-            `You will atleast need ${process.env.REQUIRED_TF2_HOURS} in TF2.`,
+            `You will atleast need ${config.get('server.auth.required_hours')} in TF2.`,
           ].join(' ')),
           null,
         );
       }
 
-      if (process.env.BETA_MODE && process.env.VALIDATE_AGAINST_STEAM_GROUP) {
-        log('Validating user against steam group', process.env.VALIDATE_AGAINST_STEAM_GROUP);
+      if (config.has('server.beta') && config.get('server.beta.steam_group')) {
+        log('Validating user against steam group', config.get('server.beta.steam_group'));
 
         const groupMembers = await getGroupMembers(
-          process.env.VALIDATE_AGAINST_STEAM_GROUP,
+          config.get('server.beta.steam_group'),
           that,
         );
 

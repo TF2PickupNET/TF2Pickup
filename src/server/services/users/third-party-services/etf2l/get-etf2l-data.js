@@ -2,8 +2,7 @@
 import axios from 'axios';
 import moment from 'moment';
 import debug from 'debug';
-
-import { displayGamemodeDivs } from '../../../../../config';
+import config from 'config';
 
 import {
   transformGamemode,
@@ -12,6 +11,7 @@ import {
 } from './utils';
 
 const log = debug('TF2Pickup:users:etf2l');
+const displayGamemodeDivs = config.get('service.etf2l.divs');
 
 /**
  * Get the player data from etf2l.

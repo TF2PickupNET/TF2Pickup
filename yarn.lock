@@ -25,6 +25,10 @@
     eslint-plugin-react "7.3.0"
     eslint-plugin-react-jsdoc "0.9.0"
 
+"@tf2-pickup/tf2-configs@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@tf2-pickup/tf2-configs/-/tf2-configs-2.0.1.tgz#c6681182535e3e7a96810dd5cade4cfad19a4210"
+
 "@types/express-serve-static-core@*":
   version "4.0.49"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.0.49.tgz#3438d68d26e39db934ba941f18e3862a1beeb722"
@@ -1925,7 +1929,7 @@ concat-stream@1.6.0, concat-stream@^1.4.6, concat-stream@^1.4.7, concat-stream@^
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
-config@^1.26.2:
+config@1.26.2:
   version "1.26.2"
   resolved "https://registry.yarnpkg.com/config/-/config-1.26.2.tgz#2466291168d8afae0aae8ab99ea4d4272f520cae"
   dependencies:

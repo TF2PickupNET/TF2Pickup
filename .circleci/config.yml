@@ -13,6 +13,12 @@ jobs:
       - run:
           name: Lint
           command: yarn run lint
+      - run:
+          name: Builds succesfully
+          command: yarn run build
+      - run:
+          name: Start server
+          command: DEBUG="TF2Pickup" IS_CI_TEST yarn run start-prod
 
 workflows:
   version: 2

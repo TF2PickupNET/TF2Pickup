@@ -83,6 +83,7 @@
     "redux": "3.7.2",
     "sleep-promise": "2.0.0",
     "socket.io-client": "2.0.3",
+    "srcds-rcon": "^2.2.1",
     "steamcommunity": "3.33.0",
     "steamid": "1.1.0",
     "uws": "8.14.1"

@@ -161,6 +161,7 @@ export class View extends PureComponent {
   };
 
   randomGamemode = randomItem([sixes, hl]);
+
   randomRegion = randomItem([eu, na, oc]);
 
   render() {

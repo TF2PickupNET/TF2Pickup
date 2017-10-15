@@ -89,7 +89,7 @@ class Footer extends PureComponent {
       >
         <Icon
           icon={data.icon}
-          className={'mdi-48px'}
+          className="mdi-48px"
           style={{ color: 'inherit' }}
         />
       </Link>

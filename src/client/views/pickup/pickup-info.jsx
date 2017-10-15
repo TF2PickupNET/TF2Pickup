@@ -24,7 +24,7 @@ class PickupInfo extends PureComponent {
       gamemode: PropTypes.string.isRequired,
       readyUp: PropTypes.instanceOf(Date),
     }).isRequired,
-    classes: Progress.shape({
+    classes: PropTypes.shape({
       container: PropTypes.string.isRequired,
       item: PropTypes.string.isRequired,
       progress: PropTypes.string.isRequired,

@@ -30,8 +30,8 @@ async function changeMap(connection, map) {
  * @param {String} cfg - CFG file to execute.
  */
 function executeConfig(connection, cfg) {
-  const nodePath = process.env.NODE_PATH;
-  const configPath = `${nodePath}/../node_modules/@tf2-pickup/tf2-configs/dist/${cfg}.cfg`;
+  const rootPath = process.cwd();
+  const configPath = `${rootPath}/node_modules/@tf2-pickup/tf2-configs/dist/${cfg}.cfg`;
   const configFile = fs.readFileSync(configPath, 'utf8');
   const configLines = configFile.split('\n');
 
@@ -80,9 +80,9 @@ async function setup(connection, region, format, map) {
   const cfg = getCfgName(region, format, map);
 
   await sleep(1 * 1000);
-  await executeConfig(connection, cfg);
-  await sleep(3 * 1000);
   await changeMap(connection, map);
+  await sleep(30 * 1000);
+  await executeConfig(connection, cfg);
 }
 
 /**

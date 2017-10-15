@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "@tf2-pickup/configs": "2.1.0",
-    "@tf2-pickup/tf2-configs": "2.0.1",
+    "@tf2-pickup/tf2-configs": "^2.0.1",
+    "await-sleep": "^0.0.1",
     "axios": "0.16.2",
     "body-parser": "1.18.2",
     "classnames": "2.2.5",

@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
-import Helmet from 'react-helmet';
-import ReactMarkdown from 'react-markdown';
-import axios from 'axios';
-import injectSheet from 'react-jss';
-import { Card, Spinner } from 'materialize-react';
-import Aux from 'react-aux';
 import PropTypes from 'prop-types';
+import Helmet from 'react-helmet';
+import injectSheet from 'react-jss';
+import Aux from 'react-aux';
+import { Card } from 'materialize-react';
+
+import MarkdownView from '../../components/markdown-view';
 
 const RULES_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/RULES.md';
 
@@ -35,33 +35,17 @@ class View extends PureComponent {
     },
   }
 
-  state = { rules: null };
-
-  /**
-   * Fetch rules from GitHub.
-   */
-  async componentWillMount() {
-    const response = await axios.get(RULES_URL);
-
-    this.setState({ rules: response.data });
-  }
-
   render() {
     return (
       <Aux>
         <Helmet>
           <title>Rules</title>
         </Helmet>
-
-        {this.state.rules === null ? (
-          <Spinner active />
-        ) : (
-          <div className={this.props.classes.container}>
-            <Card className={this.props.classes.rules}>
-              <ReactMarkdown source={this.state.rules} />
-            </Card>
-          </div>
-        )}
+        <div className={this.props.classes.container}>
+          <Card className={this.props.classes.rules}>
+            <MarkdownView url={RULES_URL} />
+          </Card>
+        </div>
       </Aux>
     );
   }

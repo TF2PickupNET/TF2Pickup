@@ -18,7 +18,7 @@ jobs:
           command: yarn run build
       - run:
           name: Start server
-          command: DEBUG="TF2Pickup" IS_CI_TEST yarn run start-prod
+          command: DEBUG="TF2Pickup" IS_CI_TEST=true yarn run start-prod
 
 workflows:
   version: 2

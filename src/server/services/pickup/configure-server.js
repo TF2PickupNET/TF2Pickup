@@ -1,10 +1,9 @@
 import Rcon from 'modern-rcon';
 import debug from 'debug';
-import config from 'config';
 import fs from 'fs';
 import sleep from 'await-sleep';
 
-const log = debug('TF2Pickup:server');
+const log = debug('TF2Pickup:gameserver');
 
 /**
  * Change server map.
@@ -99,9 +98,9 @@ export default async function configureServer(props) {
     const connection = await new Rcon(server.ip, server.port, server.password);
 
     await connection.connect();
-    await setup(connection, 'eu', '6v6', 'cp_badlands');
+    await setup(connection, pickup.region, pickup.gamemode, pickup.map);
 
-    log(`Server setup for ${server.ip}:${server.port} is done`);
+    log(`Setup for ${server.ip}:${server.port} is done`);
   } catch (error) {
     log(error);
   }

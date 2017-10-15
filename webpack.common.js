@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const dotenv = require('dotenv');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const { colors } = require('materialize-react');
 const WebpackPwaManifest = require('webpack-pwa-manifest');

@@ -135,6 +135,7 @@ export default async function configureServer(props) {
     // TODO: Retry the setup and else wise close the pickup
     await props.app.service('slack').create({
       attachments: [{
+        fallback: 'Error while configuring a server!',
         pretext: 'Error while configuring a server!',
         color: colors.red500,
         fields: [{

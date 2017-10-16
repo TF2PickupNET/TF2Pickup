@@ -1,40 +1,47 @@
 import React, { PureComponent } from 'react';
+import { Card } from 'materialize-react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
-import Spinner from 'materialize-react';
-import ReactMarkdown from 'react-markdown';
-import Aux from 'react-aux';
+import injectSheet from 'react-jss';
+
+import RemoteMarkdown from './remote-markdown';
 
 /**
- * A component that renders a markdown document.
+ * A component that renders a remote markdown document
+ * on a card.
  * 
  * @class
  */
-export default class MarkdownView extends PureComponent {
-  static propTypes = { url: PropTypes.string.isRequired };
+class MarkdownView extends PureComponent {
+  static propTypes = {
+    url: PropTypes.string.isRequired,
+    classes: PropTypes.shape({
+      container: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+    }).isRequired,
+  };
 
-  state = { rules: null };
+  static styles = {
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
 
-  /**
-   * Fetch rules from the specified url.
-   */
-  async componentWillMount() {
-    const response = await axios.get(this.props.url);
-
-    this.setState({ rules: response.data });
+    content: {
+      width: '100%',
+      maxWidth: 1000,
+    },
   }
 
   render() {
-    const rules = this.state.rules;
-
     return (
-      <Aux>
-        {typeof rules === 'undefined' ? (
-          <Spinner active />
-        ) : (
-          <ReactMarkdown source={rules} />
-        )}
-      </Aux>
+      <div className={this.props.classes.container}>
+        <Card className={this.props.classes.content}>
+          <RemoteMarkdown url={this.props.url} />
+        </Card>
+      </div>
     );
   }
 }
+
+export default injectSheet(MarkdownView.styles)(MarkdownView);

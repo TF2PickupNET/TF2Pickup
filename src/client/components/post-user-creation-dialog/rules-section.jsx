@@ -8,7 +8,7 @@ import {
 } from 'materialize-react';
 
 import app from '../../app';
-import MarkdownView from '../../components/markdown-view';
+import RemoteMarkdown from '../../components/remote-markdown';
 
 const RULES_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/RULES.md';
 
@@ -60,7 +60,7 @@ class RulesSection extends PureComponent {
         </Typography>
 
         <div className={this.props.classes.rules}>
-          <MarkdownView url={RULES_URL} />
+          <RemoteMarkdown url={RULES_URL} />
         </div>
 
         <div className={this.props.classes.buttonContainer}>

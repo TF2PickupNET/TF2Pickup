@@ -2,8 +2,11 @@ import Rcon from 'modern-rcon';
 import debug from 'debug';
 import fs from 'fs';
 import sleep from 'sleep-promise';
+import config from 'config';
 
 const log = debug('TF2Pickup:pickup:configure-server');
+
+const commandWait = config.get('pickup.server.setup.commandWait');
 
 /**
  * Change server map.
@@ -38,9 +41,25 @@ function executeConfig(connection, cfg) {
   configLines.forEach(async (line) => {
     // TODO: Remve log line before merge
     log(line);
-    await sleep(250);
+    await sleep(config.get('pickup.server.setup.commandWait'));
     await connection.send(line);
   }, this);
+}
+
+/**
+ * Execute commands in the server.
+ *
+ * @param {Object} connection - RCON connection object to server.
+ * @param {String} password - Password for server.
+ */
+async function executeCommands(connection, password) {
+  const listenerAddr = config.get('pickup.server.setup.logListenerAddr');
+
+  await connection.send('kickall');
+  await sleep(commandWait);
+  await connection.send(`logaddress_add ${listenerAddr}`);
+  await sleep(commandWait);
+  await connection.send(`sv_password ${password}`);
 }
 
 /**
@@ -73,16 +92,15 @@ function getCfgName(region, format, map) {
  * Setup the server.
  *
  * @param {Object} connection - RCON connection object to server.
- * @param {String} region - Region of the game.
- * @param {String} format - Region of the game.
- * @param {String} map - Map of the game.
+ * @param {Object} server - Server info object.
  */
-async function setup(connection, region, format, map) {
-  const cfg = getCfgName(region, format, map);
+async function setup(connection, server) {
+  const cfg = getCfgName(server.pickup.region, server.pickup.format, server.pickup.map);
 
-  await sleep(1 * 1000);
-  await changeMap(connection, map);
-  await sleep(30 * 1000);
+  await executeCommands(connection, server.password);
+  await sleep(commandWait);
+  await changeMap(connection, server.pickup.map);
+  await sleep(config.get('pickup.server.setup.mapChangeWait'));
   await executeConfig(connection, cfg);
 }
 
@@ -95,11 +113,13 @@ export default async function configureServer(props) {
   const pickup = props.result;
   const server = await props.app.service('servers').get(pickup.serverId);
 
+  server.pickup = pickup;
+
   try {
     const connection = await new Rcon(server.ip, server.port, server.password);
 
     await connection.connect();
-    await setup(connection, pickup.region, pickup.gamemode, pickup.map);
+    await setup(connection, server);
 
     log(`Setup for ${server.ip}:${server.port} is done`);
   } catch (error) {

@@ -8,6 +8,7 @@
             "secret": "someamazingsecret"
         }
     },
+
     "service": {
         "steam": {
             "apikey": "E890985873267CCBF3B200A3C96D42AB"
@@ -25,5 +26,15 @@
             "apikey-eu": "",
             "apikey-na": ""
         }
+    },
+
+    "pickup": {
+      "server": {
+        "setup": {
+          "commandWait": 250,
+          "mapChangeWait": 30000,
+          "logListenerAddr": ""
+        }
+      }
     }
 }

@@ -1,6 +1,9 @@
 import config from 'config';
 import axios from 'axios';
 
+/**
+ * Setup the slack service for sending custom messages to slack.
+ */
 export default function slack() {
   const that = this;
 

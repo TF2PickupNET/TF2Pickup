@@ -3,6 +3,7 @@
         "port": 3000,
         "ip": "localhost",
         "mongourl": "mongodb://localhost:27017/tf2pickup",
+        "log_listener": "",
         "auth": {
             "required_hours": 1000,
             "secret": "someamazingsecret"
@@ -32,8 +33,7 @@
       "server": {
         "setup": {
           "commandWait": 250,
-          "mapChangeWait": 30000,
-          "logListenerAddr": ""
+          "mapChangeWait": 30000
         }
       }
     }

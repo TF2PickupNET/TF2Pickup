@@ -58,7 +58,7 @@ async function executeConfig(connection, cfg) {
  * @param {Object} pickup - The pickup object.
  */
 async function executeCommands(connection, server, pickup) {
-  const listenerAddr = config.get('server.log_listener');
+  const listenerAddr = `${config.get('server.ip')}:${config.get('server.log_listener_port')}`;
   const regionFullname = regions[pickup.region].fullName;
 
   await connection.send(`sv_password ${server.password}`);

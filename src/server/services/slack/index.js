@@ -9,7 +9,7 @@ export default function slack() {
 
   that.service('slack', {
     setup() {
-      this.url = config.get('service.slack.url');
+      this.url = config.has('service.slack.url') ? config.get('service.slack.url') : null;
     },
 
     create(data) {

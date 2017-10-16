@@ -4,6 +4,8 @@ import fs from 'fs';
 import sleep from 'sleep-promise';
 import config from 'config';
 
+import { regions } from '@tf2-pickup/configs';
+
 const log = debug('TF2Pickup:pickup:configure-server');
 
 const commandWait = config.get('pickup.server.setup.commandWait');
@@ -51,16 +53,22 @@ async function executeConfig(connection, cfg) {
  * Execute commands in the server.
  *
  * @param {Object} connection - RCON connection object to server.
- * @param {String} password - Password for server.
+ * @param {Object} server - The server object.
+ * @param {Object} pickup - The pickup object.
  */
-async function executeCommands(connection, password) {
+async function executeCommands(connection, server, pickup) {
   const listenerAddr = config.get('pickup.server.setup.logListenerAddr');
+  const regionFullname = regions[pickup.region].fullName;
 
+  await connection.send(`sv_password ${server.password}`);
+  await sleep(commandWait);
   await connection.send('kickall');
   await sleep(commandWait);
   await connection.send(`logaddress_add ${listenerAddr}`);
   await sleep(commandWait);
-  await connection.send(`sv_password ${password}`);
+  await connection.send(`tftrue_logs_apikey ${config.get('service.logstf.apikey')}`);
+  await sleep(commandWait);
+  await connection.send(`tftrue_logs_prefix TF2Pickup ${regionFullname} #${pickup.id}`);
 }
 
 /**
@@ -93,14 +101,15 @@ function getCfgName(region, format, map) {
  * Setup the server.
  *
  * @param {Object} connection - RCON connection object to server.
- * @param {Object} server - Server info object.
+ * @param {Object} server - The server info object.
+ * @param {Object} pickup - The pickup info object.
  */
-async function setup(connection, server) {
-  const cfg = getCfgName(server.pickup.region, server.pickup.format, server.pickup.map);
+async function setup(connection, server, pickup) {
+  const cfg = getCfgName(pickup.region, pickup.format, pickup.map);
 
-  await executeCommands(connection, server.password);
+  await executeCommands(connection, server, pickup);
   await sleep(commandWait);
-  await changeMap(connection, server.pickup.map);
+  await changeMap(connection, pickup.map);
   await sleep(config.get('pickup.server.setup.mapChangeWait'));
   await executeConfig(connection, cfg);
 }
@@ -114,13 +123,11 @@ export default async function configureServer(props) {
   const pickup = props.result;
   const server = await props.app.service('servers').get(pickup.serverId);
 
-  server.pickup = pickup;
-
   try {
     const connection = await new Rcon(server.ip, server.port, server.rconPassword);
 
     await connection.connect();
-    await setup(connection, server);
+    await setup(connection, server, pickup);
 
     log(`Setup for ${server.ip}:${server.port} is done`);
   } catch (error) {

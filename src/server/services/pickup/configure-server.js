@@ -3,6 +3,7 @@ import debug from 'debug';
 import fs from 'fs';
 import sleep from 'sleep-promise';
 import config from 'config';
+import { colors } from 'materialize-react';
 
 import { regions } from '@tf2-pickup/configs';
 
@@ -129,8 +130,21 @@ export default async function configureServer(props) {
     await connection.connect();
     await setup(connection, server, pickup);
 
-    log(`Setup for ${server.ip}:${server.port} is done`);
+    log('Setup for pickup server is done', pickup.pickupId);
   } catch (error) {
-    log(error);
+    // TODO: Retry the setup and else wise close the pickup
+    await props.app.service('slack').create({
+      attachments: [{
+        pretext: 'Error while configuring a server!',
+        color: colors.red500,
+        fields: [{
+          title: 'Error:',
+          value: error.message,
+          short: false,
+        }],
+      }],
+    });
+
+    log('Error while configuring server for pickup', pickup.id, error);
   }
 }

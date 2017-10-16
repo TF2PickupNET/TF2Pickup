@@ -1,9 +1,9 @@
 import Rcon from 'modern-rcon';
 import debug from 'debug';
 import fs from 'fs';
-import sleep from 'await-sleep';
+import sleep from 'sleep-promise';
 
-const log = debug('TF2Pickup:gameserver');
+const log = debug('TF2Pickup:pickup:configure-server');
 
 /**
  * Change server map.
@@ -36,6 +36,7 @@ function executeConfig(connection, cfg) {
   const configLines = configFile.split('\n');
 
   configLines.forEach(async (line) => {
+    // TODO: Remve log line before merge
     log(line);
     await sleep(250);
     await connection.send(line);

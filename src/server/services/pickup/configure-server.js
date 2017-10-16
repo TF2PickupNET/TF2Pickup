@@ -29,18 +29,19 @@ async function changeMap(connection, map) {
  * @param {Object} connection - RCON connection object to server.
  * @param {String} cfg - CFG file to execute.
  */
-function executeConfig(connection, cfg) {
+async function executeConfig(connection, cfg) {
   const rootPath = process.cwd();
   const configPath = `${rootPath}/node_modules/@tf2-pickup/tf2-configs/dist/${cfg}.cfg`;
   const configFile = fs.readFileSync(configPath, 'utf8');
   const configLines = configFile.split('\n');
 
-  configLines.forEach(async (line) => {
+  // eslint-disable-next-line no-restricted-syntax
+  for (let index = 0; index < configLines.length; index += 1) {
     // TODO: Remve log line before merge
-    log(line);
-    await sleep(250);
-    await connection.send(line);
-  }, this);
+    log(configLines[index]);
+    await sleep(250); // eslint-disable-line no-await-in-loop
+    await connection.send(configLines[index]); // eslint-disable-line no-await-in-loop
+  }
 }
 
 /**

@@ -4,6 +4,7 @@ import authentication from './authentication';
 import pickup from './pickup';
 import pickupQueue from './pickup-queue';
 import servers from './servers';
+import slack from './slack';
 
 /**
  * Setup all of the services.
@@ -15,5 +16,6 @@ export default function services() {
     .configure(authentication)
     .configure(pickup)
     .configure(servers)
-    .configure(pickupQueue);
+    .configure(pickupQueue)
+    .configure(slack);
 }

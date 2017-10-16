@@ -125,6 +125,9 @@ export default async function configureServer(props) {
   const server = await props.app.service('servers').get(pickup.serverId);
 
   try {
+    // Wait 90 seconds for serveme servers to start
+    await sleep(90 * 1000);
+
     const connection = await new Rcon(server.ip, server.port, server.rconPassword);
 
     await connection.connect();

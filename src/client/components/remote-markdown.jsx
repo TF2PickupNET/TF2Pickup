@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Spinner from 'materialize-react';
 import ReactMarkdown from 'react-markdown';
-import Aux from 'react-aux';
 
 /**
  * A component that renders a markdown document. The document
@@ -26,16 +25,12 @@ export default class RemoteMarkdown extends PureComponent {
   }
 
   render() {
-    const rules = this.state.rules;
+    const { rules } = this.state;
 
-    return (
-      <Aux>
-        {typeof rules === 'undefined' ? (
-          <Spinner active />
-        ) : (
-          <ReactMarkdown source={rules} />
-        )}
-      </Aux>
-    );
+    if (typeof rules === 'undefined') {
+      return <Spinner active />;
+    }
+
+    return <ReactMarkdown source={rules} />;
   }
 }

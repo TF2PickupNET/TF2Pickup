@@ -44,7 +44,9 @@ export default function logListener(app) {
     Object
       .values(events)
       .forEach((event) => {
-        // Call event here
+        if (line.data.match(event.line)) {
+          event.handler(app, line);
+        }
       });
   });
 }

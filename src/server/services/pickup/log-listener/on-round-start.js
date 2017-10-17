@@ -4,6 +4,8 @@ export default {
     const pickup = await app.service('pickup').find({ query: { logsecret: line.secret } });
     const id = parseInt(pickup[0].id, 10);
 
-    await app.service('pickup').patch(id, { $set: { status: 'game-is-live' } });
+    if (pickup.status !== 'game-is-live') {
+      await app.service('pickup').patch(id, { $set: { status: 'game-is-live' } });
+    }
   },
 };

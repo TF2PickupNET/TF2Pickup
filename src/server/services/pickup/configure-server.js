@@ -9,7 +9,7 @@ import { regions } from '@tf2-pickup/configs';
 
 const log = debug('TF2Pickup:pickup:configure-server');
 
-const commandWait = config.get('pickup.server.setup.commandWait');
+const COMMAND_WAIT = 250;
 
 /**
  * Change server map.
@@ -43,9 +43,9 @@ async function executeConfig(connection, cfg) {
 
   // eslint-disable-next-line no-restricted-syntax
   for (let index = 0; index < configLines.length; index += 1) {
-    // TODO: Remve log line before merge
+    // TODO: Remove log line before merge
     log(configLines[index]);
-    await sleep(commandWait); // eslint-disable-line no-await-in-loop
+    await sleep(COMMAND_WAIT); // eslint-disable-line no-await-in-loop
     await connection.send(configLines[index]); // eslint-disable-line no-await-in-loop
   }
 }
@@ -62,13 +62,13 @@ async function executeCommands(connection, server, pickup) {
   const regionFullname = regions[pickup.region].fullName;
 
   await connection.send(`sv_password ${server.password}`);
-  await sleep(commandWait);
+  await sleep(COMMAND_WAIT);
   await connection.send('kickall');
-  await sleep(commandWait);
+  await sleep(COMMAND_WAIT);
   await connection.send(`logaddress_add ${listenerAddr}`);
-  await sleep(commandWait);
+  await sleep(COMMAND_WAIT);
   await connection.send(`tftrue_logs_apikey ${config.get('service.logstf.apikey')}`);
-  await sleep(commandWait);
+  await sleep(COMMAND_WAIT);
   await connection.send(`tftrue_logs_prefix TF2Pickup ${regionFullname} #${pickup.id}`);
 }
 
@@ -109,9 +109,9 @@ async function setup(connection, server, pickup) {
   const cfg = getCfgName(pickup.region, pickup.format, pickup.map);
 
   await executeCommands(connection, server, pickup);
-  await sleep(commandWait);
+  await sleep(COMMAND_WAIT);
   await changeMap(connection, pickup.map);
-  await sleep(config.get('pickup.server.setup.mapChangeWait'));
+  await sleep(30 * 1000);
   await executeConfig(connection, cfg);
 }
 
@@ -119,10 +119,12 @@ async function setup(connection, server, pickup) {
  * Start the server.
  *
  * @param {Object} props - Props from app.
+ * @param {Boolean} [isSecondTry] - Whether or not this is the second try executing the config.
  */
-export default async function configureServer(props) {
+export default async function configureServer(props, isSecondTry = false) {
   const pickup = props.result;
   const server = await props.app.service('servers').get(pickup.serverId);
+  const pickupService = props.app.service('pickup');
 
   try {
     // Wait 90 seconds for serveme servers to start
@@ -133,22 +135,33 @@ export default async function configureServer(props) {
     await connection.connect();
     await setup(connection, server, pickup);
 
-    log('Setup for pickup server is done', pickup.pickupId);
-  } catch (error) {
-    // TODO: Retry the setup and else wise close the pickup
-    await props.app.service('slack').create({
-      attachments: [{
-        fallback: 'Error while configuring a server!',
-        pretext: 'Error while configuring a server!',
-        color: colors.red500,
-        fields: [{
-          title: 'Error:',
-          value: error.message,
-          short: false,
-        }],
-      }],
-    });
+    log('Server setup for pickup is done', pickup.pickupId);
 
-    log('Error while configuring server for pickup', pickup.id, error);
+    await pickupService.patch(pickup.id, { $set: { status: 'waiting-for-game-to-start' } });
+  } catch (error) {
+    if (isSecondTry) {
+      // TODO: Retry the setup and else wise close the pickup
+      await props.app.service('slack').create({
+        attachments: [{
+          fallback: 'Error while configuring server!',
+          pretext: 'Error while configuring server!',
+          color: colors.red500,
+          fields: [{
+            title: 'Error:',
+            value: error.message,
+            short: false,
+          }],
+        }],
+      });
+
+      await props.app.service('pickup').patch(
+        pickup.id,
+        { $set: { status: 'server-configuration-error' } },
+      );
+
+      log('Error while configuring server for pickup', pickup.id, error);
+    } else {
+      configureServer(props, true);
+    }
   }
 }

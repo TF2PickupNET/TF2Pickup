@@ -12,6 +12,7 @@ export default new Schema({
       'waiting-for-game-to-start',
       'game-is-live',
       'game-finished',
+      'server-configuration-error',
     ], {}),
     required: true,
   },

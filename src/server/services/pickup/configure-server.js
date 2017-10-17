@@ -154,10 +154,7 @@ export default async function configureServer(props, isSecondTry = false) {
         }],
       });
 
-      await props.app.service('pickup').patch(
-        pickup.id,
-        { $set: { status: 'server-configuration-error' } },
-      );
+      await pickupService.patch(pickup.id, { $set: { status: 'server-configuration-error' } });
 
       log('Error while configuring server for pickup', pickup.id, error);
     } else {

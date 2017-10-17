@@ -13,7 +13,9 @@ const log = debug('TF2Pickup:pickup:log-listener');
  * @returns {String} - Processed log line.
  */
 function processLine(rawLine) {
-  const matches = /S(.*?)L (.*?) - (.*?): (.*)/gi;
+  const regex = /S(.*?)L (.*?) - (.*?): (.*)/g;
+  const matches = regex.exec(rawLine);
+
   const line = {
     secret: matches[1],
     date: matches[2],
@@ -22,7 +24,7 @@ function processLine(rawLine) {
     raw: rawLine,
   };
 
-  if (!line.date || !line.time || !line.raw) {
+  if (!line.secret || !line.date || !line.time || !line.data) {
     throw new Error('Unknown line');
   }
 
@@ -49,7 +51,7 @@ export default function logListener(app) {
     Object
       .values(events)
       .forEach((event) => {
-        const match = line.data.match(event.line);
+        const match = event.line.exec(line.data);
 
         if (match) {
           event.handler(app, line, match);

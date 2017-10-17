@@ -13,10 +13,12 @@ const log = debug('TF2Pickup:pickup:log-listener');
  * @returns {String} - Processed log line.
  */
 function processLine(rawLine) {
+  const matches = /S(.*?)L (.*?) - (.*?): (.*)/gi;
   const line = {
-    date: rawLine.match(/[0-3][0-9].[0-1][0-9].[2][0][0-9][0-9]/)[0],
-    time: rawLine.match(/[0-2][0-9]:[0-9][0-9]:[0-9][0-9]/)[0],
-    data: rawLine.split(':')[3],
+    secret: matches[1],
+    date: matches[2],
+    time: matches[3],
+    data: matches[4],
     raw: rawLine,
   };
 

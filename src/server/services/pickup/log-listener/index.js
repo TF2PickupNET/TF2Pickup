@@ -53,8 +53,10 @@ export default function logListener(app) {
       .forEach((event) => {
         const match = event.line.exec(line.data);
 
+        line.data = match;
+
         if (match) {
-          event.handler(app, line, match);
+          event.handler(app, line);
         }
       });
   });

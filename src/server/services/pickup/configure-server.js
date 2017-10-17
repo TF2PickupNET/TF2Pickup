@@ -70,6 +70,8 @@ async function executeCommands(connection, server, pickup) {
   await connection.send(`tftrue_logs_apikey ${config.get('service.logstf.apikey')}`);
   await sleep(COMMAND_WAIT);
   await connection.send(`tftrue_logs_prefix TF2Pickup ${regionFullname} #${pickup.id}`);
+  await sleep(COMMAND_WAIT);
+  await connection.send(`sv_logsecret ${pickup.logsecret}`);
 }
 
 /**

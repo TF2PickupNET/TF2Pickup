@@ -10,6 +10,7 @@ const log = debug('TF2Pickup:pickup:log-listener');
  * Process log line for info.
  *
  * @param {String} rawLine - Raw log line.
+ * @returns {String} - Processed log line.
  */
 function processLine(rawLine) {
   const line = {
@@ -28,6 +29,8 @@ function processLine(rawLine) {
 
 /**
  * Start log listener socket.
+ *
+ * @param {Object} app - The app object.
  */
 export default function logListener(app) {
   log('Setting up log listener');

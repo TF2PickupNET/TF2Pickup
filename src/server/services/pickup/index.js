@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import service from 'feathers-mongoose';
 import debug from 'debug';
 
+import logListener from './log-listener';
 import schema from './schema';
 
 const log = debug('TF2Pickup:pickup');
@@ -18,4 +19,6 @@ export default function pickup() {
     Model: mongoose.model('Pickup', schema),
     id: 'id',
   }));
+
+  logListener();
 }

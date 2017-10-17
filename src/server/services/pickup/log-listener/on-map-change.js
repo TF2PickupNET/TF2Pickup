@@ -1,6 +1,6 @@
 export default {
   line: /Started map "(.*?)" \\(CRC "(.*?)"\\)/,
-  handler(app) {
+  handler(app, line, match) {
     // Do stuff
   },
 };

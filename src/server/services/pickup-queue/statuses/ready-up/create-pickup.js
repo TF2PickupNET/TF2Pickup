@@ -42,6 +42,7 @@ export default async function createPickup(props) {
       id: pickupId,
       teams,
       status: 'setting-up-server',
+      map: 'cp_badlands',
       serverId: server.id,
       logSecret: server.logSecret,
     });

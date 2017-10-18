@@ -43,8 +43,6 @@ async function executeConfig(connection, cfg) {
 
   // eslint-disable-next-line no-restricted-syntax
   for (let index = 0; index < configLines.length; index += 1) {
-    // TODO: Remove log line before merge
-    log(configLines[index]);
     await sleep(COMMAND_WAIT); // eslint-disable-line no-await-in-loop
     await connection.send(configLines[index]); // eslint-disable-line no-await-in-loop
   }
@@ -142,7 +140,6 @@ export default async function configureServer(props, isSecondTry = false) {
     await pickupService.patch(pickup.id, { $set: { status: 'waiting-for-game-to-start' } });
   } catch (error) {
     if (isSecondTry) {
-      // TODO: Retry the setup and else wise close the pickup
       await props.app.service('slack').create({
         attachments: [{
           fallback: 'Error while configuring server!',

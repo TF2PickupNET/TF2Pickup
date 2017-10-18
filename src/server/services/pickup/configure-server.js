@@ -71,7 +71,7 @@ async function executeCommands(connection, server, pickup) {
   await sleep(COMMAND_WAIT);
   await connection.send(`tftrue_logs_prefix TF2Pickup ${regionFullname} #${pickup.id}`);
   await sleep(COMMAND_WAIT);
-  await connection.send(`sv_logsecret ${pickup.logsecret}`);
+  await connection.send(`sv_logsecret ${pickup.logSecret}`);
 }
 
 /**

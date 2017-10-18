@@ -5,6 +5,7 @@ import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import generateTeams from './generate-teams';
 import reserveServer from './reserve-server';
+import { generateRandomMaps } from '../../map-pool';
 
 /**
  * Create a new pickup when enough players are ready.
@@ -36,13 +37,15 @@ export default async function createPickup(props) {
       sort: { id: -1 },
     });
     const pickupId = lastPickup[0] ? lastPickup[0].id + 1 : 1;
+    // TODO: Implement most voted map algorithm
+    const map = 'cp_badlands';
 
     // Create a new pickup
     await pickupService.create({
       id: pickupId,
       teams,
       status: 'setting-up-server',
-      map: 'cp_badlands',
+      map,
       serverId: server.id,
       logSecret: server.logSecret,
     });
@@ -55,6 +58,8 @@ export default async function createPickup(props) {
           pickupQueue.classes,
           classPlayers => classPlayers.filter(player => !players.includes(player.id)),
         ),
+        // TODO: Also exclude the map from the last created pickup for that region and gamemode
+        maps: generateRandomMaps(pickupQueue.region, pickupQueue.gamemode, [map]),
       },
     });
 

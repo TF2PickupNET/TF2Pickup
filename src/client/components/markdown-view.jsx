@@ -8,7 +8,7 @@ import RemoteMarkdown from './remote-markdown';
 /**
  * A component that renders a remote markdown document
  * on a card.
- * 
+ *
  * @class
  */
 class MarkdownView extends PureComponent {
@@ -29,9 +29,9 @@ class MarkdownView extends PureComponent {
 
     content: {
       width: '100%',
-      maxWidth: 1000,
+      maxWidth: 960,
     },
-  }
+  };
 
   render() {
     return (

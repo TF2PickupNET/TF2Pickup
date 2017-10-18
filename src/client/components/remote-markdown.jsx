@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import Spinner from 'materialize-react';
+import { Spinner } from 'materialize-react';
 import ReactMarkdown from 'react-markdown';
 
 /**
  * A component that renders a markdown document. The document
  * itself is fetch from the given url.
- * 
+ *
  * @class
  */
 export default class RemoteMarkdown extends PureComponent {
@@ -27,7 +27,7 @@ export default class RemoteMarkdown extends PureComponent {
   render() {
     const { rules } = this.state;
 
-    if (typeof rules === 'undefined') {
+    if (!rules) {
       return <Spinner active />;
     }
 

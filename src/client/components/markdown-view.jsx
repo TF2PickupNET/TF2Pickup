@@ -37,7 +37,9 @@ class MarkdownView extends PureComponent {
     return (
       <div className={this.props.classes.container}>
         <Card className={this.props.classes.content}>
-          <RemoteMarkdown url={this.props.url} />
+          <Card.Content>
+            <RemoteMarkdown url={this.props.url} />
+          </Card.Content>
         </Card>
       </div>
     );

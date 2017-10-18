@@ -13,7 +13,7 @@ import ReactMarkdown from 'react-markdown';
 export default class RemoteMarkdown extends PureComponent {
   static propTypes = { url: PropTypes.string.isRequired };
 
-  state = { rules: null };
+  state = { markdown: null };
 
   /**
    * Fetch rules from the specified url.
@@ -21,16 +21,16 @@ export default class RemoteMarkdown extends PureComponent {
   async componentWillMount() {
     const response = await axios.get(this.props.url);
 
-    this.setState({ rules: response.data });
+    this.setState({ markdown: response.data });
   }
 
   render() {
-    const { rules } = this.state;
+    const { markdown } = this.state;
 
-    if (!rules) {
+    if (!markdown) {
       return <Spinner active />;
     }
 
-    return <ReactMarkdown source={rules} />;
+    return <ReactMarkdown source={markdown} />;
   }
 }

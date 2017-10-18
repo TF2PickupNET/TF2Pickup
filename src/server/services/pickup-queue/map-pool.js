@@ -98,6 +98,9 @@ const mapPool = {
   },
 };
 
+/**
+ * Validate that each map has a config object and that enough maps are in the map pool.
+ */
 export function validateMapPool() {
   const gamemodeKeys = Object.keys(gamemodes);
   const keys = flatten(

@@ -105,7 +105,6 @@ class PickupContainer extends PureComponent {
     if (pickup) {
       return (
         <div
-          // TODO: Move those into JSS or solve this through a common layout component
           style={{
             display: 'flex',
             flexDirection: 'column',

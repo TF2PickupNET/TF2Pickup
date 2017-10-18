@@ -17,7 +17,7 @@ const strategies = {
     );
   },
 
-  // TODO: Create a strategy to get the server from ozfortress
+  // Create a strategy to get the server from ozfortress
   au: () => {},
 };
 

@@ -10,9 +10,9 @@
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@tf2-pickup/configs/-/configs-2.1.0.tgz#04f4f40a02ace43f941dafbfca972777f8747424"
 
-"@tf2-pickup/eslint-config@6.3.0":
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/@tf2-pickup/eslint-config/-/eslint-config-6.3.0.tgz#f78851da84099fbf475196cdbb0a7e4bf9b83cdf"
+"@tf2-pickup/eslint-config@6.3.1":
+  version "6.3.1"
+  resolved "https://registry.yarnpkg.com/@tf2-pickup/eslint-config/-/eslint-config-6.3.1.tgz#70d178eaf3593d760dcf4f538f95e0a6dc87b756"
   dependencies:
     babel-eslint "8.0.1"
     eslint "4.9.0"
@@ -1066,9 +1066,9 @@ babel-preset-babili@^0.1.4:
     babel-plugin-transform-undefined-to-void "^6.8.2"
     lodash.isplainobject "^4.0.6"
 
-babel-preset-env@1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/babel-preset-env/-/babel-preset-env-1.6.0.tgz#2de1c782a780a0a5d605d199c957596da43c44e4"
+babel-preset-env@1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/babel-preset-env/-/babel-preset-env-1.6.1.tgz#a18b564cc9b9afdf4aae57ae3c1b0d99188e6f48"
   dependencies:
     babel-plugin-check-es2015-constants "^6.22.0"
     babel-plugin-syntax-trailing-function-commas "^6.22.0"
@@ -1925,9 +1925,9 @@ concat-stream@1.6.0, concat-stream@^1.4.6, concat-stream@^1.4.7, concat-stream@^
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
-config@1.26.2:
-  version "1.26.2"
-  resolved "https://registry.yarnpkg.com/config/-/config-1.26.2.tgz#2466291168d8afae0aae8ab99ea4d4272f520cae"
+config@1.27.0:
+  version "1.27.0"
+  resolved "https://registry.yarnpkg.com/config/-/config-1.27.0.tgz#3ab30d0080ff76f407c2f47ac1326adfd908af5f"
   dependencies:
     json5 "0.4.0"
     os-homedir "1.0.2"
@@ -5504,9 +5504,9 @@ mongodb@2.2.33:
     mongodb-core "2.1.17"
     readable-stream "2.2.7"
 
-mongoose@4.12.2:
-  version "4.12.2"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-4.12.2.tgz#523077ce909b90f073e219b56d030f35450c50f0"
+mongoose@4.12.3:
+  version "4.12.3"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-4.12.3.tgz#7099bf8ce4945150001f4c2462e56c9e958ddcb9"
   dependencies:
     async "2.1.4"
     bson "~1.0.4"
@@ -8215,9 +8215,9 @@ webpack-sources@^1.0.1:
     source-list-map "^2.0.0"
     source-map "~0.5.3"
 
-webpack@3.7.1:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-3.7.1.tgz#6046b5c415ff7df7a0dc54c5b6b86098e8b952da"
+webpack@3.8.1:
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-3.8.1.tgz#b16968a81100abe61608b0153c9159ef8bb2bd83"
   dependencies:
     acorn "^5.0.0"
     acorn-dynamic-import "^2.0.0"

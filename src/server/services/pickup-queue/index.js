@@ -7,6 +7,7 @@ import hooks from './hooks';
 import filters from './filters';
 import setupDb from './setup-db';
 import socketMethods from './socket-methods';
+import { validateMapPool } from './map-pool';
 
 const log = debug('TF2Pickup:pickup-queue');
 
@@ -27,6 +28,8 @@ export default function pickupQueue() {
   that.service('pickup-queue').filter(filters);
 
   setupDb(that.service('pickup-queue'));
+
+  validateMapPool();
 
   that.on('listening', () => {
     that.io.on('connection', socket => socketMethods(that, socket));

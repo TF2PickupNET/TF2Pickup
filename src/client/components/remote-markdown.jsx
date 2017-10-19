@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Spinner } from 'materialize-react';
 import ReactMarkdown from 'react-markdown';
 
 /**
@@ -26,11 +25,8 @@ export default class RemoteMarkdown extends PureComponent {
 
   render() {
     const { markdown } = this.state;
+    const component = markdown ? <ReactMarkdown source={markdown} /> : null;
 
-    if (!markdown) {
-      return <Spinner active />;
-    }
-
-    return <ReactMarkdown source={markdown} />;
+    return this.props.children(component);
   }
 }

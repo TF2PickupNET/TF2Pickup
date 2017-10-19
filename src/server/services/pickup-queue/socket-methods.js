@@ -25,6 +25,32 @@ function queueWithoutPlayer(queue, playerId) {
 }
 
 /**
+ * Checks if players is blocked for join.
+ *
+ * @param {Object} app - The feathers app object.
+ * @param {String} userId - Player's ID.
+ * @returns {Boolean} - Is player blocked.
+ */
+async function checkBlock(app, userId) {
+  const statusQuery = [ { $ne: 'game-finished' }, { $ne: 'server-configuration-error' } ];
+  const query = { status: { $or: statusQuery } };
+  const pickups = await app.service('pickup').find({ query });
+
+  let isPlaying = false;
+
+  await pickups.forEach((pickup) => {
+    const teams = JSON.stringify(pickup.teams);
+    const regex = new RegExp(userId);
+
+    if (regex.test(teams)) {
+      isPlaying = true;
+    }
+  }, this);
+
+  return isPlaying;
+}
+
+/**
  * Setup the socket methods for the users.
  *
  * @param {Object} app - The feathers app object.
@@ -51,9 +77,13 @@ export default function socketMethods(app, socket) {
         preReady: null,
       });
 
-      log('Adding user to pickup', userId);
+      if (await checkBlock(app, userId)) {
+        log('User blocked for pickup', userId);
+      } else {
+        log('Adding user to pickup', userId);
 
-      await pickupQueue.patch(queue.id, { $set: { classes: newQueue.classes } });
+        await pickupQueue.patch(queue.id, { $set: { classes: newQueue.classes } });
+      }
     }
   });
 

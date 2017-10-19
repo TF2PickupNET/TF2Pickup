@@ -1,11 +1,48 @@
 import mapValues from 'lodash.mapvalues';
 import flatten from 'lodash.flatten';
+import pickRandom from 'pick-random';
+import get from 'lodash.get';
 
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
+import { generateRandomMaps } from '../../map-pool';
+
 import generateTeams from './generate-teams';
 import reserveServer from './reserve-server';
-import { generateRandomMaps } from '../../map-pool';
+
+function getVotesForMap(map, classes) {
+  return Object
+    .values(classes)
+    .map(players => players.filter(player => player.map === map).length)
+    .reduce((current, count) => current + count);
+}
+
+function getMostVotedMap(maps, classes) {
+  const totalVotesForMaps = maps.map(map => [
+    map,
+    getVotesForMap(map, classes),
+  ]);
+  const mostVotes = totalVotesForMaps.reduce((current, map) => {
+    if (current.votes < map[1]) {
+      return {
+        votes: map[1],
+        maps: [map[0]],
+      };
+    } else if (current.votes === map[1]) {
+      return {
+        votes: map[1],
+        maps: current.maps.concat([map[0]]),
+      };
+    }
+
+    return current;
+  }, {
+    votes: 0,
+    maps: [],
+  });
+
+  return pickRandom(mostVotes.maps);
+}
 
 /**
  * Create a new pickup when enough players are ready.
@@ -37,8 +74,15 @@ export default async function createPickup(props) {
       sort: { id: -1 },
     });
     const pickupId = lastPickup[0] ? lastPickup[0].id + 1 : 1;
-    // TODO: Implement most voted map algorithm
-    const map = 'cp_badlands';
+    const map = getMostVotedMap(pickupQueue.maps, pickupQueue.classes);
+    const lastPickupForGamemodeAndRegion = await pickupService.find({
+      query: {
+        region: pickupQueue.region,
+        gamemode: pickupQueue.gamemode,
+      },
+      limit: 1,
+      sort: { id: -1 },
+    });
 
     // Create a new pickup
     await pickupService.create({
@@ -59,7 +103,10 @@ export default async function createPickup(props) {
           classPlayers => classPlayers.filter(player => !players.includes(player.id)),
         ),
         // TODO: Also exclude the map from the last created pickup for that region and gamemode
-        maps: generateRandomMaps(pickupQueue.region, pickupQueue.gamemode, [map]),
+        maps: generateRandomMaps(pickupQueue.region, pickupQueue.gamemode, [
+          map,
+          get(lastPickupForGamemodeAndRegion, '[0].map', null),
+        ]),
       },
     });
 

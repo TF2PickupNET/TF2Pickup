@@ -44,7 +44,9 @@ export default function setupDb(service) {
           $set: {
             classes,
             status: 'waiting',
-            maps: gamemodeQueue.maps || generateRandomMaps(region, gamemode),
+            maps: gamemodeQueue.maps.length === 0
+              ? generateRandomMaps(region, gamemode)
+              : gamemodeQueue.maps,
           },
         });
       } catch (error) {

@@ -140,7 +140,7 @@ export function validateMapPool() {
  */
 export function generateRandomMaps(region, gamemode, excludedMaps = []) {
   const maps = mapPool[region][gamemode];
-  const filteredMaps = maps.filter(map => excludedMaps.includes(map));
+  const filteredMaps = maps.filter(map => !excludedMaps.includes(map));
 
   return pickRandom(filteredMaps, { count: 3 });
 }

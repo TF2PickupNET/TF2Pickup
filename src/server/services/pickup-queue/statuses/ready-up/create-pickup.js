@@ -10,17 +10,17 @@ import { generateRandomMaps } from '../../map-pool';
 import generateTeams from './generate-teams';
 import reserveServer from './reserve-server';
 
-function getVotesForMap(map, classes) {
-  return Object
-    .values(classes)
-    .map(players => players.filter(player => player.map === map).length)
-    .reduce((current, count) => current + count);
-}
-
-function getMostVotedMap(maps, classes) {
+/**
+ * Get the most voted map by the players.
+ *
+ * @param {String[]} maps - The map selection.
+ * @param {Object[]} players - The players for the pickup.
+ * @returns {String} - Returns the most voted map.
+ */
+function getMostVotedMap(maps, players) {
   const totalVotesForMaps = maps.map(map => [
     map,
-    getVotesForMap(map, classes),
+    players.filter(player => player.map === map).length,
   ]);
   const mostVotes = totalVotesForMaps.reduce((current, map) => {
     if (current.votes < map[1]) {
@@ -73,8 +73,11 @@ export default async function createPickup(props) {
       limit: 1,
       sort: { id: -1 },
     });
-    const pickupId = lastPickup[0] ? lastPickup[0].id + 1 : 1;
-    const map = getMostVotedMap(pickupQueue.maps, pickupQueue.classes);
+    const pickupId = get(lastPickup, '[0].id', 0) + 1;
+    const map = getMostVotedMap(
+      pickupQueue.maps,
+      flatten(Object.values(players)),
+    );
     const lastPickupForGamemodeAndRegion = await pickupService.find({
       query: {
         region: pickupQueue.region,

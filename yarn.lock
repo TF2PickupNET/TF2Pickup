@@ -6094,6 +6094,10 @@ phantomjs-prebuilt@^2.1.7:
     request-progress "~2.0.1"
     which "~1.2.10"
 
+pick-random@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/pick-random/-/pick-random-2.0.0.tgz#36ea6d3bce8ee506b0c62cb7b7d39e05c283da9a"
+
 pify@^2.0.0, pify@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"

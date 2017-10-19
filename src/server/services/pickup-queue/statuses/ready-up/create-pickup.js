@@ -102,7 +102,6 @@ export default async function createPickup(props) {
           pickupQueue.classes,
           classPlayers => classPlayers.filter(player => !players.includes(player.id)),
         ),
-        // TODO: Also exclude the map from the last created pickup for that region and gamemode
         maps: generateRandomMaps(pickupQueue.region, pickupQueue.gamemode, [
           map,
           get(lastPickupForGamemodeAndRegion, '[0].map', null),

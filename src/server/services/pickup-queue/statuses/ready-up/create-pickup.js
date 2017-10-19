@@ -69,6 +69,7 @@ export default async function createPickup(props) {
       reserveServer(props),
       generateTeams(players),
     );
+
     const lastPickup = await pickupService.find({
       limit: 1,
       sort: { id: -1 },
@@ -103,7 +104,15 @@ export default async function createPickup(props) {
         status: 'waiting',
         classes: mapValues(
           pickupQueue.classes,
-          classPlayers => classPlayers.filter(player => !players.includes(player.id)),
+          classPlayers => classPlayers.filter((player) => {
+            for (let index = 0; index < players.length; index += 1) {
+              if (players[index].id === player.id) {
+                return true;
+              }
+            }
+
+            return false;
+          }),
         ),
         maps: generateRandomMaps(pickupQueue.region, pickupQueue.gamemode, [
           map,
@@ -119,6 +128,8 @@ export default async function createPickup(props) {
   } catch (error) {
     // Reset the pickup queue to waiting status and remove the players from the queue
     await pickupQueueService.patch(props.id, { $set: { status: 'waiting' } });
+
+    log(error);
 
     props.app.io.emit('notifications.add', {
       forUsers: flatten(Object.values(players)),

@@ -10,7 +10,13 @@ import ReactMarkdown from 'react-markdown';
  * @class
  */
 export default class RemoteMarkdown extends PureComponent {
-  static propTypes = { url: PropTypes.string.isRequired };
+  static propTypes = {
+    url: PropTypes.string.isRequired,
+    children: PropTypes.shape({
+      waiting: PropTypes.node.isRequired,
+      ready: PropTypes.func.isRequired,
+    }).isRequired,
+  };
 
   state = { markdown: null };
 
@@ -25,8 +31,14 @@ export default class RemoteMarkdown extends PureComponent {
 
   render() {
     const { markdown } = this.state;
-    const component = markdown ? <ReactMarkdown source={markdown} /> : null;
 
-    return this.props.children(component);
+    const waiting = this.props.children.waiting;
+    const ready = this.props.children.ready;
+
+    if (markdown) {
+      return ready(<ReactMarkdown source={markdown} />);
+    }
+
+    return waiting;
   }
 }

@@ -34,18 +34,21 @@ class MarkdownView extends PureComponent {
   };
 
   render() {
+    const markdownHandler = {
+      waiting: <Spinner active />,
+      ready: component => (
+        <Card className={this.props.classes.content}>
+          <Card.Content>
+            {component}
+          </Card.Content>
+        </Card>
+      ),
+    };
+
     return (
       <div className={this.props.classes.container}>
         <RemoteMarkdown url={this.props.url}>
-          {(component) => {
-            return component ? (
-              <Card className={this.props.classes.content}>
-                <Card.Content>
-                  {component}
-                </Card.Content>
-              </Card>
-            ) : <Spinner active />;
-          }}
+          {markdownHandler}
         </RemoteMarkdown>
       </div>
     );

@@ -4,6 +4,7 @@ import debug from 'debug';
 
 import schema from './schema';
 import hooks from './hooks';
+import logListener from './log-listener';
 
 const log = debug('TF2Pickup:pickup');
 
@@ -21,4 +22,6 @@ export default function pickup() {
   }));
 
   that.service('pickup').hooks(hooks);
+
+  logListener(that);
 }

@@ -11,6 +11,20 @@ import generateTeams from './generate-teams';
 import reserveServer from './reserve-server';
 
 /**
+ * Remove the players from the queue.
+ *
+ * @param {Object} players - The players from the new pickup.
+ * @returns {Function} - A function which will modify the queue and remove the players.
+ */
+function removePlayersFromQueue(players) {
+  return (classPlayers, className) => {
+    const playersForClass = players[className];
+
+    return classPlayers.filter(({ id }) => !playersForClass.includes(id));
+  };
+}
+
+/**
  * Get the most voted map by the players.
  *
  * @param {String[]} maps - The map selection.
@@ -98,18 +112,24 @@ export default async function createPickup(props) {
       logSecret: server.logSecret,
     });
 
+    // Remove players from every gamemode
+    await Promise.all(
+      Object
+        .keys(gamemodes)
+        .map(gamemode => pickupQueueService.patch(`${pickupQueue.region}-${gamemode}`, {
+          $set: {
+            classes: mapValues(
+              pickupQueue.classes,
+              removePlayersFromQueue(players),
+            ),
+          },
+        })),
+    );
+
     // Reset the pickup queue to waiting status and remove the players from the queue
     await pickupQueueService.patch(props.id, {
       $set: {
         status: 'waiting',
-        classes: mapValues(
-          pickupQueue.classes,
-          (classPlayers, className) => {
-            const playersForClass = players[className];
-
-            return classPlayers.filter(({ id }) => !playersForClass.includes(id));
-          },
-        ),
         maps: generateRandomMaps(pickupQueue.region, pickupQueue.gamemode, [
           map,
           get(lastPickupForGamemodeAndRegion, '[0].map', null),
@@ -119,10 +139,10 @@ export default async function createPickup(props) {
 
     props.app.io.emit('pickup.redirect', {
       pickupId,
-      players,
+      players: flatten(Object.values(players)),
     });
   } catch (error) {
-    // Reset the pickup queue to waiting status and remove the players from the queue
+    // Reset the pickup queue to waiting status
     await pickupQueueService.patch(props.id, { $set: { status: 'waiting' } });
 
     props.app.io.emit('notifications.add', {

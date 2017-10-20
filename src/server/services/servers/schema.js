@@ -30,6 +30,8 @@ export default new Schema({
 
   password: String,
 
+  rconPassword: String,
+
   stvPort: Number,
   stvPassword: String,
 

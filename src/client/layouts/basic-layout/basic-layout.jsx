@@ -83,7 +83,6 @@ class BasicLayout extends PureComponent {
   };
 
   render() {
-    // TODO: Eventually this should be set in the users data
     const query = queryString.parse(this.props.location.search);
     const themeType = query.dark ? 'dark' : 'light';
 

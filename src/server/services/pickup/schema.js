@@ -12,6 +12,7 @@ export default new Schema({
       'waiting-for-game-to-start',
       'game-is-live',
       'game-finished',
+      'server-configuration-error',
     ], {}),
     required: true,
   },
@@ -62,6 +63,11 @@ export default new Schema({
       type: Number,
       default: 0,
     },
+  },
+
+  serverId: {
+    type: Number,
+    required: true,
   },
 
   logSecret: {

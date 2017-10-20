@@ -1,8 +1,11 @@
 import debug from 'debug';
 
-import regions from '@tf2-pickup/configs/regions';
+import {
+  regions,
+  gamemodes,
+} from '@tf2-pickup/configs';
 
-import gamemodes from '@tf2-pickup/configs/gamemodes';
+import { generateRandomMaps } from './map-pool';
 
 const log = debug('TF2Pickup:pickup-queue:setup-db');
 
@@ -41,6 +44,9 @@ export default function setupDb(service) {
           $set: {
             classes,
             status: 'waiting',
+            maps: gamemodeQueue.maps.length === 0
+              ? generateRandomMaps(region, gamemode)
+              : gamemodeQueue.maps,
           },
         });
       } catch (error) {
@@ -53,6 +59,7 @@ export default function setupDb(service) {
             status: 'waiting',
             id: `${region}-${gamemode}`,
             classes,
+            maps: generateRandomMaps(region, gamemode),
           });
 
           return;

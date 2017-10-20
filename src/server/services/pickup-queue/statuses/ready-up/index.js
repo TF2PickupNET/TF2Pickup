@@ -21,7 +21,7 @@ export default async function readyUp(props) {
     mapValues(pickup.classes, (players, className) => {
       const min = gamemodes[pickup.gamemode].slots[className];
 
-      return players.filter(player => player.ready) >= min;
+      return players.filter(player => player.ready).length >= min;
     }),
   ).every(value => value);
 
@@ -30,7 +30,7 @@ export default async function readyUp(props) {
 
     await service.patch(pickupId, {
       $set: {
-        status: 'making-teams',
+        status: 'creating-teams',
         readyUp: null,
       },
     });

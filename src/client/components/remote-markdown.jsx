@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
+import { Spinner } from 'materialize-react';
 
 /**
  * A component that renders a markdown document. The document
@@ -12,10 +13,7 @@ import ReactMarkdown from 'react-markdown';
 export default class RemoteMarkdown extends PureComponent {
   static propTypes = {
     url: PropTypes.string.isRequired,
-    children: PropTypes.shape({
-      waiting: PropTypes.node.isRequired,
-      ready: PropTypes.func.isRequired,
-    }).isRequired,
+    children: PropTypes.func.isRequired,
   };
 
   state = { markdown: null };
@@ -32,13 +30,10 @@ export default class RemoteMarkdown extends PureComponent {
   render() {
     const { markdown } = this.state;
 
-    const waiting = this.props.children.waiting;
-    const ready = this.props.children.ready;
-
     if (markdown) {
-      return ready(<ReactMarkdown source={markdown} />);
+      return this.props.children(<ReactMarkdown source={markdown} />);
     }
 
-    return waiting;
+    return <Spinner active />;
   }
 }

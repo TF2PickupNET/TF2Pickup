@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Card, Spinner } from 'materialize-react';
+import { Card } from 'materialize-react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 
@@ -34,21 +34,16 @@ class MarkdownView extends PureComponent {
   };
 
   render() {
-    const markdownHandler = {
-      waiting: <Spinner active />,
-      ready: component => (
-        <Card className={this.props.classes.content}>
-          <Card.Content>
-            {component}
-          </Card.Content>
-        </Card>
-      ),
-    };
-
     return (
       <div className={this.props.classes.container}>
         <RemoteMarkdown url={this.props.url}>
-          {markdownHandler}
+          {component => (
+            <Card className={this.props.classes.content}>
+              <Card.Content>
+                {component}
+              </Card.Content>
+            </Card>
+          )}
         </RemoteMarkdown>
       </div>
     );

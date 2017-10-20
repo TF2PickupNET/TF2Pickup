@@ -31,7 +31,7 @@ function queueWithoutPlayer(queue, playerId) {
  * @param {String} userId - Player's ID.
  * @returns {Boolean} - Is player blocked.
  */
-async function isPlayerBlockedFromPickup(app, userId) {
+async function isPlayerInPickup(app, userId) {
   const serverStatus = [ 'waiting-for-game-to-start', 'waiting-for-game-to-start', 'game-is-live' ];
   const query = { status: { $in: serverStatus } };
   const pickups = await app.service('pickup').find({ query });
@@ -67,7 +67,7 @@ export default function socketMethods(app, socket) {
         preReady: null,
       });
 
-      if (await isPlayerBlockedFromPickup(app, userId)) {
+      if (await isPlayerInPickup(app, userId)) {
         log('User blocked for pickup', userId);
 
         app.io.emit('notifications.add', {

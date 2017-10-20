@@ -1,6 +1,7 @@
 /* eslint-disable promise/prefer-await-to-callbacks */
 
 import mapValues from 'lodash.mapvalues';
+import flatten from 'lodash.flatten';
 import sleep from 'sleep-promise';
 import debug from 'debug';
 
@@ -37,14 +38,14 @@ async function checkBlock(app, userId) {
 
   let isPlaying = false;
 
-  await pickups.forEach((pickup) => {
+  pickups.forEach((pickup) => {
     const teams = JSON.stringify(pickup.teams);
     const regex = new RegExp(userId);
 
     if (regex.test(teams)) {
       isPlaying = true;
     }
-  }, this);
+  });
 
   return isPlaying;
 }
@@ -78,6 +79,11 @@ export default function socketMethods(app, socket) {
 
       if (await checkBlock(app, userId)) {
         log('User blocked for pickup', userId);
+
+        app.io.emit('notifications.add', {
+          forUsers: [ userId ],
+          message: 'You are already in a pickup',
+        });
       } else {
         log('Adding user to pickup', userId);
 

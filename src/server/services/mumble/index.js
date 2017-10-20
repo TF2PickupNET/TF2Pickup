@@ -3,7 +3,7 @@ import config from 'config';
 
 import { getMumbleIP } from '../../../config/index';
 
-import { regions } from '@tf2-pickup/configs/regions';
+import regions from '@tf2-pickup/configs/regions';
 
 /**
  * Mumble service.
@@ -26,18 +26,22 @@ export default function mumble() {
       const mumbleUsername = config.get('server.mumble.username');
       const mumblePassword = config.get('server.mumble.password');
 
-      regions.forEach((region) => {
-        const url = getMumbleIP(region.name);
+      // eslint-disable-next-line no-restricted-syntax
+      for (const key in regions) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (regions.hasOwnProperty(key)) {
+          const url = getMumbleIP(key);
 
-        nodeMumble.connect(url, { }, (error, connection) => {
-          if (error) {
-            throw new Error(error);
-          }
+          nodeMumble.connect(url, { }, (error, connection) => {
+            if (error) {
+              throw new Error(error);
+            }
 
-          connection.authenticate(mumbleUsername, mumblePassword);
-          connection.on('initialized', setConnection);
-        });
-      });
+            connection.authenticate(mumbleUsername, mumblePassword);
+            connection.on('initialized', setConnection);
+          });
+        }
+      }
     },
 
     create(region, name) {

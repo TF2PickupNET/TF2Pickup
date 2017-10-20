@@ -53,7 +53,6 @@ export default async function servemeStrategy(url, key) {
       stvPassword: STV_PASSWORD,
       reservationId: reservation.data.reservation.id,
     },
-    serverId: reservation.data.reservation.id,
     logSecret: reservation.data.reservation.logsecret.toString(),
   };
 }

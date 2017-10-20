@@ -104,15 +104,11 @@ export default async function createPickup(props) {
         status: 'waiting',
         classes: mapValues(
           pickupQueue.classes,
-          classPlayers => classPlayers.filter((player) => {
-            for (let index = 0; index < players.length; index += 1) {
-              if (players[index].id === player.id) {
-                return true;
-              }
-            }
+          (classPlayers, className) => {
+            const playersForClass = players[className];
 
-            return false;
-          }),
+            return classPlayers.filter(({ id }) => !playersForClass.includes(id));
+          },
         ),
         maps: generateRandomMaps(pickupQueue.region, pickupQueue.gamemode, [
           map,

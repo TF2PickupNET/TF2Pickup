@@ -25,7 +25,7 @@ function queueWithoutPlayer(queue, playerId) {
 }
 
 /**
- * Checks if players is blocked for join.
+ * Checks if players is blocked for join the pickup queue.
  *
  * @param {Object} app - The feathers app object.
  * @param {String} userId - Player's ID.

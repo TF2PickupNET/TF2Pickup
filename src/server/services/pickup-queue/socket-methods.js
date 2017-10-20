@@ -35,19 +35,9 @@ async function isPlayerBlockedFromPickup(app, userId) {
   const serverStatus = [ 'waiting-for-game-to-start', 'waiting-for-game-to-start', 'game-is-live' ];
   const query = { status: { $in: serverStatus } };
   const pickups = await app.service('pickup').find({ query });
+  const regex = new RegExp(userId);
 
-  let isPlaying = false;
-
-  pickups.forEach((pickup) => {
-    const teams = JSON.stringify(pickup.teams);
-    const regex = new RegExp(userId);
-
-    if (regex.test(teams)) {
-      isPlaying = true;
-    }
-  });
-
-  return isPlaying;
+  return pickups.some(pickup => regex.test(JSON.stringify(pickup.teams)));
 }
 
 /**

@@ -65,6 +65,11 @@ export default new Schema({
     },
   },
 
+  serverId: {
+    type: Number,
+    required: true,
+  },
+
   logSecret: {
     type: String,
     required: true,

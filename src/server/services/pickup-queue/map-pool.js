@@ -1,5 +1,6 @@
 import flatten from 'lodash.flatten';
 import get from 'lodash.get';
+import pickRandom from 'pick-random';
 
 import {
   gamemodes,
@@ -128,4 +129,18 @@ export function validateMapPool() {
   });
 }
 
-export default mapPool;
+/**
+ * Pick three new random maps from the map pool.
+ *
+ * @param {String} region - The region of the pickup queue.
+ * @param {String} gamemode - The gamemode of the pickup queue.
+ * @param {String[]} [excludedMaps] - A set of maps to exclude from the pool.
+ * This is needed for not having the same map in the map selection after it got selected.
+ * @returns {String[]} - Returns the three random picked maps.
+ */
+export function generateRandomMaps(region, gamemode, excludedMaps = []) {
+  const maps = mapPool[region][gamemode];
+  const filteredMaps = maps.filter(map => !excludedMaps.includes(map));
+
+  return pickRandom(filteredMaps, { count: 3 });
+}

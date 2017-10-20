@@ -82,6 +82,4 @@ export default new Schema({
 
     blu: { type: Object },
   },
-
-  mumbleChannel: { type: String },
 });

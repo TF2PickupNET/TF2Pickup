@@ -5,16 +5,24 @@ export default {
     create(props) {
       configureServer(props);
 
-      props.app.service('mumble').create(props.result.region, props.result.id);
+      props.app.service('mumble-channels').create({
+        region: props.result.region,
+        name: props.result.id,
+      });
 
       return props;
     },
 
-    patch(props) {
-      const serverStatus = [ 'game-finished', 'server-configuration-error' ];
+    async patch(props) {
+      const serverStatus = ['game-finished', 'server-configuration-error'];
 
       if (serverStatus.includes(props.result.status)) {
-        props.app.service('mumble').create(props.result.region, props.result.mumbleChannel);
+        const mumbleChannels = props.app.service('mumble-channels');
+
+        await mumbleChannels.delete({
+          region: props.result.region,
+          name: props.result.id,
+        });
       }
 
       return props;

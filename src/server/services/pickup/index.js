@@ -22,6 +22,6 @@ export default function pickup() {
   }));
 
   that.service('pickup').hooks(hooks);
-  
+
   logListener(that);
 }

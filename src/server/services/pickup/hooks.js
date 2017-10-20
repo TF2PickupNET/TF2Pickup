@@ -1,10 +1,10 @@
 import configureServer from './configure-server';
-import createMumbleLobby from './create-mumble-lobby';
+import createMumbleChannel from './create-mumble-channel';
 
 export default {
   after: {
     create(props) {
-      createMumbleLobby(props);
+      createMumbleChannel(props);
       configureServer(props);
 
       return props;

@@ -6,7 +6,7 @@ import config from 'config';
  *
  * @param {Object} props - Props from app.
  */
-export default function createMumbleLobby(props) {
+export default function createMumbleChannel(props) {
   const pickup = props.result;
   const pickupService = props.app.service('pickup');
   const channelName = `${pickup.id}`;
@@ -26,7 +26,7 @@ export default function createMumbleLobby(props) {
 
       channel.addSubChannel(channelName);
 
-      pickupService.get(pickup.id).patch({ mumbleLobby: channelName });
+      pickupService.get(pickup.id).patch({ mumbleChannel: channelName });
     });
   });
 }

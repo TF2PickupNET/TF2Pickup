@@ -3,6 +3,8 @@ import debug from 'debug';
 import fs from 'fs';
 import sleep from 'sleep-promise';
 import config from 'config';
+import flatten from 'lodash.flatten';
+import serial from 'promise-serial';
 import { colors } from 'materialize-react';
 
 import { regions } from '@tf2-pickup/configs';
@@ -41,11 +43,14 @@ async function executeConfig(connection, cfg) {
   const configFile = fs.readFileSync(configPath, 'utf8');
   const configLines = configFile.split('\n');
 
-  // eslint-disable-next-line no-restricted-syntax
-  for (let index = 0; index < configLines.length; index += 1) {
-    await sleep(COMMAND_WAIT); // eslint-disable-line no-await-in-loop
-    await connection.send(configLines[index]); // eslint-disable-line no-await-in-loop
-  }
+  await serial(
+    flatten(
+      configLines.map(line => [
+        () => connection.send(line),
+        () => sleep(COMMAND_WAIT),
+      ]),
+    ),
+  );
 }
 
 /**

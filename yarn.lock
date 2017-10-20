@@ -1377,13 +1377,13 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
+bluebird@^3.4.1, bluebird@^3.5.0:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
+
 bluebird@^3.4.7:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
-
-bluebird@^3.5.0:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
 
 bmp-js@0.0.3:
   version "0.0.3"
@@ -6452,6 +6452,12 @@ progress@^2.0.0:
 progress@~1.1.8:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/progress/-/progress-1.1.8.tgz#e260c78f6161cdd9b0e56cc3e0a85de17c7a57be"
+
+promise-serial@0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/promise-serial/-/promise-serial-0.1.5.tgz#68fb4d0e283c912459e02377a26a8d067bf567d1"
+  dependencies:
+    bluebird "^3.4.1"
 
 promise@^7.1.1:
   version "7.3.1"

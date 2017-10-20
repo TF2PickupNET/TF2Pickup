@@ -32,7 +32,7 @@ function queueWithoutPlayer(queue, playerId) {
  * @returns {Boolean} - Is player blocked.
  */
 async function checkBlock(app, userId) {
-  const query = { status: { $in: [ 'game-finished', 'server-configuration-error' ] } };
+  const query = { status: { $not: { $in: [ 'game-finished', 'server-configuration-error' ] } } };
   const pickups = await app.service('pickup').find({ query });
 
   let isPlaying = false;

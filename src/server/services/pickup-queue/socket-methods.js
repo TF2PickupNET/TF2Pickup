@@ -1,7 +1,6 @@
 /* eslint-disable promise/prefer-await-to-callbacks */
 
 import mapValues from 'lodash.mapvalues';
-import flatten from 'lodash.flatten';
 import sleep from 'sleep-promise';
 import debug from 'debug';
 

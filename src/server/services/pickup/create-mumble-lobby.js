@@ -8,8 +8,8 @@ import config from 'config';
  */
 export default function createMumbleLobby(props) {
   const pickup = props.result;
-  const pickupService = props.service('pickup');
-  const channelName = `${pickup.id}-${pickup.gamemode}`;
+  const pickupService = props.app.service('pickup');
+  const channelName = `${pickup.id}`;
 
   mumble.connect(config.get(`server.mumble.${pickup.region}`), { }, (error, conn) => {
     if (error) {

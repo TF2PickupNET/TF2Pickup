@@ -13,8 +13,10 @@ import { Spinner } from 'materialize-react';
 export default class RemoteMarkdown extends PureComponent {
   static propTypes = {
     url: PropTypes.string.isRequired,
-    children: PropTypes.func.isRequired,
+    children: PropTypes.func,
   };
+
+  static defaultProps = { children: component => component };
 
   state = { markdown: null };
 

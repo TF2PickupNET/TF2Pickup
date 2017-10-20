@@ -7,7 +7,5 @@ export default {
   // Data[4] - Player's team in server.
   // Data[5] - say or say_team.
   // Data[6] - Player's chat.
-  async handler(app, line) {
-
-  },
+  handler: () => {},
 };

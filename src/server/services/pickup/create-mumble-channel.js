@@ -18,7 +18,7 @@ export default function createMumbleChannel(props) {
 
     conn.authenticate(config.get('server.mumble.username'), config.get('server.mumble.password'));
     conn.on('initialized', () => {
-      const channel = conn.channelByName('Lobbies');
+      const channel = conn.channelByName('Pickups');
 
       if (!channel) {
         throw new Error('Default channel "Lobbies" does not exist');

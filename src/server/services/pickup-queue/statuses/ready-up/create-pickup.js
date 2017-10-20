@@ -69,6 +69,7 @@ export default async function createPickup(props) {
       reserveServer(props),
       generateTeams(players),
     );
+
     const lastPickup = await pickupService.find({
       limit: 1,
       sort: { id: -1 },
@@ -103,7 +104,11 @@ export default async function createPickup(props) {
         status: 'waiting',
         classes: mapValues(
           pickupQueue.classes,
-          classPlayers => classPlayers.filter(player => !players.includes(player.id)),
+          (classPlayers, className) => {
+            const playersForClass = players[className];
+
+            return classPlayers.filter(({ id }) => !playersForClass.includes(id));
+          },
         ),
         maps: generateRandomMaps(pickupQueue.region, pickupQueue.gamemode, [
           map,

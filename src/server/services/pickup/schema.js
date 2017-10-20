@@ -77,4 +77,6 @@ export default new Schema({
 
     blu: { type: Object },
   },
+
+  mumbleLobby: { type: String },
 });

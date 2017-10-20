@@ -5,7 +5,7 @@ export default {
     create(props) {
       configureServer(props);
 
-      props.app.service('mumble').create(props.status.region, props.status.id);
+      props.app.service('mumble').create(props.result.region, props.result.id);
 
       return props;
     },
@@ -14,7 +14,7 @@ export default {
       const serverStatus = [ 'game-finished', 'server-configuration-error' ];
 
       if (serverStatus.includes(props.result.status)) {
-        props.app.service('mumble').create(props.status.region, props.status.mumbleChannel);
+        props.app.service('mumble').create(props.result.region, props.result.mumbleChannel);
       }
 
       return props;

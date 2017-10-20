@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
-import ReactMarkdown from 'react-markdown';
 import { connect } from 'react-redux';
 import {
   Button,
   Typography,
-  Spinner,
 } from 'materialize-react';
-import axios from 'axios';
 
 import app from '../../app';
+import RemoteMarkdown from '../../components/remote-markdown';
+
+const RULES_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/RULES.md';
 
 /**
  * The section for accepting the rules.
@@ -50,23 +50,6 @@ class RulesSection extends PureComponent {
     },
   };
 
-  state = {
-    loadingRules: true,
-    rules: null,
-  };
-
-  /**
-   * Get the rules from GitHub.
-   */
-  async componentWillMount() {
-    const rules = await axios.get('https://raw.githubusercontent.com/TF2PickupNET/Info/master/RULES.md');
-
-    this.setState({
-      loadingRules: false,
-      rules: rules.data,
-    });
-  }
-
   handleAcceptRules = () => app.io.emit('user.accept-rules');
 
   render() {
@@ -77,11 +60,7 @@ class RulesSection extends PureComponent {
         </Typography>
 
         <div className={this.props.classes.rules}>
-          {this.state.loadingRules ? (
-            <Spinner active />
-          ) : (
-            <ReactMarkdown source={this.state.rules} />
-          )}
+          <RemoteMarkdown url={RULES_URL} />
         </div>
 
         <div className={this.props.classes.buttonContainer}>

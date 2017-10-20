@@ -25,6 +25,22 @@ function queueWithoutPlayer(queue, playerId) {
 }
 
 /**
+ * Checks if players is blocked for join the pickup queue.
+ *
+ * @param {Object} app - The feathers app object.
+ * @param {String} userId - Player's ID.
+ * @returns {Boolean} - Is player blocked.
+ */
+async function isPlayerInPickup(app, userId) {
+  const serverStatus = [ 'waiting-for-game-to-start', 'waiting-for-game-to-start', 'game-is-live' ];
+  const query = { status: { $in: serverStatus } };
+  const pickups = await app.service('pickup').find({ query });
+  const regex = new RegExp(userId);
+
+  return pickups.some(pickup => regex.test(JSON.stringify(pickup.teams)));
+}
+
+/**
  * Setup the socket methods for the users.
  *
  * @param {Object} app - The feathers app object.
@@ -51,9 +67,18 @@ export default function socketMethods(app, socket) {
         preReady: null,
       });
 
-      log('Adding user to pickup', userId);
+      if (await isPlayerInPickup(app, userId)) {
+        log('User blocked for pickup', userId);
 
-      await pickupQueue.patch(queue.id, { $set: { classes: newQueue.classes } });
+        app.io.emit('notifications.add', {
+          forUsers: [ userId ],
+          message: 'You are already in a pickup',
+        });
+      } else {
+        log('Adding user to pickup', userId);
+
+        await pickupQueue.patch(queue.id, { $set: { classes: newQueue.classes } });
+      }
     }
   });
 

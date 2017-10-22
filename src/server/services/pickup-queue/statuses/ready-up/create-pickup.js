@@ -17,11 +17,7 @@ import reserveServer from './reserve-server';
  * @returns {Function} - A function which will modify the queue and remove the players.
  */
 function removePlayersFromQueue(players) {
-  return (classPlayers, className) => {
-    const playersForClass = players[className];
-
-    return classPlayers.filter(({ id }) => !playersForClass.includes(id));
-  };
+  return (classPlayers) => classPlayers.filter(({ id }) => !players.includes(id));
 }
 
 /**
@@ -74,13 +70,14 @@ export default async function createPickup(props) {
       .filter(player => player.ready)
       .slice(0, min);
   });
+  const allPlayers = flatten(Object.values(players)).map(player => player.id);
 
   try {
     const [
       server,
       teams,
     ] = Promise.all(
-      reserveServer(props),
+      // reserveServer(props),
       generateTeams(players),
     );
 
@@ -123,7 +120,7 @@ export default async function createPickup(props) {
             $set: {
               classes: mapValues(
                 queue.classes,
-                removePlayersFromQueue(players),
+                removePlayersFromQueue(allPlayers),
               ),
             },
           });

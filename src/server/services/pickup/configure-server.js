@@ -1,10 +1,8 @@
 import Rcon from 'rcon';
 import debug from 'debug';
 import fs from 'fs';
-import sleep from 'sleep-promise';
 import config from 'config';
 import remove from 'lodash.remove';
-import serial from 'promise-serial';
 import { colors } from 'materialize-react';
 
 import { regions } from '@tf2-pickup/configs';
@@ -41,7 +39,7 @@ async function executeCommands(connection, server, pickup) {
   await connection.send(`sv_password ${server.password}`);
   await connection.send('kickall');
   await connection.send(`logaddress_add ${listenerAddr}`);
-  // await connection.send(`tftrue_logs_apikey ${config.get('service.logstf.apikey')}`);
+  await connection.send(`tftrue_logs_apikey ${config.get('service.logstf.apikey')}`);
   await connection.send(`tftrue_logs_prefix TF2Pickup ${regionFullname} #${pickup.id}`);
   await connection.send(`sv_logsecret ${pickup.logSecret}`);
   await connection.send(`changelevel ${pickup.map}`);

@@ -17,11 +17,7 @@ import reserveServer from './reserve-server';
  * @returns {Function} - A function which will modify the queue and remove the players.
  */
 function removePlayersFromQueue(players) {
-  return (classPlayers, className) => {
-    const playersForClass = players[className];
-
-    return classPlayers.filter(({ id }) => !playersForClass.includes(id));
-  };
+  return classPlayers => classPlayers.filter(({ id }) => !players.includes(id));
 }
 
 /**
@@ -74,6 +70,7 @@ export default async function createPickup(props) {
       .filter(player => player.ready)
       .slice(0, min);
   });
+  const allPlayers = flatten(Object.values(players)).map(player => player.id);
 
   try {
     const [
@@ -116,14 +113,18 @@ export default async function createPickup(props) {
     await Promise.all(
       Object
         .keys(gamemodes)
-        .map(gamemode => pickupQueueService.patch(`${pickupQueue.region}-${gamemode}`, {
-          $set: {
-            classes: mapValues(
-              pickupQueue.classes,
-              removePlayersFromQueue(players),
-            ),
-          },
-        })),
+        .map(async (gamemode) => {
+          const queue = await pickupQueueService.get(`${pickupQueue.region}-${gamemode}`);
+
+          return pickupQueueService.patch(queue.id, {
+            $set: {
+              classes: mapValues(
+                queue.classes,
+                removePlayersFromQueue(allPlayers),
+              ),
+            },
+          });
+        }),
     );
 
     // Reset the pickup queue to waiting status and remove the players from the queue

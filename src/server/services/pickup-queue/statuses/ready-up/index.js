@@ -28,13 +28,14 @@ export default async function readyUp(props) {
   if (enoughPlayersAreReady) {
     log('Enough players are ready, creating teams', pickupId);
 
+    /*
     await service.patch(pickupId, {
       $set: {
         status: 'creating-teams',
         readyUp: null,
       },
     });
-
+    */
     createPickup(props);
   }
 

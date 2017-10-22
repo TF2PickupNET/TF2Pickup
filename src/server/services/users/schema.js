@@ -120,6 +120,45 @@ export default new Schema({
     default: [],
   },
 
+  elo: {
+    scout: {
+      type: Number,
+      default: 1000
+    },
+    soldier: {
+      type: Number,
+      default: 1000
+    },
+    pyro: {
+      type: Number,
+      default: 1000
+    },
+    demoman: {
+      type: Number,
+      default: 1000
+    },
+    heavy: {
+      type: Number,
+      default: 1000
+    },
+    engineer: {
+      type: Number,
+      default: 1000
+    },
+    medic: {
+      type: Number,
+      default: 1000
+    },
+    sniper: {
+      type: Number,
+      default: 1000
+    },
+    spy: {
+      type: Number,
+      default: 1000
+    }
+  },
+
   settings: {
     region: {
       type: String,

@@ -41,7 +41,7 @@ async function executeCommands(connection, server, pickup) {
   await connection.send(`sv_password ${server.password}`);
   await connection.send('kickall');
   await connection.send(`logaddress_add ${listenerAddr}`);
-  await connection.send(`tftrue_logs_apikey ${config.get('service.logstf.apikey')}`);
+  // await connection.send(`tftrue_logs_apikey ${config.get('service.logstf.apikey')}`);
   await connection.send(`tftrue_logs_prefix TF2Pickup ${regionFullname} #${pickup.id}`);
   await connection.send(`sv_logsecret ${pickup.logSecret}`);
   await connection.send(`changelevel ${pickup.map}`);
@@ -51,7 +51,7 @@ async function executeCommands(connection, server, pickup) {
  * Generates CFG name.
  *
  * @param {String} region - Region of the game.
- * @param {String} format - Region of the game.
+ * @param {String} format - Format of the game.
  * @param {String} map - Map of the game.
  * @returns {String} - Returns the CFG name.
  */
@@ -81,10 +81,21 @@ function getCfgName(region, format, map) {
  * @param {Object} pickup - The pickup info object.
  */
 async function setup(connection, server, pickup) {
-  const cfg = getCfgName(pickup.region, pickup.format, pickup.map);
+  const cfg = getCfgName(pickup.region, pickup.gamemode, pickup.map);
 
   await executeCommands(connection, server, pickup);
   await executeConfig(connection, cfg);
+}
+
+/**
+ * Check rcon response from the server.
+ *
+ * @param {String} response - RCON response.
+ */
+function checkRconResponse(response) {
+  if (/Failed to find map (.*?)/.test(response)) {
+    log('Pickup map does not exist in the server');
+  }
 }
 
 /**
@@ -100,7 +111,7 @@ export default async function configureServer(props, isSecondTry = false) {
 
   try {
     // Wait 90 seconds for serveme servers to start
-    await sleep(90 * 1000);
+    // await sleep(90 * 1000);
 
     const connection = await new Rcon(server.ip, server.port, server.rconPassword, {
       tcp: true,
@@ -109,14 +120,15 @@ export default async function configureServer(props, isSecondTry = false) {
 
     await connection.connect();
     connection.on('auth', async () => {
-      log('Authorized');
-
       await setup(connection, server, pickup);
+      await connection.disconnect();
 
-      log('Server setup for pickup is done', pickup.pickupId);
+      log('Server setup for pickup is done', pickup.id);
 
       await pickupService.patch(pickup.id, { $set: { status: 'waiting-for-game-to-start' } });
     });
+
+    connection.on('response', checkRconResponse);
   } catch (error) {
     if (isSecondTry) {
       await props.app.service('slack').create({

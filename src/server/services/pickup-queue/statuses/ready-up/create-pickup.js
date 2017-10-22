@@ -116,14 +116,18 @@ export default async function createPickup(props) {
     await Promise.all(
       Object
         .keys(gamemodes)
-        .map(gamemode => pickupQueueService.patch(`${pickupQueue.region}-${gamemode}`, {
-          $set: {
-            classes: mapValues(
-              pickupQueue.classes,
-              removePlayersFromQueue(players),
-            ),
-          },
-        })),
+        .map(async (gamemode) => {
+          const queue = await pickupQueueService.get(`${pickupQueue.region}-${gamemode}`);
+
+          return pickupQueueService.patch(queue.id, {
+            $set: {
+              classes: mapValues(
+                queue.classes,
+                removePlayersFromQueue(players),
+              ),
+            },
+          });
+        }),
     );
 
     // Reset the pickup queue to waiting status and remove the players from the queue

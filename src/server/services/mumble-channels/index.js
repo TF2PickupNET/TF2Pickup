@@ -8,12 +8,34 @@ import { getMumbleIP } from '../../../config/index';
 
 const log = debug('TF2Pickup:mumble');
 
+/**
+ * Mumble service.
+ *
+ * @class Mumble Service class.
+ */
 class MumbleService {
   connections = {};
 
+  /**
+   * Mumble service setup.
+   */
   setup() {
     const mumbleUsername = config.get('server.mumble.username');
     const mumblePassword = config.get('server.mumble.password');
+
+    /**
+     * Handle mumble connection.
+     *
+     * @param {String} region - Mumble region.
+     * @param {Object} connection - Mumble connection.
+     */
+    const handleConnection = (region, connection) => {
+      connection.authenticate(mumbleUsername, mumblePassword);
+
+      connection.on('initialized', () => {
+        this.connections[region.name] = connection;
+      });
+    };
 
     Object
       .values(regions)
@@ -27,31 +49,41 @@ class MumbleService {
             return;
           }
 
-          connection.authenticate(mumbleUsername, mumblePassword);
-
-          connection.on('initialized', () => {
-            this.connections[region.name] = connection;
-          });
+          handleConnection(region, connection);
         });
       });
   }
 
-  create({
+  /**
+   * Create mumble channel.
+   *
+   * @param {Object} channel - Mumble channel.
+   * @param {Object} channel.region - Mumble channel region.
+   * @param {Object} channel.name - Mumble channel name.
+   */
+  async create({
     region,
     name,
   }) {
-    const channel = this.connections[region].channelByName('Pickups');
+    const channel = await this.connections[region].channelByName('Pickups');
 
-    channel.addSubChannel(name);
+    await channel.addSubChannel(name);
   }
 
-  delete({
+  /**
+   * Delete mumble channel.
+   *
+   * @param {Object} channel - Mumble channel.
+   * @param {Object} channel.region - Mumble channel region.
+   * @param {Object} channel.name - Mumble channel name.
+   */
+  async delete({
     region,
     name,
   }) {
-    const channel = this.connections[region].channelByName(name);
+    const channel = await this.connections[region].channelByName(name);
 
-    channel.remove(name);
+    await channel.remove(name);
   }
 }
 

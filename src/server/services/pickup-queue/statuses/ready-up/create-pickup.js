@@ -17,7 +17,7 @@ import reserveServer from './reserve-server';
  * @returns {Function} - A function which will modify the queue and remove the players.
  */
 function removePlayersFromQueue(players) {
-  return (classPlayers) => classPlayers.filter(({ id }) => !players.includes(id));
+  return classPlayers => classPlayers.filter(({ id }) => !players.includes(id));
 }
 
 /**
@@ -77,7 +77,7 @@ export default async function createPickup(props) {
       server,
       teams,
     ] = Promise.all(
-      // reserveServer(props),
+      reserveServer(props),
       generateTeams(players),
     );
 

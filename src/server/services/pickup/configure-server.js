@@ -2,10 +2,11 @@ import Rcon from 'rcon';
 import debug from 'debug';
 import fs from 'fs';
 import config from 'config';
-import remove from 'lodash.remove';
 import { colors } from 'materialize-react';
 
 import { regions } from '@tf2-pickup/configs';
+
+import maps from '../../../config/maps';
 
 const log = debug('TF2Pickup:pickup:configure-server');
 
@@ -19,10 +20,11 @@ function executeConfig(connection, cfg) {
   const rootPath = process.cwd();
   const configPath = `${rootPath}/node_modules/@tf2-pickup/tf2-configs/dist/${cfg}.cfg`;
   const configFile = fs.readFileSync(configPath, 'utf8');
-  const configLines = configFile.split('\n');
-  const lines = remove(configLines, line => line !== '');
+  const configLines = configFile
+    .split('\n')
+    .filter(line => line !== '');
 
-  lines.forEach(line => connection.send(line));
+  configLines.forEach(line => connection.send(line));
 }
 
 /**
@@ -54,21 +56,14 @@ async function executeCommands(connection, server, pickup) {
  * @returns {String} - Returns the CFG name.
  */
 function getCfgName(region, format, map) {
-  const service = 'tf2pickup';
+  const prefix = 'tf2pickup';
+  const mapInfo = maps[map];
 
-  if (format === 'ultiduo' || format === 'bball') {
-    return `${service}_${region}_${format}`;
+  if (mapInfo.configType === null) {
+    return `${prefix}_${region}_${format}`;
   }
 
-  if (map.indexOf('cp_') === 0) {
-    return `${service}_${region}_${format}_5cp`;
-  } else if (map.indexOf('koth_') === 0) {
-    return `${service}_${region}_${format}_koth`;
-  } else if (map.indexOf('pl_') === 0) {
-    return `${service}_${region}_${format}_stopwatch`;
-  }
-
-  throw new Error('Unknown map type!');
+  return `${prefix}_${region}_${format}_${mapInfo.configType}`;
 }
 
 /**

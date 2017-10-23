@@ -59,7 +59,6 @@
     "lodash.mapvalues": "4.6.0",
     "lodash.merge": "4.6.0",
     "lodash.omit": "4.5.0",
-    "lodash.remove": "4.7.0",
     "lodash.shuffle": "4.2.0",
     "marked": "0.3.6",
     "materialize-react": "0.2.0-alpha.1",

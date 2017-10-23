@@ -1,35 +1,13 @@
-import Rcon from 'modern-rcon';
+import Rcon from 'rcon';
 import debug from 'debug';
 import fs from 'fs';
-import sleep from 'sleep-promise';
 import config from 'config';
-import flatten from 'lodash.flatten';
-import serial from 'promise-serial';
+import remove from 'lodash.remove';
 import { colors } from 'materialize-react';
 
 import { regions } from '@tf2-pickup/configs';
 
 const log = debug('TF2Pickup:pickup:configure-server');
-
-const COMMAND_WAIT = 250;
-
-/**
- * Change server map.
- *
- * @param {Object} connection - RCON connection object to server.
- * @param {Object} map - Map name.
- */
-async function changeMap(connection, map) {
-  const maplist = await connection.send('maps *');
-
-  if (maplist.indexOf(map) === -1) {
-    throw new Error(`Server does not have map ${map}`);
-  } else {
-    log(`Changing server map to ${map}`);
-    await sleep(3 * 1000);
-    await connection.send(`changelevel ${map}`);
-  }
-}
 
 /**
  * Change server config.
@@ -37,20 +15,14 @@ async function changeMap(connection, map) {
  * @param {Object} connection - RCON connection object to server.
  * @param {String} cfg - CFG file to execute.
  */
-async function executeConfig(connection, cfg) {
+function executeConfig(connection, cfg) {
   const rootPath = process.cwd();
   const configPath = `${rootPath}/node_modules/@tf2-pickup/tf2-configs/dist/${cfg}.cfg`;
   const configFile = fs.readFileSync(configPath, 'utf8');
   const configLines = configFile.split('\n');
+  const lines = remove(configLines, line => line !== '');
 
-  await serial(
-    flatten(
-      configLines.map(line => [
-        () => connection.send(line),
-        () => sleep(COMMAND_WAIT),
-      ]),
-    ),
-  );
+  lines.forEach(line => connection.send(line));
 }
 
 /**
@@ -65,23 +37,19 @@ async function executeCommands(connection, server, pickup) {
   const regionFullname = regions[pickup.region].fullName;
 
   await connection.send(`sv_password ${server.password}`);
-  await sleep(COMMAND_WAIT);
   await connection.send('kickall');
-  await sleep(COMMAND_WAIT);
   await connection.send(`logaddress_add ${listenerAddr}`);
-  await sleep(COMMAND_WAIT);
   await connection.send(`tftrue_logs_apikey ${config.get('service.logstf.apikey')}`);
-  await sleep(COMMAND_WAIT);
   await connection.send(`tftrue_logs_prefix TF2Pickup ${regionFullname} #${pickup.id}`);
-  await sleep(COMMAND_WAIT);
   await connection.send(`sv_logsecret ${pickup.logSecret}`);
+  await connection.send(`changelevel ${pickup.map}`);
 }
 
 /**
  * Generates CFG name.
  *
  * @param {String} region - Region of the game.
- * @param {String} format - Region of the game.
+ * @param {String} format - Format of the game.
  * @param {String} map - Map of the game.
  * @returns {String} - Returns the CFG name.
  */
@@ -111,13 +79,21 @@ function getCfgName(region, format, map) {
  * @param {Object} pickup - The pickup info object.
  */
 async function setup(connection, server, pickup) {
-  const cfg = getCfgName(pickup.region, pickup.format, pickup.map);
+  const cfg = getCfgName(pickup.region, pickup.gamemode, pickup.map);
 
   await executeCommands(connection, server, pickup);
-  await sleep(COMMAND_WAIT);
-  await changeMap(connection, pickup.map);
-  await sleep(30 * 1000);
   await executeConfig(connection, cfg);
+}
+
+/**
+ * Check rcon response from the server.
+ *
+ * @param {String} response - RCON response.
+ */
+function checkRconResponse(response) {
+  if (/Failed to find map (.*?)/.test(response)) {
+    log('Pickup map does not exist in the server');
+  }
 }
 
 /**
@@ -133,16 +109,24 @@ export default async function configureServer(props, isSecondTry = false) {
 
   try {
     // Wait 90 seconds for serveme servers to start
-    await sleep(90 * 1000);
+    // await sleep(90 * 1000);
 
-    const connection = await new Rcon(server.ip, server.port, server.rconPassword);
+    const connection = await new Rcon(server.ip, server.port, server.rconPassword, {
+      tcp: true,
+      challenge: false,
+    });
 
     await connection.connect();
-    await setup(connection, server, pickup);
+    connection.on('auth', async () => {
+      await setup(connection, server, pickup);
+      await connection.disconnect();
 
-    log('Server setup for pickup is done', pickup.pickupId);
+      log('Server setup for pickup is done', pickup.id);
 
-    await pickupService.patch(pickup.id, { $set: { status: 'waiting-for-game-to-start' } });
+      await pickupService.patch(pickup.id, { $set: { status: 'waiting-for-game-to-start' } });
+    });
+
+    connection.on('response', checkRconResponse);
   } catch (error) {
     if (isSecondTry) {
       await props.app.service('slack').create({
@@ -162,7 +146,7 @@ export default async function configureServer(props, isSecondTry = false) {
 
       log('Error while configuring server for pickup', pickup.id, error);
     } else {
-      configureServer(props, true);
+      configureServer(server, true);
     }
   }
 }

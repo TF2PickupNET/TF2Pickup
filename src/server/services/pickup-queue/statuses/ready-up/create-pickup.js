@@ -28,30 +28,19 @@ function removePlayersFromQueue(players) {
  * @returns {String} - Returns the most voted map.
  */
 function getMostVotedMap(maps, players) {
-  const totalVotesForMaps = maps.map(map => [
-    map,
-    players.filter(player => player.map === map).length,
-  ]);
-  const mostVotes = totalVotesForMaps.reduce((current, map) => {
-    if (current.votes < map[1]) {
-      return {
-        votes: map[1],
-        maps: [map[0]],
-      };
-    } else if (current.votes === map[1]) {
-      return {
-        votes: map[1],
-        maps: current.maps.concat([map[0]]),
-      };
-    }
-
-    return current;
-  }, {
-    votes: 0,
-    maps: [],
+  const totalVotesForMaps = maps.map((map) => {
+    return {
+      name: map,
+      votes: players.filter(player => player.map === map).length,
+    };
   });
+  const mostVotes = Math.max(...totalVotesForMaps.map(map => map.votes));
 
-  return pickRandom(mostVotes.maps);
+  return pickRandom(
+    totalVotesForMaps
+      .filter(map => map.votes === mostVotes)
+      .map(map => map.name),
+  );
 }
 
 /**

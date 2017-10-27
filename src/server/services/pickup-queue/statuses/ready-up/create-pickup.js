@@ -89,8 +89,8 @@ export default async function createPickup(props) {
       //server,
       teams,
     ] = Promise.all(
-      //reserveServer(props),
-      generateTeams(players),
+      reserveServer(props),
+      generateTeams(props, players, pickupQueue.gamemode),
     );
 
     const lastPickup = await pickupService.find({

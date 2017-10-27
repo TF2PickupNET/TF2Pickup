@@ -21,11 +21,7 @@ const log = debug('TF2Pickup:pickup-queue:statuses:create-pickup');
  * @returns {Function} - A function which will modify the queue and remove the players.
  */
 function removePlayersFromQueue(players) {
-  return (classPlayers, className) => {
-    const playersForClass = players[className];
-
-    return classPlayers.filter(({ id }) => !playersForClass.includes(id));
-  };
+  return classPlayers => classPlayers.filter(({ id }) => !players.includes(id));
 }
 
 /**
@@ -36,30 +32,19 @@ function removePlayersFromQueue(players) {
  * @returns {String} - Returns the most voted map.
  */
 function getMostVotedMap(maps, players) {
-  const totalVotesForMaps = maps.map(map => [
-    map,
-    players.filter(player => player.map === map).length,
-  ]);
-  const mostVotes = totalVotesForMaps.reduce((current, map) => {
-    if (current.votes < map[1]) {
-      return {
-        votes: map[1],
-        maps: [map[0]],
-      };
-    } else if (current.votes === map[1]) {
-      return {
-        votes: map[1],
-        maps: current.maps.concat([map[0]]),
-      };
-    }
-
-    return current;
-  }, {
-    votes: 0,
-    maps: [],
+  const totalVotesForMaps = maps.map((map) => {
+    return {
+      name: map,
+      votes: players.filter(player => player.map === map).length,
+    };
   });
+  const mostVotes = Math.max(...totalVotesForMaps.map(map => map.votes));
 
-  return pickRandom(mostVotes.maps);
+  return pickRandom(
+    totalVotesForMaps
+      .filter(map => map.votes === mostVotes)
+      .map(map => map.name),
+  );
 }
 
 /**
@@ -78,6 +63,7 @@ export default async function createPickup(props) {
       .filter(player => player.ready)
       .slice(0, min);
   });
+  const allPlayers = flatten(Object.values(players)).map(player => player.id);
 
   log("createPickup");
 
@@ -125,14 +111,18 @@ export default async function createPickup(props) {
     await Promise.all(
       Object
         .keys(gamemodes)
-        .map(gamemode => pickupQueueService.patch(`${pickupQueue.region}-${gamemode}`, {
-          $set: {
-            classes: mapValues(
-              pickupQueue.classes,
-              removePlayersFromQueue(players),
-            ),
-          },
-        })),
+        .map(async (gamemode) => {
+          const queue = await pickupQueueService.get(`${pickupQueue.region}-${gamemode}`);
+
+          return pickupQueueService.patch(queue.id, {
+            $set: {
+              classes: mapValues(
+                queue.classes,
+                removePlayersFromQueue(allPlayers),
+              ),
+            },
+          });
+        }),
     );
 
     // Reset the pickup queue to waiting status and remove the players from the queue

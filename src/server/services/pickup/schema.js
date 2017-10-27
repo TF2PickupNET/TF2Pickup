@@ -2,6 +2,10 @@ import { Schema } from 'mongoose';
 
 import { isInArray } from '../validators';
 
+import gamemodes from '@tf2-pickup/configs/gamemodes';
+
+import regions from '@tf2-pickup/configs/regions';
+
 export default new Schema({
   id: Number,
 
@@ -17,9 +21,17 @@ export default new Schema({
     required: true,
   },
 
-  region: {},
+  region: {
+    type: String,
+    validate: isInArray(Object.keys(regions), {}),
+    required: true,
+  },
 
-  gamemode: {},
+  gamemode: {
+    type: String,
+    validate: isInArray(Object.keys(gamemodes), {}),
+    required: true,
+  },
 
   map: {
     type: String,

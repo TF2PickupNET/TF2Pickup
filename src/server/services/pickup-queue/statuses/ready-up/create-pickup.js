@@ -11,13 +11,12 @@ import { generateRandomMaps } from '../../map-pool';
 import generateTeams from './generate-teams';
 import reserveServer from './reserve-server';
 
-
 const log = debug('TF2Pickup:pickup-queue:statuses:create-pickup');
 
 /**
  * Remove the players from the queue.
  *
- * @param {Object} players - The players from the new pickup.
+ * @param {Object} players - The players from tgihe new pickup.
  * @returns {Function} - A function which will modify the queue and remove the players.
  */
 function removePlayersFromQueue(players) {
@@ -65,14 +64,11 @@ export default async function createPickup(props) {
   });
   const allPlayers = flatten(Object.values(players)).map(player => player.id);
 
-  log("createPickup");
+  log('createPickup');
 
   try {
-
-
-
     const [
-      //server,
+      server,
       teams,
     ] = Promise.all(
       reserveServer(props),

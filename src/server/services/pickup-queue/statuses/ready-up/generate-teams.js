@@ -8,7 +8,7 @@ const prio = {
     'demoman',
     'pocket',
     'roamer',
-    'medic'
+    'medic',
   ],
   '9v9': [
     'demoman',
@@ -19,89 +19,130 @@ const prio = {
     'scout',
     'soldier',
     'heavy',
-    'engineer'
+    'engineer',
   ],
-  'bball': [
-    'soldier'
-  ],
-  'ultiduo': [
+  bball: [
     'soldier',
-    'medic'
-  ]
+  ],
+  ultiduo: [
+    'soldier',
+    'medic',
+  ],
 };
 
-function sortClass(arr){
-  arr.sort(function (a, b) {
-    if (a.elo < b.elo) {
+/**
+ * Function to sort players by their elo.
+ *
+ * @method sortClass
+ * @param  {Array} arr - Array with players.
+ * @returns {Array}   -   Array with players sorted DESC by their elo.
+ */
+function sortClass(arr) {
+  arr.sort((p1, p2) => {
+    if (p1.elo < p2.elo) {
       return 1;
     }
-    if (a.elo > b.elo) {
+
+    if (p1.elo > p2.elo) {
       return -1;
     }
+
     return 0;
   });
+
   return arr;
 }
 
-function getAvgTeamElo(arr){
-  var tmp_elos = {
+/**
+ * Function get EloSum for each class.
+ *
+ * @method getAvgTeamElo
+ * @param  {Array} tfplayers - Array with players.
+ * @returns {Number}   -   Sum of player elo.
+ */
+function getEloSum(tfplayers) {
+  return tfplayers.map(item => item.elo).reduce((prev, next) => prev + next);
+}
+
+/**
+ * Function to sort players by their elo.
+ *
+ * @method getAvgTeamElo
+ * @param  {Array} arr - Array with teams.
+ * @returns {Array}   -   Array with players sorted DESC by their elo.
+ */
+function getAvgTeamElo(arr) {
+  const tmpElos = {
     red: 0,
     blu: 0,
-    diff: 0
+    diff: 0,
   };
 
   Object.entries(arr).forEach(([team, tfclasses]) => {
+    let pCount = 0;
 
-    var p = 0;
-    Object.entries(tfclasses).forEach( ([tfclass, tfplayers]) => {
-      tfplayers.forEach( (el) => {
-        p++;
-        tmp_elos[team] += el.elo;
-      });
+    Object.entries(tfclasses).forEach((tfplayers) => {
+      tmpElos[team] += getEloSum(tfplayers);
+      pCount += tfplayers.length;
     });
 
-    tmp_elos[team] = Math.round(tmp_elos[team]/p);
+    tmpElos[team] = Math.round(tmpElos[team] / pCount);
   });
 
-  var diff = tmp_elos.red - tmp_elos.blu;
-  if(diff < 0) diff = diff * -1;
-  tmp_elos.diff = diff;
+  let diff = tmpElos.red - tmpElos.blu;
 
-  return tmp_elos;
+  if (diff < 0) {
+    diff *= -1;
+  }
+
+  tmpElos.diff = diff;
+
+  return tmpElos;
 }
 
-function balanceTeams(arr, mode){
+/**
+ * Function to sort players by their elo.
+ *
+ * @param  {Array} arr - Array with teams.
+ * @param  {String} mode - Gamemode string.
+ * @returns {Array}   -   Array with balanced teams.
+ */
+function balanceTeams(arr, mode) {
+  prio[mode].forEach((tfclass) => {
+    const tfplayers = arr.red[tfclass];
+    const avg = getAvgTeamElo(arr);
+    let diff = avg.red - avg.blu;
 
-  prio[mode].forEach( tfclass => {
+    if (diff < 0) {
+      diff *= -1;
+    }
 
-    var tfplayers = arr.red[tfclass];
-    var avg = getAvgTeamElo(arr);
-    var diff = avg.red - avg.blu;
-
-    if(diff < 0) diff = diff * -1;
-
-    //swap players of this class
-    // for 6s we dont swap scouts again, since we started with them and they should be balanced already
-    if(tfplayers.length == 1){
-      var p1 = arr.red[tfclass].shift();
-      var p2 = arr.blu[tfclass].shift();
+    /**
+     * Swap players of this class
+     * for 6s we dont swap scouts again
+     * since we started with them and they should be balanced already
+     */
+    if (tfplayers.length === 1) {
+      let p1 = arr.red[tfclass].shift();
+      let p2 = arr.blu[tfclass].shift();
 
       arr.red[tfclass].push(p2);
       arr.blu[tfclass].push(p1);
 
-      //check elo and if less than before keep changes
-      var new_avg = getAvgTeamElo(arr);
-      var new_diff = new_avg.red - new_avg.blu;
-      if(new_diff < 0) new_diff = new_diff * -1;
+      // Check elo and if less than before keep changes
+      const newAvg = getAvgTeamElo(arr);
+      let newDiff = newAvg.red - newAvg.blu;
 
-      if(new_diff > diff){
+      if (newDiff < 0) {
+        newDiff *= -1;
+      }
 
-        var p1 = arr.red[tfclass].shift();
-        var p2 = arr.blu[tfclass].shift();
+      if (newDiff > diff) {
+        p1 = arr.red[tfclass].shift();
+        p2 = arr.blu[tfclass].shift();
 
         arr.red[tfclass].push(p2);
         arr.blu[tfclass].push(p1);
-
       }
     }
   });
@@ -110,67 +151,70 @@ function balanceTeams(arr, mode){
 }
 
 /**
- * Generate the teams.
+ * Function to sort players by their elo.
  *
- * @returns {Object} - Returns the teams.
+ * @param  {Object} props - The props from the hook.
+ * @param  {Object} players - Object with the classes and players.
+ * @param  {String} mode - Gamemode string.
+ * @returns {Array}   -   Array with balanced teams.
  */
 export default function generateTeams(props, players, mode) {
   const userService = props.app.service('users');
 
-  var teams = {
+  let teams = {
     red: {},
-    blu: {}
+    blu: {},
   };
 
-  //get user elos per class and sort
+  // Get user elos per class and sort
 
-  prio[mode].forEach( tfclass => {
-    if(!teams.red.hasOwnProperty(tfclass)){
+  prio[mode].forEach((tfclass) => {
+    if (!Object.prototype.hasOwnProperty.call(teams.red, tfclass)) {
       teams.red[tfclass] = [];
     }
 
-    if(!teams.blu.hasOwnProperty(tfclass)){
+    if (!Object.prototype.hasOwnProperty.call(teams.blu, tfclass)) {
       teams.blu[tfclass] = [];
     }
 
-    var users = players[tfclass];
+    let users = players[tfclass];
 
-    users.forEach( user => {
-      var userElos = userService.find({
-        query: {
-          id: user.id,
-        },
+    users.forEach((user) => {
+      const userElos = userService.find({
+        query: { id: user.id },
         limit: 1,
         sort: { elo: -1 },
       });
 
+      /* eslint no-param-reassign: ["error", { "props": false }] */
       user.elo = userElos[tfclass];
     });
 
     users = sortClass(users);
 
-    var max = users.length;
-    while( (teams.red[tfclass].length + teams.blu[tfclass].length) < max ){
+    const max = users.length;
 
-      var avg = getAvgTeamElo(teams);
+    while ((teams.red[tfclass].length + teams.blu[tfclass].length) < max) {
+      const avg = getAvgTeamElo(teams);
 
-      var top = users.shift();
-      var bot = users.pop();
+      const top = users.shift();
+      const bot = users.pop();
 
-      if(avg.blu > avg.red){
-        teams.blu[tfclass].push( bot );
-        teams.red[tfclass].push( top );
-      }else{
-        teams.blu[tfclass].push( top );
-        teams.red[tfclass].push( bot );
+      if (avg.blu > avg.red) {
+        teams.blu[tfclass].push(bot);
+        teams.red[tfclass].push(top);
+      } else {
+        teams.blu[tfclass].push(top);
+        teams.red[tfclass].push(bot);
       }
     }
   });
 
-  //running through teams
-  for(var i = 0; i < 5; i++){
+  // Running through teams
+  for (let num = 0; num < 5; num += 1) {
     teams = balanceTeams(teams, mode);
   }
   log(teams);
+
   return teams;
 }

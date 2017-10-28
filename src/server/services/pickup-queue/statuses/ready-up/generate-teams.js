@@ -1,8 +1,9 @@
+import flatten from 'lodash.flatten';
 import debug from 'debug';
 
 const log = debug('TF2Pickup:pickup-queue:statuses:generating-teams');
 
-const prio = {
+const priorities = {
   '6v6': [
     'scout',
     'demoman',
@@ -30,74 +31,38 @@ const prio = {
   ],
 };
 
-/**
- * Function to sort players by their elo.
- *
- * @method sortClass
- * @param  {Array} arr - Array with players.
- * @returns {Array}   -   Array with players sorted DESC by their elo.
- */
-function sortClass(arr) {
-  arr.sort((p1, p2) => {
-    if (p1.elo < p2.elo) {
-      return 1;
-    }
+const sortClass = classes => classes.sort((player1, player2) => player2.elo - player1.elo);
 
-    if (p1.elo > p2.elo) {
-      return -1;
-    }
+const getEloSum = players => players
+  .map(player => player.elo)
+  .reduce((total, elo) => total + elo);
 
-    return 0;
-  });
+function getAverageEloForTeam(classes) {
+  const allPlayers = flatten(Object.values(classes));
 
-  return arr;
-}
-
-/**
- * Function get EloSum for each class.
- *
- * @method getAvgTeamElo
- * @param  {Array} tfplayers - Array with players.
- * @returns {Number}   -   Sum of player elo.
- */
-function getEloSum(tfplayers) {
-  return tfplayers.map(item => item.elo).reduce((prev, next) => prev + next);
+  return Math.round(getEloSum(allPlayers) / allPlayers.length);
 }
 
 /**
  * Function to sort players by their elo.
  *
- * @method getAvgTeamElo
- * @param  {Array} arr - Array with teams.
- * @returns {Array}   -   Array with players sorted DESC by their elo.
+ * @param  {Array} teams - Array with teams.
+ * @returns {Object} - Array with players sorted DESC by their elo.
  */
-function getAvgTeamElo(arr) {
-  const tmpElos = {
-    red: 0,
-    blu: 0,
-    diff: 0,
+function getAvgTeamElo(teams) {
+  const elos = Object
+    .entries(teams)
+    .reduce((obj, [team, classes]) => {
+      return {
+        ...obj,
+        [team]: getAverageEloForTeam(classes),
+      };
+    }, {});
+
+  return {
+    ...elos,
+    diff: Math.abs(elos.red - elos.blu),
   };
-
-  Object.entries(arr).forEach(([team, tfclasses]) => {
-    let pCount = 0;
-
-    Object.entries(tfclasses).forEach((tfplayers) => {
-      tmpElos[team] += getEloSum(tfplayers);
-      pCount += tfplayers.length;
-    });
-
-    tmpElos[team] = Math.round(tmpElos[team] / pCount);
-  });
-
-  let diff = tmpElos.red - tmpElos.blu;
-
-  if (diff < 0) {
-    diff *= -1;
-  }
-
-  tmpElos.diff = diff;
-
-  return tmpElos;
 }
 
 /**
@@ -105,50 +70,50 @@ function getAvgTeamElo(arr) {
  *
  * @param  {Array} arr - Array with teams.
  * @param  {String} mode - Gamemode string.
- * @returns {Array}   -   Array with balanced teams.
+ * @returns {Array} - Array with balanced teams.
  */
+// TODO: Rewrite this method without mutations
 function balanceTeams(arr, mode) {
-  prio[mode].forEach((tfclass) => {
-    const tfplayers = arr.red[tfclass];
-    const avg = getAvgTeamElo(arr);
-    let diff = avg.red - avg.blu;
-
-    if (diff < 0) {
-      diff *= -1;
-    }
+  priorities[mode].forEach((className) => {
+    const players = arr.red[className];
+    const teamElo = getAvgTeamElo(arr);
 
     /**
      * Swap players of this class
      * for 6s we dont swap scouts again
      * since we started with them and they should be balanced already
      */
-    if (tfplayers.length === 1) {
-      let p1 = arr.red[tfclass].shift();
-      let p2 = arr.blu[tfclass].shift();
+    if (players.length === 1) {
+      let p1 = arr.red[className].shift();
+      let p2 = arr.blu[className].shift();
 
-      arr.red[tfclass].push(p2);
-      arr.blu[tfclass].push(p1);
+      arr.red[className].push(p2);
+      arr.blu[className].push(p1);
 
       // Check elo and if less than before keep changes
-      const newAvg = getAvgTeamElo(arr);
-      let newDiff = newAvg.red - newAvg.blu;
+      const newTeamElo = getAvgTeamElo(arr);
 
-      if (newDiff < 0) {
-        newDiff *= -1;
-      }
+      if (newTeamElo.diff > teamElo.diff) {
+        p1 = arr.red[className].shift();
+        p2 = arr.blu[className].shift();
 
-      if (newDiff > diff) {
-        p1 = arr.red[tfclass].shift();
-        p2 = arr.blu[tfclass].shift();
-
-        arr.red[tfclass].push(p2);
-        arr.blu[tfclass].push(p1);
+        arr.red[className].push(p2);
+        arr.blu[className].push(p1);
       }
     }
   });
 
   return arr;
 }
+
+const usersToObject = users => users.reduce((obj, user) => {
+  return {
+    ...obj,
+    [user.id]: user,
+  };
+}, {});
+
+const repeats = new Array(5).fill(1);
 
 /**
  * Function to sort players by their elo.
@@ -156,65 +121,48 @@ function balanceTeams(arr, mode) {
  * @param  {Object} props - The props from the hook.
  * @param  {Object} players - Object with the classes and players.
  * @param  {String} mode - Gamemode string.
- * @returns {Array}   -   Array with balanced teams.
+ * @returns {Array} - Array with balanced teams.
  */
-export default function generateTeams(props, players, mode) {
+export default async function generateTeams(props, players, mode) {
   const userService = props.app.service('users');
 
-  let teams = {
+  const teams = {
     red: {},
     blu: {},
   };
+  const allPlayers = flatten(Object.values(players));
+  const users = await Promise
+    .all(allPlayers.map(player => userService.get(player.id)))
+    .then(usersToObject);
 
   // Get user elos per class and sort
+  priorities[mode].forEach((className) => {
+    teams.red[className] = [];
+    teams.blu[className] = [];
 
-  prio[mode].forEach((tfclass) => {
-    if (!Object.prototype.hasOwnProperty.call(teams.red, tfclass)) {
-      teams.red[tfclass] = [];
-    }
+    const playersForClass = sortClass(
+      players[className].map((player) => {
+        return {
+          ...player,
+          elo: users[player.id].elos[className],
+        };
+      }),
+    );
 
-    if (!Object.prototype.hasOwnProperty.call(teams.blu, tfclass)) {
-      teams.blu[tfclass] = [];
-    }
-
-    let users = players[tfclass];
-
-    users.forEach((user) => {
-      const userElos = userService.find({
-        query: { id: user.id },
-        limit: 1,
-        sort: { elo: -1 },
-      });
-
-      /* eslint no-param-reassign: ["error", { "props": false }] */
-      user.elo = userElos[tfclass];
-    });
-
-    users = sortClass(users);
-
-    const max = users.length;
-
-    while ((teams.red[tfclass].length + teams.blu[tfclass].length) < max) {
+    while (playersForClass.length > 0) {
       const avg = getAvgTeamElo(teams);
-
-      const top = users.shift();
-      const bot = users.pop();
+      const topPlayer = playersForClass.shift();
+      const bottomPlayer = playersForClass.pop();
 
       if (avg.blu > avg.red) {
-        teams.blu[tfclass].push(bot);
-        teams.red[tfclass].push(top);
+        teams.blu[className].push(bottomPlayer);
+        teams.red[className].push(topPlayer);
       } else {
-        teams.blu[tfclass].push(top);
-        teams.red[tfclass].push(bot);
+        teams.blu[className].push(topPlayer);
+        teams.red[className].push(bottomPlayer);
       }
     }
   });
 
-  // Running through teams
-  for (let num = 0; num < 5; num += 1) {
-    teams = balanceTeams(teams, mode);
-  }
-  log(teams);
-
-  return teams;
+  return repeats.reduce(currentTeams => balanceTeams(currentTeams, mode), teams);
 }

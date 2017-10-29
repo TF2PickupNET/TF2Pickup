@@ -35,7 +35,6 @@ async function isPlayerInPickup(app, userId) {
   const serverStatus = [
     'setting-up-server',
     'waiting-for-game-to-start',
-    'waiting-for-game-to-start',
     'game-is-live',
   ];
   const query = { status: { $in: serverStatus } };

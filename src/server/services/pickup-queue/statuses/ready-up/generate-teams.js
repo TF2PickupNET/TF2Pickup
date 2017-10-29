@@ -1,6 +1,7 @@
 import flatten from 'lodash.flatten';
 import debug from 'debug';
 
+/* eslint no-unused-vars: */
 const log = debug('TF2Pickup:pickup-queue:statuses:generating-teams');
 
 const priorities = {
@@ -37,6 +38,12 @@ const getEloSum = players => players
   .map(player => player.elo)
   .reduce((total, elo) => total + elo);
 
+/**
+   * Function to sort players by their elo.
+   *
+   * @param  {Array} classes - Array with all players of a team.
+   * @returns {Number} - Average elo of the team.
+   */
 function getAverageEloForTeam(classes) {
   const allPlayers = flatten(Object.values(classes));
 
@@ -72,7 +79,6 @@ function getAvgTeamElo(teams) {
  * @param  {String} mode - Gamemode string.
  * @returns {Array} - Array with balanced teams.
  */
-// TODO: Rewrite this method without mutations
 function balanceTeams(arr, mode) {
   priorities[mode].forEach((className) => {
     const players = arr.red[className];

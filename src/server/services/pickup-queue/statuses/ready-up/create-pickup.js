@@ -16,7 +16,7 @@ const log = debug('TF2Pickup:pickup-queue:statuses:create-pickup');
 /**
  * Remove the players from the queue.
  *
- * @param {Object} players - The players from tgihe new pickup.
+ * @param {Object} players - The players from the new pickup.
  * @returns {Function} - A function which will modify the queue and remove the players.
  */
 function removePlayersFromQueue(players) {

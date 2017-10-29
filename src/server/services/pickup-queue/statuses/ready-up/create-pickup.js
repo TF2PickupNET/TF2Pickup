@@ -70,10 +70,7 @@ export default async function createPickup(props) {
       generateTeams(players),
     );
 
-    const lastPickup = await pickupService.find({
-      limit: 1,
-      sort: { id: -1 },
-    });
+    const lastPickup = await pickupService.Model.aggregate({ $sort: { id: -1 } });
     const pickupId = get(lastPickup, '[0].id', 0) + 1;
     const map = getMostVotedMap(
       pickupQueue.maps,
@@ -96,6 +93,8 @@ export default async function createPickup(props) {
       map,
       serverId: server.id,
       logSecret: server.logSecret,
+      region: pickupQueue.region,
+      gamemode: pickupQueue.gamemode,
     });
 
     // Remove players from every gamemode

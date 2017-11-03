@@ -2,7 +2,6 @@ import mapValues from 'lodash.mapvalues';
 import flatten from 'lodash.flatten';
 import pickRandom from 'pick-random';
 import get from 'lodash.get';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import { generateRandomMaps } from '../../map-pool';

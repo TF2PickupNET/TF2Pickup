@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import get from 'lodash.get';
 import flatten from 'lodash.flatten';
-import { Spinner } from 'materialize-react';
-
+import {
+  Spinner,
+  Layout,
+} from 'materialize-react';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import app from '../../app';
@@ -104,12 +106,9 @@ class PickupContainer extends PureComponent {
 
     if (pickup) {
       return (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
+        <Layout
+          direction="column"
+          alignItems="center"
         >
           <PickupTabs gamemode={this.props.gamemode} />
 
@@ -130,7 +129,7 @@ class PickupContainer extends PureComponent {
             pickup={pickup}
             isInPickup={isInPickup}
           />
-        </div>
+        </Layout>
       );
     }
 

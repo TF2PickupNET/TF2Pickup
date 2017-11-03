@@ -3,23 +3,24 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Snackbar } from 'materialize-react';
 
-import app from '../../app';
 import {
-  removeNotification,
   addNotification,
+  removeNotification,
 } from '../../redux/notifications/actions';
+import app from '../../app';
 
 /**
- * A component to render all of the notifications which are currently in the redux store.
+ * A component which renders the snackbars and handles the removal and adding
+ * notifications from the server.
  *
  * @class
  */
 class Notifications extends PureComponent {
   static propTypes = {
-    snackbars: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired,
-    user: PropTypes.shape({ id: PropTypes.string }),
-    removeNotification: PropTypes.func.isRequired,
     addNotification: PropTypes.func.isRequired,
+    removeNotification: PropTypes.func.isRequired,
+    snackbars: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    user: PropTypes.shape({ id: PropTypes.string }),
   };
 
   static defaultProps = { user: null };
@@ -53,50 +54,34 @@ class Notifications extends PureComponent {
   };
 
   /**
-   * Remove the notification from the store
-   * when the snackbar controller wants to close the snackbar.
-   *
-   * @param {String} id - The id of the notification.
+   * When a snackbar finishes animating out we need to remove it from the store,
+   * so the next snackbar will start animating in.
    */
-  handleClose = id => () => {
-    this.props.removeNotification(id);
+  handleRemoveSnackbar = () => {
+    this.props.removeNotification();
   };
 
-  /**
-   * Render the snackbars from the store.
-   *
-   * @returns {JSX} - Returns the JSX for the snackbars.
-   */
-  renderSnackbars() {
-    return this.props.snackbars.map(snackbar => (
-      <Snackbar
-        autoShowOnMount
-        key={snackbar.id}
-        autoCloseTimer={snackbar.timeout}
-        onClose={this.handleClose(snackbar.id)}
-      >
-        {snackbar.text}
-      </Snackbar>
-    ));
-  }
-
   render() {
-    return this.renderSnackbars();
+    return (
+      <Snackbar
+        snackbars={this.props.snackbars}
+        onRemoveSnackbar={this.handleRemoveSnackbar}
+      />
+    );
   }
 }
 
-export default connect((state) => {
-  return {
-    snackbars: state.notifications,
-    user: state.user,
-  };
-}, (dispatch) => {
-  return {
-    removeNotification(id) {
-      return dispatch(removeNotification(id));
-    },
-    addNotification(message, options) {
-      return dispatch(addNotification(message, options));
-    },
-  };
-})(Notifications);
+export default connect(
+  (state) => {
+    return {
+      user: state.user,
+      snackbars: state.notifications,
+    };
+  },
+  (dispatch) => {
+    return {
+      addNotification: (...args) => dispatch(addNotification(...args)),
+      removeNotification: () => dispatch(removeNotification()),
+    };
+  },
+)(Notifications);

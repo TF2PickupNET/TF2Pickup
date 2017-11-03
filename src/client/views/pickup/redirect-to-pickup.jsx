@@ -2,7 +2,6 @@ import { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 /**

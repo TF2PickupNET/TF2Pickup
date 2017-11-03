@@ -1,7 +1,6 @@
 import flatten from 'lodash.flatten';
 import get from 'lodash.get';
 import pickRandom from 'pick-random';
-
 import {
   gamemodes,
   regions,

@@ -1,5 +1,4 @@
 import debug from 'debug';
-
 import {
   regions,
   gamemodes,

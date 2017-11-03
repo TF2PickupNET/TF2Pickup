@@ -1,7 +1,5 @@
 import { Schema } from 'mongoose';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
-
 import regions from '@tf2-pickup/configs/regions';
 
 import { isInArray } from '../validators';

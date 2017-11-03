@@ -13,7 +13,7 @@ import omit from 'lodash.omit';
  * @param {String} props.className - Additional className to be applied to the link.
  * @returns {JSX} - Returns the jsx.
  */
-export function Link({
+function Link({
   classes,
   children,
   href,

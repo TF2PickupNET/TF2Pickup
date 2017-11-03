@@ -8,7 +8,7 @@ import {
  *
  * @param {String} content - The string for the notification.
  * @param {Object} options - Additional options for the notification.
- * @param {String} [options.autoCloseTimer] - A custom timeout to close the snackbar after.
+ * @param {Number} [options.autoCloseTimer] - A custom timeout to close the snackbar after.
  * @returns {Object} - Returns the action object.
  */
 export function addNotification(content, { autoCloseTimer = 10 * 1000 } = {}) {

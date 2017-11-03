@@ -5,7 +5,7 @@ import pickup from './pickup';
 import pickupQueue from './pickup-queue';
 import servers from './servers';
 import slack from './slack';
-import mumble from './mumble-channels';
+import mumbleChannels from './mumble-channels';
 
 /**
  * Setup all of the services.
@@ -19,5 +19,5 @@ export default function services() {
     .configure(servers)
     .configure(pickupQueue)
     .configure(slack)
-    .configure(mumble);
+    .configure(mumbleChannels);
 }

@@ -1,7 +1,6 @@
 import mumble from 'mumble';
 import config from 'config';
 import debug from 'debug';
-
 import regions from '@tf2-pickup/configs/regions';
 
 import { getMumbleIP } from '../../../config/index';
@@ -23,20 +22,6 @@ class MumbleService {
     const mumbleUsername = config.get('server.mumble.username');
     const mumblePassword = config.get('server.mumble.password');
 
-    /**
-     * Handle mumble connection.
-     *
-     * @param {String} region - Mumble region.
-     * @param {Object} connection - Mumble connection.
-     */
-    const handleConnection = (region, connection) => {
-      connection.authenticate(mumbleUsername, mumblePassword);
-
-      connection.on('initialized', () => {
-        this.connections[region.name] = connection;
-      });
-    };
-
     Object
       .values(regions)
       .forEach((region) => {
@@ -49,10 +34,19 @@ class MumbleService {
             return;
           }
 
-          handleConnection(region, connection);
+          connection.authenticate(mumbleUsername, mumblePassword);
+
+          connection.on(
+            'initialized',
+            this.handleConnectionInitialization(region.name, connection),
+          );
         });
       });
   }
+
+  handleConnectionInitialization = (region, connection) => () => {
+    this.connections[region] = connection;
+  };
 
   /**
    * Create mumble channel.
@@ -61,13 +55,13 @@ class MumbleService {
    * @param {Object} channel.region - Mumble channel region.
    * @param {Object} channel.name - Mumble channel name.
    */
-  async create({
+  create({
     region,
     name,
   }) {
-    const channel = await this.connections[region].channelByName('Pickups');
+    const channel = this.connections[region].channelByName('Pickups');
 
-    await channel.addSubChannel(name);
+    channel.addSubChannel(name);
   }
 
   /**
@@ -77,13 +71,13 @@ class MumbleService {
    * @param {Object} channel.region - Mumble channel region.
    * @param {Object} channel.name - Mumble channel name.
    */
-  async delete({
+  delete({
     region,
     name,
   }) {
-    const channel = await this.connections[region].channelByName(name);
+    const channel = this.connections[region].channelByName(name);
 
-    await channel.remove(name);
+    channel.remove(name);
   }
 }
 

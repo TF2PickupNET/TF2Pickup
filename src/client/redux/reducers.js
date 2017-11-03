@@ -15,7 +15,6 @@ import pickupQueue from './pickup-queue/reducer';
  */
 export default function reducers(app) {
   user.setupListeners(app);
-  notifications.setupListeners(app);
   onlineUsers.setupListeners(app);
   connected.setupListeners(app);
   pickupQueue.setupListeners(app);

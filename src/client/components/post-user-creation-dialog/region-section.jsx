@@ -5,7 +5,6 @@ import {
   RadioButtonGroup,
   RadioButton,
 } from 'materialize-react';
-
 import regions from '@tf2-pickup/configs/regions';
 
 import app from '../../app';

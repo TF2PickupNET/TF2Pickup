@@ -27,7 +27,7 @@ import getErrorMessage from './get-error-message';
  * @param {Object} props - The props for the component.
  * @returns {JSX} - Returns the jsx.
  */
-export function Error(props) {
+function Error(props) {
   const query = queryString.parse(props.location.search);
   const code = Number(query.code);
   const redirectToDiscordHelp = () => openWindowInNewTab(discordUrls.help);

@@ -1,6 +1,5 @@
 import SteamID from 'steamid';
 import { Schema } from 'mongoose';
-
 import regions from '@tf2-pickup/configs/regions';
 
 import {

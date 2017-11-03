@@ -3,7 +3,6 @@ import injectSheet, { withTheme } from 'react-jss';
 import { breakpoints } from 'materialize-react';
 import PropTypes from 'prop-types';
 import get from 'lodash.get';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import ClassList from './class-list';

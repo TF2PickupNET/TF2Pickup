@@ -12,7 +12,7 @@ import setupListeners from './setup-listeners';
  * @param {Object} action - The action object.
  * @returns {Object} - Returns the new state.
  */
-export default function reducer(state = null, action) {
+function reducer(state = null, action) {
   switch (action.type) {
     case LOGIN_USER:
       return action.payload.user;
@@ -26,3 +26,5 @@ export default function reducer(state = null, action) {
 }
 
 reducer.setupListeners = setupListeners;
+
+export default reducer;

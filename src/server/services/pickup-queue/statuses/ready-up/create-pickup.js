@@ -2,13 +2,22 @@ import mapValues from 'lodash.mapvalues';
 import flatten from 'lodash.flatten';
 import pickRandom from 'pick-random';
 import get from 'lodash.get';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import { generateRandomMaps } from '../../map-pool';
 
 import generateTeams from './generate-teams';
 import reserveServer from './reserve-server';
+
+/**
+ * Remove the players from the queue.
+ *
+ * @param {Object} players - The players from the new pickup.
+ * @returns {Function} - A function which will modify the queue and remove the players.
+ */
+function removePlayersFromQueue(players) {
+  return classPlayers => classPlayers.filter(({ id }) => !players.includes(id));
+}
 
 /**
  * Get the most voted map by the players.
@@ -18,30 +27,19 @@ import reserveServer from './reserve-server';
  * @returns {String} - Returns the most voted map.
  */
 function getMostVotedMap(maps, players) {
-  const totalVotesForMaps = maps.map(map => [
-    map,
-    players.filter(player => player.map === map).length,
-  ]);
-  const mostVotes = totalVotesForMaps.reduce((current, map) => {
-    if (current.votes < map[1]) {
-      return {
-        votes: map[1],
-        maps: [map[0]],
-      };
-    } else if (current.votes === map[1]) {
-      return {
-        votes: map[1],
-        maps: current.maps.concat([map[0]]),
-      };
-    }
-
-    return current;
-  }, {
-    votes: 0,
-    maps: [],
+  const totalVotesForMaps = maps.map((map) => {
+    return {
+      name: map,
+      votes: players.filter(player => player.map === map).length,
+    };
   });
+  const mostVotes = Math.max(...totalVotesForMaps.map(map => map.votes));
 
-  return pickRandom(mostVotes.maps);
+  return pickRandom(
+    totalVotesForMaps
+      .filter(map => map.votes === mostVotes)
+      .map(map => map.name),
+  );
 }
 
 /**
@@ -60,6 +58,7 @@ export default async function createPickup(props) {
       .filter(player => player.ready)
       .slice(0, min);
   });
+  const allPlayers = flatten(Object.values(players)).map(player => player.id);
 
   try {
     const [
@@ -70,10 +69,7 @@ export default async function createPickup(props) {
       generateTeams(players),
     );
 
-    const lastPickup = await pickupService.find({
-      limit: 1,
-      sort: { id: -1 },
-    });
+    const lastPickup = await pickupService.Model.aggregate({ $sort: { id: -1 } });
     const pickupId = get(lastPickup, '[0].id', 0) + 1;
     const map = getMostVotedMap(
       pickupQueue.maps,
@@ -96,20 +92,32 @@ export default async function createPickup(props) {
       map,
       serverId: server.id,
       logSecret: server.logSecret,
+      region: pickupQueue.region,
+      gamemode: pickupQueue.gamemode,
     });
+
+    // Remove players from every gamemode
+    await Promise.all(
+      Object
+        .keys(gamemodes)
+        .map(async (gamemode) => {
+          const queue = await pickupQueueService.get(`${pickupQueue.region}-${gamemode}`);
+
+          return pickupQueueService.patch(queue.id, {
+            $set: {
+              classes: mapValues(
+                queue.classes,
+                removePlayersFromQueue(allPlayers),
+              ),
+            },
+          });
+        }),
+    );
 
     // Reset the pickup queue to waiting status and remove the players from the queue
     await pickupQueueService.patch(props.id, {
       $set: {
         status: 'waiting',
-        classes: mapValues(
-          pickupQueue.classes,
-          (classPlayers, className) => {
-            const playersForClass = players[className];
-
-            return classPlayers.filter(({ id }) => !playersForClass.includes(id));
-          },
-        ),
         maps: generateRandomMaps(pickupQueue.region, pickupQueue.gamemode, [
           map,
           get(lastPickupForGamemodeAndRegion, '[0].map', null),
@@ -119,10 +127,10 @@ export default async function createPickup(props) {
 
     props.app.io.emit('pickup.redirect', {
       pickupId,
-      players,
+      players: flatten(Object.values(players)),
     });
   } catch (error) {
-    // Reset the pickup queue to waiting status and remove the players from the queue
+    // Reset the pickup queue to waiting status
     await pickupQueueService.patch(props.id, { $set: { status: 'waiting' } });
 
     props.app.io.emit('notifications.add', {

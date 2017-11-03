@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { colors } from 'materialize-react';
 
-export default function Medic({
+function Medic({
   color,
   size,
   ...props
@@ -41,3 +41,4 @@ Medic.defaultProps = {
   size: 48,
 };
 
+export default Medic;

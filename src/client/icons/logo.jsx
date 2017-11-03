@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { colors } from 'materialize-react';
 
-export default function Logo({
+function Logo({
   circleColor,
   pickupColor,
   tf2Color,
@@ -139,3 +139,5 @@ Logo.defaultProps = {
   pickupColor: colors.grey700,
   tf2Color: colors.blue500,
 };
+
+export default Logo;

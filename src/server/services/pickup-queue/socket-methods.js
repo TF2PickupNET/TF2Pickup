@@ -3,7 +3,6 @@
 import mapValues from 'lodash.mapvalues';
 import sleep from 'sleep-promise';
 import debug from 'debug';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 const log = debug('TF2Pickup:pickup-queue:socket-methods');
@@ -22,6 +21,22 @@ function queueWithoutPlayer(queue, playerId) {
       classPlayers => classPlayers.filter(player => player.id !== playerId),
     ),
   });
+}
+
+/**
+ * Checks if players is blocked for join the pickup queue.
+ *
+ * @param {Object} app - The feathers app object.
+ * @param {String} userId - Player's ID.
+ * @returns {Boolean} - Is player blocked.
+ */
+async function isPlayerInPickup(app, userId) {
+  const serverStatus = [ 'waiting-for-game-to-start', 'waiting-for-game-to-start', 'game-is-live' ];
+  const query = { status: { $in: serverStatus } };
+  const pickups = await app.service('pickup').find({ query });
+  const regex = new RegExp(userId);
+
+  return pickups.some(pickup => regex.test(JSON.stringify(pickup.teams)));
 }
 
 /**
@@ -51,9 +66,18 @@ export default function socketMethods(app, socket) {
         preReady: null,
       });
 
-      log('Adding user to pickup', userId);
+      if (await isPlayerInPickup(app, userId)) {
+        log('User blocked for pickup', userId);
 
-      await pickupQueue.patch(queue.id, { $set: { classes: newQueue.classes } });
+        app.io.emit('notifications.add', {
+          forUsers: [ userId ],
+          message: 'You are already in a pickup',
+        });
+      } else {
+        log('Adding user to pickup', userId);
+
+        await pickupQueue.patch(queue.id, { $set: { classes: newQueue.classes } });
+      }
     }
   });
 
@@ -88,6 +112,29 @@ export default function socketMethods(app, socket) {
       log('Readying user up', userId);
 
       await pickupQueue.patch(queue.id, { $set: { classes: mapValues(queue.classes, setReady) } });
+    }
+  });
+
+  socket.on('pickup-queue.pick-map', async ({
+    map,
+    gamemode,
+  }) => {
+    if (socket.feathers.user) {
+      const region = socket.feathers.user.settings.region;
+      const userId = socket.feathers.user.id;
+      const queue = await pickupQueue.get(`${region}-${gamemode}`);
+
+      const setMap = players => players.map((player) => {
+        if (player.id === userId) {
+          return Object.assign({}, player, { map });
+        }
+
+        return player;
+      });
+
+      log('Setting map for user', userId, map);
+
+      await pickupQueue.patch(queue.id, { $set: { classes: mapValues(queue.classes, setMap) } });
     }
   });
 

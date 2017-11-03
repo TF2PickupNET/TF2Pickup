@@ -8,7 +8,7 @@ import setupListeners from './setup-listeners';
  * @param {Object} action - The action object.
  * @returns {Object} - Returns the new state.
  */
-export default function reducer(state = null, action) {
+function reducer(state = null, action) {
   switch (action.type) {
     case UPDATE_PICKUP:
       return Object.assign({}, state, { [action.payload.gamemode]: action.payload.pickup });
@@ -18,3 +18,5 @@ export default function reducer(state = null, action) {
 }
 
 reducer.setupListeners = setupListeners;
+
+export default reducer;

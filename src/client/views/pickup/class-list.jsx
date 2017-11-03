@@ -12,7 +12,6 @@ import {
 import capitalize from 'lodash.capitalize';
 import get from 'lodash.get';
 import { rgba } from 'polished';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 // eslint-disable-next-line import/no-namespace

@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import Helmet from 'react-helmet';
 import lockr from 'lockr';
 import Aux from 'react-aux';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import PickupContainer from './pickup-container';

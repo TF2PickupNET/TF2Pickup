@@ -3,7 +3,6 @@
 import mapValues from 'lodash.mapvalues';
 import sleep from 'sleep-promise';
 import debug from 'debug';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 const log = debug('TF2Pickup:pickup-queue:socket-methods');

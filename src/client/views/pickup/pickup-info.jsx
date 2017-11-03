@@ -9,7 +9,6 @@ import {
   breakpoints,
   Progress,
 } from 'materialize-react';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 /**

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { colors } from 'materialize-react';
 
-export default function Scout({
+function Scout({
   color,
   size,
   ...props
@@ -52,3 +52,5 @@ Scout.defaultProps = {
   color: colors.blackIcons,
   size: 48,
 };
+
+export default Scout;

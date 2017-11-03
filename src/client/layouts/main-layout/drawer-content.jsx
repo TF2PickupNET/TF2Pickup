@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import app from '../../app';
@@ -29,7 +28,7 @@ import { discordUrls } from '../../../config/client';
  * This is used for closing the drawer when the user clicks on a list item.
  * @returns {JSX} - Returns the sidebar content.
  */
-export function DrawerContent(props) {
+function DrawerContent(props) {
   const {
     redirect,
     closeDrawer,

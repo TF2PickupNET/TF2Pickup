@@ -13,9 +13,7 @@ import {
   Typography,
 } from 'materialize-react';
 import Parallax from 'react-smart-parallax';
-
 import regions from '@tf2-pickup/configs/regions';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import app from '../../app';

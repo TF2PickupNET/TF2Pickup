@@ -11,7 +11,6 @@ import { push } from 'react-router-redux';
 import flatten from 'lodash.flatten';
 import injectSheet from 'react-jss';
 import get from 'lodash.get';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import createNotification from '../../utils/create-notification';
@@ -80,9 +79,7 @@ class PickupTabs extends PureComponent {
           const gamemode = gamemodes[pickup.gamemode];
 
           if (isInPickup) {
-            if (this.props.gamemode !== pickup.gamemode) {
-              this.props.redirect(`/${pickup.gamemode}`);
-            }
+            this.props.redirect(`/${pickup.gamemode}`);
 
             createNotification('Ready Up', {
               timeout: gamemode.readyUpTime * 1000,
@@ -91,15 +88,6 @@ class PickupTabs extends PureComponent {
           }
         }
       });
-  }
-
-  /**
-   * When we receive a new gamemode we need to update the tabs.
-   */
-  componentDidUpdate(prevProps) {
-    if (prevProps.gamemode !== this.props.gamemode) {
-      this.tabs.currentTab = this.props.gamemode;
-    }
   }
 
   /**
@@ -116,9 +104,8 @@ class PickupTabs extends PureComponent {
 
     return (
       <Tabs
-        initialTab={this.props.gamemode}
+        tab={this.props.gamemode}
         className={this.props.classes.tabs}
-        ref={(element) => { this.tabs = element; }}
         onChange={this.handleChange}
       >
         {Object.values(gamemodes).map(gamemode => (

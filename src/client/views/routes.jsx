@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Switch, Route } from 'react-router-dom';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import app from '../app';

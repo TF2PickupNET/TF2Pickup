@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cookie from 'js-cookie';
 import lockr from 'lockr';
 import { connect } from 'react-redux';
+import Aux from 'react-aux';
 import queryString from 'query-string';
 import {
   Theme,
@@ -15,8 +16,10 @@ import {
 
 import app from '../../app';
 import { isInBetaMode } from '../../../config/client';
-import Notifications from '../../components/notifications';
-import { addNotification } from '../../redux/notifications/actions';
+import {
+  addNotification,
+  removeNotification,
+} from '../../redux/notifications/actions';
 import NoConnectionDialog from '../../components/no-connection-dialog';
 import PostUserCreationDialog from '../../components/post-user-creation-dialog';
 
@@ -68,9 +71,21 @@ class BasicLayout extends PureComponent {
     const acceptsCookie = lockr.get('acceptsCookie');
 
     if (!acceptsCookie) {
-      this.cookieSnackbar.show();
+      this.props.addNotification(
+        <Aux>
+          We are using cookies for a better experience.
+          <Button onRelease={this.handleAcceptCookies}>
+            Ok
+          </Button>
+        </Aux>,
+        { autoCloseTimer: 0 },
+      );
     }
   }
+
+  createRef = (element) => {
+    this.snackbarContainer = element;
+  };
 
   /**
    * Close the cookie snackbar and set the acceptsCookie value in the local storage to true,
@@ -79,7 +94,11 @@ class BasicLayout extends PureComponent {
   handleAcceptCookies = () => {
     lockr.set('acceptsCookie', true);
 
-    this.cookieSnackbar.close();
+    this.snackbarContainer.removeCurrentSnackbar();
+  };
+
+  handleRemoveSnackbar = () => {
+    this.props.removeNotification();
   };
 
   render() {
@@ -89,38 +108,27 @@ class BasicLayout extends PureComponent {
     return (
       <Theme type={themeType}>
         <Dialog.Controller>
-          <Snackbar.Controller>
-            <Background>
-              <Head />
+          <Background>
+            <Head />
 
-              <Dialog.Container />
+            <Dialog.Container />
 
-              <Animations />
+            <Snackbar
+              snackbars={this.props.snackbars}
+              createRef={this.createRef}
+              onRemoveSnackbar={this.handleRemoveSnackbar}
+            />
 
-              <Snackbar.Container />
+            <Animations />
 
-              <NoConnectionDialog />
+            <NoConnectionDialog />
 
-              <PostUserCreationDialog />
+            <PostUserCreationDialog />
 
-              <Notifications />
+            <NotificationRequester />
 
-              <Snackbar
-                autoCloseTimer={0}
-                ref={(element) => { this.cookieSnackbar = element; }}
-              >
-                We are using cookies for a better experience.
-
-                <Button onRelease={this.handleAcceptCookies}>
-                  Ok
-                </Button>
-              </Snackbar>
-
-              <NotificationRequester />
-
-              {isInBetaMode && !this.props.user ? (<BetaScreen />) : this.props.children}
-            </Background>
-          </Snackbar.Controller>
+            {isInBetaMode && !this.props.user ? <BetaScreen /> : this.props.children}
+          </Background>
         </Dialog.Controller>
       </Theme>
     );
@@ -132,10 +140,14 @@ export default connect(
     return {
       user: state.user,
       location: state.router.location,
+      snackbars: state.notifications,
     };
   },
   (dispatch) => {
-    return { addNotification: (...args) => dispatch(addNotification(...args)) };
+    return {
+      addNotification: (...args) => dispatch(addNotification(...args)),
+      removeNotification: () => dispatch(removeNotification()),
+    };
   },
 )(BasicLayout);
 

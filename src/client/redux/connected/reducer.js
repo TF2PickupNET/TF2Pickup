@@ -11,7 +11,7 @@ import setupListeners from './setup-listeners';
  * @param {Object} action - The action object.
  * @returns {Boolean} - Returns the new state.
  */
-export default function reducer(state = false, action) {
+function reducer(state = false, action) {
   switch (action.type) {
     case CONNECTED:
       return true;
@@ -23,3 +23,5 @@ export default function reducer(state = false, action) {
 }
 
 reducer.setupListeners = setupListeners;
+
+export default reducer;

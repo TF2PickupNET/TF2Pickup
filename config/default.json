@@ -7,6 +7,13 @@
     "auth": {
       "required_hours": 1000,
       "secret": "someamazingsecret"
+    },
+    "mumble": {
+      "eu": "",
+      "na": "",
+      "oc": "",
+      "username": "MumbleUser",
+      "password": ""
     }
   },
 

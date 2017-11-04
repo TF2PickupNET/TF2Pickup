@@ -26,8 +26,6 @@ class PostUserCreationDialog extends PureComponent {
    */
   componentWillReceiveProps(nextProps) {
     if (this.props.user === null && nextProps.user !== null) {
-      this.dialog.open();
-
       const region = nextProps.user.settings.region;
       const name = nextProps.user.name;
       const hasAcceptedTheRules = nextProps.user.hasAcceptedTheRules;

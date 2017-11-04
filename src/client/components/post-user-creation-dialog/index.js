@@ -11,7 +11,13 @@ import DialogComponent from './dialog';
  * @class
  */
 class PostUserCreationDialog extends PureComponent {
-  static propTypes = { user: PropTypes.shape({ name: PropTypes.string }) };
+  static propTypes = {
+    user: PropTypes.shape({
+      name: PropTypes.string,
+      hasAcceptedTheRules: PropTypes.bool,
+      settings: PropTypes.shape({ region: PropTypes.string }),
+    }),
+  };
 
   static defaultProps = { user: null };
 
@@ -20,7 +26,13 @@ class PostUserCreationDialog extends PureComponent {
    */
   componentWillReceiveProps(nextProps) {
     if (this.props.user === null && nextProps.user !== null) {
-      if (nextProps.user.name === null) {
+      this.dialog.open();
+
+      const region = nextProps.user.settings.region;
+      const name = nextProps.user.name;
+      const hasAcceptedTheRules = nextProps.user.hasAcceptedTheRules;
+
+      if (name === null || region === null || !hasAcceptedTheRules) {
         this.dialog.open();
       }
     }

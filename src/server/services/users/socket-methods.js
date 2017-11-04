@@ -41,23 +41,24 @@ export default function socketMethods(app, socket) {
     );
 
     const validServices = serviceNameQueries
-      .map((query, index) => {
-        if (query.length === 0) {
-          return services[index];
-        }
-
-        return null;
-      })
-      .filter(service => service !== null);
-
-    return cb(
-      validServices.map((service) => {
+      .filter(query => query.length === 0)
+      .map((query, index) => services[index])
+      .map((service) => {
         return {
           serviceName: service,
           name: currentUser.services[service].name,
         };
-      }),
-    );
+      });
+
+    if (validServices.length === 1) {
+      const name = validServices[0].name;
+
+      await users.patch(currentUser.id, { $set: { name } });
+
+      return cb(false);
+    }
+
+    return cb(validServices);
   });
 
   socket.on('user.set-name', async (name, cb) => {

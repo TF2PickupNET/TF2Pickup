@@ -12,6 +12,8 @@ import RulesSection from './rules-section';
 import RegionSection from './region-section';
 import UsernameSection from './username-section';
 
+const HeaderButton = () => null;
+
 /**
  * The actual dialog which will be rendered.
  *
@@ -28,6 +30,7 @@ class Dialog extends PureComponent {
     user: PropTypes.shape({
       hasAcceptedTheRules: PropTypes.bool,
       name: PropTypes.string,
+      settings: PropTypes.shape({ region: PropTypes.string }),
     }),
   };
 
@@ -63,76 +66,50 @@ class Dialog extends PureComponent {
     },
   };
 
-  disableBackButton = () => true;
-
   /**
-   * Whether or not to disable the next button in the stepper header.
+   * Get the current section.
    *
-   * @param {Number} index - The current section index.
-   * @param {Object} section - The props of the current section.
-   * @returns {Boolean} - Returns the disabled prop for the next button.
+   * @returns {Number} - The index of the current section.
    */
-  disableNextButton = (index, section) => {
-    if (section.name === 'accept-rules') {
-      return !this.props.user.hasAcceptedTheRules;
-    } else if (section.name === 'username') {
-      return !this.props.user.name;
+  getCurrentSection() {
+    if (!this.props.user.hasAcceptedTheRules) {
+      return 0;
+    } else if (this.props.user.settings.region === null) {
+      return 1;
+    } else if (this.props.user.name === null) {
+      return 2;
     }
 
-    return false;
-  };
+    return 3;
+  }
 
   handleClose = () => this.props.close();
-
-  /**
-   * Set the region when the section changes.
-   *
-   * @param {Number} newSection - The index of the new index.
-   */
-  handleChange = (newSection) => {
-    if (newSection === 1) {
-      this.regionSection.setRegion();
-    }
-  };
 
   render() {
     return (
       <Stepper
         headerAtBottom
         className={this.props.classes.dialog}
-        header={(
-          <Stepper.Headers.Progress
-            disableBackButton={this.disableBackButton}
-            disableNextButton={this.disableNextButton}
-          />
-        )}
-        onChange={this.handleChange}
+        header={Stepper.Headers.Progress}
+        headerProps={{
+          backButton: <HeaderButton />,
+          nextButton: <HeaderButton />,
+        }}
+        section={this.getCurrentSection()}
       >
-        <Stepper.Section name="region">
-          <RegionSection
-            className={this.props.classes.sectionContainer}
-            ref={(element) => { this.regionSection = element; }}
-          />
-        </Stepper.Section>
-
-        <Stepper.Section
-          name="username"
-          className={this.props.classes.sectionContainer}
-        >
-          <UsernameSection />
-        </Stepper.Section>
-
-        <Stepper.Section
-          name="accept-rules"
-          className={this.props.classes.sectionContainer}
-        >
+        <Stepper.Section className={this.props.classes.sectionContainer}>
           <RulesSection />
         </Stepper.Section>
 
-        <Stepper.Section
-          name="finish"
-          className={this.props.classes.finishSection}
-        >
+        <Stepper.Section className={this.props.classes.sectionContainer}>
+          <RegionSection />
+        </Stepper.Section>
+
+        <Stepper.Section className={this.props.classes.sectionContainer}>
+          <UsernameSection />
+        </Stepper.Section>
+
+        <Stepper.Section className={this.props.classes.finishSection}>
           <Button onRelease={this.handleClose}>
             Finish
           </Button>

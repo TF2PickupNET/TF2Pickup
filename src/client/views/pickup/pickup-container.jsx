@@ -108,7 +108,7 @@ class PickupContainer extends PureComponent {
       return (
         <Layout
           direction="column"
-          alignItems="center"
+          crossAlign="center"
         >
           <PickupTabs gamemode={this.props.gamemode} />
 

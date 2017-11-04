@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import {
   Button,
   Typography,
+  Layout,
 } from 'materialize-react';
 
 import app from '../../app';
@@ -20,29 +20,22 @@ const RULES_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/RU
 class RulesSection extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
-      rulesContainer: PropTypes.string.isRequired,
-      buttonContainer: PropTypes.string.isRequired,
+      container: PropTypes.string.isRequired,
       rules: PropTypes.string.isRequired,
     }).isRequired,
-    user: PropTypes.shape({ hasAcceptedTheRules: PropTypes.bool }),
   };
 
-  static defaultProps = { user: {} };
-
   static styles = {
-    rulesContainer: {
+    container: {
       display: 'grid',
       gridTemplateRows: 'auto 1fr auto',
       gridGap: '8px',
       flex: 1,
     },
 
-    buttonContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-    },
-
     rules: {
+      overflowY: 'scroll',
+
       '& ol, ul': {
         margin: 0,
         paddingLeft: 25,
@@ -54,7 +47,7 @@ class RulesSection extends PureComponent {
 
   render() {
     return (
-      <div className={this.props.classes.rulesContainer}>
+      <div className={this.props.classes.container}>
         <Typography typography="title">
           Rules
         </Typography>
@@ -63,21 +56,14 @@ class RulesSection extends PureComponent {
           <RemoteMarkdown url={RULES_URL} />
         </div>
 
-        <div className={this.props.classes.buttonContainer}>
-          <Button
-            disabled={this.props.user.hasAcceptedTheRules}
-            onPress={this.handleAcceptRules}
-          >
+        <Layout mainAlign="center">
+          <Button onPress={this.handleAcceptRules}>
             Accept Rules
           </Button>
-        </div>
+        </Layout>
       </div>
     );
   }
 }
 
-export default connect(
-  ({ user }) => {
-    return { user };
-  },
-)(injectSheet(RulesSection.styles)(RulesSection));
+export default injectSheet(RulesSection.styles)(RulesSection);

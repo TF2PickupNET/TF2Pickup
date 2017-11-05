@@ -141,6 +141,12 @@ export default new Schema({
       },
       default: 0.7,
     },
+
+    theme: {
+      type: String,
+      validate: isInArray(['light', 'dark'], { nullIsAllowed: true }),
+      default: null,
+    },
   },
 
   name: {

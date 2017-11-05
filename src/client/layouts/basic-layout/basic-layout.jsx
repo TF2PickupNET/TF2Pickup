@@ -86,7 +86,7 @@ class BasicLayout extends PureComponent {
   };
 
   render() {
-    const themeType = get(this.props.user, 'settings.theme', 'light');
+    const themeType = get(this.props.user, 'settings.theme') || 'light';
 
     return (
       <Theme type={themeType}>

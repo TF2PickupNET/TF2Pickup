@@ -15,16 +15,9 @@ export default function socketMethods(app, socket) {
     }
   });
 
-  socket.on('user.change-region', async ({
-    region,
-    id,
-  }) => {
-    const currentUserId = socket.feathers.user.id;
-    const userId = id || currentUserId;
-    const isAllowed = true;
-
-    if (isAllowed) {
-      await users.patch(userId, { $set: { 'settings.region': region } });
+  socket.on('user.change-region', async ({ region }) => {
+    if (socket.feathers.user) {
+      await users.patch(socket.feathers.user.id, { $set: { 'settings.region': region } });
     }
   });
 

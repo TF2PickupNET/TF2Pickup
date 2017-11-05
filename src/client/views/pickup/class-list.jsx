@@ -18,6 +18,7 @@ import gamemodes from '@tf2-pickup/configs/gamemodes';
 import * as Icons from '../../icons';
 import app from '../../app';
 import openWindowInNewTab from '../../utils/open-window-in-new-tab';
+import UserItem from '../../components/user-item';
 
 /**
  * The component which renders all of the players that joined the class.
@@ -144,7 +145,7 @@ class ClassList extends PureComponent {
                 )}
                 onClick={this.redirectToUser(player.id)}
               >
-                {player.name}
+                <UserItem user={player} />
 
                 <Ripple />
               </List.Item>,

@@ -7,6 +7,7 @@ import {
   steamId,
   isInArray,
 } from '../validators';
+import roles from '../../../config/roles';
 
 import { divs as etf2lDivs } from './third-party-services/etf2l/utils';
 import { divs as ozfortressDivs } from './third-party-services/ozfortress/get-ozfortress-user-data';
@@ -154,6 +155,17 @@ export default new Schema({
     default: null,
     unique: true,
     trim: true,
+  },
+
+  roles: {
+    type: [String],
+    validate: {
+      validator(userRoles) {
+        return userRoles.every(role => Object.keys(roles).includes(role));
+      },
+      msg: 'user.roles contains a not valid role',
+    },
+    default: [],
   },
 
   lastUpdate: {

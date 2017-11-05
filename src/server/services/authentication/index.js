@@ -123,11 +123,11 @@ export default function authentication() {
         );
       }
 
-      if (config.has('server.beta') && config.get('server.beta.steam_group')) {
-        log('Validating user against steam group', config.get('server.beta.steam_group'));
+      if (config.has('beta') && config.get('beta.steam-group')) {
+        log('Validating user against steam group', config.get('beta.steam-group'));
 
         const groupMembers = await getGroupMembers(
-          config.get('server.beta.steam_group'),
+          config.get('beta.steam-group'),
           that,
         );
 

@@ -1,7 +1,7 @@
 import roles from '../config/roles';
 import permissions from '../config/permissions';
 
-const computeLevel = userRoles => Math.max(...userRoles.map(name => roles[name].level));
+export const computeLevel = userRoles => Math.max(0, ...userRoles.map(name => roles[name].level));
 
 /**
  * Check if the user has the permission for an action.

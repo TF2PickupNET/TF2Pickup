@@ -19,13 +19,13 @@ function UserItem(props) {
     ? props.loggedInUser.friends.includes(props.user.id)
     : false;
   const level = computeLevel(props.user.roles);
-  const { name: roleName } = Object
+  const roleInfo = Object
     .values(roles)
     .find(role => role.level === level);
   const isDonator = props.user.roles.includes('donator');
 
   return (
-    <span className={`${props.classes.item} ${props.classes[roleName]}`}>
+    <span className={`${props.classes.item} ${roleInfo ? props.classes[roleInfo.name] : ''}`}>
       {isDonator && (
         <Icon
           icon="star"

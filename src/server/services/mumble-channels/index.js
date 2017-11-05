@@ -25,6 +25,12 @@ class MumbleService {
     Object
       .values(regions)
       .forEach((region) => {
+        log(region);
+
+        if (config.has(`service.discord.guilds.${region.name}`)) {
+          return;
+        }
+
         const url = getMumbleIP(region.name);
 
         mumble.connect(url, {}, (error, connection) => {

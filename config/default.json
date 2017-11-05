@@ -33,6 +33,12 @@
     "serveme": {
       "apikey-eu": "",
       "apikey-na": ""
+    },
+    "discord": {
+      "token": "",
+      "guilds": {
+        "eu": ""
+      }
     }
   }
 }

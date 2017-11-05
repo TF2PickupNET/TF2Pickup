@@ -77,7 +77,7 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       DEV: JSON.stringify(env === 'dev'),
-      BETA_MODE: config.has("server.beta"),
+      BETA_MODE: config.has("beta"),
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new WebpackPwaManifest({

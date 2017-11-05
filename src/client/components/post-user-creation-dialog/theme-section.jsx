@@ -31,10 +31,16 @@ class ThemeSection extends PureComponent {
 
   state = { selectedTheme: 'light' };
 
+  /**
+   * Change the state when the user selects a different theme.
+   */
   handleChange = (theme) => {
     this.setState({ selectedTheme: theme });
   };
 
+  /**
+   * Set the theme in the database.
+   */
   handleSetTheme = () => {
     app.io.emit('user.change-theme', { theme: this.state.selectedTheme });
   };

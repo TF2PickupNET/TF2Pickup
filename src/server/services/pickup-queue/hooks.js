@@ -34,6 +34,7 @@ async function populatePickup(props) {
             ...player,
             name: user.name,
             avatar: user.services.steam.avatar.medium,
+            roles: user.roles,
           };
         }),
       ),

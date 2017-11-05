@@ -5,34 +5,49 @@ export default {
     name: 'headAdmin',
     display: 'Head Admin',
     level: 9999,
-    color: colors.red900,
+    color: {
+      light: colors.red900,
+      dark: colors.red900,
+    },
   },
 
   admin: {
     name: 'admin',
     display: 'Admin',
     level: 1000,
-    color: colors.red500,
+    color: {
+      light: colors.red400,
+      dark: colors.red400,
+    },
   },
 
   developer: {
     name: 'developer',
     display: 'Developer',
     level: 500,
-    color: colors.indigo500,
+    color: {
+      light: colors.indigo600,
+      dark: colors.indigo400,
+    },
   },
 
   honoraryUser: {
     name: 'honoraryUser',
     display: 'Honorary User',
     level: 250,
-    color: colors.lightGreen500,
+    color: {
+      light: colors.green700,
+      dark: colors.green700,
+    },
   },
 
   donator: {
     name: 'donator',
     display: 'Donator',
     level: 100,
-    color: colors.orange500,
+    color: {
+      light: colors.orange500,
+      dark: colors.orange500,
+    },
   },
 };

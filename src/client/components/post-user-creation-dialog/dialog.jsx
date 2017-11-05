@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import RulesSection from './rules-section';
 import RegionSection from './region-section';
 import UsernameSection from './username-section';
+import ThemeSection from './theme-section';
 
 const HeaderButton = () => null;
 
@@ -30,7 +31,10 @@ class Dialog extends PureComponent {
     user: PropTypes.shape({
       hasAcceptedTheRules: PropTypes.bool,
       name: PropTypes.string,
-      settings: PropTypes.shape({ region: PropTypes.string }),
+      settings: PropTypes.shape({
+        region: PropTypes.string,
+        theme: PropTypes.string,
+      }),
     }),
   };
 
@@ -78,9 +82,11 @@ class Dialog extends PureComponent {
       return 1;
     } else if (this.props.user.name === null) {
       return 2;
+    } else if (this.props.user.settings.theme === null) {
+      return 3;
     }
 
-    return 3;
+    return 4;
   }
 
   handleClose = () => this.props.close();
@@ -107,6 +113,10 @@ class Dialog extends PureComponent {
 
         <Stepper.Section className={this.props.classes.sectionContainer}>
           <UsernameSection />
+        </Stepper.Section>
+
+        <Stepper.Section className={this.props.classes.sectionContainer}>
+          <ThemeSection />
         </Stepper.Section>
 
         <Stepper.Section className={this.props.classes.finishSection}>

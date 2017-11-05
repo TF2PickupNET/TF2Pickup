@@ -21,6 +21,12 @@ export default function socketMethods(app, socket) {
     }
   });
 
+  socket.on('user.change-theme', async ({ theme }) => {
+    if (socket.feathers.user) {
+      await users.patch(socket.feathers.user.id, { $set: { 'settings.theme': theme } });
+    }
+  });
+
   socket.on('user.get-valid-names', async (cb) => {
     const currentUser = socket.feathers.user;
     const services = Object

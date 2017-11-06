@@ -2,6 +2,7 @@ import mapValues from 'lodash.mapvalues';
 import flatten from 'lodash.flatten';
 import pickRandom from 'pick-random';
 import get from 'lodash.get';
+
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import { generateRandomMaps } from '../../map-pool';
@@ -61,20 +62,13 @@ export default async function createPickup(props) {
   const allPlayers = flatten(Object.values(players)).map(player => player.id);
 
   try {
-    const server = {
-      id: 123,
-      logSecret: 123,
-    };
-
-    const teams = {};
-
-    // const [
-    //   server,
-    //   teams,
-    // ] = Promise.all(
-    //   reserveServer(props),
-    //   generateTeams(players),
-    // );
+    const [
+      server,
+      teams,
+    ] = Promise.all(
+      reserveServer(props),
+      generateTeams(players),
+    );
 
     const lastPickup = await pickupService.Model.aggregate({ $sort: { id: -1 } });
     const pickupId = get(lastPickup, '[0].id', 0) + 1;

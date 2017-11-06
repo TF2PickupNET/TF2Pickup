@@ -3,7 +3,6 @@
 import mapValues from 'lodash.mapvalues';
 import sleep from 'sleep-promise';
 import debug from 'debug';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 const log = debug('TF2Pickup:pickup-queue:socket-methods');
@@ -117,6 +116,29 @@ export default function socketMethods(app, socket) {
       log('Readying user up', userId);
 
       await pickupQueue.patch(queue.id, { $set: { classes: mapValues(queue.classes, setReady) } });
+    }
+  });
+
+  socket.on('pickup-queue.pick-map', async ({
+    map,
+    gamemode,
+  }) => {
+    if (socket.feathers.user) {
+      const region = socket.feathers.user.settings.region;
+      const userId = socket.feathers.user.id;
+      const queue = await pickupQueue.get(`${region}-${gamemode}`);
+
+      const setMap = players => players.map((player) => {
+        if (player.id === userId) {
+          return Object.assign({}, player, { map });
+        }
+
+        return player;
+      });
+
+      log('Setting map for user', userId, map);
+
+      await pickupQueue.patch(queue.id, { $set: { classes: mapValues(queue.classes, setMap) } });
     }
   });
 

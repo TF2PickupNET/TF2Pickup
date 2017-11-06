@@ -2,14 +2,13 @@ import axios from 'axios';
 import debug from 'debug';
 import config from 'config';
 
-export const divs = [
+const log = debug('TF2Pickup:users:ozfortress');
+const divs = [
   null,
   'Open',
   'Intermediate',
   'Premier',
 ];
-
-const log = debug('TF2Pickup:users:ozfortress');
 
 /**
  * Find the highest division the user has played in.
@@ -28,6 +27,8 @@ function findHighestDiv(rosters) {
       return highestDivIndex < currentDivIndex ? currentDiv : highestDiv;
     }, null);
 }
+
+export { divs };
 
 /**
  * Get the data for the user from ozfortress.

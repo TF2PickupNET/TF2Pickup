@@ -1,6 +1,5 @@
 import mapValues from 'lodash.mapvalues';
 import debug from 'debug';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import createPickup from './create-pickup';

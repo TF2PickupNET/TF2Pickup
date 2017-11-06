@@ -8,7 +8,6 @@ import {
 import PropTypes from 'prop-types';
 import capitalize from 'lodash.capitalize';
 import injectSheet from 'react-jss';
-
 import socialMedia from '@tf2-pickup/configs/social-media';
 
 import Link from '../../components/link';

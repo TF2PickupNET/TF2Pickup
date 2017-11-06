@@ -1,5 +1,4 @@
 import gamemodes from '@tf2-pickup/configs/gamemodes';
-
 import classes from '@tf2-pickup/configs/classes';
 
 /**

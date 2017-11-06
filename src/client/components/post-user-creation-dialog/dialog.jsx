@@ -1,56 +1,51 @@
 import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
+import Aux from 'react-aux';
 import {
   Stepper,
   Button,
-  breakpoints,
+  Dialog,
 } from 'materialize-react';
 import { connect } from 'react-redux';
 
 import RulesSection from './rules-section';
 import RegionSection from './region-section';
 import UsernameSection from './username-section';
+import ThemeSection from './theme-section';
+
+const HeaderButton = () => null;
 
 /**
  * The actual dialog which will be rendered.
  *
  * @class
  */
-class Dialog extends PureComponent {
+class DialogContent extends PureComponent {
   static propTypes = {
     close: PropTypes.func.isRequired,
     classes: PropTypes.shape({
-      dialog: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
       sectionContainer: PropTypes.string.isRequired,
       finishSection: PropTypes.string.isRequired,
     }).isRequired,
     user: PropTypes.shape({
       hasAcceptedTheRules: PropTypes.bool,
       name: PropTypes.string,
+      settings: PropTypes.shape({
+        region: PropTypes.string,
+        theme: PropTypes.string,
+      }),
     }),
   };
 
   static defaultProps = { user: null };
 
   static styles = {
-    dialog: {
-      height: '80vh',
-      width: '85vw',
-      paddingTop: 25,
-
-      [breakpoints.up('tablet')]: {
-        height: '60vh',
-        width: '50vw',
-      },
-
-      [breakpoints.up('desktop')]: {
-        height: '40vh',
-        width: 400,
-      },
-    },
+    title: { textAlign: 'center' },
 
     sectionContainer: {
+      width: '100%',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'start',
@@ -63,81 +58,88 @@ class Dialog extends PureComponent {
     },
   };
 
-  disableBackButton = () => true;
-
   /**
-   * Whether or not to disable the next button in the stepper header.
+   * Get the current section.
    *
-   * @param {Number} index - The current section index.
-   * @param {Object} section - The props of the current section.
-   * @returns {Boolean} - Returns the disabled prop for the next button.
+   * @returns {Number} - The index of the current section.
    */
-  disableNextButton = (index, section) => {
-    if (section.name === 'accept-rules') {
-      return !this.props.user.hasAcceptedTheRules;
-    } else if (section.name === 'username') {
-      return !this.props.user.name;
+  getCurrentSection() {
+    if (!this.props.user.hasAcceptedTheRules) {
+      return 0;
+    } else if (this.props.user.settings.region === null) {
+      return 1;
+    } else if (this.props.user.name === null) {
+      return 2;
+    } else if (this.props.user.settings.theme === null) {
+      return 3;
     }
 
-    return false;
-  };
+    return 4;
+  }
+
+  /**
+   * Get the title for the current section.
+   *
+   * @param {Number} section - The index of the section.
+   * @returns {String} - Returns the title.
+   */
+  getTitle(section) {
+    const titles = {
+      0: 'Rules',
+      1: 'Select a region',
+      2: 'Select a username',
+      3: 'Select a theme',
+      4: 'You are ready to go',
+    };
+
+    return (
+      <Dialog.Header className={this.props.classes.title}>
+        {titles[section]}
+      </Dialog.Header>
+    );
+  }
 
   handleClose = () => this.props.close();
 
-  /**
-   * Set the region when the section changes.
-   *
-   * @param {Number} newSection - The index of the new index.
-   */
-  handleChange = (newSection) => {
-    if (newSection === 1) {
-      this.regionSection.setRegion();
-    }
-  };
-
   render() {
+    const section = this.getCurrentSection();
+
     return (
-      <Stepper
-        headerAtBottom
-        className={this.props.classes.dialog}
-        header={(
-          <Stepper.Headers.Progress
-            disableBackButton={this.disableBackButton}
-            disableNextButton={this.disableNextButton}
-          />
-        )}
-        onChange={this.handleChange}
-      >
-        <Stepper.Section name="region">
-          <RegionSection
-            className={this.props.classes.sectionContainer}
-            ref={(element) => { this.regionSection = element; }}
-          />
-        </Stepper.Section>
+      <Aux>
+        {this.getTitle(section)}
 
-        <Stepper.Section
-          name="username"
-          className={this.props.classes.sectionContainer}
+        <Stepper
+          headerAtBottom
+          header={Stepper.Headers.Progress}
+          headerProps={{
+            backButton: <HeaderButton />,
+            nextButton: <HeaderButton />,
+          }}
+          section={section}
         >
-          <UsernameSection />
-        </Stepper.Section>
+          <Stepper.Section className={this.props.classes.sectionContainer}>
+            <RulesSection />
+          </Stepper.Section>
 
-        <Stepper.Section
-          name="accept-rules"
-          className={this.props.classes.sectionContainer}
-        >
-          <RulesSection />
-        </Stepper.Section>
+          <Stepper.Section className={this.props.classes.sectionContainer}>
+            <RegionSection />
+          </Stepper.Section>
 
-        <Stepper.Section
-          name="finish"
-          className={this.props.classes.finishSection}
-        >
-          <Button onRelease={this.handleClose}>
-            Finish
-          </Button>
-        </Stepper.Section>
-      </Stepper>
+          <Stepper.Section className={this.props.classes.sectionContainer}>
+            <UsernameSection />
+          </Stepper.Section>
+
+          <Stepper.Section className={this.props.classes.sectionContainer}>
+            <ThemeSection />
+          </Stepper.Section>
+
+          <Stepper.Section className={this.props.classes.finishSection}>
+            <Button onRelease={this.handleClose}>
+              Finish
+            </Button>
+          </Stepper.Section>
+        </Stepper>
+      </Aux>
     );
   }
 }
@@ -146,4 +148,4 @@ export default connect(
   (state) => {
     return { user: state.user };
   },
-)(injectSheet(Dialog.styles)(Dialog));
+)(injectSheet(DialogContent.styles)(DialogContent));

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { colors } from 'materialize-react';
 
-export default function Heavy({
+function Heavy({
   color,
   size,
   ...props
@@ -46,3 +46,4 @@ Heavy.defaultProps = {
   size: 48,
 };
 
+export default Heavy;

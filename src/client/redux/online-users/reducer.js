@@ -11,7 +11,7 @@ import setupListeners from './setup-listeners';
  * @param {Object} action - The action object.
  * @returns {Object[]} - Returns the new state.
  */
-export default function reducer(state = [], action) {
+function reducer(state = [], action) {
   switch (action.type) {
     case USER_LOGGED_IN:
       return state.concat([action.payload.user]);
@@ -23,3 +23,5 @@ export default function reducer(state = [], action) {
 }
 
 reducer.setupListeners = setupListeners;
+
+export default reducer;

@@ -15,16 +15,15 @@ export default function socketMethods(app, socket) {
     }
   });
 
-  socket.on('user.change-region', async ({
-    region,
-    id,
-  }) => {
-    const currentUserId = socket.feathers.user.id;
-    const userId = id || currentUserId;
-    const isAllowed = true;
+  socket.on('user.change-region', async ({ region }) => {
+    if (socket.feathers.user) {
+      await users.patch(socket.feathers.user.id, { $set: { 'settings.region': region } });
+    }
+  });
 
-    if (isAllowed) {
-      await users.patch(userId, { $set: { 'settings.region': region } });
+  socket.on('user.change-theme', async ({ theme }) => {
+    if (socket.feathers.user) {
+      await users.patch(socket.feathers.user.id, { $set: { 'settings.theme': theme } });
     }
   });
 
@@ -41,23 +40,24 @@ export default function socketMethods(app, socket) {
     );
 
     const validServices = serviceNameQueries
-      .map((query, index) => {
-        if (query.length === 0) {
-          return services[index];
-        }
-
-        return null;
-      })
-      .filter(service => service !== null);
-
-    return cb(
-      validServices.map((service) => {
+      .filter(query => query.length === 0)
+      .map((query, index) => services[index])
+      .map((service) => {
         return {
           serviceName: service,
           name: currentUser.services[service].name,
         };
-      }),
-    );
+      });
+
+    if (validServices.length === 1) {
+      const name = validServices[0].name;
+
+      await users.patch(currentUser.id, { $set: { name } });
+
+      return cb(false);
+    }
+
+    return cb(validServices);
   });
 
   socket.on('user.set-name', async (name, cb) => {

@@ -3,7 +3,6 @@ import flatten from 'lodash.flatten';
 import pickRandom from 'pick-random';
 import debug from 'debug';
 import get from 'lodash.get';
-
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import { generateRandomMaps } from '../../map-pool';
@@ -75,10 +74,7 @@ export default async function createPickup(props) {
       generateTeams(props, players, pickupQueue.gamemode),
     );
 
-    const lastPickup = await pickupService.find({
-      limit: 1,
-      sort: { id: -1 },
-    });
+    const lastPickup = await pickupService.Model.aggregate({ $sort: { id: -1 } });
     const pickupId = get(lastPickup, '[0].id', 0) + 1;
     const map = getMostVotedMap(
       pickupQueue.maps,
@@ -101,6 +97,8 @@ export default async function createPickup(props) {
       map,
       serverId: server.id,
       logSecret: server.logSecret,
+      region: pickupQueue.region,
+      gamemode: pickupQueue.gamemode,
     });
 
     // Remove players from every gamemode

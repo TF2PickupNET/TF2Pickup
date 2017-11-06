@@ -3,7 +3,6 @@ import debug from 'debug';
 import fs from 'fs';
 import config from 'config';
 import { colors } from 'materialize-react';
-
 import { regions } from '@tf2-pickup/configs';
 
 import maps from '../../../config/maps';

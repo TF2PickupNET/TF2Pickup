@@ -1,6 +1,7 @@
 import mapValues from 'lodash.mapvalues';
 import flatten from 'lodash.flatten';
 import pickRandom from 'pick-random';
+import debug from 'debug';
 import get from 'lodash.get';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
@@ -8,6 +9,8 @@ import { generateRandomMaps } from '../../map-pool';
 
 import generateTeams from './generate-teams';
 import reserveServer from './reserve-server';
+
+const log = debug('TF2Pickup:pickup-queue:statuses:create-pickup');
 
 /**
  * Remove the players from the queue.
@@ -60,13 +63,15 @@ export default async function createPickup(props) {
   });
   const allPlayers = flatten(Object.values(players)).map(player => player.id);
 
+  log('createPickup');
+
   try {
     const [
       server,
       teams,
     ] = Promise.all(
       reserveServer(props),
-      generateTeams(players),
+      generateTeams(props, players, pickupQueue.gamemode),
     );
 
     const lastPickup = await pickupService.Model.aggregate({ $sort: { id: -1 } });

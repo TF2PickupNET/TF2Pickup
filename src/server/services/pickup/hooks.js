@@ -1,6 +1,9 @@
 import config from 'config';
+import debug from 'debug';
 
 import configureServer from './configure-server';
+
+const log = debug('TF2Pickup:pickup:hooks');
 
 export default {
   after: {

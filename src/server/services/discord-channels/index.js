@@ -45,20 +45,25 @@ class DiscordService {
       throw new Error('Discord bot is not ready!');
     }
 
-    const guildId = config.get('server.discord.guild');
+    const guildId = config.get(`service.discord.guilds.${region}`);
     const guild = bot.guilds.get(guildId);
 
-    const pickup = `${region}-${name}`;
+    const pickup = `${region.toUpperCase()}-${name}`;
     const reason = `Created for pickup ${pickup}`;
-    const channelRED = await guild.createChannel(`Pickup ${pickup} RED`, 'voice', [], reason);
-    const channelBLU = await guild.createChannel(`Pickup ${pickup} BLU`, 'voice', [], reason);
 
-    log(`Created channels for ${pickup}!`);
+    try {
+      const channelRED = await guild.createChannel(`Pickup ${pickup} RED`, 'voice', [], reason);
+      const channelBLU = await guild.createChannel(`Pickup ${pickup} BLU`, 'voice', [], reason);
 
-    this.channels[pickup] = {
-      red: channelRED,
-      blu: channelBLU,
-    };
+      log(`Created channels for ${pickup}!`);
+
+      this.channels[pickup] = {
+        red: channelRED,
+        blu: channelBLU,
+      };
+    } catch (error) {
+      throw new Error(`Error while creating discord channels ${error}`);
+    }
   }
 
   /**
@@ -72,18 +77,26 @@ class DiscordService {
     region,
     name,
   }) {
-    const pickup = `${region}-${name}`;
+    if (!this.readyFlag) {
+      throw new Error('Discord bot is not ready!');
+    }
+
+    const pickup = `${region.toUpperCase()}-${name}`;
     const channels = this.channels[pickup];
     const reason = `Pickup ${pickup} ended`;
 
     if (!channels) {
-      throw new Error(`Discord channels for pickup ${pickup} do not exist`);
+      throw new Error(`Discord channels for pickup ${pickup} dose not exist`);
     }
 
     log(`Removed channels for ${pickup}!`);
 
-    channels.red.delete(reason);
-    channels.blu.delete(reason);
+    try {
+      channels.red.delete(reason);
+      channels.blu.delete(reason);
+    } catch (error) {
+      throw new Error(`Error while deleting discord channels ${error}`);
+    }
   }
 }
 

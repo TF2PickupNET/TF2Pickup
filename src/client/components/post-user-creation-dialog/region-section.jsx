@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import {
-  Typography,
   RadioButtonGroup,
   RadioButton,
   Label,

@@ -16,6 +16,7 @@ import DialogComponent from './dialog';
  */
 class PostUserCreationDialog extends PureComponent {
   static propTypes = {
+    classes: PropTypes.shape({ dialog: PropTypes.string.isRequired }).isRequired,
     user: PropTypes.shape({
       name: PropTypes.string,
       hasAcceptedTheRules: PropTypes.bool,

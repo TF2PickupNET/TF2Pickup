@@ -3,7 +3,6 @@ import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 import {
   Button,
-  Typography,
   Layout,
   RadioButtonGroup,
   RadioButton,

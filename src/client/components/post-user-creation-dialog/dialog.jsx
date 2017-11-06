@@ -25,6 +25,7 @@ class DialogContent extends PureComponent {
   static propTypes = {
     close: PropTypes.func.isRequired,
     classes: PropTypes.shape({
+      title: PropTypes.string.isRequired,
       sectionContainer: PropTypes.string.isRequired,
       finishSection: PropTypes.string.isRequired,
     }).isRequired,
@@ -76,6 +77,12 @@ class DialogContent extends PureComponent {
     return 4;
   }
 
+  /**
+   * Get the title for the current section.
+   *
+   * @param {Number} section - The index of the section.
+   * @returns {String} - Returns the title.
+   */
   getTitle(section) {
     const titles = {
       0: 'Rules',

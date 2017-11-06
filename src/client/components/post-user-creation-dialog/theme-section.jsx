@@ -3,7 +3,6 @@ import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 import {
   Button,
-  Typography,
   Layout,
   RadioButtonGroup,
   RadioButton,
@@ -23,13 +22,13 @@ class ThemeSection extends PureComponent {
   static styles = {
     container: {
       display: 'grid',
-      gridTemplateRows: 'auto 1fr auto',
+      gridTemplateRows: '1fr auto',
       gridGap: '8px',
       flex: 1,
     },
   };
 
-  state = { selectedTheme: 'light' };
+  state = { selectedTheme: 'dark' };
 
   /**
    * Change the state when the user selects a different theme.
@@ -48,10 +47,6 @@ class ThemeSection extends PureComponent {
   render() {
     return (
       <div className={this.props.classes.container}>
-        <Typography typography="title">
-          Would you like to use the dark theme?
-        </Typography>
-
         <RadioButtonGroup
           selected={this.state.selectedTheme}
           onChange={this.handleChange}

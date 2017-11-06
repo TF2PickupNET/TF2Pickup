@@ -1,8 +1,4 @@
 import flatten from 'lodash.flatten';
-import debug from 'debug';
-
-/* eslint no-unused-vars: */
-const log = debug('TF2Pickup:pickup-queue:statuses:generating-teams');
 
 const priorities = {
   '6v6': [
@@ -75,14 +71,14 @@ function getAvgTeamElo(teams) {
 /**
  * Function to sort players by their elo.
  *
- * @param  {Array} arr - Array with teams.
+ * @param  {Object} teams - An object with the teams.
  * @param  {String} mode - Gamemode string.
- * @returns {Array} - Array with balanced teams.
+ * @returns {Object} - Object with balanced teams.
  */
-function balanceTeams(arr, mode) {
+function balanceTeams(teams, mode) {
   priorities[mode].forEach((className) => {
-    const players = arr.red[className];
-    const teamElo = getAvgTeamElo(arr);
+    const players = teams.red[className];
+    const teamElo = getAvgTeamElo(teams);
 
     /**
      * Swap players of this class
@@ -90,34 +86,46 @@ function balanceTeams(arr, mode) {
      * since we started with them and they should be balanced already
      */
     if (players.length === 1) {
-      let p1 = arr.red[className].shift();
-      let p2 = arr.blu[className].shift();
+      let p1 = teams.red[className].shift();
+      let p2 = teams.blu[className].shift();
 
-      arr.red[className].push(p2);
-      arr.blu[className].push(p1);
+      teams.red[className].push(p2);
+      teams.blu[className].push(p1);
 
       // Check elo and if less than before keep changes
-      const newTeamElo = getAvgTeamElo(arr);
+      const newTeamElo = getAvgTeamElo(teams);
 
       if (newTeamElo.diff > teamElo.diff) {
-        p1 = arr.red[className].shift();
-        p2 = arr.blu[className].shift();
+        p1 = teams.red[className].shift();
+        p2 = teams.blu[className].shift();
 
-        arr.red[className].push(p2);
-        arr.blu[className].push(p1);
+        teams.red[className].push(p2);
+        teams.blu[className].push(p1);
       }
     }
   });
 
-  return arr;
+  return teams;
 }
 
-const usersToObject = users => users.reduce((obj, user) => {
-  return {
-    ...obj,
-    [user.id]: user,
-  };
-}, {});
+/**
+ * Get the users data for the players.
+ *
+ * @param {Object} app - The feathers app object.
+ * @param {Object[]} players - The players for the pickup.
+ * @returns {Object} - Returns an object containing the user id's mapped to the users data.
+ */
+async function getUsers(app, players) {
+  const service = app.service('users');
+  const users = await Promise.all(players.map(player => service.get(player.id)));
+
+  return users.reduce((obj, user) => {
+    return {
+      ...obj,
+      [user.id]: user,
+    };
+  }, {});
+}
 
 const repeats = new Array(5).fill(1);
 
@@ -127,19 +135,15 @@ const repeats = new Array(5).fill(1);
  * @param  {Object} props - The props from the hook.
  * @param  {Object} players - Object with the classes and players.
  * @param  {String} mode - Gamemode string.
- * @returns {Array} - Array with balanced teams.
+ * @returns {Object} - Object with balanced teams.
  */
 export default async function generateTeams(props, players, mode) {
-  const userService = props.app.service('users');
-
   const teams = {
     red: {},
     blu: {},
   };
   const allPlayers = flatten(Object.values(players));
-  const users = await Promise
-    .all(allPlayers.map(player => userService.get(player.id)))
-    .then(usersToObject);
+  const users = await getUsers(props.app, allPlayers);
 
   // Get user elos per class and sort
   priorities[mode].forEach((className) => {

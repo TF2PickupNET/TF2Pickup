@@ -1,9 +1,6 @@
 import config from 'config';
-import debug from 'debug';
 
 import servemeStrategy from './serveme-strategy';
-
-const log = debug('TF2Pickup:pickup-queue:statuses:reserve-server');
 
 const strategies = {
   eu() {

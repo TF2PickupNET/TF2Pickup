@@ -1,7 +1,6 @@
 import SteamID from 'steamid';
 import { Schema } from 'mongoose';
 import flatten from 'lodash.flatten';
-
 import {
   regions,
   gamemodes,
@@ -191,13 +190,6 @@ export default new Schema({
     },
   },
 
-  name: {
-    type: String,
-    default: null,
-    unique: true,
-    trim: true,
-  },
-
   roles: {
     type: [String],
     validate: {
@@ -209,28 +201,6 @@ export default new Schema({
     default: [],
   },
 
-  lastUpdate: {
-    type: Date,
-    default: Date.now,
-  },
-
-  online: {
-    type: Boolean,
-    default: true,
-  },
-
-  lastOnline: {
-    type: Date,
-    default: Date.now,
-  },
-
-  hasAcceptedTheRules: {
-    type: Boolean,
-    default: false,
-  },
-
-  createdOn: Date,
-  
   elos: allClasses.reduce((obj, className) => {
     return {
       ...obj,

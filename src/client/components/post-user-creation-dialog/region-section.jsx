@@ -25,8 +25,8 @@ class RegionSection extends PureComponent {
   static styles = {
     container: {
       display: 'grid',
-      gridTemplateRows: 'auto 1fr auto',
-      gridGap: '8px',
+      gridTemplateRows: '1fr auto',
+      gridGap: '16px',
       flex: 1,
     },
   };
@@ -78,10 +78,6 @@ class RegionSection extends PureComponent {
   render() {
     return (
       <div className={this.props.classes.container}>
-        <Typography typography="title">
-          Select a region
-        </Typography>
-
         <RadioButtonGroup
           selected={this.state.selectedRegion}
           onChange={this.handleRegionChange}

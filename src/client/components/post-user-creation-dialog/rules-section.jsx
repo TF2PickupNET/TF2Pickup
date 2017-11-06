@@ -3,7 +3,6 @@ import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 import {
   Button,
-  Typography,
   Layout,
 } from 'materialize-react';
 
@@ -28,9 +27,10 @@ class RulesSection extends PureComponent {
   static styles = {
     container: {
       display: 'grid',
-      gridTemplateRows: 'auto 1fr auto',
-      gridGap: '8px',
+      gridTemplateRows: '1fr auto',
+      gridGap: '16px',
       flex: 1,
+      overflow: 'hidden',
     },
 
     rules: {
@@ -48,10 +48,6 @@ class RulesSection extends PureComponent {
   render() {
     return (
       <div className={this.props.classes.container}>
-        <Typography typography="title">
-          Rules
-        </Typography>
-
         <div className={this.props.classes.rules}>
           <RemoteMarkdown url={RULES_URL} />
         </div>

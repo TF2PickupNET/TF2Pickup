@@ -1,7 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Dialog } from 'materialize-react';
+import injectSheet from 'react-jss';
+import {
+  Dialog,
+  breakpoints,
+} from 'materialize-react';
 
 import DialogComponent from './dialog';
 
@@ -20,6 +24,27 @@ class PostUserCreationDialog extends PureComponent {
   };
 
   static defaultProps = { user: null };
+
+  static styles = {
+    dialog: {
+      height: '80vh',
+      width: '85vw',
+      display: 'grid',
+      gridTemplateRows: 'auto 1fr',
+
+      [breakpoints.up('tablet')]: {
+        maxHeight: '80vh',
+        minHeight: '60vh',
+        width: '50vw',
+      },
+
+      [breakpoints.up('desktop')]: {
+        maxHeight: '50vh',
+        minHeight: '40vh',
+        width: 400,
+      },
+    },
+  };
 
   /**
    * Open the dialog when the user logged in and has no name set yet.
@@ -42,6 +67,7 @@ class PostUserCreationDialog extends PureComponent {
         ref={(element) => { this.dialog = element; }}
         closeOnOutsideClick={false}
         component={DialogComponent}
+        className={this.props.classes.dialog}
       />
     );
   }
@@ -51,4 +77,4 @@ export default connect(
   (state) => {
     return { user: state.user };
   },
-)(PostUserCreationDialog);
+)(injectSheet(PostUserCreationDialog.styles)(PostUserCreationDialog));

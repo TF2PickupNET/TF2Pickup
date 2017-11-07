@@ -17,10 +17,16 @@ class MumbleService {
 
   /**
    * Mumble service setup.
+   *
+   * @param {Object} app - The feathers app object.
    */
-  setup() {
+  setup(app) {
     const mumbleUsername = config.get('server.mumble.username');
     const mumblePassword = config.get('server.mumble.password');
+
+    if (app.get('env') === 'dev') {
+      return;
+    }
 
     Object
       .values(regions)

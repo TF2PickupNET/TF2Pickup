@@ -186,7 +186,7 @@ function DrawerContent(props) {
 
         <List.Item
           leftItem={<Icon icon="help-circle" />}
-          onClick={handleItemPress(createNewTab(discordUrls.help))}
+          onClick={handleItemPress(createRedirect('/help'))}
         >
           Help
 

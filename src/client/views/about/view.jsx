@@ -1,7 +1,14 @@
 import React from 'react';
 import Helmet from 'react-helmet';
+import injectSheet from 'react-jss';
+import {
+  Card,
+  Layout,
+} from 'materialize-react';
 
-import MarkdownView from '../../components/markdown-view';
+import RemoteMarkdown from '../../components/remote-markdown';
+
+import Partners from './partners';
 
 const ABOUT_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/ABOUT.md';
 
@@ -10,14 +17,29 @@ const ABOUT_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/AB
  *
  * @returns {JSX} - Returns the view.
  */
-export default function View() {
+function View(props) {
   return (
-    <div>
+    <Layout mainAlign="center">
       <Helmet>
         <title>About</title>
       </Helmet>
 
-      <MarkdownView url={ABOUT_URL} />
-    </div>
+      <Card className={props.classes.card}>
+        <Card.Content>
+          <RemoteMarkdown url={ABOUT_URL} />
+
+          <Partners />
+        </Card.Content>
+      </Card>
+    </Layout>
   );
 }
+
+View.styles = {
+  card: {
+    maxWidth: 1024,
+    width: '100%',
+  },
+};
+
+export default injectSheet(View.styles)(View);

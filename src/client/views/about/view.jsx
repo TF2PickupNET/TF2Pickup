@@ -4,13 +4,15 @@ import injectSheet from 'react-jss';
 import {
   Card,
   Layout,
+  Typography,
 } from 'materialize-react';
 
 import RemoteMarkdown from '../../components/remote-markdown';
 
 import Partners from './partners';
+import SocialMedia from './social-media';
 
-const ABOUT_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/ABOUT.md';
+const README_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/README.md';
 
 /**
  * The view for the about page.
@@ -26,7 +28,23 @@ function View(props) {
 
       <Card className={props.classes.card}>
         <Card.Content>
-          <RemoteMarkdown url={ABOUT_URL} />
+          <RemoteMarkdown url={README_URL} />
+
+          <Typography
+            typography="display1"
+            className={props.classes.headline}
+          >
+            Social Media
+          </Typography>
+
+          <SocialMedia />
+
+          <Typography
+            typography="display1"
+            className={props.classes.headline}
+          >
+            Partners
+          </Typography>
 
           <Partners />
         </Card.Content>
@@ -39,6 +57,13 @@ View.styles = {
   card: {
     maxWidth: 1024,
     width: '100%',
+  },
+
+  headline: {
+    textAlign: 'center',
+    marginTop: 30,
+    marginBottom: 20,
+    display: 'block',
   },
 };
 

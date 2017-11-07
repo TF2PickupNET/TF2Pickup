@@ -6,8 +6,9 @@ import injectSheet from 'react-jss';
 import {
   Spinner,
   Typography,
-  typography,
 } from 'materialize-react';
+
+import Link from './link';
 
 /**
  * A component that renders a markdown document. The document
@@ -24,7 +25,7 @@ class RemoteMarkdown extends PureComponent {
   static defaultProps = { children: component => component };
 
   static renderers = {
-    Heading(level, children) {
+    Heading(props) {
       const typos = {
         1: 'display3',
         2: 'display2',
@@ -35,9 +36,19 @@ class RemoteMarkdown extends PureComponent {
       };
 
       return (
-        <Typography typography={typos[level]}>
-          {children}
+        <Typography typography={typos[props.level]}>
+          {props.children}
         </Typography>
+      );
+    },
+    Link(props) {
+      return (
+        <Link
+          primary
+          href={props.href}
+        >
+          {props.children}
+        </Link>
       );
     },
   };

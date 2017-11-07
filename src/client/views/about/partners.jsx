@@ -54,46 +54,30 @@ const partners = [{
 
 function Partners(props) {
   return (
-    <Aux>
-      <Typography
-        typography="display1"
-        className={props.classes.headline}
-      >
-        Partners
-      </Typography>
+    <div className={props.classes.grid}>
+      {partners.map(partner => (
+        <span
+          key={partner.title}
+          className={props.classes.gridItem}
+        >
+          <img
+            src={partner.img}
+            alt={partner.title}
+            className={props.classes.image}
+          />
 
-      <div className={props.classes.grid}>
-        {partners.map(partner => (
-          <span
-            key={partner.title}
-            className={props.classes.gridItem}
-          >
-            <img
-              src={partner.img}
-              alt={partner.title}
-              className={props.classes.image}
-            />
+          <Link href={partner.link}>
+            <Typography typography="title">{partner.title}</Typography>
+          </Link>
 
-            <Link href={partner.link}>
-              <Typography typography="title">{partner.title}</Typography>
-            </Link>
-
-            <Typography typography="body1">{partner.description}</Typography>
-          </span>
-        ))}
-      </div>
-    </Aux>
+          <Typography typography="body1">{partner.description}</Typography>
+        </span>
+      ))}
+    </div>
   );
 }
 
 Partners.styles = {
-  headline: {
-    textAlign: 'center',
-    marginTop: 20,
-    marginBottom: 15,
-    display: 'block',
-  },
-
   grid: {
     display: 'grid',
     gridGap: '16px',

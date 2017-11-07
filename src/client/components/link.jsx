@@ -13,22 +13,16 @@ import omit from 'lodash.omit';
  * @param {String} props.className - Additional className to be applied to the link.
  * @returns {JSX} - Returns the jsx.
  */
-function Link({
-  classes,
-  children,
-  href,
-  className,
-  ...props
-}) {
+function Link(props) {
   return (
     <a
-      href={href}
+      {...omit(props, 'sheet')}
+      href={props.href}
       rel="noopener noreferrer"
       target="_blank"
-      className={`${classes.link} ${className}`}
-      {...omit(props, 'sheet')}
+      className={`${props.classes.link} ${props.primary && props.classes.primary} ${props.className}`}
     >
-      {children}
+      {props.children}
     </a>
   );
 }
@@ -38,15 +32,23 @@ Link.propTypes = {
   children: PropTypes.node.isRequired,
   href: PropTypes.string.isRequired,
   className: PropTypes.string,
+  primary: PropTypes.bool,
 };
 
-Link.defaultProps = { className: '' };
+Link.defaultProps = {
+  className: '',
+  primary: false,
+};
 
-Link.styles = {
-  link: {
-    textDecoration: 'none',
-    color: 'inherit',
-  },
+Link.styles = (theme) => {
+  return {
+    link: {
+      textDecoration: 'none',
+      color: 'inherit',
+    },
+
+    primary: { color: theme.primaryBase },
+  };
 };
 
 export default injectSheet(Link.styles)(Link);

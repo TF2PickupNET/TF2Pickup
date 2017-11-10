@@ -1,5 +1,7 @@
+/* eslint-disable import/no-commonjs, global-require */
+
 import React from 'react';
-import Aux from 'react-aux';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { Typography } from 'materialize-react';
 
@@ -52,6 +54,12 @@ const partners = [{
   description: 'North America 6v6 competitive league',
 }];
 
+/**
+ * Render the partners with description and images.
+ *
+ * @param {Object} props - The props for the component.
+ * @returns {JSX} - Returns the JSX.
+ */
 function Partners(props) {
   return (
     <div className={props.classes.grid}>
@@ -76,6 +84,14 @@ function Partners(props) {
     </div>
   );
 }
+
+Partners.propTypes = {
+  classes: PropTypes.shape({
+    grid: PropTypes.string.isRequired,
+    gridItem: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 Partners.styles = {
   grid: {

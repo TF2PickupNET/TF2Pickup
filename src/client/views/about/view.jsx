@@ -1,5 +1,6 @@
 import React from 'react';
 import Helmet from 'react-helmet';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import {
   Card,
@@ -17,6 +18,7 @@ const README_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/R
 /**
  * The view for the about page.
  *
+ * @param {Object} props - The props for the component.
  * @returns {JSX} - Returns the view.
  */
 function View(props) {
@@ -52,6 +54,13 @@ function View(props) {
     </Layout>
   );
 }
+
+View.propTypes = {
+  classes: PropTypes.shape({
+    card: PropTypes.string.isRequired,
+    headline: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 View.styles = {
   card: {

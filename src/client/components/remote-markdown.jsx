@@ -18,6 +18,7 @@ import Link from './link';
  */
 class RemoteMarkdown extends PureComponent {
   static propTypes = {
+    classes: PropTypes.shape({ container: PropTypes.string.isRequired }).isRequired,
     url: PropTypes.string.isRequired,
     children: PropTypes.func,
   };

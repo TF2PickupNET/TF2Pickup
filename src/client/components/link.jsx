@@ -1,26 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
-import omit from 'lodash.omit';
+import classnames from 'classnames';
 
 /**
  * Render a link which will open safely the provided href in a new tab.
  *
  * @param {Object} props - The props for the component.
- * @param {Object} props.classes - Classes provided by Jss.
- * @param {JSX} props.children - Children to render inside the link.
- * @param {String} props.href - The href for the link.
- * @param {String} props.className - Additional className to be applied to the link.
  * @returns {JSX} - Returns the jsx.
  */
 function Link(props) {
   return (
     <a
-      {...omit(props, 'sheet')}
       href={props.href}
       rel="noopener noreferrer"
       target="_blank"
-      className={`${props.classes.link} ${props.primary && props.classes.primary} ${props.className}`}
+      className={classnames(
+        props.classes.link,
+        props.primary && props.classes.primary,
+        props.className,
+      )}
     >
       {props.children}
     </a>
@@ -28,7 +27,10 @@ function Link(props) {
 }
 
 Link.propTypes = {
-  classes: PropTypes.shape({ link: PropTypes.string }).isRequired,
+  classes: PropTypes.shape({
+    link: PropTypes.string.isRequired,
+    primary: PropTypes.string.isRequired,
+  }).isRequired,
   children: PropTypes.node.isRequired,
   href: PropTypes.string.isRequired,
   className: PropTypes.string,

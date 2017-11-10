@@ -1,5 +1,6 @@
 import React from 'react';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 import {
   Icon,
 } from 'materialize-react';
@@ -7,6 +8,12 @@ import { socialMedia } from '@tf2-pickup/configs';
 
 import Link from '../../components/link';
 
+/**
+ * Render the social media links as icons.
+ *
+ * @param {Object} props - The props for the component.
+ * @returns {JSX} - Returns the jsx.
+ */
 function SocialMedia(props) {
   return (
     <div className={props.classes.grid}>
@@ -28,6 +35,13 @@ function SocialMedia(props) {
     </div>
   );
 }
+
+SocialMedia.propTypes = {
+  classes: PropTypes.shape({
+    grid: PropTypes.string.isRequired,
+    gridItem: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 SocialMedia.styles = {
   grid: {

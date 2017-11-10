@@ -1,11 +1,16 @@
-import flatten from 'lodash.flatten';
-import get from 'lodash.get';
 import pickRandom from 'pick-random';
 import {
   gamemodes,
   regions,
 } from '@tf2-pickup/configs';
 
+import {
+  pipe,
+  map,
+  flatten,
+  pluck,
+  filter,
+} from '../../../utils/functions';
 import mapInfo from '../../../config/maps';
 
 const ultiduoMaps = [
@@ -102,15 +107,17 @@ const mapPool = {
  * Validate that each map has a config object and that enough maps are in the map pool.
  */
 export function validateMapPool() {
-  const gamemodeKeys = Object.keys(gamemodes);
-  const keys = flatten(
-    Object
-      .keys(regions)
-      .map(region => gamemodeKeys.map(gamemode => `${region}.${gamemode}`)),
-  );
+  const keys = pipe(
+    Object.keys,
+    map(region => pipe(
+      Object.keys,
+      map(gamemode => `${region}.${gamemode}`),
+    )(gamemodes)),
+    flatten,
+  )(regions);
 
   keys.forEach((key) => {
-    const mapPoolForGamemode = get(mapPool, key, null);
+    const mapPoolForGamemode = pluck(key)(mapPool);
 
     if (!mapPoolForGamemode) {
       throw new Error(`Missing map fool for ${key}`);
@@ -120,9 +127,9 @@ export function validateMapPool() {
       throw new Error(`There should be atleast 5 maps in the map pool ${key}`);
     }
 
-    mapPoolForGamemode.forEach((map) => {
-      if (!mapInfo[map]) {
-        throw new Error(`Missing map info for ${map}`);
+    mapPoolForGamemode.forEach((mapName) => {
+      if (!mapInfo[mapName]) {
+        throw new Error(`Missing map info for ${mapName}`);
       }
     });
   });
@@ -139,7 +146,7 @@ export function validateMapPool() {
  */
 export function generateRandomMaps(region, gamemode, excludedMaps = []) {
   const maps = mapPool[region][gamemode];
-  const filteredMaps = maps.filter(map => !excludedMaps.includes(map));
+  const filterMaps = filter(mapName => !excludedMaps.includes(mapName));
 
-  return pickRandom(filteredMaps, { count: 3 });
+  return pickRandom(filterMaps(maps), { count: 3 });
 }

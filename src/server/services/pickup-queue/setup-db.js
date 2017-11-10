@@ -4,6 +4,13 @@ import {
   gamemodes,
 } from '@tf2-pickup/configs';
 
+import {
+  flatten,
+  map,
+  mapObject,
+  pipe,
+} from '../../../utils/functions';
+
 import { generateRandomMaps } from './map-pool';
 
 const log = debug('TF2Pickup:pickup-queue:setup-db');
@@ -13,58 +20,57 @@ const log = debug('TF2Pickup:pickup-queue:setup-db');
  *
  * @param {Object} service - The pickup-queue service.
  */
-export default function setupDb(service) {
-  Object
-    .keys(regions)
-    .reduce((current, region) => current.concat(
-      Object
-        .keys(gamemodes)
-        .map((gamemode) => {
-          return {
-            gamemode,
-            region,
-          };
-        }),
-    ), [])
-    .forEach(async ({
-      gamemode,
-      region,
-    }) => {
-      const classes = Object
-        .keys(gamemodes[gamemode].slots)
-        .reduce((current, slotName) => Object.assign({}, current, { [slotName]: [] }), {});
+export default async function setupDb(service) {
+  const pickups = await Promise.all(
+    pipe(
+      Object.keys,
+      map(region => pipe(
+        Object.keys,
+        map(gamemode => Object.assign({
+          gamemode,
+          region,
+        })),
+      )(gamemodes)),
+      flatten,
+      map(pickup => service.get(`${pickup.region}-${pickup.gamemode}`)),
+    )(regions),
+  );
+
+  await Promise.all(
+    map(async (pickup) => {
+      const classes = mapObject(() => [])(gamemodes[pickup.gamemode].slots);
 
       try {
-        const gamemodeQueue = await service.get(`${region}-${gamemode}`);
+        const queue = await service.get(`${pickup.region}-${pickup.gamemode}`);
 
-        log('Resetting classes for pickup queue', region, gamemode);
+        log('Resetting classes for pickup queue', pickup.region, pickup.gamemode);
 
-        await service.patch(gamemodeQueue.id, {
+        await service.patch(queue.id, {
           $set: {
             classes,
             status: 'waiting',
-            maps: gamemodeQueue.maps.length === 0
-              ? generateRandomMaps(region, gamemode)
-              : gamemodeQueue.maps,
+            maps: queue.maps.length === 0
+              ? generateRandomMaps(pickup.region, pickup.gamemode)
+              : queue.maps,
           },
         });
       } catch (error) {
         if (error.code === 404) {
-          log('Creating new pickup queue', region, gamemode);
+          log('Creating new pickup queue', pickup.region, pickup.gamemode);
 
           await service.create({
-            region,
-            gamemode,
+            ...pickup,
             status: 'waiting',
-            id: `${region}-${gamemode}`,
+            id: `${pickup.region}-${pickup.gamemode}`,
             classes,
-            maps: generateRandomMaps(region, gamemode),
+            maps: generateRandomMaps(pickup.region, pickup.gamemode),
           });
 
           return;
         }
 
-        log('Unknown error while getting pickup queue', region, gamemode, error);
+        log('Unknown error while getting pickup queue', pickup.region, pickup.gamemode, error);
       }
-    });
+    })(pickups),
+  );
 }

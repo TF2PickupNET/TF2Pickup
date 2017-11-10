@@ -15,6 +15,7 @@ import Rules from './rules';
 import Servers from './servers';
 import RecentPickups from './recent-pickups';
 import Error from './error';
+import Help from './help';
 
 /**
  * The main component.
@@ -86,6 +87,12 @@ export default class Routes extends PureComponent {
           exact
           path="/rules"
           render={composeWithMainLayout(Rules)}
+        />
+
+        <Route
+          exact
+          path="/help"
+          render={composeWithMainLayout(Help)}
         />
 
         <Route

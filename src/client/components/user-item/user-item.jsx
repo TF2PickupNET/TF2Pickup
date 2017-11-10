@@ -2,9 +2,13 @@ import React from 'react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import mapValues from 'lodash.mapvalues';
 import { Icon } from 'materialize-react';
 
+import {
+  mapObject,
+  pipe,
+  find,
+} from '../../../utils/functions';
 import { computeLevel } from '../../../utils/has-permission';
 import roles from '../../../config/roles';
 
@@ -19,9 +23,10 @@ function UserItem(props) {
     ? props.loggedInUser.friends.includes(props.user.id)
     : false;
   const level = computeLevel(props.user.roles);
-  const roleInfo = Object
-    .values(roles)
-    .find(role => role.level === level);
+  const roleInfo = pipe(
+    Object.values,
+    find(role => role.level === level),
+  )(roles);
   const isDonator = props.user.roles.includes('donator');
 
   return (
@@ -83,9 +88,9 @@ UserItem.styles = (theme) => {
 
     friendIcon: { color: 'inherit' },
 
-    ...mapValues(roles, (role) => {
+    ...mapObject((role) => {
       return { color: role.color[theme.type] };
-    }),
+    })(roles),
   };
 };
 

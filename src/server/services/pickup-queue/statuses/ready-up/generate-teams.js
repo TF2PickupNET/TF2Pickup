@@ -1,4 +1,8 @@
-import flatten from 'lodash.flatten';
+import { getPlayers } from '../../../../../utils/pickup';
+import {
+  arrayToObject,
+  flatten,
+} from '../../../../../utils/functions';
 
 const priorities = {
   '6v6': [
@@ -41,7 +45,7 @@ const getEloSum = players => players
    * @returns {Number} - Average elo of the team.
    */
 function getAverageEloForTeam(classes) {
-  const allPlayers = flatten(Object.values(classes));
+  const allPlayers = getPlayers(classes);
 
   return Math.round(getEloSum(allPlayers) / allPlayers.length);
 }
@@ -119,12 +123,7 @@ async function getUsers(app, players) {
   const service = app.service('users');
   const users = await Promise.all(players.map(player => service.get(player.id)));
 
-  return users.reduce((obj, user) => {
-    return {
-      ...obj,
-      [user.id]: user,
-    };
-  }, {});
+  return arrayToObject('id')(users);
 }
 
 const repeats = new Array(5).fill(1);

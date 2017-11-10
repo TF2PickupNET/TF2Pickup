@@ -1,5 +1,9 @@
-import flatten from 'lodash.flatten';
-import mapValues from 'lodash.mapvalues';
+import {
+  pipe,
+  map,
+  mapObject, arrayToObject,
+} from '../../../utils/functions';
+import { getPlayers } from '../../../utils/pickup';
 
 import statuses from './statuses';
 
@@ -12,22 +16,20 @@ import statuses from './statuses';
 async function populatePickup(props) {
   const pickup = props.result;
   const usersService = props.app.service('users');
-  const playerIds = flatten(Object.values(pickup.classes)).map(player => player.id);
-  const allUsers = await Promise.all(playerIds.map(playerId => usersService.get(playerId)));
-  const users = allUsers.reduce((current, user) => {
-    return {
-      ...current,
-      [user.id]: user,
-    };
-  }, {});
+  const allUsers = await Promise.all(
+    pipe(
+      getPlayers,
+      map(player => usersService.get(player.id)),
+    )(pickup.classes),
+  );
+  const users = arrayToObject('id')(allUsers);
 
   return {
     ...props,
     result: {
       ...pickup,
-      classes: mapValues(
-        pickup.classes,
-        classPlayers => classPlayers.map((player) => {
+      classes: mapObject(
+        map((player) => {
           const user = users[player.id];
 
           return {
@@ -37,7 +39,7 @@ async function populatePickup(props) {
             roles: user.roles,
           };
         }),
-      ),
+      )(pickup.classes),
     },
   };
 }

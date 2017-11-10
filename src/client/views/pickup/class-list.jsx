@@ -9,8 +9,6 @@ import {
   Ripple,
   colors,
 } from 'materialize-react';
-import capitalize from 'lodash.capitalize';
-import get from 'lodash.get';
 import { rgba } from 'polished';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
@@ -19,6 +17,10 @@ import * as Icons from '../../icons';
 import app from '../../app';
 import openWindowInNewTab from '../../utils/open-window-in-new-tab';
 import UserItem from '../../components/user-item';
+import {
+  capitalize,
+  pluck,
+} from '../../../utils/functions';
 
 /**
  * The component which renders all of the players that joined the class.
@@ -98,7 +100,7 @@ class ClassList extends PureComponent {
     } = this.props;
     const name = capitalize(slotName);
     const ClassIcon = Icons[name];
-    const userId = get(user, 'id', null);
+    const userId = pluck(user, 'id', null);
     const isInSlot = players.some(player => player.id === userId);
     const requiredPlayers = gamemodes[gamemode].slots[slotName];
     const playerCount = players.length;

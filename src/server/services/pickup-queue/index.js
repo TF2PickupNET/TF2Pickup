@@ -14,7 +14,7 @@ const log = debug('TF2Pickup:pickup-queue');
 /**
  * Set up the logs service.
  */
-export default function pickupQueue() {
+export default async function pickupQueue() {
   const that = this;
 
   log('Setting up pickup-queue service');
@@ -27,11 +27,11 @@ export default function pickupQueue() {
   that.service('pickup-queue').hooks(hooks);
   that.service('pickup-queue').filter(filters);
 
-  setupDb(that.service('pickup-queue'));
-
-  validateMapPool();
-
   that.on('listening', () => {
     that.io.on('connection', socket => socketMethods(that, socket));
   });
+
+  await setupDb(that.service('pickup-queue'));
+
+  validateMapPool();
 }

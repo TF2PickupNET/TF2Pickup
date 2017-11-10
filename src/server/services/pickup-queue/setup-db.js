@@ -36,7 +36,7 @@ export default async function setupDb(service) {
     )(regions),
   );
 
-  return Promise.all(
+  await Promise.all(
     map(async (pickup) => {
       const classes = mapObject(() => [])(gamemodes[pickup.gamemode].slots);
 

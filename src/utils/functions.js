@@ -113,3 +113,16 @@ export const arrayToObject = key => reduce((obj, item) => {
     [item[key]]: item,
   };
 }, {});
+
+export const omit = (...keys) => pipe(
+  Object.keys,
+  filter(key => !keys.includes(key)),
+  reduce((obj, key) => {
+    return {
+      ...obj,
+      [key]: obj[key],
+    };
+  }),
+);
+
+export const assign = (...objs) => obj => Object.assign({}, obj, ...objs);

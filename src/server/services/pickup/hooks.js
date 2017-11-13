@@ -1,3 +1,10 @@
+import hasPermission from '../../../utils/has-permission';
+import {
+  omit,
+  pipe,
+  assign,
+} from '../../../utils/functions';
+
 import configureServer from './configure-server';
 
 export default {
@@ -26,6 +33,21 @@ export default {
       }
 
       return props;
+    },
+
+    async get(props) {
+      const isInPickup = true;
+      const canSeeServer = isInPickup || hasPermission('pickup.see-server', props.user);
+      const server = await props.app.service('servers').get(props.result.serverId);
+
+      console.log(server);
+
+      return Object.assign({}, props, {
+        result: pipe(
+          omit('serverId', 'logSecret'),
+          assign({ server }),
+        )(props.result),
+      });
     },
   },
 };

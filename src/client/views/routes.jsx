@@ -10,7 +10,7 @@ import About from './about';
 import Donate from './donate';
 import Settings from './settings';
 import Profile from './profile';
-import Pickup, { RedirectToPickup } from './pickup';
+import PickupQueue, { RedirectToPickup } from './pickup-queue';
 import Rules from './rules';
 import Servers from './servers';
 import RecentPickups from './recent-pickups';
@@ -46,7 +46,7 @@ export default class Routes extends PureComponent {
 
         <Route
           path={`/(${Object.keys(gamemodes).join('|')})`}
-          render={composeWithMainLayout(Pickup)}
+          render={composeWithMainLayout(PickupQueue)}
         />
 
         <Route

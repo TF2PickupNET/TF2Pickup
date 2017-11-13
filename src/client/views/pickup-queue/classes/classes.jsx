@@ -1,28 +1,35 @@
 import React, { PureComponent } from 'react';
-import injectSheet, { withTheme } from 'react-jss';
-import { breakpoints } from 'materialize-react';
+import injectSheet from 'react-jss';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import get from 'lodash.get';
-import gamemodes from '@tf2-pickup/configs/gamemodes';
+import { breakpoints } from 'materialize-react';
+
+import {
+  map,
+  pipe,
+  pluck,
+} from '../../../../utils/functions';
+import { getGamemodeFromUrl } from '../../../../utils/pickup';
 
 import ClassList from './class-list';
 
 const minmax = 'minmax(240px, 360px) ';
 
 /**
- * Render the classes for the current gamemode.
+ * The classes for the current gamemode.
  *
  * @class
  */
-class Pickup extends PureComponent {
+class Classes extends PureComponent {
   static propTypes = {
-    gamemode: PropTypes.string.isRequired,
-    pickup: PropTypes.shape({}).isRequired,
     classes: PropTypes.shape({ classContainer: PropTypes.string }).isRequired,
-    user: PropTypes.shape({}),
+    pickup: PropTypes.shape({
+      gamemode: PropTypes.string,
+      classes: PropTypes.shape({}),
+    }),
   };
 
-  static defaultProps = { user: null };
+  static defaultProps = { pickup: null };
 
   static styles = {
     classContainer: {
@@ -54,34 +61,27 @@ class Pickup extends PureComponent {
    * @returns {JSX[]} - Returns the JSX.
    */
   renderClasses() {
-    const {
-      gamemode,
-      user,
-      pickup,
-    } = this.props;
-
-    return Object
-      .keys(gamemodes[gamemode].slots)
-      .map((slot) => {
-        const players = get(pickup, `classes.${slot}`, []);
-
-        return (
-          <ClassList
-            key={slot}
-            slotName={slot}
-            players={players}
-            gamemode={gamemode}
-            user={user}
-          />
-        );
-      });
+    return pipe(
+      Object.entries,
+      map(([className, players]) => (
+        <ClassList
+          key={className}
+          players={players}
+          className={className}
+        />
+      )),
+    )(this.props.pickup.classes);
   }
 
   render() {
+    if (!this.props.pickup) {
+      return null;
+    }
+
     return (
       <div
         className={this.props.classes.classContainer}
-        data-gamemode={this.props.gamemode}
+        data-gamemode={this.props.pickup.gamemode}
       >
         {this.renderClasses()}
       </div>
@@ -89,4 +89,10 @@ class Pickup extends PureComponent {
   }
 }
 
-export default injectSheet(Pickup.styles)(withTheme(Pickup));
+export default connect(
+  (state) => {
+    const gamemode = getGamemodeFromUrl(state.router.location.pathname);
+
+    return { pickup: pluck(gamemode, null)(state.pickupQueue) };
+  },
+)(injectSheet(Classes.styles)(Classes));

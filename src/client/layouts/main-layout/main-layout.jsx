@@ -4,6 +4,7 @@ import injectSheet from 'react-jss';
 import {
   Drawer,
   breakpoints,
+  Layout,
 } from 'materialize-react';
 import { devices } from 'materialize-react/lib/styles/breakpoints';
 
@@ -24,8 +25,6 @@ class MainLayout extends PureComponent {
   static styles = {
     container: {
       padding: 16,
-      display: 'flex',
-      flexDirection: 'column',
       overflowX: 'hidden',
 
       [breakpoints.up('tablet')]: { padding: 24 },
@@ -59,9 +58,13 @@ class MainLayout extends PureComponent {
         <Drawer.MainContent>
           <MainToolbar onMenuButtonPress={this.handleMenuButtonPress} />
 
-          <div className={this.props.classes.container}>
+          <Layout
+            direction="column"
+            crossAlign="center"
+            className={this.props.classes.container}
+          >
             {this.props.children}
-          </div>
+          </Layout>
         </Drawer.MainContent>
       </Drawer>
     );

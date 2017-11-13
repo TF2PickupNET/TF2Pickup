@@ -32,20 +32,18 @@ export default async function setupDb(service) {
         })),
       )(gamemodes)),
       flatten,
-      map(pickup => service.get(`${pickup.region}-${pickup.gamemode}`)),
     )(regions),
   );
 
   await Promise.all(
     map(async (pickup) => {
       const classes = mapObject(() => [])(gamemodes[pickup.gamemode].slots);
+      const [queue] = await service.find({ query: { id: `${pickup.region}-${pickup.gamemode}` } });
 
-      try {
-        const queue = await service.get(`${pickup.region}-${pickup.gamemode}`);
-
+      if (queue) {
         log('Resetting classes for pickup queue', pickup.region, pickup.gamemode);
 
-        await service.patch(queue.id, {
+        return service.patch(queue.id, {
           $set: {
             classes,
             status: 'waiting',
@@ -54,23 +52,17 @@ export default async function setupDb(service) {
               : queue.maps,
           },
         });
-      } catch (error) {
-        if (error.code === 404) {
-          log('Creating new pickup queue', pickup.region, pickup.gamemode);
-
-          await service.create({
-            ...pickup,
-            status: 'waiting',
-            id: `${pickup.region}-${pickup.gamemode}`,
-            classes,
-            maps: generateRandomMaps(pickup.region, pickup.gamemode),
-          });
-
-          return;
-        }
-
-        log('Unknown error while getting pickup queue', pickup.region, pickup.gamemode, error);
       }
+
+      log('Creating new pickup queue', pickup.region, pickup.gamemode);
+
+      return service.create({
+        ...pickup,
+        status: 'waiting',
+        id: `${pickup.region}-${pickup.gamemode}`,
+        classes,
+        maps: generateRandomMaps(pickup.region, pickup.gamemode),
+      });
     })(pickups),
   );
 }

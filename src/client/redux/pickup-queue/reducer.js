@@ -1,4 +1,7 @@
-import { UPDATE_PICKUP } from './constants';
+import {
+  UPDATE_PICKUP,
+  UPDATE_PICKUPS,
+} from './constants';
 import setupListeners from './setup-listeners';
 
 /**
@@ -12,6 +15,8 @@ function reducer(state = null, action) {
   switch (action.type) {
     case UPDATE_PICKUP:
       return Object.assign({}, state, { [action.payload.gamemode]: action.payload.pickup });
+    case UPDATE_PICKUPS:
+      return action.payload.pickups;
     default:
       return state;
   }

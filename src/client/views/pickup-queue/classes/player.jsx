@@ -6,7 +6,6 @@ import {
   List,
   Ripple,
   colors,
-  Icon,
 } from 'materialize-react';
 import { rgba } from 'polished';
 import injectSheet from 'react-jss';
@@ -14,6 +13,11 @@ import injectSheet from 'react-jss';
 import UserItem from '../../../components/user-item';
 import openWindowInNewTab from '../../../utils/open-window-in-new-tab';
 
+/**
+ * The player component for the pickup queue view.
+ *
+ * @class
+ */
 class Player extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
@@ -22,7 +26,8 @@ class Player extends PureComponent {
     }).isRequired,
     player: PropTypes.shape({
       id: PropTypes.string.isRequired,
-      ready: PropTypes.string.isRequired,
+      ready: PropTypes.bool,
+      avatar: PropTypes.string.isRequired,
     }).isRequired,
   };
 
@@ -37,13 +42,14 @@ class Player extends PureComponent {
     ready: { backgroundColor: rgba(colors.green500, 0.25) },
   };
 
+  /**
+   * When the user clicks on the user, we create a new tab with the profile.
+   */
   handleClick = () => {
     openWindowInNewTab(`/profile/${this.props.player.id}`);
   };
 
   render() {
-    console.log(this.props.player);
-
     return (
       <Aux>
         <List.Divider inset />

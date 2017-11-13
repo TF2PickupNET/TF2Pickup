@@ -61,6 +61,11 @@ class ClassList extends PureComponent {
     icon: { margin: '0 8px' },
   };
 
+  /**
+   * Check whether the user is in the class.
+   *
+   * @returns {Boolean} - Returns whether or not the user is in the class.
+   */
   get isInClass() {
     return find(player => player.id === this.props.userId)(this.props.players);
   }
@@ -82,6 +87,11 @@ class ClassList extends PureComponent {
     app.io.emit('pickup-queue.remove', { gamemode: this.props.gamemode });
   };
 
+  /**
+   * Render the title for the class.
+   *
+   * @returns {JSX} - Returns the JSX.
+   */
   renderTitle() {
     const {
       className,
@@ -114,6 +124,11 @@ class ClassList extends PureComponent {
     );
   }
 
+  /**
+   * Render the list item for adding / removing from the class.
+   *
+   * @returns {JSX} - Returns the JSX.
+   */
   renderJoinRemoveItem() {
     const { userId } = this.props;
     const isInClass = this.isInClass;
@@ -136,6 +151,11 @@ class ClassList extends PureComponent {
     );
   }
 
+  /**
+   * Render the current players for the class.
+   *
+   * @returns {JSX[]} - Returns the JSX.
+   */
   renderPlayers() {
     return this.props.players.map(player => (
       <Player

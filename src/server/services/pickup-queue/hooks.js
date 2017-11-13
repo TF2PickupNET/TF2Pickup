@@ -10,8 +10,9 @@ import statuses from './statuses';
 /**
  * Populate the pickup with the correct user data.
  *
- * @param {Object} props - The props from the hook.
- * @returns {Object} - Returns the new populated hook data.
+ * @param {Object} app - The feathers app object.
+ * @param {Object} pickup - The pickup to populate.
+ * @returns {Object} - Returns the new populated pickup.
  */
 async function populatePickup(app, pickup) {
   const usersService = app.service('users');

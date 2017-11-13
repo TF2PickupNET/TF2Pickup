@@ -15,6 +15,11 @@ import ClassList from './class-list';
 
 const minmax = 'minmax(240px, 360px) ';
 
+/**
+ * The classes for the current gamemode.
+ *
+ * @class
+ */
 class Classes extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({ classContainer: PropTypes.string }).isRequired,

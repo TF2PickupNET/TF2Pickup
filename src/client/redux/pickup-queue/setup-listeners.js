@@ -37,22 +37,4 @@ export default function setupListeners(app) {
   pickupQueue.on('patched', (data) => {
     app.store.dispatch(updatePickup(data.gamemode, data));
   });
-
-  app
-    .service('users')
-    .on('patched', async (data) => {
-      const user = app.store.getState().user;
-      const region = pluck('settings.region', 'eu')(user);
-
-      if (data.settings.region !== region) {
-        await fetchPickups(app, data.settings.region);
-      }
-    });
-
-  app.io.on('connect', async () => {
-    const user = app.store.getState().user;
-    const region = pluck('settings.region', 'eu')(user);
-
-    await fetchPickups(app, region);
-  });
 }

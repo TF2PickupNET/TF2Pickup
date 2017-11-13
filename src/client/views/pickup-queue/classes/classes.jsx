@@ -8,8 +8,11 @@ import {
   map,
   pipe,
   pluck,
+  arrayToObject,
 } from '../../../../utils/functions';
 import { getGamemodeFromUrl } from '../../../../utils/pickup';
+import { updatePickups } from '../../../redux/pickup-queue/actions';
+import app from '../../../app';
 
 import ClassList from './class-list';
 
@@ -27,9 +30,15 @@ class Classes extends PureComponent {
       gamemode: PropTypes.string,
       classes: PropTypes.shape({}),
     }),
+    connected: PropTypes.bool.isRequired,
+    updatePickups: PropTypes.func.isRequired,
+    user: PropTypes.shape({}),
   };
 
-  static defaultProps = { pickup: null };
+  static defaultProps = {
+    pickup: null,
+    user: null,
+  };
 
   static styles = {
     classContainer: {
@@ -54,6 +63,36 @@ class Classes extends PureComponent {
       '&[data-gamemode="bball"]': { gridTemplateColumns: 'minmax(736px, 1fr)' },
     },
   };
+
+  componentWillMount() {
+    this.updatePickups(this.getRegion(this.props.user));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const currentRegion = this.getRegion(this.props.user);
+    const nextRegion = this.getRegion(nextProps.user);
+
+    if (nextProps.connected && !this.props.connected) {
+      this.updatePickups(nextRegion);
+    }
+
+    if (currentRegion !== nextRegion) {
+      this.updatePickups(nextRegion);
+    }
+  }
+
+  getRegion = pluck('settings.region', 'eu');
+
+  /**
+   * Fetch the pickups for the passed region.
+   *
+   * @param {String} region - The regions name.
+   */
+  async updatePickups(region) {
+    const pickups = await app.service('pickup-queue').find({ query: { region } });
+
+    this.props.updatePickups(arrayToObject('gamemode')(pickups));
+  }
 
   /**
    * Render the class list with the players.
@@ -93,6 +132,17 @@ export default connect(
   (state) => {
     const gamemode = getGamemodeFromUrl(state.router.location.pathname);
 
-    return { pickup: pluck(gamemode, null)(state.pickupQueue) };
+    return {
+      pickup: pluck(gamemode, null)(state.pickupQueue),
+      user: state.user,
+      connected: state.connected,
+    };
+  },
+  (dispatch) => {
+    return {
+      updatePickups(pickups) {
+        return dispatch(updatePickups(pickups));
+      },
+    };
   },
 )(injectSheet(Classes.styles)(Classes));

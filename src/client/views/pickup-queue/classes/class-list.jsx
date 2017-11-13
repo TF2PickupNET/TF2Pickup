@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import injectSheet, { withTheme } from 'react-jss';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 import {
   Card,
   List,
@@ -37,6 +38,7 @@ class ClassList extends PureComponent {
       hidden: PropTypes.string.isRequired,
       classIcon: PropTypes.string.isRequired,
       icon: PropTypes.string.isRequired,
+      leaveIcon: PropTypes.string.isRequired,
     }).isRequired,
     players: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     theme: PropTypes.shape({ iconColor: PropTypes.string }).isRequired,
@@ -59,7 +61,13 @@ class ClassList extends PureComponent {
 
     classIcon: { margin: '8px 0' },
 
-    icon: { margin: '0 8px' },
+    icon: {
+      margin: '0 8px',
+
+      '&:before': { transition: 'transform 100ms' },
+    },
+
+    leaveIcon: { '&:before': { transform: 'rotate(45deg)' } },
   };
 
   /**
@@ -139,8 +147,11 @@ class ClassList extends PureComponent {
         className={userId ? '' : this.props.classes.hidden}
         leftItem={(
           <Icon
-            icon={isInClass ? 'close' : 'plus'}
-            className={this.props.classes.icon}
+            icon="plus"
+            className={classnames(
+              this.props.classes.icon,
+              { [this.props.classes.leaveIcon]: isInClass },
+            )}
           />
         )}
         onClick={isInClass ? this.handleLeaveClass : this.handleJoinClass}

@@ -18,6 +18,7 @@ import {
   capitalize,
   pipe,
   find,
+  findIndex, add,
 } from '../../../../utils/functions';
 import { getGamemodeFromUrl } from '../../../../utils/pickup';
 
@@ -167,9 +168,14 @@ class ClassList extends PureComponent {
 
   render() {
     const isHidden = this.props.userId ? '' : this.props.classes.hidden;
+    const order = pipe(
+      Object.keys,
+      findIndex(className => this.props.className === className),
+      add(1),
+    )(gamemodes[this.props.gamemode].slots);
 
     return (
-      <div>
+      <div style={{ order }}>
         <Card className={this.props.classes.card}>
           <List inset>
             {this.renderTitle()}

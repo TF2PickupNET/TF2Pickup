@@ -1,29 +1,4 @@
-import {
-  arrayToObject,
-  pipe,
-  pluck,
-} from '../../../utils/functions';
-
-import {
-  updatePickup,
-  updatePickups,
-} from './actions';
-
-/**
- * Fetch the pickups for the passed region.
- *
- * @param {Object} app - The app object.
- * @param {String} region - The regions name.
- */
-async function fetchPickups(app, region) {
-  const pickups = await app.service('pickup-queue').find({ query: { region } });
-
-  pipe(
-    arrayToObject('gamemode'),
-    updatePickups,
-    app.store.dispatch,
-  )(pickups);
-}
+import { updatePickup } from './actions';
 
 /**
  * Setup listeners for the current user store to change the store

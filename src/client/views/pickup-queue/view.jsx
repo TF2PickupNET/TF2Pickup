@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
 import Helmet from 'react-helmet';
 import lockr from 'lockr';
-import Aux from 'react-aux';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
+import Aux from 'react-aux';
 
-import PickupContainer from './pickup-container';
+import Tabs from './tabs';
+import Info from './info';
+import Classes from './classes';
 
 /**
  * The view for the pickup page.
@@ -48,15 +50,17 @@ export default class View extends PureComponent {
   }
 
   render() {
-    const gamemode = this.getCurrentGamemode();
-
     return (
       <Aux>
         <Helmet>
           <title>{this.getTitle()}</title>
         </Helmet>
 
-        <PickupContainer gamemode={gamemode} />
+        <Tabs />
+
+        <Info />
+
+        <Classes />
       </Aux>
     );
   }

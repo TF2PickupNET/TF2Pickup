@@ -43,8 +43,8 @@ export const pipe = (...fns) => init => reduce((memo, fn) => fn(memo), init)(fns
 export const capitalize = str => `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
 
 export const pluck = (path, defaultValue = null) => (object) => {
-  if (undef(object)) {
-    return null;
+  if (!object) {
+    return defaultValue;
   }
 
   if (path.includes('.')) {

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import Aux from 'react-aux';
 
-import app from '../../app';
+import app from '../../../app';
 
 /**
  * The component to render the ready up dialog and open or close it when needed.
@@ -16,8 +16,14 @@ import app from '../../app';
  */
 export default class ReadyUpDialog extends PureComponent {
   static propTypes = {
-    pickup: PropTypes.shape({ status: PropTypes.string.isRequired }).isRequired,
-    gamemode: PropTypes.string.isRequired,
+    pickup: PropTypes.shape({
+      status: PropTypes.string.isRequired,
+      gamemode: PropTypes.string.isRequired,
+    }).isRequired,
+    player: PropTypes.oneOfType([ // eslint-disable-line react/no-unused-prop-types
+      PropTypes.bool,
+      PropTypes.shape({ ready: PropTypes.bool }), // eslint-disable-line react/no-unused-prop-types
+    ]).isRequired,
   };
 
   /**
@@ -28,8 +34,8 @@ export default class ReadyUpDialog extends PureComponent {
    */
   static getDialogStatus(props) {
     return props.pickup.status === 'ready-up'
-           && props.isInPickup
-           && !props.isInPickup.ready;
+           && props.player
+           && !props.player.ready;
   }
 
   /**
@@ -79,14 +85,14 @@ export default class ReadyUpDialog extends PureComponent {
    * Ready the user up.
    */
   handleYesPress = () => {
-    app.io.emit('pickup-queue.ready-up', { gamemode: this.props.gamemode });
+    app.io.emit('pickup-queue.ready-up', { gamemode: this.props.pickup.gamemode });
   };
 
   /**
    * Remove the user from the queue.
    */
   handleNoPress = () => {
-    app.io.emit('pickup-queue.remove', { gamemode: this.props.gamemode });
+    app.io.emit('pickup-queue.remove', { gamemode: this.props.pickup.gamemode });
   };
 
   render() {

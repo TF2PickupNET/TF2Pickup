@@ -2,7 +2,8 @@ import { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
-import gamemodes from '@tf2-pickup/configs/gamemodes';
+
+import getAlias from '../../../utils/get-alias';
 
 /**
  * Redirect the user to the correct url.
@@ -20,25 +21,9 @@ class RedirectToPickup extends PureComponent {
    */
   componentDidMount() {
     const url = this.props.location.pathname;
-    const aliasName = url.slice(1);
+    const alias = url.slice(1);
 
-    const aliases = Object
-      .values(gamemodes)
-      .reduce(
-        (current, gamemode) => []
-          .concat(current)
-          .concat(gamemode.aliases.map((alias) => {
-            return {
-              gamemode: gamemode.name,
-              alias,
-            };
-          })),
-        [],
-      );
-
-    const redirectToGamemode = aliases.find(alias => alias.alias === aliasName);
-
-    this.props.redirect(`/${redirectToGamemode.gamemode}`);
+    this.props.redirect(`/${getAlias(alias)}`);
   }
 
   render() {

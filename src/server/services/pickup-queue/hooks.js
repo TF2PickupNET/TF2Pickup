@@ -13,9 +13,8 @@ import statuses from './statuses';
  * @param {Object} props - The props from the hook.
  * @returns {Object} - Returns the new populated hook data.
  */
-async function populatePickup(props) {
-  const pickup = props.result;
-  const usersService = props.app.service('users');
+async function populatePickup(app, pickup) {
+  const usersService = app.service('users');
   const allUsers = await Promise.all(
     pipe(
       getPlayers,
@@ -25,28 +24,34 @@ async function populatePickup(props) {
   const users = arrayToObject('id')(allUsers);
 
   return {
-    ...props,
-    result: {
-      ...pickup,
-      classes: mapObject(
-        map((player) => {
-          const user = users[player.id];
+    ...pickup,
+    classes: mapObject(
+      map((player) => {
+        const user = users[player.id];
 
-          return {
-            ...player,
-            name: user.name,
-            avatar: user.services.steam.avatar.medium,
-            roles: user.roles,
-          };
-        }),
-      )(pickup.classes),
-    },
+        return {
+          ...player,
+          name: user.name,
+          avatar: user.services.steam.avatar.medium,
+          roles: user.roles,
+        };
+      }),
+    )(pickup.classes),
   };
 }
 
 export default {
   after: {
-    get: populatePickup,
+    async find(props) {
+      const pickups = await Promise.all(
+        map(pickup => populatePickup(props.app, pickup))(props.result),
+      );
+
+      return {
+        ...props,
+        result: pickups,
+      };
+    },
     patch: [
       (props) => {
         switch (props.result.status) {
@@ -61,7 +66,14 @@ export default {
           default: return props;
         }
       },
-      populatePickup,
+      async (props) => {
+        const populatedPickup = await populatePickup(props.app, props.result);
+
+        return {
+          ...props,
+          result: populatedPickup,
+        };
+      },
     ],
   },
 };

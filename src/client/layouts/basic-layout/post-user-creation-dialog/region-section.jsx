@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import regions from '@tf2-pickup/configs/regions';
 import axios from 'axios';
 
-import app from '../../app';
+import app from '../../../app';
 
 /**
  * The section for the setting the initial region.

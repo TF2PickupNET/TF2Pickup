@@ -64,10 +64,16 @@ class Classes extends PureComponent {
     },
   };
 
+  /**
+   * Update the pickups when the component mounts.
+   */
   componentWillMount() {
     this.updatePickups(this.getRegion(this.props.user));
   }
 
+  /**
+   * Update the pickups when the user reconnects or the user changes the region.
+   */
   componentWillReceiveProps(nextProps) {
     const currentRegion = this.getRegion(this.props.user);
     const nextRegion = this.getRegion(nextProps.user);

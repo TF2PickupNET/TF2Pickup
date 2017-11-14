@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { breakpoints } from 'materialize-react';
 
 import {
@@ -53,14 +54,14 @@ class Classes extends PureComponent {
       [breakpoints.up('tablet')]: { gridTemplateColumns: '1fr 1fr' },
 
       [breakpoints.up('desktop')]: {
-        '&[data-gamemode="6v6"]': { gridTemplateColumns: 'minmax(240px, 300px) '.repeat(5) },
+        '&.gamemode-6v6': { gridTemplateColumns: 'minmax(240px, 300px) '.repeat(5) },
 
-        '&[data-gamemode="9v9"]': { gridTemplateColumns: minmax.repeat(3) },
+        '&.gamemode-9v9': { gridTemplateColumns: minmax.repeat(3) },
 
-        '&[data-gamemode="ultiduo"]': { gridTemplateColumns: minmax.repeat(2) },
+        '&.gamemode-ultiduo': { gridTemplateColumns: minmax.repeat(2) },
       },
 
-      '&[data-gamemode="bball"]': { gridTemplateColumns: 'minmax(736px, 1fr)' },
+      '&.gamemode-bball': { gridTemplateColumns: 'minmax(736px, 1fr)' },
     },
   };
 
@@ -125,8 +126,10 @@ class Classes extends PureComponent {
 
     return (
       <div
-        className={this.props.classes.classContainer}
-        data-gamemode={this.props.pickup.gamemode}
+        className={classnames(
+          this.props.classes.classContainer,
+          `gamemode-${this.props.pickup.gamemode}`,
+        )}
       >
         {this.renderClasses()}
       </div>

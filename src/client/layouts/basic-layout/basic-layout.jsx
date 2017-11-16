@@ -17,11 +17,10 @@ import {
 import app from '../../app';
 import { isInBetaMode } from '../../../config/client';
 import { addNotification } from '../../redux/notifications/actions';
-import Notifications from '../../components/notifications';
-import NoConnectionDialog from '../../components/no-connection-dialog';
-import PostUserCreationDialog from '../../components/post-user-creation-dialog';
-import { pluck } from '../../../utils/functions';
 
+import NoConnectionDialog from './no-connection-dialog';
+import PostUserCreationDialog from './post-user-creation-dialog';
+import Notifications from './notifications';
 import Head from './head';
 import BetaScreen from './beta-screen';
 import NotificationRequester from './notification-requester';

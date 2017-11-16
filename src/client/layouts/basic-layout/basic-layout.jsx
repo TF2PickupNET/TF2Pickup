@@ -4,13 +4,14 @@ import cookie from 'js-cookie';
 import lockr from 'lockr';
 import { connect } from 'react-redux';
 import Aux from 'react-aux';
-import get from 'lodash.get';
 import {
   Theme,
   Background,
   Animations,
   Dialog,
   Button,
+  Spinner,
+  Layout,
 } from 'materialize-react';
 
 import app from '../../app';
@@ -19,6 +20,7 @@ import { addNotification } from '../../redux/notifications/actions';
 import Notifications from '../../components/notifications';
 import NoConnectionDialog from '../../components/no-connection-dialog';
 import PostUserCreationDialog from '../../components/post-user-creation-dialog';
+import { pluck } from '../../../utils/functions';
 
 import Head from './head';
 import BetaScreen from './beta-screen';
@@ -39,6 +41,8 @@ class BasicLayout extends PureComponent {
 
   static defaultProps = { user: null };
 
+  state = { hasAuthenticated: false };
+
   /**
    * Tries to login with the token from the cookies.
    */
@@ -53,6 +57,8 @@ class BasicLayout extends PureComponent {
         });
       } catch (error) {
         this.props.addNotification(error.message);
+      } finally {
+        this.setState({ hasAuthenticated: true });
       }
     }
   }
@@ -85,8 +91,14 @@ class BasicLayout extends PureComponent {
     closeSnackbar();
   };
 
+  renderContent() {
+    return isInBetaMode && !this.props.user
+      ? <BetaScreen />
+      : this.props.children;
+  }
+
   render() {
-    const themeType = get(this.props.user, 'settings.theme') || 'light';
+    const themeType = pluck('settings.theme', 'light')(this.props.user);
 
     return (
       <Theme type={themeType}>
@@ -106,7 +118,14 @@ class BasicLayout extends PureComponent {
 
             <NotificationRequester />
 
-            {isInBetaMode && !this.props.user ? <BetaScreen /> : this.props.children}
+            {this.state.hasAuthenticated ? this.renderContent() : (
+              <Layout
+                mainAlign="center"
+                crossAlign="center"
+              >
+                <Spinner active />
+              </Layout>
+            )}
           </Background>
         </Dialog.Controller>
       </Theme>

@@ -1,6 +1,8 @@
 import roles from '../config/roles';
 import permissions from '../config/permissions';
 
+import { pluck } from './functions';
+
 export const computeLevel = userRoles => Math.max(0, ...userRoles.map(name => roles[name].level));
 
 /**
@@ -12,7 +14,11 @@ export const computeLevel = userRoles => Math.max(0, ...userRoles.map(name => ro
  * @returns {Boolean} - Returns if the user has permission to perform the action.
  */
 export default function hasPermission(permission, loggedInUser, targetUser = null) {
-  const permissionInfo = permissions[permission];
+  const permissionInfo = pluck(permission)(permissions);
+
+  if (!permissionInfo || !loggedInUser) {
+    return false;
+  }
 
   if (permissionInfo.selfEditing && targetUser.id === loggedInUser.id) {
     return true;

@@ -10,6 +10,10 @@ import {
   IconButton,
 } from 'materialize-react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
+
+import openWindowInNewTab from '../../utils/open-window-in-new-tab';
+import { discordUrls } from '../../../config/client';
 
 class ErrorBoundary extends PureComponent {
   static propTypes = {
@@ -37,6 +41,10 @@ class ErrorBoundary extends PureComponent {
       display: 'grid',
       gridTemplateColumns: '1fr auto',
     },
+
+    iconButton: { transition: 'transform 140ms' },
+
+    rotateIconButton: { transform: 'rotate(180deg)' },
   };
 
   state = {
@@ -57,6 +65,10 @@ class ErrorBoundary extends PureComponent {
     this.setState((state) => {
       return { showStackTrace: !state.showStackTrace };
     });
+  };
+
+  handleButtonPress = () => {
+    openWindowInNewTab(discordUrls.help);
   };
 
   renderComponentStack() {
@@ -88,7 +100,7 @@ class ErrorBoundary extends PureComponent {
         <Divider />
 
         <Card.Actions>
-          <Button>
+          <Button onRelease={this.handleButtonPress}>
             Go to discord
           </Button>
         </Card.Actions>
@@ -100,7 +112,10 @@ class ErrorBoundary extends PureComponent {
 
           <IconButton
             icon="chevron-down"
-            className={this.props.classes}
+            className={classnames(
+              this.props.classes.iconButton,
+              this.state.showStackTrace && this.props.classes.rotateIconButton,
+            )}
             onPress={this.handleIconButtonPress}
           />
         </Card.Actions>

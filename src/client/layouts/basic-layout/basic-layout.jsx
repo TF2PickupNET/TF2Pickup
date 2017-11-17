@@ -23,6 +23,7 @@ import Notifications from './notifications';
 import Head from './head';
 import BetaScreen from './beta-screen';
 import NotificationRequester from './notification-requester';
+import { pluck } from '../../../utils/functions';
 
 /**
  * Render a basic layout which will try login with the token from a cookie and make sure
@@ -79,17 +80,29 @@ class BasicLayout extends PureComponent {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user !== this.props.user && nextProps.user) {
+      lockr.set('theme', nextProps.user.settings.theme);
+    }
+  }
+
   createAcceptCookiesHandler = closeSnackbar => () => {
     lockr.set('acceptsCookie', true);
 
     closeSnackbar();
   };
 
-  render() {
-    const themeType = get(this.props.user, 'settings.theme') || 'light';
+  getTheme() {
+    if (this.props.user) {
+      return pluck('settings.theme')(this.props.user);
+    }
 
+    return lockr.get('theme') || 'light';
+  }
+
+  render() {
     return (
-      <Theme type={themeType}>
+      <Theme type={this.getTheme()}>
         <Dialog.Controller>
           <Background>
             <Head />

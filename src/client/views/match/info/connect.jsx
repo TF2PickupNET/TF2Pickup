@@ -4,8 +4,26 @@ import {
   Button,
 } from 'materialize-react';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
+
+import openWindowInNewTab from '../../../utils/open-window-in-new-tab';
 
 class Info extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({
+      card: PropTypes.string.isRequired,
+      item: PropTypes.string.isRequired,
+      button: PropTypes.string.isRequired,
+    }).isRequired,
+    pickup: PropTypes.shape({
+      server: PropTypes.shape({
+        ip: PropTypes.string,
+        port: PropTypes.string,
+        password: PropTypes.string,
+      }),
+    }).isRequired,
+  };
+
   static styles = {
     card: {
       height: 64,
@@ -32,6 +50,21 @@ class Info extends PureComponent {
     return `connect ${ip}:${port}; password ${password}`;
   }
 
+  getConnectUrl() {
+    const {
+      ip,
+      port,
+      password,
+    } = this.props.pickup.server;
+
+    return `steam://connect/${ip}:${port}/${password}`;
+  }
+
+  handleButtonPress = () => {
+    const tab = openWindowInNewTab(this.getConnectUrl());
+
+    setTimeout(() => tab.close(), 100);
+  };
   render() {
     if (!this.props.pickup.server.password) {
       return null;
@@ -39,12 +72,12 @@ class Info extends PureComponent {
 
     return (
       <Card className={this.props.classes.card}>
-        <span>
+        <span className={this.props.classes.item}>
           {this.getConnect()}
         </span>
 
         <span className={this.props.classes.button}>
-          <Button>
+          <Button onRelease={this.handleButtonPress}>
             Join server
           </Button>
         </span>

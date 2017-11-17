@@ -17,6 +17,7 @@ import {
 import app from '../../app';
 import { isInBetaMode } from '../../../config/client';
 import { addNotification } from '../../redux/notifications/actions';
+import { pluck } from '../../../utils/functions';
 
 import NoConnectionDialog from './no-connection-dialog';
 import PostUserCreationDialog from './post-user-creation-dialog';

@@ -8,6 +8,7 @@ import {
   Card,
   Spinner,
   breakpoints,
+  Dialog,
 } from 'materialize-react';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
@@ -24,6 +25,7 @@ import {
 
 import ReadyUpDialog from './ready-up-dialog';
 import ProgressBar from './progress-bar';
+import MapVoteDialog from './map-vote-dialog';
 
 /**
  * A component which renders info about the current pickup.
@@ -124,6 +126,8 @@ class PickupInfo extends PureComponent {
     return false;
   }
 
+  handleMapVoteButtonPress = () => this.mapVoteDialog.open();
+
   render() {
     if (!this.props.pickup) {
       return (
@@ -151,7 +155,10 @@ class PickupInfo extends PureComponent {
           </span>
 
           <span className={this.props.classes.item}>
-            <Button disabled={!playerData}>
+            <Button
+              disabled={!playerData}
+              onPress={this.handleMapVoteButtonPress}
+            >
               Vote for map
             </Button>
           </span>
@@ -162,6 +169,12 @@ class PickupInfo extends PureComponent {
 
           <ProgressBar pickup={this.props.pickup} />
         </Card>
+
+        <Dialog
+          closeOnOutsideClick
+          ref={(element) => { this.mapVoteDialog = element; }}
+          component={MapVoteDialog}
+        />
 
         <ReadyUpDialog
           pickup={this.props.pickup}
@@ -176,6 +189,9 @@ export default connect(
   (state) => {
     const gamemode = getGamemodeFromUrl(state.router.location.pathname);
 
-    return { pickup: pluck(gamemode, null)(state.pickupQueue) };
+    return {
+      pickup: pluck(gamemode, null)(state.pickupQueue),
+      user: state.user,
+    };
   },
 )(injectSheet(PickupInfo.styles)(PickupInfo));

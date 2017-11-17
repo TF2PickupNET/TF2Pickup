@@ -19,8 +19,6 @@ export default class View extends PureComponent {
    */
   componentWillMount() {
     lockr.set('lastGamemode', this.getCurrentGamemode());
-
-    throw new Error('Some error');
   }
 
   /**

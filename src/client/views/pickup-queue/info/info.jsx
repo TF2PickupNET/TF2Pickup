@@ -138,8 +138,6 @@ class PickupInfo extends PureComponent {
     const gamemodeInfo = gamemodes[this.props.pickup.gamemode];
     const playerData = this.getPlayerData();
 
-    console.log(playerData);
-
     return (
       <Aux>
         <Card

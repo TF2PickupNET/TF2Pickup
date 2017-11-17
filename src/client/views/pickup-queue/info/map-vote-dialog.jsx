@@ -17,6 +17,11 @@ import {
 import maps from '../../../../config/maps';
 import app from '../../../app';
 
+/**
+ * The dialog content for the map voting.
+ *
+ * @class
+ */
 class MapVoteDialog extends PureComponent {
   static propTypes = {
     selectedMap: PropTypes.string,
@@ -31,6 +36,9 @@ class MapVoteDialog extends PureComponent {
 
   handleCancelButtonPress = () => this.props.close();
 
+  /**
+   * Emit the pick-map event and close the dialog.
+   */
   handleSelectButtonPress = () => {
     app.io.emit('pickup-queue.pick-map', {
       gamemode: this.props.gamemode,
@@ -40,10 +48,20 @@ class MapVoteDialog extends PureComponent {
     this.props.close();
   };
 
+  /**
+   * Change the state when the user changes the selected map.
+   *
+   * @param {String} name - The name of the map.
+   */
   handleMapChange = (name) => {
     this.setState({ selectedMap: name });
   };
 
+  /**
+   * Render the radio buttons for the maps.
+   *
+   * @returns {JSX[]} - Returns the JSX for the radio buttons.
+   */
   renderRadioButtons() {
     return this.props.maps.map(map => (
       <Label key={map}>
@@ -89,8 +107,6 @@ export default connect(
     const gamemode = getGamemodeFromUrl(state.router.location.pathname);
     const pickup = state.pickupQueue[gamemode];
     const player = getPlayer(state.user.id)(pickup.classes);
-
-    console.log(player.map);
 
     return {
       gamemode,

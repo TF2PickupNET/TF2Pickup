@@ -8,6 +8,8 @@ import {
 } from 'materialize-react';
 import { devices } from 'materialize-react/lib/styles/breakpoints';
 
+import ErrorBoundary from '../../components/error-boundary';
+
 import DrawerContent from './drawer-content';
 import MainToolbar from './main-toolbar';
 
@@ -26,6 +28,8 @@ class MainLayout extends PureComponent {
     container: {
       padding: 16,
       overflowX: 'hidden',
+      overflowY: 'scroll',
+      minHeight: '100%',
 
       [breakpoints.up('tablet')]: { padding: 24 },
     },
@@ -63,7 +67,9 @@ class MainLayout extends PureComponent {
             crossAlign="center"
             className={this.props.classes.container}
           >
-            {this.props.children}
+            <ErrorBoundary>
+              {this.props.children}
+            </ErrorBoundary>
           </Layout>
         </Drawer.MainContent>
       </Drawer>

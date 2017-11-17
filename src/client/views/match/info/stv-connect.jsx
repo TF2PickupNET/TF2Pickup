@@ -18,7 +18,7 @@ class Info extends PureComponent {
     pickup: PropTypes.shape({
       server: PropTypes.shape({
         ip: PropTypes.string,
-        stvPort: PropTypes.string,
+        stvPort: PropTypes.number,
         stvPassword: PropTypes.string,
       }),
     }).isRequired,

@@ -11,6 +11,7 @@ import Info from './info/info';
 import Connect from './info/connect';
 import StvConnect from './info/stv-connect';
 import RconPassword from './info/rcon-password';
+import Teams from './teams';
 
 class View extends PureComponent {
   static styles = {
@@ -72,6 +73,19 @@ class View extends PureComponent {
             <StvConnect pickup={this.state.pickup} />
 
             <RconPassword pickup={this.state.pickup} />
+
+            <Teams
+              teams={{
+                red: {
+                  scout: ['1', '2'],
+                  roamer: ['1'],
+                  pocket: ['1'],
+                  demoman: ['1'],
+                  medic: ['1'],
+                },
+              }}
+              scores={this.state.pickup.score}
+            />
           </div>
         ) : (
           <Spinner active />

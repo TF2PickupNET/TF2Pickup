@@ -87,6 +87,16 @@ export const find = fn => ([x, ...xs]) => {
   return fn(x) ? x : find(fn)(xs);
 };
 
+export const findIndex = fn => ([x, ...xs], index = 0) => {
+  if (undef(x)) {
+    return -1;
+  }
+
+  return fn(x) ? index : findIndex(fn)(xs, index + 1);
+};
+
+export const add = x => y => x + y;
+
 export const every = fn => ([x, ...xs]) => {
   if (!fn(x) || undef(x)) {
     return false;

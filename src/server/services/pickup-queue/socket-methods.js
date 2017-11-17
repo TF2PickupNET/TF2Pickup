@@ -153,7 +153,7 @@ export default function socketMethods(app, socket) {
 
       await pickupQueue.patch(
         queue.id,
-        { $set: { classes: mapObject(setMap, queue.classes) } },
+        { $set: { classes: mapObject(setMap)(queue.classes) } },
       );
     }
   });

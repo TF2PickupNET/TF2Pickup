@@ -15,12 +15,19 @@ import classnames from 'classnames';
 import openWindowInNewTab from '../../utils/open-window-in-new-tab';
 import { discordUrls } from '../../../config/client';
 
+/**
+ * An error boundary which catches errors in the react vdom tree.
+ *
+ * @class
+ */
 class ErrorBoundary extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
       card: PropTypes.string.isRequired,
       stackTraceContainer: PropTypes.string.isRequired,
       cardActions: PropTypes.string.isRequired,
+      iconButton: PropTypes.string.isRequired,
+      rotateIconButton: PropTypes.string.isRequired,
     }).isRequired,
     children: PropTypes.node.isRequired,
     isTopLevel: PropTypes.bool,
@@ -54,6 +61,12 @@ class ErrorBoundary extends PureComponent {
 
   error = null;
 
+  /**
+   * When the component catches an error, set the hasError state to true.
+   *
+   * @param {Object} error - The error object.
+   * @param {Object} info - The info for the error.
+   */
   componentDidCatch(error, info) {
     this.error = error;
     this.info = info;
@@ -61,16 +74,27 @@ class ErrorBoundary extends PureComponent {
     this.setState({ hasError: true });
   }
 
+  /**
+   * Toggle showing the stack trace.
+   */
   handleIconButtonPress = () => {
     this.setState((state) => {
       return { showStackTrace: !state.showStackTrace };
     });
   };
 
+  /**
+   * Open a new tab with the dircord help channel url.
+   */
   handleButtonPress = () => {
     openWindowInNewTab(discordUrls.help);
   };
 
+  /**
+   * Render the component stack trace.
+   *
+   * @returns {JSX[]} - Returns an array of elements for each of the trace.
+   */
   renderComponentStack() {
     return this.info.componentStack
       .split('\n')
@@ -82,6 +106,11 @@ class ErrorBoundary extends PureComponent {
       ));
   }
 
+  /**
+   * Render the error content.
+   *
+   * @returns {JSX} - Returns the jsx.
+   */
   renderErrorContent() {
     return (
       <Card className={this.props.classes.card}>

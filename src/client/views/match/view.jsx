@@ -4,6 +4,7 @@ import Aux from 'react-aux';
 import { connect } from 'react-redux';
 import { Spinner } from 'materialize-react';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 
 import app from '../../app';
 
@@ -13,26 +14,47 @@ import StvConnect from './info/stv-connect';
 import RconPassword from './info/rcon-password';
 import Teams from './teams';
 
+/**
+ * The component for the match view.
+ *
+ * @class
+ */
 class View extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({ container: PropTypes.string.isRequired }).isRequired,
+    match: PropTypes.shape({ params: PropTypes.shape({ id: PropTypes.string }) }).isRequired,
+    user: PropTypes.shape({}),
+  };
+
+  static defaultProps = { user: null };
+
   static styles = {
     container: {
       width: '100%',
       maxWidth: 1024,
+      display: 'grid',
+      gridGap: '24px',
+      gridTemplateColumns: '1fr',
     },
   };
 
   state = { pickup: null };
 
+  /**
+   * Get the initial pickup and setup the event listener.
+   */
   async componentWillMount() {
-    const pickup = await app.service('pickup').get(this.id);
+    const service = app.service('pickup');
+    const pickup = await service.get(this.id);
 
     this.setState({ pickup });
 
-    app
-      .service('pickup')
-      .on('patched', this.handlePickupUpdate);
+    service.on('patched', this.handlePickupUpdate);
   }
 
+  /**
+   * When the users object changes, we refetch the pickup.
+   */
   async componentWillReceiveProps(nextProps) {
     if (nextProps.user !== this.props.user) {
       const pickup = await app.service('pickup').get(this.id);
@@ -41,18 +63,29 @@ class View extends PureComponent {
     }
   }
 
+  /**
+   * Remove the event listener.
+   */
   componentWillUnmount() {
     app
       .service('pickup')
       .removeListener('patched', this.handlePickupUpdate);
   }
 
+  /**
+   * Get the id of the pickup from the url.
+   *
+   * @returns {Number} - Returns the id of the pickup.
+   */
   get id() {
     return this.props.match.params.id;
   }
 
+  /**
+   * Update the state when the patched event get's fired.
+   */
   handlePickupUpdate = (data) => {
-    console.log(data);
+    this.setState({ pickup: data });
   };
 
   render() {
@@ -75,15 +108,7 @@ class View extends PureComponent {
             <RconPassword pickup={this.state.pickup} />
 
             <Teams
-              teams={{
-                red: {
-                  scout: ['1', '2'],
-                  roamer: ['1'],
-                  pocket: ['1'],
-                  demoman: ['1'],
-                  medic: ['1'],
-                },
-              }}
+              teams={this.state.pickup.teams}
               scores={this.state.pickup.score}
             />
           </div>

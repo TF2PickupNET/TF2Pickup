@@ -91,6 +91,11 @@ class BasicLayout extends PureComponent {
     closeSnackbar();
   };
 
+  /**
+   * Render the content when the user tried to authenticate.
+   *
+   * @returns {JSX} - Returns the content.
+   */
   renderContent() {
     return isInBetaMode && !this.props.user
       ? <BetaScreen />

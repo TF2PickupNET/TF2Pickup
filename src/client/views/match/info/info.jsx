@@ -6,17 +6,43 @@ import {
 import injectSheet from 'react-jss';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 import regions from '@tf2-pickup/configs/regions';
+import PropTypes from 'prop-types';
 
 import Date from '../../../components/date';
 import maps from '../../../../config/maps';
 
+/**
+ * The info for the pickup.
+ *
+ * @class
+ */
 class Info extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({
+      card: PropTypes.string.isRequired,
+      imageContainer: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
+      imageCaption: PropTypes.string.isRequired,
+      item: PropTypes.string.isRequired,
+    }).isRequired,
+    pickup: PropTypes.shape({
+      status: PropTypes.string.isRequired,
+      region: PropTypes.string.isRequired,
+      gamemode: PropTypes.string.isRequired,
+      launchedOn: PropTypes.string,
+      startedOn: PropTypes.string,
+      endedOn: PropTypes.string,
+      map: PropTypes.string.isRequired,
+    }).isRequired,
+  };
+
   static styles = {
     card: {
       height: 64 * 2,
       display: 'grid',
       gridTemplateColumns: '3fr 2fr 2fr auto',
       gridTemplateRows: '64px',
+      margin: 0,
     },
 
     imageContainer: {
@@ -52,6 +78,11 @@ class Info extends PureComponent {
     },
   };
 
+  /**
+   * Get the transformed status to display.
+   *
+   * @returns {String} - Returns the status.
+   */
   getStatus() {
     switch (this.props.pickup.status) {
       case 'setting-up-server': return 'Setting up server';
@@ -63,14 +94,29 @@ class Info extends PureComponent {
     }
   }
 
+  /**
+   * Get the fullname of the region.
+   *
+   * @returns {String} - Returns the name.
+   */
   getRegion() {
     return regions[this.props.pickup.region].fullName;
   }
 
+  /**
+   * Get the display for the gamemode.
+   *
+   * @returns {String} - Returns the display for the gamemode.
+   */
   getGamemode() {
     return gamemodes[this.props.pickup.gamemode].display;
   }
 
+  /**
+   * Get the date based on the current status.
+   *
+   * @returns {Date} - Returns the date.
+   */
   getDate() {
     switch (this.props.pickup.status) {
       case 'server-configuration-error':
@@ -128,7 +174,7 @@ class Info extends PureComponent {
           <img
             src={`/assets/images/maps/${this.props.pickup.map}.jpg`}
             className={this.props.classes.image}
-            alt="map picture"
+            alt="map"
           />
 
           <span className={this.props.classes.imageCaption}>

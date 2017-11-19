@@ -24,4 +24,27 @@ export default function pickup() {
   that.service('pickup').hooks(hooks);
 
   logListener(that);
+
+  const player = { id: '76561198085010248' };
+  const team = {
+    scout: [player, player],
+    roamer: [player],
+    pocket: [player],
+    demoman: [player],
+    medic: [player],
+  };
+
+  that.service('pickup').patch(1, {
+    $set: {
+      serverId: 3,
+      teams: {
+        red: team,
+        blu: team,
+      },
+      score: {
+        blu: 1,
+        red: 1,
+      },
+    },
+  });
 }

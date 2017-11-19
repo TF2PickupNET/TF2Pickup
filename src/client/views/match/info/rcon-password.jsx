@@ -8,7 +8,12 @@ import PropTypes from 'prop-types';
 
 import copy from '../../../utils/copy';
 
-class Info extends PureComponent {
+/**
+ * The rcon password command.
+ *
+ * @class
+ */
+class RCONPassword extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
       card: PropTypes.string.isRequired,
@@ -29,6 +34,7 @@ class Info extends PureComponent {
       height: 64,
       display: 'grid',
       gridTemplateColumns: '1fr auto',
+      margin: 0,
     },
 
     item: {
@@ -40,6 +46,11 @@ class Info extends PureComponent {
     button: { alignSelf: 'center' },
   };
 
+  /**
+   * Get the rcon connect command.
+   *
+   * @returns {String} - Returns the command.
+   */
   getConnect() {
     const {
       ip,
@@ -50,6 +61,9 @@ class Info extends PureComponent {
     return `rcon_address ${ip}:${port}; rcon_password ${rconPassword}`;
   }
 
+  /**
+   * Copy the rcon connect command.
+   */
   handleButtonPress = () => copy(this.getConnectUrl());
 
   render() {
@@ -73,4 +87,4 @@ class Info extends PureComponent {
   }
 }
 
-export default injectSheet(Info.styles)(Info);
+export default injectSheet(RCONPassword.styles)(RCONPassword);

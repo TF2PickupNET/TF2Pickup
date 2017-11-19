@@ -8,7 +8,12 @@ import PropTypes from 'prop-types';
 
 import openWindowInNewTab from '../../../utils/open-window-in-new-tab';
 
-class Info extends PureComponent {
+/**
+ * The STV connect for the pickup.
+ *
+ * @class
+ */
+class STVConnect extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
       card: PropTypes.string.isRequired,
@@ -29,6 +34,7 @@ class Info extends PureComponent {
       height: 64,
       display: 'grid',
       gridTemplateColumns: '1fr auto',
+      margin: 0,
     },
 
     item: {
@@ -40,6 +46,11 @@ class Info extends PureComponent {
     button: { alignSelf: 'center' },
   };
 
+  /**
+   * Get the stv connect string for the pickup.
+   *
+   * @returns {String} - Returns the command.
+   */
   getConnect() {
     const {
       ip,
@@ -50,6 +61,11 @@ class Info extends PureComponent {
     return `connect ${ip}:${stvPort}; password ${stvPassword}`;
   }
 
+  /**
+   * Get the stv connect link.
+   *
+   * @returns {String} - Returns the link.
+   */
   getConnectUrl() {
     const {
       ip,
@@ -60,6 +76,9 @@ class Info extends PureComponent {
     return `steam://connect/${ip}:${stvPort}/${stvPassword}`;
   }
 
+  /**
+   * Open a new window with the link and close it after 100ms.
+   */
   handleButtonPress = () => {
     const tab = openWindowInNewTab(this.getConnectUrl());
 
@@ -83,4 +102,4 @@ class Info extends PureComponent {
   }
 }
 
-export default injectSheet(Info.styles)(Info);
+export default injectSheet(STVConnect.styles)(STVConnect);

@@ -8,7 +8,12 @@ import PropTypes from 'prop-types';
 
 import openWindowInNewTab from '../../../utils/open-window-in-new-tab';
 
-class Info extends PureComponent {
+/**
+ * The connect for the pickup.
+ *
+ * @class
+ */
+class Connect extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
       card: PropTypes.string.isRequired,
@@ -29,6 +34,7 @@ class Info extends PureComponent {
       height: 64,
       display: 'grid',
       gridTemplateColumns: '1fr auto',
+      margin: 0,
     },
 
     item: {
@@ -40,6 +46,11 @@ class Info extends PureComponent {
     button: { alignSelf: 'center' },
   };
 
+  /**
+   * Get the connect string.
+   *
+   * @returns {String} - Returns the connect command.
+   */
   getConnect() {
     const {
       ip,
@@ -50,6 +61,11 @@ class Info extends PureComponent {
     return `connect ${ip}:${port}; password ${password}`;
   }
 
+  /**
+   * Get the connect url.
+   *
+   * @returns {String} - Returns the connect url.
+   */
   getConnectUrl() {
     const {
       ip,
@@ -60,11 +76,15 @@ class Info extends PureComponent {
     return `steam://connect/${ip}:${port}/${password}`;
   }
 
+  /**
+   * Create a new window and close it when the button get's pressed.
+   */
   handleButtonPress = () => {
     const tab = openWindowInNewTab(this.getConnectUrl());
 
     setTimeout(() => tab.close(), 100);
   };
+
   render() {
     if (!this.props.pickup.server.password) {
       return null;
@@ -86,4 +106,4 @@ class Info extends PureComponent {
   }
 }
 
-export default injectSheet(Info.styles)(Info);
+export default injectSheet(Connect.styles)(Connect);

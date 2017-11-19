@@ -2,6 +2,7 @@ import React from 'react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { Icon } from 'materialize-react';
 
 import {
@@ -30,7 +31,13 @@ function UserItem(props) {
   const isDonator = props.user.roles.includes('donator');
 
   return (
-    <span className={`${props.classes.item} ${roleInfo ? props.classes[roleInfo.name] : ''}`}>
+    <span
+      className={classnames(
+        props.classes.item,
+        { [props.classes[roleInfo.name]]: roleInfo },
+        props.className,
+      )}
+    >
       {isDonator && (
         <Icon
           icon="star"
@@ -63,9 +70,13 @@ UserItem.propTypes = {
     friendIcon: PropTypes.string.isRequired,
   }).isRequired,
   loggedInUser: PropTypes.shape({ friends: PropTypes.arrayOf(PropTypes.string) }),
+  className: PropTypes.string,
 };
 
-UserItem.defaultProps = { loggedInUser: null };
+UserItem.defaultProps = {
+  loggedInUser: null,
+  className: '',
+};
 
 UserItem.styles = (theme) => {
   return {
@@ -75,6 +86,7 @@ UserItem.styles = (theme) => {
       color: theme.textColor,
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'center',
     },
 
     icon: {

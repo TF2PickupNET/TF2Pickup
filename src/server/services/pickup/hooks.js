@@ -4,11 +4,19 @@ import hasPermission from '../../../utils/has-permission';
 import {
   pipe,
   pick, omit, assign,
+  map, flatten,
+  arrayToObject, mapObject,
 } from '../../../utils/functions';
 
 import configureServer from './configure-server';
 
-async function populatePickup(hook) {
+/**
+ * Populate the result with the server data.
+ *
+ * @param {Object} hook - The hooks data.
+ * @returns {Object} - The transformed hook.
+ */
+async function populateServer(hook) {
   const isActiveGame = [
     'waiting-for-game-to-start',
     'game-is-live',
@@ -31,6 +39,46 @@ async function populatePickup(hook) {
       assign({ server: pick(...validKeys)(server) }),
     )(hook.result),
   });
+}
+
+/**
+ * Populate the user data for each team player.
+ *
+ * @param {Object} hook - The hooks data.
+ * @returns {Object} - The transformed hook.
+ */
+async function populateUsers(hook) {
+  const usersService = hook.app.service('users');
+  const allUsers = await Promise.all(
+    pipe(
+      Object.values,
+      map(Object.values),
+      flatten,
+      map(player => usersService.get(player.id)),
+    )(hook.result.teams),
+  );
+  const users = arrayToObject('id')(allUsers);
+
+  return {
+    ...hook,
+    result: {
+      ...hook.result,
+      teams: mapObject(
+        mapObject(
+          map((player) => {
+            const user = users[player.id];
+
+            return {
+              ...player,
+              name: user.name,
+              avatar: user.services.steam.avatar.medium,
+              roles: user.roles,
+            };
+          }),
+        ),
+      )(hook.result.teams),
+    },
+  };
 }
 
 export default {
@@ -61,9 +109,13 @@ export default {
 
         return hook;
       },
-      populatePickup,
+      populateServer,
+      populateUsers,
     ],
 
-    get: populatePickup,
+    get: [
+      populateServer,
+      populateUsers,
+    ],
   },
 };

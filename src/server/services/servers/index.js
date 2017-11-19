@@ -3,7 +3,6 @@ import service from 'feathers-mongoose';
 import debug from 'debug';
 
 import schema from './schema';
-import hooks from './hooks';
 
 const log = debug('TF2Pickup:servers');
 
@@ -20,5 +19,14 @@ export default function servers() {
     id: 'id',
   }));
 
-  that.service('servers').hooks(hooks);
+  that.service('servers').create({
+    id: 3,
+    type: 'serveme',
+    ip: '127.0.0.1',
+    port: 27015,
+    password: 'pw',
+    rconPassword: 'rconPw',
+    stvPort: 27020,
+    stvPassword: 'stvPw',
+  });
 }

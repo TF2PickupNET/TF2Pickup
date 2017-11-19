@@ -10,6 +10,8 @@ import {
   Animations,
   Dialog,
   Button,
+  Spinner,
+  Layout,
 } from 'materialize-react';
 
 import app from '../../app';
@@ -39,6 +41,8 @@ class BasicLayout extends PureComponent {
 
   static defaultProps = { user: null };
 
+  state = { hasAuthenticated: false };
+
   /**
    * Tries to login with the token from the cookies.
    */
@@ -53,6 +57,8 @@ class BasicLayout extends PureComponent {
         });
       } catch (error) {
         this.props.addNotification(error.message);
+      } finally {
+        this.setState({ hasAuthenticated: true });
       }
     }
   }
@@ -107,6 +113,17 @@ class BasicLayout extends PureComponent {
     return lockr.get('theme') || 'light';
   }
 
+  /**
+   * Render the content when the user tried to authenticate.
+   *
+   * @returns {JSX} - Returns the content.
+   */
+  renderContent() {
+    return isInBetaMode && !this.props.user
+      ? <BetaScreen />
+      : this.props.children;
+  }
+
   render() {
     return (
       <Theme type={this.getTheme()}>
@@ -126,7 +143,14 @@ class BasicLayout extends PureComponent {
 
             <NotificationRequester />
 
-            {isInBetaMode && !this.props.user ? <BetaScreen /> : this.props.children}
+            {this.state.hasAuthenticated ? this.renderContent() : (
+              <Layout
+                mainAlign="center"
+                crossAlign="center"
+              >
+                <Spinner active />
+              </Layout>
+            )}
           </Background>
         </Dialog.Controller>
       </Theme>

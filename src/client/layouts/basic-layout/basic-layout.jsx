@@ -4,7 +4,6 @@ import cookie from 'js-cookie';
 import lockr from 'lockr';
 import { connect } from 'react-redux';
 import Aux from 'react-aux';
-import get from 'lodash.get';
 import {
   Theme,
   Background,
@@ -16,6 +15,7 @@ import {
 import app from '../../app';
 import { isInBetaMode } from '../../../config/client';
 import { addNotification } from '../../redux/notifications/actions';
+import { pluck } from '../../../utils/functions';
 
 import NoConnectionDialog from './no-connection-dialog';
 import PostUserCreationDialog from './post-user-creation-dialog';
@@ -34,7 +34,7 @@ class BasicLayout extends PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
     addNotification: PropTypes.func.isRequired,
-    user: PropTypes.shape({}),
+    user: PropTypes.shape({ settings: PropTypes.shape({ theme: PropTypes.string }) }),
   };
 
   static defaultProps = { user: null };
@@ -79,17 +79,37 @@ class BasicLayout extends PureComponent {
     }
   }
 
+  /**
+   * Update the local storage when the user state changes.
+   */
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user !== this.props.user && nextProps.user) {
+      lockr.set('theme', nextProps.user.settings.theme);
+    }
+  }
+
   createAcceptCookiesHandler = closeSnackbar => () => {
     lockr.set('acceptsCookie', true);
 
     closeSnackbar();
   };
 
-  render() {
-    const themeType = get(this.props.user, 'settings.theme') || 'light';
+  /**
+   * Calculate the current theme.
+   *
+   * @returns {String} - Returns the theme type.
+   */
+  getTheme() {
+    if (this.props.user) {
+      return pluck('settings.theme')(this.props.user);
+    }
 
+    return lockr.get('theme') || 'light';
+  }
+
+  render() {
     return (
-      <Theme type={themeType}>
+      <Theme type={this.getTheme()}>
         <Dialog.Controller>
           <Background>
             <Head />

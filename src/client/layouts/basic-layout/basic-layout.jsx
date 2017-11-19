@@ -36,7 +36,7 @@ class BasicLayout extends PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
     addNotification: PropTypes.func.isRequired,
-    user: PropTypes.shape({}),
+    user: PropTypes.shape({ settings: PropTypes.shape({ theme: PropTypes.string }) }),
   };
 
   static defaultProps = { user: null };
@@ -85,6 +85,15 @@ class BasicLayout extends PureComponent {
     }
   }
 
+  /**
+   * Update the local storage when the user state changes.
+   */
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user !== this.props.user && nextProps.user) {
+      lockr.set('theme', nextProps.user.settings.theme);
+    }
+  }
+
   createAcceptCookiesHandler = closeSnackbar => () => {
     lockr.set('acceptsCookie', true);
 
@@ -102,11 +111,23 @@ class BasicLayout extends PureComponent {
       : this.props.children;
   }
 
-  render() {
-    const themeType = pluck('settings.theme', 'light')(this.props.user);
+ 
+  /**
+   * Calculate the current theme.
+   *
+   * @returns {String} - Returns the theme type.
+   */
+  getTheme() {
+    if (this.props.user) {
+      return pluck('settings.theme')(this.props.user);
+    }
 
+    return lockr.get('theme') || 'light';
+  }
+
+  render() {
     return (
-      <Theme type={themeType}>
+      <Theme type={this.getTheme()}>
         <Dialog.Controller>
           <Background>
             <Head />

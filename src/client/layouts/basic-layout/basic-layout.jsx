@@ -101,18 +101,6 @@ class BasicLayout extends PureComponent {
   };
 
   /**
-   * Render the content when the user tried to authenticate.
-   *
-   * @returns {JSX} - Returns the content.
-   */
-  renderContent() {
-    return isInBetaMode && !this.props.user
-      ? <BetaScreen />
-      : this.props.children;
-  }
-
- 
-  /**
    * Calculate the current theme.
    *
    * @returns {String} - Returns the theme type.
@@ -123,6 +111,17 @@ class BasicLayout extends PureComponent {
     }
 
     return lockr.get('theme') || 'light';
+  }
+
+  /**
+   * Render the content when the user tried to authenticate.
+   *
+   * @returns {JSX} - Returns the content.
+   */
+  renderContent() {
+    return isInBetaMode && !this.props.user
+      ? <BetaScreen />
+      : this.props.children;
   }
 
   render() {

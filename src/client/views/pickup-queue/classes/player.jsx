@@ -15,7 +15,6 @@ import app from '../../../app';
 import UserItem from '../../../components/user-item';
 import openWindowInNewTab from '../../../utils/open-window-in-new-tab';
 import hasPermission from '../../../../utils/has-permission';
-import Link from '../../../components/link';
 import { getGamemodeFromUrl } from '../../../../utils/pickup';
 
 /**
@@ -28,6 +27,7 @@ class Player extends PureComponent {
     classes: PropTypes.shape({
       ready: PropTypes.string.isRequired,
       avatar: PropTypes.string.isRequired,
+      clickable: PropTypes.string.isRequired,
     }).isRequired,
     player: PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -50,13 +50,13 @@ class Player extends PureComponent {
 
     ready: { backgroundColor: rgba(colors.green500, 0.25) },
 
-    kickIcon: { cursor: 'pointer' },
+    clickable: { cursor: 'pointer' },
   };
 
   /**
    * When the user clicks on the user, we create a new tab with the profile.
    */
-  handleClick = () => {
+  handleRedirectToProfile = () => {
     openWindowInNewTab(`/profile/${this.props.player.id}`);
   };
 
@@ -91,12 +91,16 @@ class Player extends PureComponent {
           rightItem={hasPermission('pickup.kick', this.props.user, this.props.player) ? (
             <Icon
               icon="close"
-              className={this.props.classes.kickIcon}
+              className={this.props.classes.clickable}
               onClick={this.handleKickIconPress}
             />
           ) : null}
         >
-          <UserItem user={this.props.player} />
+          <UserItem
+            user={this.props.player}
+            className={this.props.classes.clickable}
+            onClick={this.handleRedirectToProfile}
+          />
         </List.Item>
       </Aux>
     );

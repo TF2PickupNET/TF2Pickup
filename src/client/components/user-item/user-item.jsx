@@ -3,7 +3,10 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Icon } from 'materialize-react';
+import {
+  Icon,
+  getNotDeclaredProps,
+} from 'materialize-react';
 
 import {
   mapObject,
@@ -37,6 +40,7 @@ function UserItem(props) {
         { [props.classes[roleInfo.name]]: roleInfo },
         props.className,
       )}
+      {...getNotDeclaredProps(props, UserItem)}
     >
       {isDonator && (
         <Icon

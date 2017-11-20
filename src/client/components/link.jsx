@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import classnames from 'classnames';
+import { getNotDeclaredProps } from 'materialize-react';
 
 /**
  * Render a link which will open safely the provided href in a new tab.
@@ -20,6 +21,7 @@ function Link(props) {
         props.primary && props.classes.primary,
         props.className,
       )}
+      {...getNotDeclaredProps(props, Link)}
     >
       {props.children}
     </a>

@@ -35,6 +35,10 @@ import NotificationRequester from './notification-requester';
  */
 class BasicLayout extends PureComponent {
   static propTypes = {
+    classes: PropTypes.shape({
+      background: PropTypes.string.isRequired,
+      loadingContainer: PropTypes.string.isRequired,
+    }).isRequired,
     children: PropTypes.node.isRequired,
     addNotification: PropTypes.func.isRequired,
     user: PropTypes.shape({ settings: PropTypes.shape({ theme: PropTypes.string }) }),

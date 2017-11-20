@@ -1,17 +1,22 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Aux from 'react-aux';
+import { connect } from 'react-redux';
 import classnames from 'classnames';
 import {
   List,
-  Ripple,
+  Icon,
   colors,
 } from 'materialize-react';
 import { rgba } from 'polished';
 import injectSheet from 'react-jss';
 
+import app from '../../../app';
 import UserItem from '../../../components/user-item';
 import openWindowInNewTab from '../../../utils/open-window-in-new-tab';
+import hasPermission from '../../../../utils/has-permission';
+import Link from '../../../components/link';
+import { getGamemodeFromUrl } from '../../../../utils/pickup';
 
 /**
  * The player component for the pickup queue view.
@@ -49,6 +54,13 @@ class Player extends PureComponent {
     openWindowInNewTab(`/profile/${this.props.player.id}`);
   };
 
+  handleKickIconPress = () => {
+    app.io.emit('pickup-queue.kick', {
+      gamemode: this.props.gamemode,
+      userId: this.props.player.id,
+    });
+  };
+
   render() {
     return (
       <Aux>
@@ -67,15 +79,27 @@ class Player extends PureComponent {
               />
             </List.Item.Avatar>
           )}
-          onClick={this.handleClick}
+          rightItem={hasPermission('pickup.kick', this.props.user, this.props.player) ? (
+            <Icon
+              icon="close"
+              onClick={this.handleKickIconPress}
+            />
+          ) : null}
         >
-          <UserItem user={this.props.player} />
-
-          <Ripple />
+          <Link href={`/profile/${this.props.player.id}`}>
+            <UserItem user={this.props.player} />
+          </Link>
         </List.Item>
       </Aux>
     );
   }
 }
 
-export default injectSheet(Player.styles)(Player);
+export default connect(
+  (state) => {
+    return {
+      user: state.user,
+      gamemode: getGamemodeFromUrl(state.router.location.pathname),
+    };
+  },
+)(injectSheet(Player.styles)(Player));

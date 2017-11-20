@@ -13,6 +13,7 @@ import {
   getPlayer,
   removePlayersFromClasses,
 } from '../../../utils/pickup';
+import hasPermission from '../../../utils/has-permission';
 
 const log = debug('TF2Pickup:pickup-queue:socket-methods');
 
@@ -155,6 +156,30 @@ export default function socketMethods(app, socket) {
         queue.id,
         { $set: { classes: mapObject(setMap)(queue.classes) } },
       );
+    }
+  });
+
+  socket.on('pickup-queue.kick', async ({
+    gamemode,
+    userId,
+  }) => {
+    const user = await app.service('users').get(userId);
+
+    if (hasPermission('pickup.kick', socket.feathers.user, user)) {
+      const region = socket.feathers.user.settings.region;
+      const queue = await pickupQueue.get(`${region}-${gamemode}`);
+
+      log('Kicking user from pickup', userId);
+
+      await pickupQueue.patch(
+        queue.id,
+        { $set: { classes: removePlayersFromClasses([userId])(queue.classes) } },
+      );
+
+      app.io.emit('notifications.add', {
+        forUsers: [userId],
+        message: `You got kicked by ${socket.feathers.user.name}`,
+      });
     }
   });
 

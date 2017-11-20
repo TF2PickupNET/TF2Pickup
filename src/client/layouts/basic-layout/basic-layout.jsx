@@ -123,7 +123,7 @@ class BasicLayout extends PureComponent {
    */
   getTheme() {
     if (this.props.user) {
-      return pluck('settings.theme')(this.props.user);
+      return pluck('settings.theme', 'light')(this.props.user);
     }
 
     return lockr.get('theme') || 'light';

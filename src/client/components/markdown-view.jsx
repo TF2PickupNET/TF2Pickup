@@ -14,19 +14,10 @@ import RemoteMarkdown from './remote-markdown';
 class MarkdownView extends PureComponent {
   static propTypes = {
     url: PropTypes.string.isRequired,
-    classes: PropTypes.shape({
-      container: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired,
-    }).isRequired,
+    classes: PropTypes.shape({ content: PropTypes.string.isRequired }).isRequired,
   };
 
   static styles = {
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-
     content: {
       width: '100%',
       maxWidth: 960,
@@ -35,17 +26,15 @@ class MarkdownView extends PureComponent {
 
   render() {
     return (
-      <div className={this.props.classes.container}>
-        <RemoteMarkdown url={this.props.url}>
-          {component => (
-            <Card className={this.props.classes.content}>
-              <Card.Content>
-                {component}
-              </Card.Content>
-            </Card>
-          )}
-        </RemoteMarkdown>
-      </div>
+      <RemoteMarkdown url={this.props.url}>
+        {component => (
+          <Card className={this.props.classes.content}>
+            <Card.Content>
+              {component}
+            </Card.Content>
+          </Card>
+        )}
+      </RemoteMarkdown>
     );
   }
 }

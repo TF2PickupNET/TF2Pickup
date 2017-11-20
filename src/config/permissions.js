@@ -12,6 +12,9 @@ export default {
   pickup: {
     'see-server': { level: roles.admin.level },
 
-    kick: { level: roles.admin.level },
+    kick: {
+      level: roles.admin.level,
+      selfEditing: true,
+    },
   },
 };

@@ -45,6 +45,7 @@ Link.defaultProps = {
 Link.styles = (theme) => {
   return {
     link: {
+      display: 'inline',
       textDecoration: 'none',
       color: 'inherit',
     },

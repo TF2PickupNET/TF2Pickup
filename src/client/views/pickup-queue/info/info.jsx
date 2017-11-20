@@ -176,10 +176,12 @@ class PickupInfo extends PureComponent {
           component={MapVoteDialog}
         />
 
-        <ReadyUpDialog
-          pickup={this.props.pickup}
-          player={playerData}
-        />
+        {playerData ? (
+          <ReadyUpDialog
+            pickup={this.props.pickup}
+            player={playerData}
+          />
+        ) : null}
       </Aux>
     );
   }

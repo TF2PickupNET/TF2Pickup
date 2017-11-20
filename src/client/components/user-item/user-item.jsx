@@ -84,9 +84,8 @@ UserItem.styles = (theme) => {
       height: 24,
       lineHeight: '24px',
       color: theme.textColor,
-      display: 'flex',
+      display: 'inline-flex',
       alignItems: 'center',
-      justifyContent: 'center',
     },
 
     icon: {

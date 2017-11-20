@@ -34,7 +34,11 @@ class Player extends PureComponent {
       ready: PropTypes.bool,
       avatar: PropTypes.string.isRequired,
     }).isRequired,
+    gamemode: PropTypes.string.isRequired,
+    user: PropTypes.shape({}),
   };
+
+  static defaultProps = { user: null };
 
   static styles = {
     avatar: {
@@ -45,6 +49,8 @@ class Player extends PureComponent {
     },
 
     ready: { backgroundColor: rgba(colors.green500, 0.25) },
+
+    kickIcon: { cursor: 'pointer' },
   };
 
   /**
@@ -54,6 +60,9 @@ class Player extends PureComponent {
     openWindowInNewTab(`/profile/${this.props.player.id}`);
   };
 
+  /**
+   * Emit the socket event when a player should be kicked.
+   */
   handleKickIconPress = () => {
     app.io.emit('pickup-queue.kick', {
       gamemode: this.props.gamemode,
@@ -82,13 +91,12 @@ class Player extends PureComponent {
           rightItem={hasPermission('pickup.kick', this.props.user, this.props.player) ? (
             <Icon
               icon="close"
+              className={this.props.classes.kickIcon}
               onClick={this.handleKickIconPress}
             />
           ) : null}
         >
-          <Link href={`/profile/${this.props.player.id}`}>
-            <UserItem user={this.props.player} />
-          </Link>
+          <UserItem user={this.props.player} />
         </List.Item>
       </Aux>
     );

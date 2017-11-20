@@ -74,6 +74,8 @@ class BasicLayout extends PureComponent {
       } finally {
         this.setState({ hasAuthenticated: true });
       }
+    } else {
+      this.setState({ hasAuthenticated: true });
     }
   }
 

@@ -4,6 +4,7 @@ import cookie from 'js-cookie';
 import lockr from 'lockr';
 import { connect } from 'react-redux';
 import Aux from 'react-aux';
+import injectSheet from 'react-jss';
 import {
   Theme,
   Background,
@@ -34,12 +35,25 @@ import NotificationRequester from './notification-requester';
  */
 class BasicLayout extends PureComponent {
   static propTypes = {
+    classes: PropTypes.shape({
+      background: PropTypes.string.isRequired,
+      loadingContainer: PropTypes.string.isRequired,
+    }).isRequired,
     children: PropTypes.node.isRequired,
     addNotification: PropTypes.func.isRequired,
     user: PropTypes.shape({ settings: PropTypes.shape({ theme: PropTypes.string }) }),
   };
 
   static defaultProps = { user: null };
+
+  static styles = {
+    background: {
+      width: '100vw',
+      minHeight: '100vh',
+    },
+
+    loadingContainer: { height: '100vh' },
+  };
 
   state = { hasAuthenticated: false };
 
@@ -128,7 +142,7 @@ class BasicLayout extends PureComponent {
     return (
       <Theme type={this.getTheme()}>
         <Dialog.Controller>
-          <Background>
+          <Background className={this.props.classes.background}>
             <Head />
 
             <Dialog.Container />
@@ -147,6 +161,7 @@ class BasicLayout extends PureComponent {
               <Layout
                 mainAlign="center"
                 crossAlign="center"
+                className={this.props.classes.loadingContainer}
               >
                 <Spinner active />
               </Layout>
@@ -165,5 +180,5 @@ export default connect(
   (dispatch) => {
     return { addNotification: (...args) => dispatch(addNotification(...args)) };
   },
-)(BasicLayout);
+)(injectSheet(BasicLayout.styles)(BasicLayout));
 

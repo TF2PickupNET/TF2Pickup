@@ -137,7 +137,10 @@ export default async function createPickup(props) {
 
     props.app.io.emit('pickup.redirect', {
       pickupId,
-      players: getPlayers(players),
+      players: pipe(
+        getPlayers,
+        map(player => player.id),
+      )(players),
     });
   } catch (error) {
     // Reset the pickup queue to waiting status

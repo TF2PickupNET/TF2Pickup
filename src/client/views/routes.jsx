@@ -46,11 +46,19 @@ export default class Routes extends PureComponent {
         />
 
         <Route
+          exact
+          path="/match/:id"
+          render={composeWithMainLayout(Match)}
+        />
+
+        <Route
+          exact
           path={`/(${Object.keys(gamemodes).join('|')})`}
           render={composeWithMainLayout(PickupQueue)}
         />
 
         <Route
+          exact
           path={`/(${
             Object
               .values(gamemodes)
@@ -70,12 +78,6 @@ export default class Routes extends PureComponent {
           exact
           path="/recent-pickups"
           render={composeWithMainLayout(RecentPickups)}
-        />
-
-        <Route
-          exact
-          path="/match/:id"
-          render={composeWithMainLayout(Match)}
         />
 
         <Route

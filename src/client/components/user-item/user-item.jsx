@@ -37,10 +37,10 @@ function UserItem(props) {
     <span
       className={classnames(
         props.classes.item,
-        { [props.classes[roleInfo.name]]: roleInfo },
+        roleInfo ? props.classes[roleInfo.name] : '',
         props.className,
       )}
-      {...getNotDeclaredProps(props, UserItem)}
+      {...getNotDeclaredProps(props, UserItem, 'dispatch')}
     >
       {isDonator && (
         <Icon

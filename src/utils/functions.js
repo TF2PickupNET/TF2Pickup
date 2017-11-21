@@ -98,7 +98,11 @@ export const findIndex = fn => ([x, ...xs], index = 0) => {
 export const add = x => y => x + y;
 
 export const every = fn => ([x, ...xs]) => {
-  if (!fn(x) || undef(x)) {
+  if (undef(x)) {
+    return true;
+  }
+
+  if (!fn(x)) {
     return false;
   }
 

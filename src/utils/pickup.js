@@ -23,7 +23,7 @@ export const removePlayersFromClasses = players => mapObject(
   filter(player => !players.includes(player.id)),
 );
 
-export const getGamemodeFromUrl = url => url.slice(1);
+export const getGamemodeFromUrl = url => url.match(/(6v6|9v9|bball|ultiduo)/)[1];
 
 export const countPlayers = gamemode => pipe(
   mapObject((players, className) => Math.min(players.length, gamemodes[gamemode].slots[className])),

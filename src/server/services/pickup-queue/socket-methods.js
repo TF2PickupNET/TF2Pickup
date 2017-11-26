@@ -183,6 +183,31 @@ export default function socketMethods(app, socket) {
     }
   });
 
+  if (app.get('env') === 'dev') {
+    socket.on('pickup-queue.fill', async ({ gamemode }) => {
+      const user = socket.feathers.user;
+      const queue = await pickupQueue.get(`${user.settings.region}-${gamemode}`);
+      const player = {
+        id: user.id,
+        readyUp: null,
+        map: null,
+        joinedOn: new Date(),
+      };
+
+      await pickupQueue.patch(queue.id, {
+        $set: {
+          classes: mapObject((players, className) => {
+            const min = gamemodes[gamemode].slots[className];
+
+            return []
+              .concat(players)
+              .concat(new Array(min - players.length).fill(player));
+          })(queue.classes),
+        },
+      });
+    });
+  }
+
   socket.on('disconnect', async () => {
     if (socket.feathers.user) {
       const userId = socket.feathers.user.id;

@@ -5,7 +5,11 @@ import regions from '@tf2-pickup/configs/regions';
 import { isInArray } from '../validators';
 
 export default new Schema({
-  id: Number,
+  id: {
+    type: Number,
+    index: true,
+    unique: true,
+  },
 
   status: {
     type: String,
@@ -15,6 +19,7 @@ export default new Schema({
       'game-is-live',
       'game-finished',
       'server-configuration-error',
+      'server-reservation-error',
     ], {}),
     required: true,
   },
@@ -61,8 +66,12 @@ export default new Schema({
     default: null,
   },
 
-  score: {
+  scores: {
     type: Object,
+    default: {
+      red: 0,
+      blu: 0,
+    },
 
     red: {
       type: Number,
@@ -75,15 +84,9 @@ export default new Schema({
     },
   },
 
-  serverId: {
-    type: Number,
-    required: true,
-  },
+  serverId: Number,
 
-  logSecret: {
-    type: String,
-    required: true,
-  },
+  logSecret: String,
 
   teams: {
     type: Object,

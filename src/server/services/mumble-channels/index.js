@@ -17,16 +17,10 @@ class MumbleService {
 
   /**
    * Mumble service setup.
-   *
-   * @param {Object} app - The feathers app object.
    */
-  setup(app) {
+  setup() {
     const mumbleUsername = config.get('server.mumble.username');
     const mumblePassword = config.get('server.mumble.password');
-
-    if (app.get('env') === 'dev') {
-      return;
-    }
 
     Object
       .values(regions)
@@ -87,11 +81,19 @@ class MumbleService {
   }
 }
 
+const devService = {
+  create: () => Promise.resolve(),
+  delete: () => Promise.resolve(),
+};
+
 /**
  * Mumble service.
  */
 export default function mumbleChannels() {
   const that = this;
 
-  that.service('mumble-channels', new MumbleService());
+  that.service(
+    'mumble-channels',
+    that.get('env') === 'dev' ? devService : new MumbleService(),
+  );
 }

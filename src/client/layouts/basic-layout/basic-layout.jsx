@@ -61,20 +61,15 @@ class BasicLayout extends PureComponent {
    * Tries to login with the token from the cookies.
    */
   async componentWillMount() {
-    const token = cookie.get('feathers-jwt');
+    app.on('reauthentication-error', this.authenticate);
 
-    if (token) {
-      try {
-        await app.authenticate({
-          strategy: 'jwt',
-          accessToken: token,
-        });
-      } catch (error) {
-        this.props.addNotification(error.message);
-      } finally {
-        this.setState({ hasAuthenticated: true });
-      }
-    } else {
+    app.io.on('redirect', this.handleRedirect);
+
+    try {
+      await this.authenticate();
+    } catch (error) {
+      this.props.addNotification(error.message);
+    } finally {
       this.setState({ hasAuthenticated: true });
     }
   }
@@ -109,6 +104,19 @@ class BasicLayout extends PureComponent {
       lockr.set('theme', nextProps.user.settings.theme);
     }
   }
+
+  authenticate = () => {
+    const token = cookie.get('feathers-jwt');
+
+    if (token) {
+      return app.authenticate({
+        strategy: 'jwt',
+        accessToken: token,
+      });
+    }
+
+    return false;
+  };
 
   createAcceptCookiesHandler = closeSnackbar => () => {
     lockr.set('acceptsCookie', true);

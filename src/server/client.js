@@ -23,7 +23,7 @@ export default function client() {
   // Serve the assets under /assets
   that.use('/assets', feathers.static(path.resolve(__dirname, '../assets')));
 
-  if (that.get('env') === 'development') {
+  if (that.get('env') === 'dev') {
     log('Setting up webpack dev middleware');
 
     // Use the webpack middleware in dev mode to recompile when a file changes

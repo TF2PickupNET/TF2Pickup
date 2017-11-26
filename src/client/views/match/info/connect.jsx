@@ -86,7 +86,7 @@ class Connect extends PureComponent {
   };
 
   render() {
-    if (!this.props.pickup.server.password) {
+    if (!this.props.pickup.server || !this.props.pickup.server.password) {
       return null;
     }
 

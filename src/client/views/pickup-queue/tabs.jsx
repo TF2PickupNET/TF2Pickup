@@ -22,6 +22,7 @@ import {
   countPlayers,
 } from '../../../utils/pickup';
 import createNotification from '../../utils/create-notification';
+import app from '../../app';
 
 /**
  * Render the tabs for the different gamemodes.
@@ -63,6 +64,10 @@ class GamemodeTabs extends PureComponent {
     },
   };
 
+  componentWillMount() {
+    app.service('pickup').on('redirect', this.handleRedirect);
+  }
+
   /**
    * Switch the tab when one of the pickups changes into ready-up mode.
    */
@@ -87,6 +92,10 @@ class GamemodeTabs extends PureComponent {
     )(nextProps.pickups);
   }
 
+  componentWillUnmount() {
+    app.service('pickup').removeListener('redirect', this.handleRedirect);
+  }
+
   /**
    * Count the players for the gamemode.
    *
@@ -100,6 +109,12 @@ class GamemodeTabs extends PureComponent {
 
     return countPlayers(gamemode)(this.props.pickups[gamemode].classes);
   }
+
+  handleRedirect = (data) => {
+    if (this.props.user && data.users.includes(this.props.user.id)) {
+      window.location = data.url;
+    }
+  };
 
   /**
    * Redirect the user when he clicks one of the tabs.

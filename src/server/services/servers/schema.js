@@ -11,10 +11,7 @@ export default new Schema({
 
   type: {
     type: String,
-    validate: isInArray([
-      'serveme',
-      'dm',
-    ], {}),
+    validate: isInArray(['serveme'], {}),
     required: true,
   },
 

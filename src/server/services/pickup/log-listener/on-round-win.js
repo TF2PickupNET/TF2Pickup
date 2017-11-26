@@ -7,6 +7,6 @@ export default {
     const pickup = await service.find({ query: { logsecret: line.secret } });
     const team = line.data[0] === 'Blue' ? 'blu' : 'red';
 
-    await service.patch(pickup.id, { $set: { [`score.${team}`]: pickup.score[team] + 1 } });
+    await service.patch(pickup.id, { $set: { [`scores.${team}`]: pickup.score[team] + 1 } });
   },
 };

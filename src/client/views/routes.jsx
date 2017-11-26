@@ -46,19 +46,16 @@ export default class Routes extends PureComponent {
         />
 
         <Route
-          exact
           path="/match/:id"
           render={composeWithMainLayout(Match)}
         />
 
         <Route
-          exact
           path={`/(${Object.keys(gamemodes).join('|')})`}
           render={composeWithMainLayout(PickupQueue)}
         />
 
         <Route
-          exact
           path={`/(${
             Object
               .values(gamemodes)
@@ -69,61 +66,51 @@ export default class Routes extends PureComponent {
         />
 
         <Route
-          exact
           path="/about"
           render={composeWithMainLayout(About)}
         />
 
         <Route
-          exact
           path="/recent-pickups"
           render={composeWithMainLayout(RecentPickups)}
         />
 
         <Route
-          exact
           path="/donate"
           render={composeWithMainLayout(Donate)}
         />
 
         <Route
-          exact
           path="/servers"
           render={composeWithMainLayout(Servers)}
         />
 
         <Route
-          exact
           path="/rules"
           render={composeWithMainLayout(Rules)}
         />
 
         <Route
-          exact
           path="/help"
           render={composeWithMainLayout(Help)}
         />
 
         <Route
-          exact
           path="/profile"
           render={composeWithMainLayout(Profile)}
         />
 
         <Route
-          exact
           path="/profile/:steamId"
           render={composeWithMainLayout(Profile)}
         />
 
         <Route
-          exact
           path="/settings"
           render={composeWithMainLayout(Settings)}
         />
 
         <Route
-          exact
           path="/error"
           component={Error}
         />

@@ -13,5 +13,11 @@ export default {
     'see-server': { level: roles.admin.level },
 
     kick: { level: roles.admin.level },
+
+    end: { level: roles.admin.level },
+
+    'reserve-server': { level: roles.admin.level },
   },
+
+  servers: { configure: { level: roles.admin.level } },
 };

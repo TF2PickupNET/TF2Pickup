@@ -63,8 +63,6 @@ class BasicLayout extends PureComponent {
   async componentWillMount() {
     app.on('reauthentication-error', this.authenticate);
 
-    app.io.on('redirect', this.handleRedirect);
-
     try {
       await this.authenticate();
     } catch (error) {

@@ -15,13 +15,20 @@ import {
 } from '../../../utils/functions';
 import app from '../../app';
 
+/**
+ * The actions row for a match.
+ *
+ * @class
+ */
 class Actions extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({ card: PropTypes.string.isRequired }).isRequired,
     pickup: PropTypes.shape({
+      id: PropTypes.string.isRequired,
       status: PropTypes.string.isRequired,
       teams: PropTypes.shape({}),
     }).isRequired,
+    user: PropTypes.shape({ id: PropTypes.string.isRequired }).isRequired,
   };
 
   static styles = {
@@ -34,11 +41,21 @@ class Actions extends PureComponent {
     },
   };
 
+  /**
+   * Check if the current user can reserve a server.
+   *
+   * @returns {Boolean} - Returns true of false.
+   */
   get canReserveServer() {
     return this.props.pickup.status === 'server-reservation-error'
            && hasPermission('pickup.reserve-server', this.props.user);
   }
 
+  /**
+   * Check if the user can reconfigure a server.
+   *
+   * @returns {Boolean} - Returns true or false.
+   */
   get canReconfigureServer() {
     const { status } = this.props.pickup;
 
@@ -47,10 +64,20 @@ class Actions extends PureComponent {
            && hasPermission('servers.configure', this.props.user);
   }
 
+  /**
+   * Check if the user can end the pickup.
+   *
+   * @returns {Boolean} - Returns true or false.
+   */
   get canEndPickup() {
     return hasPermission('pickup.end', this.props.user);
   }
 
+  /**
+   * Check if the user is in the pickup.
+   *
+   * @returns {Boolean} - Returns true or false.
+   */
   get isInPickup() {
     return pipe(
       Object.values,
@@ -59,6 +86,11 @@ class Actions extends PureComponent {
     )(this.props.pickup.teams);
   }
 
+  /**
+   * Check if the user can perform any actions.
+   *
+   * @returns {Boolean} - Returns true or false.
+   */
   get hasActions() {
     return this.canReserveServer
            || this.canReconfigureServer
@@ -66,14 +98,23 @@ class Actions extends PureComponent {
            || this.isInPickup;
   }
 
+  /**
+   * End the pickup.
+   */
   handleEndPickup = () => {
     app.io.emit('pickup.end', { pickupId: this.props.pickup.id });
   };
 
+  /**
+   * Reserve a server for the pickup.
+   */
   handleReserveServer = () => {
     app.io.emit('pickup.reserve-server', { pickupId: this.props.pickup.id });
   };
 
+  /**
+   * Reconfigure the server.
+   */
   handleConfigureServer = () => {
     app.io.emit('servers.configure', { pickupId: this.props.pickup.id });
   };

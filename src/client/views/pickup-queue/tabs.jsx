@@ -64,6 +64,9 @@ class GamemodeTabs extends PureComponent {
     },
   };
 
+  /**
+   * Add an event listener to the redirect event.
+   */
   componentWillMount() {
     app.service('pickup').on('redirect', this.handleRedirect);
   }
@@ -92,8 +95,13 @@ class GamemodeTabs extends PureComponent {
     )(nextProps.pickups);
   }
 
+  /**
+   * Remove the event listener for the redirect.
+   */
   componentWillUnmount() {
-    app.service('pickup').removeListener('redirect', this.handleRedirect);
+    app
+      .service('pickup')
+      .removeListener('redirect', this.handleRedirect);
   }
 
   /**
@@ -110,6 +118,11 @@ class GamemodeTabs extends PureComponent {
     return countPlayers(gamemode)(this.props.pickups[gamemode].classes);
   }
 
+  /**
+   * Redirect the user to the match.
+   *
+   * @param {Object} data - The data from the server.
+   */
   handleRedirect = (data) => {
     if (this.props.user && data.users.includes(this.props.user.id)) {
       window.location = data.url;

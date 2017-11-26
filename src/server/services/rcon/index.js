@@ -9,6 +9,11 @@ const PacketType = {
 
 Object.freeze(PacketType);
 
+/**
+ * RCON Implementation.
+ *
+ * @class
+ */
 export default class Rcon {
   socket = null;
 
@@ -20,19 +25,31 @@ export default class Rcon {
 
   callbacks = new Map();
 
-  constructor(host, port, password) {
-    this.host = host;
+  /**
+   * Create a new RCON connection.
+   *
+   * @param {String} ip - The ip of the server.
+   * @param {Number} port - The port of the server.
+   * @param {String} password - The RCON password.
+   */
+  constructor(ip, port, password) {
+    this.ip = ip;
     this.port = port;
     this.password = password;
   }
 
+  /**
+   * Connect to the server and authenticate.
+   *
+   * @returns {Promise} - Returns a promise which will resolve when authenticated.
+   */
   connect() {
     return new Promise((resolve, reject) => {
       if (this.hasAuthenticated) {
         reject(new Error('Instance is already authed'));
       }
 
-      this.socket = net.createConnection(this.port, this.host);
+      this.socket = net.createConnection(this.port, this.ip);
 
       this.socket.on('connect', async () => {
         try {
@@ -57,6 +74,11 @@ export default class Rcon {
     });
   }
 
+  /**
+   * Disconnect from the server.
+   *
+   * @returns {Promise} - Returns a promise which will resolve when disconnected.
+   */
   disconnect() {
     return new Promise((resolve, reject) => {
       if (!this.hasAuthenticated) {
@@ -75,6 +97,11 @@ export default class Rcon {
     });
   }
 
+  /**
+   * Handle a response from the server.
+   *
+   * @param {String} data - The response data.
+   */
   handleResponse = (data) => {
     const len = data.readInt32LE(0);
 
@@ -98,16 +125,23 @@ export default class Rcon {
     }
   };
 
-  send(data, cmd = PacketType.COMMAND) {
+  /**
+   * Send a command to the server.
+   *
+   * @param {String} command - The command to send.
+   * @param {String} [type] - The type of the command.
+   * @returns {Promise} - Returns a promise which will resolve when the return data comes back.
+   */
+  send(command, type = PacketType.COMMAND) {
     return new Promise((resolve, reject) => {
-      if (!this.hasAuthenticated && cmd !== PacketType.AUTH) {
+      if (!this.hasAuthenticated && type !== PacketType.AUTH) {
         reject(new Error('Instance is not authed'));
       }
 
-      const length = Buffer.byteLength(data);
+      const length = Buffer.byteLength(command);
       const id = Math.trunc(Math.random() * (0x98967F - 0xF4240) + 0xF4240);
 
-      if (cmd === PacketType.AUTH) {
+      if (type === PacketType.AUTH) {
         this.authPacketId = id;
       }
 
@@ -115,8 +149,8 @@ export default class Rcon {
 
       buf.writeInt32LE(length + 10, 0);
       buf.writeInt32LE(id, 4);
-      buf.writeInt32LE(cmd, 8);
-      buf.write(data, 12);
+      buf.writeInt32LE(type, 8);
+      buf.write(command, 12);
       buf.fill(0x00, length + 12);
 
       this.socket.write(buf.toString('binary'), 'binary');
@@ -132,7 +166,7 @@ export default class Rcon {
 
         this.callbacks.delete(id);
 
-        if (cmd === PacketType.AUTH) {
+        if (type === PacketType.AUTH) {
           this.authPacketId = null;
         }
 

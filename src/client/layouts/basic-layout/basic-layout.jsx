@@ -103,17 +103,18 @@ class BasicLayout extends PureComponent {
     }
   }
 
-  authenticate = () => {
+  /**
+   * Authenticate with the token from the cookies.
+   */
+  authenticate = async () => {
     const token = cookie.get('feathers-jwt');
 
     if (token) {
-      return app.authenticate({
+      await app.authenticate({
         strategy: 'jwt',
         accessToken: token,
       });
     }
-
-    return false;
   };
 
   createAcceptCookiesHandler = closeSnackbar => () => {

@@ -18,8 +18,8 @@ async function executeConfig(connection, cfg) {
     .split('\n')
     .filter(line => line !== '');
 
-  for (const index in configLines) {
-    await connection.send(configLines[index]);
+  for (const index in configLines) { // eslint-disable-line guard-for-in, no-restricted-syntax
+    await connection.send(configLines[index]); // eslint-disable-line no-await-in-loop
   }
 }
 
@@ -81,10 +81,10 @@ async function setup(connection, server, pickup) {
 }
 
 /**
- * Start the server.
+ * Configure the server.
  *
- * @param {Object} props - Props from app.
- * @param {Boolean} [isSecondTry] - Whether or not this is the second try executing the config.
+ * @param {Object} app - The feathers app object.
+ * @param {Boolean} serverId - The server to configure.
  */
 export default async function configureServer(app, serverId) {
   const server = await app.service('servers').get(serverId);

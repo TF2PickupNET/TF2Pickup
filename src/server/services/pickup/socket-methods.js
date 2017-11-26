@@ -5,7 +5,6 @@ import debug from 'debug';
 import hasPermission from '../../../utils/has-permission';
 
 import reserveServer from './reserve-server';
-import { pick } from '../../../utils/functions';
 
 const log = debug('TF2Pickup:pickup:socket-methods');
 

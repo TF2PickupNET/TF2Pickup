@@ -3,7 +3,6 @@ import debug from 'debug';
 import hooks from 'feathers-hooks-common';
 
 import configureServer from './configure-server';
-import { pick } from '../../../utils/functions';
 
 const log = debug('TF2Pickup:servers:hooks');
 

@@ -26,7 +26,8 @@ const strategies = {
  * This will create a new server in the servers database.
  * This will call the appropriate handler for the different regions.
  *
- * @param {Object} props - The props from the hook.
+ * @param {Object} app - The feathers app object.
+ * @param {String} region - The region to reservate the server for.
  * @returns {Object} - Returns an object with the server id and the logsecret.
  */
 export default async function reserveServer(app, region) {

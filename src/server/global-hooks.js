@@ -1,15 +1,18 @@
 import hooks from 'feathers-hooks-common';
+import auth from 'feathers-authentication';
 
 export default {
   before: {
-    find: hooks.disallow('external'),
-    get(props) {
-      if (props.path === 'users' || props.path === 'pickup-queue') {
-        return props;
-      }
+    all: [
+      (hook) => {
+        if (hook.path === 'authentication' || !hook.params.accessToken) {
+          return hook;
+        }
 
-      return hooks.disallow('external')(props);
-    },
+        return auth.hooks.authenticate(['jwt'])(hook);
+      },
+    ],
+
     create(props) {
       if (props.path === 'authentication') {
         return props;

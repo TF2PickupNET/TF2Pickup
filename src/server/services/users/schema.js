@@ -1,6 +1,10 @@
 import SteamID from 'steamid';
 import { Schema } from 'mongoose';
-import regions from '@tf2-pickup/configs/regions';
+import flatten from 'lodash.flatten';
+import {
+  regions,
+  gamemodes,
+} from '@tf2-pickup/configs';
 
 import {
   url,
@@ -43,9 +47,11 @@ function etf2lDivSchema(gamemode) {
   };
 }
 
-const allowedVolumes = new Array(10)
-  .fill(1)
-  .map((value, index) => (index + 1) / 10);
+const allClasses = flatten(
+  Object
+    .values(gamemodes)
+    .map(gamemode => Object.keys(gamemode.slots)),
+);
 
 export default new Schema({
   id: {
@@ -53,6 +59,39 @@ export default new Schema({
     validate: steamId({}),
     required: [true, 'SteamId on the user object is required!'],
     index: true,
+    unique: true,
+  },
+
+  name: {
+    type: String,
+    default: null,
+    unique: true,
+    trim: true,
+  },
+
+  lastUpdate: {
+    type: Date,
+    default: Date.now,
+  },
+
+  online: {
+    type: Boolean,
+    default: true,
+  },
+
+  lastOnline: {
+    type: Date,
+    default: Date.now,
+  },
+
+  hasAcceptedTheRules: {
+    type: Boolean,
+    default: false,
+  },
+
+  createdOn: {
+    type: Date,
+    default: Date.now,
   },
 
   services: {
@@ -83,21 +122,24 @@ export default new Schema({
     etf2l: {
       id: Number,
       name: String,
+      div6v6: etf2lDivSchema('6v6'),
+      div9v9: etf2lDivSchema('9v9'),
+
       banned: {
         type: Boolean,
         default: false,
       },
+
       banExpiry: {
         type: Date,
         default: null,
       },
-      div6v6: etf2lDivSchema('6v6'),
-      div9v9: etf2lDivSchema('9v9'),
     },
 
     ozfortress: {
       id: Number,
       name: String,
+
       div6v6: {
         type: String,
         validate: isInArray(ozfortressDivs, {
@@ -123,12 +165,10 @@ export default new Schema({
   settings: {
     region: {
       type: String,
-      validate: {
-        validator(region) {
-          return Object.keys(regions).includes(region) || region === null;
-        },
+      validate: isInArray(Object.keys(regions), {
+        nullIsAllowed: true,
         msg: '{VALUE} is not a valid region!',
-      },
+      }),
       default: null,
     },
 
@@ -136,7 +176,7 @@ export default new Schema({
       type: Number,
       validate: {
         validator(volume) {
-          return allowedVolumes.includes(volume);
+          return volume <= 100 && volume >= 0;
         },
         msg: '{VALUE} is not a valid volume',
       },
@@ -150,13 +190,6 @@ export default new Schema({
     },
   },
 
-  name: {
-    type: String,
-    default: null,
-    unique: true,
-    trim: true,
-  },
-
   roles: {
     type: [String],
     validate: {
@@ -168,25 +201,13 @@ export default new Schema({
     default: [],
   },
 
-  lastUpdate: {
-    type: Date,
-    default: Date.now,
-  },
-
-  online: {
-    type: Boolean,
-    default: true,
-  },
-
-  lastOnline: {
-    type: Date,
-    default: Date.now,
-  },
-
-  hasAcceptedTheRules: {
-    type: Boolean,
-    default: false,
-  },
-
-  createdOn: Date,
+  elos: allClasses.reduce((obj, className) => {
+    return {
+      ...obj,
+      [className]: {
+        type: Number,
+        default: 1000,
+      },
+    };
+  }, {}),
 });

@@ -10,11 +10,13 @@ import About from './about';
 import Donate from './donate';
 import Settings from './settings';
 import Profile from './profile';
-import Pickup, { RedirectToPickup } from './pickup';
+import PickupQueue, { RedirectToPickup } from './pickup-queue';
 import Rules from './rules';
 import Servers from './servers';
 import RecentPickups from './recent-pickups';
 import Error from './error';
+import Help from './help';
+import Match from './match';
 
 /**
  * The main component.
@@ -44,8 +46,13 @@ export default class Routes extends PureComponent {
         />
 
         <Route
+          path="/match/:id"
+          render={composeWithMainLayout(Match)}
+        />
+
+        <Route
           path={`/(${Object.keys(gamemodes).join('|')})`}
-          render={composeWithMainLayout(Pickup)}
+          render={composeWithMainLayout(PickupQueue)}
         />
 
         <Route
@@ -59,55 +66,51 @@ export default class Routes extends PureComponent {
         />
 
         <Route
-          exact
           path="/about"
           render={composeWithMainLayout(About)}
         />
 
         <Route
-          exact
           path="/recent-pickups"
           render={composeWithMainLayout(RecentPickups)}
         />
 
         <Route
-          exact
           path="/donate"
           render={composeWithMainLayout(Donate)}
         />
 
         <Route
-          exact
           path="/servers"
           render={composeWithMainLayout(Servers)}
         />
 
         <Route
-          exact
           path="/rules"
           render={composeWithMainLayout(Rules)}
         />
 
         <Route
-          exact
+          path="/help"
+          render={composeWithMainLayout(Help)}
+        />
+
+        <Route
           path="/profile"
           render={composeWithMainLayout(Profile)}
         />
 
         <Route
-          exact
           path="/profile/:steamId"
           render={composeWithMainLayout(Profile)}
         />
 
         <Route
-          exact
           path="/settings"
           render={composeWithMainLayout(Settings)}
         />
 
         <Route
-          exact
           path="/error"
           component={Error}
         />

@@ -11,6 +11,7 @@ import { isDev } from '../config/client';
 
 import app from './app';
 import App from './views/app';
+import ErrorBoundary from './components/error-boundary';
 
 /**
  * Register the service worker.
@@ -57,4 +58,8 @@ if ('serviceWorker' in navigator && !isDev) {
   registerServiceWorker();
 }
 
-ReactDOM.render(<App app={app} />, document.getElementById('app'));
+ReactDOM.render((
+  <ErrorBoundary isTopLevel>
+    <App />
+  </ErrorBoundary>
+), document.getElementById('app'));

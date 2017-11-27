@@ -6,3 +6,5 @@ dist/
 config/*.json
 
 !config/default.json
+
+src/server/services/pickup/elo

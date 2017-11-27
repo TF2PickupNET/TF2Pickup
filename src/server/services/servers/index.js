@@ -4,6 +4,7 @@ import debug from 'debug';
 
 import schema from './schema';
 import hooks from './hooks';
+import socketMethods from './socket-methods';
 
 const log = debug('TF2Pickup:servers');
 
@@ -21,4 +22,8 @@ export default function servers() {
   }));
 
   that.service('servers').hooks(hooks);
+
+  that.on('listening', () => {
+    that.io.on('connection', socket => socketMethods(that, socket));
+  });
 }

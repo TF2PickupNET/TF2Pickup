@@ -16,7 +16,7 @@ const url = `${protocol}://${ip}${env === 'dev' ? `:${port}` : ''}`;
  */
 async function startServer() {
   try {
-    const app = await setupApp(url);
+    const app = await setupApp(url, env);
     const server = app.listen(port);
 
     server.on('listening', () => {

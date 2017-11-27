@@ -115,7 +115,7 @@ export default {
 
       // Create a mumble channel
       async (hook) => {
-        await hook.app.service('mumble-channels').create({
+        await hook.app.service('voice-channel').create({
           region: hook.data.region,
           name: hook.data.id,
         });
@@ -163,7 +163,7 @@ export default {
     patch: [
       async (hook) => {
         if (hook.result.status === 'game-finished') {
-          await hook.app.service('mumble-channels').delete({
+          await hook.app.service('voice-channel').delete({
             region: hook.result.region,
             name: hook.result.id,
           });

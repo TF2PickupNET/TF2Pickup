@@ -1,14 +1,23 @@
+import debug from 'debug';
 import classnames from 'classnames';
+import { iff, isProvider } from 'feathers-hooks-common';
 
 import hasPermission from '../../../utils/has-permission';
 import {
   pipe,
-  pick, omit, assign,
-  map, flatten,
-  arrayToObject, mapObject,
+  pick,
+  omit,
+  assign,
+  map,
+  flatten,
+  arrayToObject,
+  mapObject,
 } from '../../../utils/functions';
 
-import configureServer from './configure-server';
+import reserveServer from './reserve-server';
+import cleanupServer from './cleanup-server';
+
+const log = debug('TF2Pickup:pickup:hooks');
 
 /**
  * Populate the result with the server data.
@@ -21,13 +30,15 @@ async function populateServer(hook) {
     'waiting-for-game-to-start',
     'game-is-live',
   ].includes(hook.result.status);
+
+  if (!isActiveGame) {
+    return Object.assign({}, hook, { result: omit('serverId', 'logSecret')(hook.result) });
+  }
+
   const server = await hook.app.service('servers').get(hook.result.serverId);
   const isInPickup = false;
   const canSeeServer = isInPickup || hasPermission('pickup.see-server', hook.params.user);
-  const validKeys = classnames({
-    ip: isActiveGame,
-    stvPort: isActiveGame,
-    stvPassword: isActiveGame,
+  const validKeys = classnames('ip stvPort stvPassword', {
     port: isInPickup || canSeeServer,
     password: isInPickup || canSeeServer,
     rconPassword: canSeeServer,
@@ -82,40 +93,93 @@ async function populateUsers(hook) {
 }
 
 export default {
+  before: {
+    create: [
+      // Calculate the id of the pickup
+      async (hook) => {
+        const lastPickup = await hook.app.service('pickup').find({
+          query: {
+            $limit: 1,
+            $sort: { launchedOn: -1 },
+          },
+        });
+
+        return {
+          ...hook,
+          data: {
+            ...hook.data,
+            id: lastPickup[0] ? lastPickup[0].id + 1 : 1,
+          },
+        };
+      },
+
+      // Create a mumble channel
+      async (hook) => {
+        await hook.app.service('mumble-channels').create({
+          region: hook.data.region,
+          name: hook.data.id,
+        });
+      },
+
+      // Get a server for the pickup
+      async (hook) => {
+        try {
+          const server = await reserveServer(hook.app, hook.data.region);
+
+          return {
+            ...hook,
+            data: {
+              ...hook.data,
+              serverId: server.id,
+              logSecret: server.logSecret,
+            },
+          };
+        } catch (error) {
+          log('Error while getting server for pickup', hook.data.id, error);
+
+          return {
+            ...hook,
+            data: {
+              ...hook.data,
+              status: 'server-reservation-error',
+            },
+          };
+        }
+      },
+    ],
+  },
   after: {
     create(props) {
-      configureServer(props);
-
-      props.app.service('mumble-channels').create({
-        region: props.result.region,
-        name: props.result.id,
+      props.app.service('pickup').emit('redirect', {
+        url: `/match/${props.result.id}`,
+        users: pipe(
+          Object.values,
+          map(Object.values),
+          map(player => player.id),
+        )(props.result.teams),
       });
-
-      return props;
     },
 
     patch: [
       async (hook) => {
-        const serverStatus = ['game-finished', 'server-configuration-error'];
-
-        if (serverStatus.includes(hook.result.status)) {
-          const mumbleChannels = hook.app.service('mumble-channels');
-
-          await mumbleChannels.delete({
+        if (hook.result.status === 'game-finished') {
+          await hook.app.service('mumble-channels').delete({
             region: hook.result.region,
             name: hook.result.id,
           });
+
+          await cleanupServer(hook.app, hook.result.id);
         }
-
-        return hook;
       },
-      populateServer,
-      populateUsers,
+      iff(isProvider('external'), [
+        populateServer,
+        populateUsers,
+      ]),
     ],
 
-    get: [
+    get: iff(isProvider('external'), [
       populateServer,
       populateUsers,
-    ],
+    ]),
   },
 };

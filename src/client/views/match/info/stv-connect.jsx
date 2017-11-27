@@ -86,6 +86,10 @@ class STVConnect extends PureComponent {
   };
 
   render() {
+    if (!this.props.pickup.server) {
+      return null;
+    }
+
     return (
       <Card className={this.props.classes.card}>
         <span className={this.props.classes.item}>

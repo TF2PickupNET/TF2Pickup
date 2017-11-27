@@ -1,7 +1,10 @@
 import { getPlayers } from '../../../../../utils/pickup';
 import {
   arrayToObject,
-  flatten,
+  map,
+  mapObject,
+  pipe,
+  reduce,
 } from '../../../../../utils/functions';
 
 const priorities = {
@@ -34,9 +37,10 @@ const priorities = {
 
 const sortClass = classes => classes.sort((player1, player2) => player2.elo - player1.elo);
 
-const getEloSum = players => players
-  .map(player => player.elo)
-  .reduce((total, elo) => total + elo);
+const getEloSum = pipe(
+  map(player => player.elo),
+  reduce((total, elo) => total + elo, 0),
+);
 
 /**
    * Function to sort players by their elo.
@@ -57,14 +61,7 @@ function getAverageEloForTeam(classes) {
  * @returns {Object} - Array with players sorted DESC by their elo.
  */
 function getAvgTeamElo(teams) {
-  const elos = Object
-    .entries(teams)
-    .reduce((obj, [team, classes]) => {
-      return {
-        ...obj,
-        [team]: getAverageEloForTeam(classes),
-      };
-    }, {});
+  const elos = mapObject(getAverageEloForTeam)(teams);
 
   return {
     ...elos,
@@ -141,22 +138,22 @@ export default async function generateTeams(props, players, mode) {
     red: {},
     blu: {},
   };
-  const allPlayers = flatten(Object.values(players));
-  const users = await getUsers(props.app, allPlayers);
+  const users = await getUsers(props.app, getPlayers(players));
 
   // Get user elos per class and sort
   priorities[mode].forEach((className) => {
     teams.red[className] = [];
     teams.blu[className] = [];
 
-    const playersForClass = sortClass(
-      players[className].map((player) => {
+    const playersForClass = pipe(
+      map((player) => {
         return {
           ...player,
           elo: users[player.id].elos[className],
         };
       }),
-    );
+      sortClass,
+    )(players[className]);
 
     while (playersForClass.length > 0) {
       const avg = getAvgTeamElo(teams);

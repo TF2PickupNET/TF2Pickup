@@ -7,10 +7,8 @@ import {
   Layout,
   Divider,
   Button,
-  IconButton,
 } from 'materialize-react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 
 import openWindowInNewTab from '../../utils/open-window-in-new-tab';
 import { discordUrls } from '../../../config/client';
@@ -22,42 +20,16 @@ import { discordUrls } from '../../../config/client';
  */
 class ErrorBoundary extends PureComponent {
   static propTypes = {
-    classes: PropTypes.shape({
-      card: PropTypes.string.isRequired,
-      stackTraceContainer: PropTypes.string.isRequired,
-      cardActions: PropTypes.string.isRequired,
-      iconButton: PropTypes.string.isRequired,
-      rotateIconButton: PropTypes.string.isRequired,
-    }).isRequired,
+    classes: PropTypes.shape({ card: PropTypes.string.isRequired }).isRequired,
     children: PropTypes.node.isRequired,
     isTopLevel: PropTypes.bool,
   };
 
   static defaultProps = { isTopLevel: false };
 
-  static styles = {
-    card: { marginTop: 100 },
+  static styles = { card: { marginTop: 100 } };
 
-    stackTraceContainer: {
-      display: 'grid',
-      gridTemplateColumns: '1fr',
-      padding: '16px 24px',
-    },
-
-    cardActions: {
-      display: 'grid',
-      gridTemplateColumns: '1fr auto',
-    },
-
-    iconButton: { transition: 'transform 140ms' },
-
-    rotateIconButton: { transform: 'rotate(180deg)' },
-  };
-
-  state = {
-    hasError: false,
-    showStackTrace: false,
-  };
+  state = { hasError: false };
 
   error = null;
 
@@ -75,36 +47,11 @@ class ErrorBoundary extends PureComponent {
   }
 
   /**
-   * Toggle showing the stack trace.
-   */
-  handleIconButtonPress = () => {
-    this.setState((state) => {
-      return { showStackTrace: !state.showStackTrace };
-    });
-  };
-
-  /**
    * Open a new tab with the dircord help channel url.
    */
   handleButtonPress = () => {
     openWindowInNewTab(discordUrls.help);
   };
-
-  /**
-   * Render the component stack trace.
-   *
-   * @returns {JSX[]} - Returns an array of elements for each of the trace.
-   */
-  renderComponentStack() {
-    return this.info.componentStack
-      .split('\n')
-      .map((trace, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <span key={index}>
-          {trace}
-        </span>
-      ));
-  }
 
   /**
    * Render the error content.
@@ -133,27 +80,6 @@ class ErrorBoundary extends PureComponent {
             Go to discord
           </Button>
         </Card.Actions>
-
-        <Divider />
-
-        <Card.Actions className={this.props.classes.cardActions}>
-          <span>Error Trace</span>
-
-          <IconButton
-            icon="chevron-down"
-            className={classnames(
-              this.props.classes.iconButton,
-              this.state.showStackTrace && this.props.classes.rotateIconButton,
-            )}
-            onPress={this.handleIconButtonPress}
-          />
-        </Card.Actions>
-
-        {this.state.showStackTrace ? (
-          <span className={this.props.classes.stackTraceContainer}>
-            {this.renderComponentStack()}
-          </span>
-        ) : null}
       </Card>
     );
   }

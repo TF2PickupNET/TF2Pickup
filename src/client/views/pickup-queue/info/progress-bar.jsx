@@ -16,7 +16,7 @@ class ProgressBar extends PureComponent {
     pickup: PropTypes.shape({
       status: PropTypes.string.isRequired,
       gamemode: PropTypes.string.isRequired,
-      readyUp: PropTypes.instanceOf(Date),
+      readyUp: PropTypes.string,
       classes: PropTypes.shape({}).isRequired,
     }).isRequired,
     classes: PropTypes.shape({

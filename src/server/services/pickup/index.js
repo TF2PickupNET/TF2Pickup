@@ -5,6 +5,7 @@ import debug from 'debug';
 import schema from './schema';
 import hooks from './hooks';
 import logListener from './log-listener';
+import socketMethods from './socket-methods';
 
 const log = debug('TF2Pickup:pickup');
 
@@ -19,32 +20,14 @@ export default function pickup() {
   that.service('pickup', service({
     Model: mongoose.model('Pickup', schema),
     id: 'id',
+    events: ['redirect'],
   }));
 
   that.service('pickup').hooks(hooks);
 
   logListener(that);
 
-  const player = { id: '76561198085010248' };
-  const team = {
-    scout: [player, player],
-    roamer: [player],
-    pocket: [player],
-    demoman: [player],
-    medic: [player],
-  };
-
-  that.service('pickup').patch(1, {
-    $set: {
-      serverId: 3,
-      teams: {
-        red: team,
-        blu: team,
-      },
-      score: {
-        blu: 1,
-        red: 1,
-      },
-    },
+  that.on('listening', () => {
+    that.io.on('connection', socket => socketMethods(that, socket));
   });
 }

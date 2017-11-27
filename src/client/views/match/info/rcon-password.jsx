@@ -67,7 +67,7 @@ class RCONPassword extends PureComponent {
   handleButtonPress = () => copy(this.getConnectUrl());
 
   render() {
-    if (!this.props.pickup.server.rconPassword) {
+    if (!this.props.pickup.server || !this.props.pickup.server.rconPassword) {
       return null;
     }
 

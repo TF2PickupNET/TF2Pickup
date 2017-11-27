@@ -13,6 +13,7 @@ import Connect from './info/connect';
 import StvConnect from './info/stv-connect';
 import RconPassword from './info/rcon-password';
 import Teams from './teams';
+import Actions from './actions';
 
 /**
  * The component for the match view.
@@ -109,8 +110,10 @@ class View extends PureComponent {
 
             <Teams
               teams={this.state.pickup.teams}
-              scores={this.state.pickup.score}
+              scores={this.state.pickup.scores}
             />
+
+            <Actions pickup={this.state.pickup} />
           </div>
         ) : (
           <Spinner active />

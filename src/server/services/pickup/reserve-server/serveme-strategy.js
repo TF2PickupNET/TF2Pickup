@@ -27,6 +27,11 @@ export default async function servemeStrategy(url, key) {
   const response = await serveme.post('api/reservations/find_servers.json', dates);
   const servers = shuffle(response.data.servers);
   const server = servers[0];
+
+  if (!server) {
+    throw new Error('No available server!');
+  }
+
   const rcon = randomstring.generate({ length: 12 });
   const password = randomstring.generate({ length: 12 });
   const reservation = await serveme.post('api/reservations.json', {
@@ -49,6 +54,7 @@ export default async function servemeStrategy(url, key) {
       rcon,
       password,
       port,
+      rconPassword: rcon,
       stvPort: port + 5,
       stvPassword: STV_PASSWORD,
       reservationId: reservation.data.reservation.id,

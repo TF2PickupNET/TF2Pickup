@@ -2,6 +2,8 @@ export const def = x => typeof x !== 'undefined';
 
 export const undef = x => typeof x === 'undefined';
 
+export const first = ([x]) => x;
+
 export const map = fn => ([x, ...xs]) => {
   if (undef(x)) {
     return [];

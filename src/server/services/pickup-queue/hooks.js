@@ -57,15 +57,17 @@ export default {
       (props) => {
         switch (props.result.status) {
           case 'waiting': {
-            return statuses.waiting(props);
+            statuses.waiting(props);
+            break;
           }
-
           case 'ready-up': {
-            return statuses.readyUp(props);
+            statuses.readyUp(props);
+            break;
           }
-
-          default: return props;
+          default: break;
         }
+
+        return props;
       },
       async (props) => {
         const populatedPickup = await populatePickup(props.app, props.result);

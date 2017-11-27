@@ -15,7 +15,6 @@ const log = debug('TF2Pickup:pickup-queue:statuses:waiting');
  * The after hook handler for the waiting status.
  *
  * @param {Object} props - The props passed to the hook.
- * @returns {Object} - Returns the not modified props.
  */
 export default async function waiting(props) {
   const pickupId = props.id;
@@ -63,6 +62,4 @@ export default async function waiting(props) {
       }
     }, gamemodes[pickup.gamemode].readyUpTime * 1000);
   }
-
-  return props;
 }

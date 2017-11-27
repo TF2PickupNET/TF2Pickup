@@ -19,14 +19,16 @@ const log = debug('TF2Pickup');
  * Setup the feathers app and configure all of the parts.
  *
  * @param {String} url - URL for the app.
+ * @param {String} env - The environment the server is started in.
  * @returns {JSX} - Returns the app.
  */
-export default async function setupApp(url) {
+export default async function setupApp(url, env) {
   log('Creating Feathers app');
 
   const app = feathers();
   const mongourl = config.get('server.mongourl');
 
+  app.set('env', env);
   app.set('url', url);
 
   mongoose.Promise = global.Promise;

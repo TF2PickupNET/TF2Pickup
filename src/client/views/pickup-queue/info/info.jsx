@@ -90,7 +90,7 @@ class PickupInfo extends PureComponent {
     switch (this.props.pickup.status) {
       case 'waiting': return 'Waiting';
       case 'ready-up': return 'Ready Up';
-      case 'making-teams': return 'Making Teams';
+      case 'creating-teams': return 'Creating Teams';
       default: return 'Unknown status';
     }
   }

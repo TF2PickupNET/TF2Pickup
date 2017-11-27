@@ -3,7 +3,11 @@ import config from 'config';
 import debug from 'debug';
 import regions from '@tf2-pickup/configs/regions';
 
-import { getMumbleIP } from '../../../config/index';
+import { getMumbleIP } from '../../../config';
+import {
+  map,
+  pipe,
+} from '../../../utils/functions';
 
 const log = debug('TF2Pickup:mumble');
 
@@ -17,73 +21,101 @@ class MumbleService {
 
   /**
    * Mumble service setup.
+   *
+   * @returns {Promise} - Returns a promise for .
    */
   setup() {
-    const mumbleUsername = config.get('server.mumble.username');
-    const mumblePassword = config.get('server.mumble.password');
-
-    Object
-      .values(regions)
-      .forEach((region) => {
-        const url = getMumbleIP(region.name);
-
-        mumble.connect(url, {}, (error, connection) => {
-          if (error) {
-            log(`Error connecting to ${region.name} mumble server`, error);
-
-            return;
-          }
-
-          connection.authenticate(mumbleUsername, mumblePassword);
-
-          connection.on(
-            'initialized',
-            this.handleConnectionInitialization(region.name, connection),
-          );
-        });
-      });
+    return Promise.all(
+      pipe(
+        Object.keys,
+        map(region => this.connect(getMumbleIP(region), region)),
+      )(regions),
+    );
   }
 
-  handleConnectionInitialization = (region, connection) => () => {
-    this.connections[region] = connection;
-  };
+  /**
+   * Connect to a specific mumble server.
+   *
+   * @param {String} url - The url of the mumble server.
+   * @param {String} region - The name of the region.
+   * @returns {Promise} - Returns a promise which will resolve
+   * when the connection has been established.
+   */
+  connect(url, region) {
+    return new Promise((resolve, reject) => {
+      const mumbleUsername = config.get('server.mumble.username');
+      const mumblePassword = config.get('server.mumble.password');
+
+      mumble.connect(url, {}, (error, connection) => {
+        if (error) {
+          log(`Error while connecting to ${region} mumble server`, error);
+
+          reject(error);
+        }
+
+        connection.authenticate(mumbleUsername, mumblePassword);
+
+        connection.on('initialized', () => {
+          log(`Successfully connected to ${region} mumble`);
+
+          this.connections[region] = connection;
+
+          resolve();
+        });
+      });
+    });
+  }
 
   /**
-   * Create mumble channel.
+   * Create a mumble channel.
    *
-   * @param {Object} channel - Mumble channel.
-   * @param {Object} channel.region - Mumble channel region.
-   * @param {Object} channel.name - Mumble channel name.
+   * @param {Object} data - Mumble channel.
+   * @param {Object} data.region - The region of the mumble channel.
+   * @param {Object} data.name - The name of the mumble channel.
+   * @returns {(Error|Boolean)} - Throws an error or returns true if the channel has been created.
    */
   create({
     region,
     name,
   }) {
+    if (!this.connections[region]) {
+      return Promise.reject(new Error(`No connection for region ${region} has been established`));
+    }
+
     const channel = this.connections[region].channelByName('Pickups');
 
     channel.addSubChannel(name);
+
+    return Promise.resolve(true);
   }
 
   /**
-   * Delete mumble channel.
+   * Delete a mumble channel.
    *
-   * @param {Object} channel - Mumble channel.
-   * @param {Object} channel.region - Mumble channel region.
-   * @param {Object} channel.name - Mumble channel name.
+   * @param {Object} data - Mumble channel.
+   * @param {Object} data.region - The region of the mumble channel.
+   * @param {Object} data.name - The name of the mumble channel.
+   * @returns {(Error|Boolean)} - Throws an error or returns true if the channel has been deleted.
    */
   delete({
     region,
     name,
   }) {
+    if (!this.connections[region]) {
+      return Promise.reject(new Error(`No connection for region ${region} has been established`));
+    }
+
     const channel = this.connections[region].channelByName(name);
 
     channel.remove(name);
+
+    return Promise.resolve(true);
   }
 }
 
 const devService = {
-  create: () => Promise.resolve(),
-  delete: () => Promise.resolve(),
+  create: () => Promise.resolve(true),
+  delete: () => Promise.resolve(true),
 };
 
 /**

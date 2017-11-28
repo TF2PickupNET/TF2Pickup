@@ -9,6 +9,8 @@ import handler from 'feathers-errors/handler';
 import debug from 'debug';
 import config from 'config';
 
+import { pluck } from '../utils/functions';
+
 import services from './services';
 import globalHooks from './global-hooks';
 import client from './client';
@@ -67,6 +69,7 @@ export default async function setupApp(url, env) {
       const { _id } = await app.service('errors').create({
         message: error.message,
         info: error,
+        steamId: pluck('feathers.user.id')(req),
       });
 
       res.redirect(`/error?message=${error.message}&code=${error.code}&id=${_id}`);

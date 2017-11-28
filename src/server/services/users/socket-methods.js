@@ -1,5 +1,48 @@
 /* eslint-disable promise/prefer-await-to-callbacks */
 
+import {
+  pipe,
+  map,
+  filter,
+  reduce,
+} from '../../../utils/functions';
+
+/**
+ * Get the valid names for a user.
+ *
+ * @param {Object} app - The feathers app object.
+ * @param {Object} user - The users object.
+ * @returns {Promise} - Returns a promise which will resolve with the valid names.
+ */
+async function getValidNames(app, user) {
+  const services = Object
+    .keys(user.services)
+    .filter(service => service !== 'steam');
+  const queries = await Promise.all(
+    pipe(
+      Object.keys,
+      filter(service => service !== 'steam'),
+      map(service => app.service('users').find({ query: { name: user.services[service].name } })),
+    )(user.services),
+  ).then(results => results.map((query, index) => {
+    return {
+      isValid: query.length === 0,
+      name: services[index],
+      username: user.services[services[index]].name,
+    };
+  }));
+
+  return pipe(
+    filter(service => service.isValid),
+    reduce((obj, service) => {
+      return {
+        ...obj,
+        [service.username]: [service.name].concat(obj[service.username] || []),
+      };
+    }, {}),
+  )(queries);
+}
+
 /**
  * Setup the socket methods for the users.
  *
@@ -29,35 +72,22 @@ export default function socketMethods(app, socket) {
 
   socket.on('user.get-valid-names', async (cb) => {
     const currentUser = socket.feathers.user;
-    const services = Object
-      .keys(currentUser.services)
-      .filter(service => service !== 'steam');
 
-    const serviceNameQueries = await Promise.all(
-      services
-        .map(service => currentUser.services[service].name)
-        .map(name => users.find({ query: { name } })),
-    );
-
-    const validServices = serviceNameQueries
-      .filter(query => query.length === 0)
-      .map((query, index) => services[index])
-      .map((service) => {
-        return {
-          serviceName: service,
-          name: currentUser.services[service].name,
-        };
-      });
-
-    if (validServices.length === 1) {
-      const name = validServices[0].name;
-
-      await users.patch(currentUser.id, { $set: { name } });
-
+    if (!currentUser) {
       return cb(false);
     }
 
-    return cb(validServices);
+    const names = await getValidNames(app, currentUser);
+
+    if (Object.keys(names).length === 1) {
+      const name = Object.keys(names)[0];
+
+      await app.service('users').patch(currentUser.id, { $set: { name } });
+
+      return false;
+    }
+
+    return cb(names);
   });
 
   socket.on('user.set-name', async (name, cb) => {

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -14,6 +15,7 @@ import {
 import Link from '../../../components/link';
 import app from '../../../app';
 import { discordUrls } from '../../../../config/client';
+import { find } from '../../../../utils/functions';
 
 /**
  * The section for setting the username.
@@ -27,6 +29,7 @@ class UsernameSection extends PureComponent {
       link: PropTypes.string.isRequired,
       errorText: PropTypes.string.isRequired,
     }).isRequired,
+    user: PropTypes.shape({ settings: PropTypes.shape({ region: PropTypes.string }) }).isRequired,
   };
 
   static styles = {
@@ -48,6 +51,12 @@ class UsernameSection extends PureComponent {
     },
   };
 
+  static regionToServices = {
+    eu: 'etf2l',
+    na: null,
+    oz: 'ozfortress',
+  };
+
   state = {
     isLoading: true,
     names: [],
@@ -67,6 +76,27 @@ class UsernameSection extends PureComponent {
         });
       }
     });
+  }
+
+  /**
+   * Preselect the username from the selected region.
+   *
+   * @param nextProps
+   */
+  componentWillReceiveProps(nextProps) {
+    if (this.props.user.settings.region === null && nextProps.user.settings.region !== null) {
+      const service = UsernameSection.regionToServices[nextProps.user.settings.region];
+
+      this.setState((state) => {
+        if (this.state.error) {
+          return null;
+        }
+
+        const username = find(name => name.serviceName === service)(state.names);
+
+        return { selectedName: username };
+      });
+    }
   }
 
   /**
@@ -149,4 +179,8 @@ class UsernameSection extends PureComponent {
   }
 }
 
-export default injectSheet(UsernameSection.styles)(UsernameSection);
+export default connect(
+  (state) => {
+    return { user: state.user };
+  },
+)(injectSheet(UsernameSection.styles)(UsernameSection));

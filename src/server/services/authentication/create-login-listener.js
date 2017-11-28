@@ -14,7 +14,6 @@ const log = debug('TF2Pickup:authentication:login');
 export default function createLoginListener(app) {
   return async (payload, { connection }) => {
     const users = app.service('users');
-    const logs = app.service('logs');
 
     log('User logged in', connection.user.id);
 
@@ -23,26 +22,12 @@ export default function createLoginListener(app) {
       const oneDaySinceLastUpdate = moment(connection.user.lastUpdate).isBefore(yesterday);
       const updatedData = await getNewUserData(connection.user.id, oneDaySinceLastUpdate, app);
 
-      log('Updating third party user data', connection.user.id, updatedData);
-
-      updatedData.online = true;
-
-      await users.patch(connection.user.id, updatedData);
-
-      await logs.create({
-        message: 'User logged in',
-        environment: 'server',
-        steamId: connection.user.id,
+      await users.patch(connection.user.id, {
+        ...updatedData,
+        online: true,
       });
     } catch (error) {
       log('Error in login callback', connection.user.id, error);
-
-      await logs.create({
-        message: 'Error in login callback',
-        environment: 'server',
-        info: error,
-        steamId: connection.user.id,
-      });
     }
   };
 }

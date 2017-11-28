@@ -64,10 +64,9 @@ export default async function setupApp(url, env) {
     async html(error, req, res) {
       log('An error occurred!', error.message);
 
-      const { _id } = await app.service('logs').create({
-        message: 'Something went wrong on the server!',
+      const { _id } = await app.service('errors').create({
+        message: error.message,
         info: error,
-        environment: 'server',
       });
 
       res.redirect(`/error?message=${error.message}&code=${error.code}&id=${_id}`);

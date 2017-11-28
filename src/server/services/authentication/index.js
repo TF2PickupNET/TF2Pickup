@@ -1,7 +1,6 @@
 import auth from 'feathers-authentication';
 import SteamStrategy from 'passport-steam';
 import jwt, { Verifier } from 'feathers-authentication-jwt';
-import errors from 'feathers-errors';
 import ms from 'ms';
 import debug from 'debug';
 import config from 'config';
@@ -10,8 +9,6 @@ import { authUrl } from '../../../config/index';
 
 import createLoginListener from './create-login-listener';
 import createLogoutListener from './create-logout-listener';
-import getGroupMembers from './get-group-members';
-import getTF2Hours from './get-tf2-hours';
 
 const log = debug('TF2Pickup:authentication');
 
@@ -31,12 +28,8 @@ class JWTVerifier extends Verifier {
    * @returns {Promise} - Returns the called done function.
    */
   async verify(req, payload, done) {
-    log('Verifying JWT', payload.id);
-
     try {
       const user = await this.app.service('users').get(payload.id);
-
-      log('Verified JWT', user.id);
 
       return done(null, user, { id: user.id });
     } catch (error) {
@@ -81,8 +74,6 @@ export default function authentication() {
       const [, id] = identifier.match(/https?:\/\/steamcommunity\.com\/openid\/id\/(\d+)/);
       const usersService = that.service('users');
 
-      log('New steam login', id);
-
       try {
         const user = await usersService.get(id);
 
@@ -97,52 +88,6 @@ export default function authentication() {
         }
       }
 
-      const tf2Hours = await getTF2Hours(id, that);
-
-      if (tf2Hours === null) {
-        log('Unable to fetch tf2 hours', id);
-
-        return done(
-          new errors.Timeout([
-            'Something went wrong while trying to get your played hours in TF2!',
-            'Please try again. If the problem persists concat a developer over discord.',
-          ].join(' ')),
-          null,
-        );
-      }
-
-      if (tf2Hours < config.get('server.auth.required_hours')) {
-        log('TF2 hours do not satisfy the required minimum', id);
-
-        return done(
-          new errors.Forbidden([
-            'You don\'t have the required minimum hours in TF2 to play TF2Pickup',
-            `You will atleast need ${config.get('server.auth.required_hours')} in TF2.`,
-          ].join(' ')),
-          null,
-        );
-      }
-
-      if (config.has('beta') && config.get('beta.steam-group')) {
-        log('Validating user against steam group', config.get('beta.steam-group'));
-
-        const groupMembers = await getGroupMembers(
-          config.get('beta.steam-group'),
-          that,
-        );
-
-        if (!groupMembers.includes(id)) {
-          log('User is not in the steam group', id);
-
-          return done(
-            new errors.Forbidden(
-              'The site is currently in beta mode and you are not in the required Steam Group',
-            ),
-            null,
-          );
-        }
-      }
-
       // Create a new user when no user was found
       try {
         log('Creating new user', id);
@@ -152,13 +97,6 @@ export default function authentication() {
         return done(null, newUser);
       } catch (error) {
         log('Error while creating new user', id, error);
-
-        that.service('logs').create({
-          message: 'Error while creating new user',
-          environment: 'server',
-          info: error,
-          steamId: id,
-        });
 
         return done(error, null);
       }
@@ -171,8 +109,6 @@ export default function authentication() {
     `${authUrl}/return`,
     auth.express.authenticate('steam'),
     async (req, res, next) => {
-      log('Creating new JWT', req.user.id);
-
       // Create a new jwt token
       const token = await req.app.passport.createJWT({ id: req.user.id }, that.get('auth'));
 

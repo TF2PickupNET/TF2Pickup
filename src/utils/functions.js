@@ -123,10 +123,10 @@ export const some = fn => ([x, ...xs]) => {
   return some(fn)(xs);
 };
 
-export const arrayToObject = key => reduce((obj, item) => {
+export const arrayToObject = fn => reduce((obj, item) => {
   return {
     ...obj,
-    [item[key]]: item,
+    [fn(item)]: item,
   };
 }, {});
 

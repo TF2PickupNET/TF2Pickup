@@ -1,5 +1,5 @@
 import users from './users';
-import logs from './logs';
+import errors from './errors';
 import authentication from './authentication';
 import pickup from './pickup';
 import pickupQueue from './pickup-queue';
@@ -14,7 +14,7 @@ import voiceChannel from './voice-channel';
 export default function services() {
   this
     .configure(users)
-    .configure(logs)
+    .configure(errors)
     .configure(authentication)
     .configure(pickup)
     .configure(servers)

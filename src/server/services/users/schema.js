@@ -125,14 +125,9 @@ export default new Schema({
       div6v6: etf2lDivSchema('6v6'),
       div9v9: etf2lDivSchema('9v9'),
 
-      banned: {
+      isBanned: {
         type: Boolean,
         default: false,
-      },
-
-      banExpiry: {
-        type: Date,
-        default: null,
       },
     },
 

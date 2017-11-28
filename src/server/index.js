@@ -27,11 +27,6 @@ async function startServer() {
       if (process.env.IS_CI_TEST) {
         process.exit(0); // eslint-disable-line no-process-exit
       }
-
-      app.service('logs').create({
-        message: `Feather server started on ${url}`,
-        environment: 'server',
-      });
     });
   } catch (error) {
     log(error.message);

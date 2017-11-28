@@ -124,9 +124,7 @@ class GamemodeTabs extends PureComponent {
    * @param {Object} data - The data from the server.
    */
   handleRedirect = (data) => {
-    if (this.props.user && data.users.includes(this.props.user.id)) {
-      window.location = data.url;
-    }
+    window.location = data.url;
   };
 
   /**

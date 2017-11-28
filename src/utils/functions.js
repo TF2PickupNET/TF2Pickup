@@ -81,12 +81,12 @@ export const mapObject = fn => obj => reduce((current, key) => {
   };
 }, {})(Object.keys(obj));
 
-export const find = fn => ([x, ...xs]) => {
+export const find = (fn, defValue = null) => ([x, ...xs]) => {
   if (undef(x)) {
-    return null;
+    return defValue;
   }
 
-  return fn(x) ? x : find(fn)(xs);
+  return fn(x) ? x : find(fn, defValue)(xs);
 };
 
 export const findIndex = fn => ([x, ...xs], index = 0) => {
@@ -123,10 +123,10 @@ export const some = fn => ([x, ...xs]) => {
   return some(fn)(xs);
 };
 
-export const arrayToObject = key => reduce((obj, item) => {
+export const arrayToObject = fn => reduce((obj, item) => {
   return {
     ...obj,
-    [item[key]]: item,
+    [fn(item)]: item,
   };
 }, {});
 

@@ -44,6 +44,13 @@ const defaultDivisions = pipe(
 
 export { divs };
 
+/**
+ * Get the divisions for a user.
+ *
+ * @param {String} id - The players steam id.
+ * @param {String} etf2lId - The players etf2l id.
+ * @returns {Promise} - Returns a promise which will resolve with an object.
+ */
 export default async function getDivisions(id, etf2lId) {
   log('Updating users ETF2L divisions', id);
 

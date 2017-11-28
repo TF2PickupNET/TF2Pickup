@@ -1,9 +1,6 @@
 import { Schema } from 'mongoose';
 
-import {
-  steamId,
-  isInArray,
-} from '../validators';
+import { steamId } from '../validators';
 
 export default new Schema({
   createdOn: {

@@ -7,8 +7,14 @@ import {
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
+
 import { CLOSE_DRAWER } from '../../redux/drawer-opened/constants';
 
+/**
+ * The list item for the drawer.
+ *
+ * @class
+ */
 class DrawerListItem extends PureComponent {
   static propTypes = {
     redirectTo: PropTypes.string,
@@ -23,6 +29,9 @@ class DrawerListItem extends PureComponent {
     onClick: () => {},
   };
 
+  /**
+   * Close the drawer and call the onClick prop or redirect the user to a new page.
+   */
   handleClick = () => {
     if (this.props.redirectTo) {
       this.props.redirect(this.props.redirectTo);

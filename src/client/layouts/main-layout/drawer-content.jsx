@@ -20,6 +20,11 @@ import { discordUrls } from '../../../config/client';
 
 import ListItem from './drawer-list-item';
 
+/**
+ * The content for the drawer.
+ *
+ * @class
+ */
 class DrawerContent extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
@@ -47,6 +52,11 @@ class DrawerContent extends PureComponent {
 
   handleSuggestionsClick = () => openWindowInNewTab(discordUrls.suggestions);
 
+  /**
+   * Render the users part in the drawer.
+   *
+   * @returns {JSX} - Returns the JSX to render.
+   */
   renderUserList() {
     if (this.props.user) {
       return (

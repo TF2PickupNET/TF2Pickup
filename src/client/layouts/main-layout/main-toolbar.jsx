@@ -134,6 +134,11 @@ export class MainToolbar extends PureComponent {
     );
   }
 
+  /**
+   * Render the title for the page.
+   *
+   * @returns {JSX} - Returns the title.
+   */
   renderTitle() {
     if (this.state.title) {
       return (

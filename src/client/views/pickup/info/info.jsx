@@ -90,6 +90,7 @@ class Info extends PureComponent {
       case 'game-is-live': return 'Game is live';
       case 'game-finished': return 'Game finished';
       case 'server-configuration-error': return 'Server configuration error';
+      case 'server-reservation-error': return 'Server reservation error';
       default: return 'Unknown status';
     }
   }
@@ -120,6 +121,7 @@ class Info extends PureComponent {
   getDate() {
     switch (this.props.pickup.status) {
       case 'server-configuration-error':
+      case 'server-reservation-error':
       case 'waiting-for-game-to-start':
       case 'setting-up-server': return {
         name: 'Launched at',

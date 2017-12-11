@@ -2,13 +2,11 @@ import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Aux from 'react-aux';
 import {
   Button,
   Card,
   Spinner,
   breakpoints,
-  Dialog,
 } from 'materialize-react';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
@@ -22,10 +20,12 @@ import {
   getPlayer,
   getGamemodeFromUrl,
 } from '../../../../utils/pickup';
+import {
+  closeDialog,
+  openDialog,
+} from '../../../redux/dialog/actions';
 
-import ReadyUpDialog from './ready-up-dialog';
 import ProgressBar from './progress-bar';
-import MapVoteDialog from './map-vote-dialog';
 
 /**
  * A component which renders info about the current pickup.
@@ -38,17 +38,21 @@ class PickupInfo extends PureComponent {
       container: PropTypes.string.isRequired,
       item: PropTypes.string.isRequired,
     }).isRequired,
+    openDialog: PropTypes.func.isRequired,
+    closeDialog: PropTypes.func.isRequired,
     pickup: PropTypes.shape({
       status: PropTypes.string.isRequired,
       gamemode: PropTypes.string.isRequired,
       classes: PropTypes.shape({}).isRequired,
     }),
-    user: PropTypes.shape({ id: PropTypes.string }),
+    dialog: PropTypes.string,
+    user: PropTypes.shape({}),
   };
 
   static defaultProps = {
     pickup: null,
     user: null,
+    dialog: null,
   };
 
   static styles = {
@@ -82,6 +86,53 @@ class PickupInfo extends PureComponent {
   };
 
   /**
+   * If the user is currently logged in, we get the user data from the pickup classes.
+   *
+   * @param {Object} user - The current user object.
+   * @param {Object} pickup - The current pickup.
+   * @returns {(Boolean|Object)} - Returns either false when the player isn't in the pickup
+   * or the object which is associated with him.
+   */
+  static getPlayerData(user, pickup) {
+    if (user && pickup) {
+      return getPlayer(user.id)(pickup.classes);
+    }
+
+    return false;
+  }
+
+  /**
+   * Get whether or not the dialog should be opened.
+   *
+   * @param {Object} props - The props the state should be calculated from.
+   * @returns {Boolean} - Returns whether or not the dialog should be opened.
+   */
+  static getDialogStatus(props) {
+    const player = PickupInfo.getPlayerData(props.user, props.pickup);
+
+    return props.pickup
+      && props.pickup.status === 'ready-up'
+      && player
+      && !player.ready;
+  }
+
+  /**
+   * Open the ready up dialog when needed.
+   */
+  componentWillReceiveProps(nextProps) {
+    const nextStatus = PickupInfo.getDialogStatus(nextProps);
+    const currentStatus = PickupInfo.getDialogStatus(this.props);
+
+    if (nextStatus !== currentStatus) {
+      if (nextStatus) {
+        this.props.openDialog('READY_UP_DIALOG');
+      } else if (this.props.dialog === 'READY_UP_DIALOG') {
+        this.props.closeDialog();
+      }
+    }
+  }
+
+  /**
    * Get the pretty status to show.
    *
    * @returns {String} - Returns the pretty status.
@@ -112,21 +163,7 @@ class PickupInfo extends PureComponent {
     )(this.props.pickup.classes);
   }
 
-  /**
-   * If the user is currently logged in, we get the user data from the pickup classes.
-   *
-   * @returns {(Boolean|Object)} - Returns either false when the player isn't in the pickup
-   * or the object which is associated with him.
-   */
-  getPlayerData() {
-    if (this.props.user) {
-      return getPlayer(this.props.user.id)(this.props.pickup.classes);
-    }
-
-    return false;
-  }
-
-  handleMapVoteButtonPress = () => this.mapVoteDialog.open();
+  handleMapVoteButtonPress = () => this.props.openDialog('MAP_VOTE_DIALOG');
 
   render() {
     if (!this.props.pickup) {
@@ -136,53 +173,38 @@ class PickupInfo extends PureComponent {
     }
 
     const gamemodeInfo = gamemodes[this.props.pickup.gamemode];
-    const playerData = this.getPlayerData();
+    const playerData = PickupInfo.getPlayerData(this.props.user, this.props.pickup);
 
     return (
-      <Aux>
-        <Card
-          className={this.props.classes.container}
-          data-gamemode={this.props.pickup.gamemode}
-        >
-          <span className={this.props.classes.item}>
-            Status: {this.getStatus()}
-          </span>
+      <Card
+        className={this.props.classes.container}
+        data-gamemode={this.props.pickup.gamemode}
+      >
+        <span className={this.props.classes.item}>
+          Status: {this.getStatus()}
+        </span>
 
-          <span className={this.props.classes.item}>
-            <Button disabled={!playerData}>
-              Pre Ready
-            </Button>
-          </span>
+        <span className={this.props.classes.item}>
+          <Button disabled={!playerData}>
+            Pre Ready
+          </Button>
+        </span>
 
-          <span className={this.props.classes.item}>
-            <Button
-              disabled={!playerData}
-              onPress={this.handleMapVoteButtonPress}
-            >
-              Vote for map
-            </Button>
-          </span>
+        <span className={this.props.classes.item}>
+          <Button
+            disabled={!playerData}
+            onPress={this.handleMapVoteButtonPress}
+          >
+            Vote for map
+          </Button>
+        </span>
 
-          <span className={this.props.classes.item}>
-            Players: {this.getPlayerCount()} / {gamemodeInfo.maxPlayers}
-          </span>
+        <span className={this.props.classes.item}>
+          Players: {this.getPlayerCount()} / {gamemodeInfo.maxPlayers}
+        </span>
 
-          <ProgressBar pickup={this.props.pickup} />
-        </Card>
-
-        <Dialog
-          closeOnOutsideClick
-          ref={(element) => { this.mapVoteDialog = element; }}
-          component={MapVoteDialog}
-        />
-
-        {playerData ? (
-          <ReadyUpDialog
-            pickup={this.props.pickup}
-            player={playerData}
-          />
-        ) : null}
-      </Aux>
+        <ProgressBar pickup={this.props.pickup} />
+      </Card>
     );
   }
 }
@@ -194,6 +216,13 @@ export default connect(
     return {
       pickup: pluck(gamemode, null)(state.pickupQueue),
       user: state.user,
+      dialog: state.dialog,
+    };
+  },
+  (dispatch) => {
+    return {
+      openDialog: name => dispatch(openDialog(name)),
+      closeDialog: () => dispatch(closeDialog()),
     };
   },
 )(injectSheet(PickupInfo.styles)(PickupInfo));

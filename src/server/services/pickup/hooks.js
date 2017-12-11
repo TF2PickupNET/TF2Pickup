@@ -151,7 +151,7 @@ export default {
   after: {
     create(props) {
       props.app.service('pickup').emit('redirect', {
-        url: `/match/${props.result.id}`,
+        id: props.result.id,
         users: pipe(
           Object.values,
           map(Object.values),

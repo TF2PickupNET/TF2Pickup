@@ -1,5 +1,7 @@
 import cookie from 'js-cookie';
 
+import { openDialog } from '../dialog/actions';
+
 import {
   loginUser,
   logoutUser,
@@ -25,6 +27,10 @@ export default function setupListeners(app) {
     const user = await users.get(verifiedToken.id);
 
     app.store.dispatch(loginUser(user));
+
+    if (user.name === null || user.settings.region === null || !user.hasAcceptedTheRules) {
+      app.store.dispatch(openDialog('POST_USER_CREATION_DIALOG'));
+    }
   });
 
   users.on('patched', (data) => {

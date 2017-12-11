@@ -8,8 +8,6 @@ import injectSheet from 'react-jss';
 import {
   Theme,
   Background,
-  Animations,
-  Dialog,
   Button,
   Spinner,
   Layout,
@@ -20,12 +18,11 @@ import { isInBetaMode } from '../../../config/client';
 import { addNotification } from '../../redux/notifications/actions';
 import { pluck } from '../../../utils/functions';
 
-import NoConnectionDialog from './no-connection-dialog';
-import PostUserCreationDialog from './post-user-creation-dialog';
 import Notifications from './notifications';
 import Head from './head';
 import BetaScreen from './beta-screen';
 import NotificationRequester from './notification-requester';
+import Dialogs from './dialogs';
 
 /**
  * Render a basic layout which will try login with the token from a cookie and make sure
@@ -84,7 +81,7 @@ class BasicLayout extends PureComponent {
           <Aux>
             We are using cookies for a better experience.
 
-            <Button onRelease={this.createAcceptCookiesHandler(closeSnackbar)}>
+            <Button onPress={this.createAcceptCookiesHandler(closeSnackbar)}>
               Ok
             </Button>
           </Aux>
@@ -150,33 +147,25 @@ class BasicLayout extends PureComponent {
   render() {
     return (
       <Theme type={this.getTheme()}>
-        <Dialog.Controller>
-          <Background className={this.props.classes.background}>
-            <Head />
+        <Background className={this.props.classes.background}>
+          <Dialogs />
 
-            <Dialog.Container />
+          <Head />
 
-            <Notifications />
+          <Notifications />
 
-            <Animations />
+          <NotificationRequester />
 
-            <NoConnectionDialog />
-
-            <PostUserCreationDialog />
-
-            <NotificationRequester />
-
-            {this.state.hasAuthenticated ? this.renderContent() : (
-              <Layout
-                mainAlign="center"
-                crossAlign="center"
-                className={this.props.classes.loadingContainer}
-              >
-                <Spinner active />
-              </Layout>
-            )}
-          </Background>
-        </Dialog.Controller>
+          {this.state.hasAuthenticated ? this.renderContent() : (
+            <Layout
+              mainAlign="center"
+              crossAlign="center"
+              className={this.props.classes.loadingContainer}
+            >
+              <Spinner active />
+            </Layout>
+          )}
+        </Background>
       </Theme>
     );
   }

@@ -1,7 +1,7 @@
 module.exports = {
   extends: '@tf2-pickup/eslint-config',
 
-  // rules: { 'filenames/match-exported': 'off' },
+  // rules: { 'filenames/pickup-exported': 'off' },
 
   settings: {
     'react-jsdoc': {

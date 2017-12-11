@@ -11,13 +11,13 @@ import {
   Layout,
 } from 'materialize-react';
 
-import Link from '../../../components/link';
-import app from '../../../app';
-import { discordUrls } from '../../../../config/client';
+import Link from '../../../../components/link';
+import app from '../../../../app';
+import { discordUrls } from '../../../../../config/client';
 import {
   map,
   pipe,
-} from '../../../../utils/functions';
+} from '../../../../../utils/functions';
 
 /**
  * The section for setting the username.

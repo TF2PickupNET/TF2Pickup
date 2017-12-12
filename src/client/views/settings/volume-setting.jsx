@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import {
   ExpansionPanel,
   Slider,
   Button,
   Divider,
-  Layout,
   breakpoints,
 } from 'materialize-react';
 import injectSheet from 'react-jss';
@@ -13,7 +13,21 @@ import injectSheet from 'react-jss';
 import app from '../../app';
 import playSound from '../../utils/play-sound';
 
+/**
+ * The component for changing the volume setting.
+ *
+ * @class
+ */
 class VolumeSetting extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({
+      headerPart: PropTypes.string.isRequired,
+      details: PropTypes.string.isRequired,
+      slider: PropTypes.string.isRequired,
+    }).isRequired,
+    volume: PropTypes.number.isRequired,
+  };
+
   static styles = {
     headerPart: {
       flexBasis: '40%',
@@ -38,12 +52,18 @@ class VolumeSetting extends PureComponent {
     volume: this.props.volume,
   };
 
+  /**
+   * Update the current volume when the volume changes in the users object.
+   */
   componentWillReceiveProps(nextProps) {
     if (nextProps.volume !== this.props.volume) {
       this.setState({ volume: nextProps.volume });
     }
   }
 
+  /**
+   * Reset the local volume state when the expansion panel opens / closes.
+   */
   handleChange = () => {
     this.setState((state) => {
       return {
@@ -53,10 +73,16 @@ class VolumeSetting extends PureComponent {
     });
   };
 
+  /**
+   * Change the local volume state when the slider is being dragged.
+   */
   handleVolumeChange = (volume) => {
     this.setState({ volume });
   };
 
+  /**
+   * Emit the change-volume event when the user clicks the save button.
+   */
   handleSave = () => {
     app.io.emit(
       'user.change-volume',
@@ -65,6 +91,9 @@ class VolumeSetting extends PureComponent {
     );
   };
 
+  /**
+   * Play a test sound with the currently selected volume.
+   */
   handleTestSoundPress = () => {
     playSound('notification', this.state.volume);
   };

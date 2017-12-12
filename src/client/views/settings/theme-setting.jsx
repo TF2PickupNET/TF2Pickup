@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import {
   ExpansionPanel,
-  Typography,
   RadioButtonGroup,
   RadioButton,
   Button,
@@ -14,7 +14,17 @@ import injectSheet from 'react-jss';
 import app from '../../app';
 import { capitalize } from '../../../utils/functions';
 
+/**
+ * The component for changing the theme setting.
+ *
+ * @class
+ */
 class ThemeSetting extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({ headerPart: PropTypes.string.isRequired }).isRequired,
+    theme: PropTypes.string.isRequired,
+  };
+
   static styles = {
     headerPart: {
       flexBasis: '40%',
@@ -27,12 +37,18 @@ class ThemeSetting extends PureComponent {
     theme: this.props.theme,
   };
 
+  /**
+   * Update the locally selected theme when the users theme changes.
+   */
   componentWillReceiveProps(nextProps) {
     if (nextProps.theme !== this.props.theme) {
       this.setState({ theme: nextProps.theme });
     }
   }
 
+  /**
+   * Reset the selected theme when the expansion panel opens / closes.
+   */
   handleChange = () => {
     this.setState((state) => {
       return {
@@ -42,10 +58,16 @@ class ThemeSetting extends PureComponent {
     });
   };
 
+  /**
+   * Change the currently selected theme when the user clicks a radio button.
+   */
   handleThemeChange = (theme) => {
     this.setState({ theme });
   };
 
+  /**
+   * Emit the change-theme event when the user clicks the save button.
+   */
   handleSave = () => {
     app.io.emit(
       'user.change-theme',

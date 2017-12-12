@@ -1,5 +1,6 @@
 import React from 'react';
 import Helmet from 'react-helmet';
+import PropTypes from 'prop-types';
 import { Layout } from 'materialize-react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
@@ -11,10 +12,11 @@ import VolumeSetting from './volume-setting';
 /**
  * The view for the settings page.
  *
+ * @param {Object} props - The props for the component.
  * @returns {JSX} - Returns the view.
  */
 function View(props) {
-  if (!props.user) {
+  if (!props.userId) {
     return null;
   }
 
@@ -34,6 +36,13 @@ function View(props) {
   );
 }
 
+View.propTypes = {
+  classes: PropTypes.shape({ container: PropTypes.string.isRequired }).isRequired,
+  userId: PropTypes.string,
+};
+
+View.defaultProps = { userId: null };
+
 View.styles = {
   container: {
     maxWidth: 680,
@@ -43,6 +52,6 @@ View.styles = {
 
 export default connect(
   (state) => {
-    return { user: state.user };
+    return { userId: state.user ? state.user.id : null };
   },
 )(injectSheet(View.styles)(View));

@@ -32,8 +32,9 @@ class MainLayout extends PureComponent {
     container: {
       padding: 16,
       overflowX: 'hidden',
-      overflowY: 'scroll',
       minHeight: '100%',
+      maxWidth: '100%',
+      boxSizing: 'border-box',
 
       [breakpoints.up('tablet')]: { padding: 24 },
     },

@@ -33,9 +33,16 @@ export class MainToolbar extends PureComponent {
     }).isRequired,
     redirect: PropTypes.func.isRequired,
     openDrawer: PropTypes.func.isRequired,
+    userId: PropTypes.string,
+    name: PropTypes.string,
+    avatar: PropTypes.string,
   };
 
-  static defaultProps = { userId: null };
+  static defaultProps = {
+    userId: null,
+    name: null,
+    avatar: null,
+  };
 
   static styles = {
     steamLoginImage: {

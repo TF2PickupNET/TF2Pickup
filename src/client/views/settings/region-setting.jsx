@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 import {
   ExpansionPanel,
   RadioButtonGroup,
@@ -13,7 +14,27 @@ import regions from '@tf2-pickup/configs/regions';
 
 import app from '../../app';
 
+const radioButtons = Object
+  .values(regions)
+  .map(region => (
+    <Label key={region.name}>
+      <RadioButton name={region.name} />
+
+      {region.fullName}
+    </Label>
+  ));
+
+/**
+ * The component for changing the region setting.
+ *
+ * @class
+ */
 class RegionSetting extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({ headerPart: PropTypes.string.isRequired }).isRequired,
+    region: PropTypes.string.isRequired,
+  };
+
   static styles = {
     headerPart: {
       flexBasis: '40%',
@@ -26,12 +47,18 @@ class RegionSetting extends PureComponent {
     region: this.props.region,
   };
 
+  /**
+   * When the users region changes, update the currently selected region.
+   */
   componentWillReceiveProps(nextProps) {
     if (nextProps.region !== this.props.region) {
       this.setState({ region: nextProps.region });
     }
   }
 
+  /**
+   * When the expansion panel is toggled, reset the region state to the current user value.
+   */
   handleChange = () => {
     this.setState((state) => {
       return {
@@ -41,10 +68,16 @@ class RegionSetting extends PureComponent {
     });
   };
 
+  /**
+   * Change the current region state when the user clicks a radio button.
+   */
   handleRegionChange = (region) => {
     this.setState({ region });
   };
 
+  /**
+   * Emit the change-region event when the save button is clicked.
+   */
   handleSave = () => {
     app.io.emit(
       'user.change-region',
@@ -52,18 +85,6 @@ class RegionSetting extends PureComponent {
       () => this.handleChange(),
     );
   };
-
-  renderRadioButtons() {
-    return Object
-      .values(regions)
-      .map(region => (
-        <Label key={region.name}>
-          <RadioButton name={region.name} />
-
-          {region.fullName}
-        </Label>
-      ));
-  }
 
   render() {
     return (
@@ -86,7 +107,7 @@ class RegionSetting extends PureComponent {
             selected={this.state.region}
             onChange={this.handleRegionChange}
           >
-            {this.renderRadioButtons()}
+            {radioButtons}
           </RadioButtonGroup>
         </ExpansionPanel.Details>
 

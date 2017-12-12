@@ -1,3 +1,5 @@
+/* eslint-disable global-require, import/no-commonjs */
+
 import app from '../app';
 import { pluck } from '../../utils/functions';
 
@@ -8,6 +10,12 @@ const sounds = {
 
 const getVolume = () => pluck('user.settings.volume')(app.store.getState());
 
+/**
+ * Play a sound.
+ *
+ * @param {String} sound - The name of the sound.
+ * @param {Number} [volume] - The volume for the sound. Defaults to the current user volume.
+ */
 export default function playSound(sound, volume = getVolume()) {
   if (sounds[sound]) {
     const audio = new Audio(sounds[sound]);

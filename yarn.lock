@@ -3382,7 +3382,7 @@ feathers-errors@2.9.2:
   dependencies:
     debug "^3.0.0"
 
-feathers-errors@^2.0.1, feathers-errors@^2.2.0, feathers-errors@^2.4.0, feathers-errors@^2.5.0:
+feathers-errors@^2.2.0, feathers-errors@^2.4.0, feathers-errors@^2.5.0:
   version "2.9.1"
   resolved "https://registry.yarnpkg.com/feathers-errors/-/feathers-errors-2.9.1.tgz#137f27611275f57d5044ba40353f84409b5aaf10"
   dependencies:
@@ -3420,15 +3420,6 @@ feathers-mongoose@6.0.0:
     "@feathersjs/errors" "^3.2.0"
     lodash.omit "^4.3.0"
     uberproto "^1.2.0"
-
-feathers-rest@1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/feathers-rest/-/feathers-rest-1.8.1.tgz#3251a80ec4419763bc214dd8bb1f0a59d4ff9f35"
-  dependencies:
-    debug "^3.0.0"
-    feathers-commons "^0.8.0"
-    feathers-errors "^2.0.1"
-    qs "^6.4.0"
 
 feathers-socket-commons@^2.0.0, feathers-socket-commons@^2.3.1:
   version "2.4.0"
@@ -5467,9 +5458,9 @@ markdown-escapes@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/markdown-escapes/-/markdown-escapes-1.0.1.tgz#1994df2d3af4811de59a6714934c2b2292734518"
 
-materialize-react@0.2.0-alpha.14:
-  version "0.2.0-alpha.14"
-  resolved "https://registry.yarnpkg.com/materialize-react/-/materialize-react-0.2.0-alpha.14.tgz#287d2d4c8d19469f9601388055aa9104c7e825e5"
+materialize-react@0.2.0-alpha.15:
+  version "0.2.0-alpha.15"
+  resolved "https://registry.yarnpkg.com/materialize-react/-/materialize-react-0.2.0-alpha.15.tgz#7bc3bb3e8c4e7b907f89147fd47bed696a1da3a4"
   dependencies:
     brcast "3.0.1"
     classnames "2.2.5"
@@ -6767,7 +6758,7 @@ q@^1.1.2:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.0.tgz#dd01bac9d06d30e6f219aecb8253ee9ebdc308f1"
 
-qs@6.5.0, qs@^6.1.0, qs@^6.4.0:
+qs@6.5.0, qs@^6.1.0:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.0.tgz#8d04954d364def3efc55b5a0793e1e2c8b1e6e49"
 

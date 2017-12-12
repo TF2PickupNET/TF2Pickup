@@ -31,10 +31,10 @@ class DrawerContent extends PureComponent {
       toolbar: PropTypes.string.isRequired,
       logo: PropTypes.string.isRequired,
     }).isRequired,
-    user: PropTypes.shape({ id: PropTypes.string.isRequired }),
+    userId: PropTypes.string,
   };
 
-  static defaultProps = { user: null };
+  static defaultProps = { userId: null };
 
   static styles = {
     toolbar: {
@@ -58,7 +58,7 @@ class DrawerContent extends PureComponent {
    * @returns {JSX} - Returns the JSX to render.
    */
   renderUserList() {
-    if (this.props.user) {
+    if (this.props.userId) {
       return (
         <Aux>
           <ListItem
@@ -72,7 +72,7 @@ class DrawerContent extends PureComponent {
           <ListItem
             inset
             leftItem={<Icon icon="account-circle" />}
-            redirectTo={`/profile/${this.props.user.id}`}
+            redirectTo={`/profile/${this.props.userId}`}
           >
             Profile
           </ListItem>
@@ -198,7 +198,7 @@ class DrawerContent extends PureComponent {
 
 export default connect(
   (state) => {
-    return { user: state.user };
+    return { userId: state.user ? state.user.id : null };
   },
   (dispatch) => {
     return { redirect: url => dispatch(push(url)) };

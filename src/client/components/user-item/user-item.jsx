@@ -23,9 +23,7 @@ import roles from '../../../config/roles';
  * @returns {JSX} - Returns the JSX for the user item.
  */
 function UserItem(props) {
-  const isFriend = props.loggedInUser
-    ? props.loggedInUser.friends.includes(props.user.id)
-    : false;
+  const isFriend = props.friends.includes(props.user.id);
   const level = computeLevel(props.user.roles);
   const roleInfo = pipe(
     Object.values,
@@ -73,12 +71,12 @@ UserItem.propTypes = {
     donator: PropTypes.string.isRequired,
     friendIcon: PropTypes.string.isRequired,
   }).isRequired,
-  loggedInUser: PropTypes.shape({ friends: PropTypes.arrayOf(PropTypes.string) }),
+  friends: PropTypes.arrayOf(PropTypes.string),
   className: PropTypes.string,
 };
 
 UserItem.defaultProps = {
-  loggedInUser: null,
+  friends: [],
   className: '',
 };
 
@@ -111,7 +109,7 @@ UserItem.styles = (theme) => {
 
 export default connect(
   (state) => {
-    return { loggedInUser: state.user };
+    return { friends: state.user ? state.user.friends : [] };
   },
 )(injectSheet(UserItem.styles)(UserItem));
 

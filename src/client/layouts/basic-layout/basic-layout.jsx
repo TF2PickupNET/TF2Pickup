@@ -38,10 +38,14 @@ class BasicLayout extends PureComponent {
     }).isRequired,
     children: PropTypes.node.isRequired,
     addNotification: PropTypes.func.isRequired,
-    user: PropTypes.shape({ settings: PropTypes.shape({ theme: PropTypes.string }) }),
+    userId: PropTypes.string,
+    theme: PropTypes.string,
   };
 
-  static defaultProps = { user: null };
+  static defaultProps = {
+    userId: null,
+    theme: null,
+  };
 
   static styles = {
     background: {
@@ -95,8 +99,8 @@ class BasicLayout extends PureComponent {
    * Update the local storage when the user state changes.
    */
   componentWillReceiveProps(nextProps) {
-    if (nextProps.user !== this.props.user && nextProps.user) {
-      lockr.set('theme', nextProps.user.settings.theme);
+    if (nextProps.theme !== this.props.theme) {
+      lockr.set('theme', nextProps.theme);
     }
   }
 
@@ -126,11 +130,7 @@ class BasicLayout extends PureComponent {
    * @returns {String} - Returns the theme type.
    */
   getTheme() {
-    if (this.props.user) {
-      return pluck('settings.theme', 'light')(this.props.user);
-    }
-
-    return lockr.get('theme') || 'light';
+    return this.props.theme || lockr.get('theme') || 'light';
   }
 
   /**
@@ -139,7 +139,7 @@ class BasicLayout extends PureComponent {
    * @returns {JSX} - Returns the content.
    */
   renderContent() {
-    return isInBetaMode && !this.props.user
+    return isInBetaMode && !this.props.userId
       ? <BetaScreen />
       : this.props.children;
   }
@@ -173,7 +173,10 @@ class BasicLayout extends PureComponent {
 
 export default connect(
   (state) => {
-    return { user: state.user };
+    return {
+      theme: pluck('settings.theme')(state.user),
+      userId: state.user ? state.user.id : null,
+    };
   },
   (dispatch) => {
     return { addNotification: (...args) => dispatch(addNotification(...args)) };

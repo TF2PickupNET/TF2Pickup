@@ -175,7 +175,7 @@ export default new Schema({
         },
         msg: '{VALUE} is not a valid volume',
       },
-      default: 0.7,
+      default: 70,
     },
 
     theme: {

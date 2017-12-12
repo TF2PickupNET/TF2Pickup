@@ -64,7 +64,7 @@ module.exports = {
       test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
       loader: 'file-loader',
     }, {
-      test: /\.(png|jpg|gif)$/,
+      test: /\.(png|jpg|gif|mp3)$/,
       loaders: [{
         loader: 'url-loader',
         options: { limit: 8192 },

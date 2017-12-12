@@ -58,16 +58,28 @@ export default function socketMethods(app, socket) {
     }
   });
 
-  socket.on('user.change-region', async ({ region }) => {
+  socket.on('user.change-region', async ({ region }, cb) => {
     if (socket.feathers.user) {
       await users.patch(socket.feathers.user.id, { $set: { 'settings.region': region } });
     }
+
+    return cb();
   });
 
-  socket.on('user.change-theme', async ({ theme }) => {
+  socket.on('user.change-theme', async ({ theme }, cb) => {
     if (socket.feathers.user) {
       await users.patch(socket.feathers.user.id, { $set: { 'settings.theme': theme } });
     }
+
+    return cb();
+  });
+
+  socket.on('user.change-volume', async ({ volume }, cb) => {
+    if (socket.feathers.user) {
+      await users.patch(socket.feathers.user.id, { $set: { 'settings.volume': volume } });
+    }
+
+    return cb();
   });
 
   socket.on('user.get-valid-names', async (cb) => {

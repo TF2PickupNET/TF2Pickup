@@ -31,16 +31,11 @@ export class MainToolbar extends PureComponent {
       menuIcon: PropTypes.string.isRequired,
       spacer: PropTypes.string.isRequired,
     }).isRequired,
-    user: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string,
-      services: PropTypes.object.isRequired,
-    }),
     redirect: PropTypes.func.isRequired,
     openDrawer: PropTypes.func.isRequired,
   };
 
-  static defaultProps = { user: null };
+  static defaultProps = { userId: null };
 
   static styles = {
     steamLoginImage: {
@@ -80,15 +75,19 @@ export class MainToolbar extends PureComponent {
    * @param {Object} props - The new props from react-helmet.
    */
   handleClientStateChange = (props) => {
-    this.setState({ title: props.title.split('|')[0].trim() });
+    this.setState({
+      title: props.title
+        ? props.title.split('|')[0].trim()
+        : null,
+    });
   };
 
   /**
    * Redirect the user to the steam login page upon clicking on the login button.
    */
   handleRedirect = () => {
-    if (this.props.user) {
-      this.props.redirect(`/profile/${this.props.user.id}`);
+    if (this.props.userId) {
+      this.props.redirect(`/profile/${this.props.userId}`);
     } else {
       app.redirectToSteamAuth();
     }
@@ -119,16 +118,16 @@ export class MainToolbar extends PureComponent {
   renderUserInfo() {
     return (
       <Aux>
-        {this.props.user.name && (
+        {this.props.name && (
           <Typography typography="title">
-            {this.props.user.name}
+            {this.props.name}
           </Typography>
         )}
 
         <img
           className={this.props.classes.avatar}
           alt="avatar"
-          src={this.props.user.services.steam.avatar.large}
+          src={this.props.avatar}
         />
       </Aux>
     );
@@ -174,7 +173,7 @@ export class MainToolbar extends PureComponent {
           className={this.props.classes.rightContainer}
           onClick={this.handleRedirect}
         >
-          {this.props.user ? this.renderUserInfo() : this.renderLoginButton()}
+          {this.props.name ? this.renderUserInfo() : this.renderLoginButton()}
         </span>
       </Layout>
     );
@@ -183,7 +182,11 @@ export class MainToolbar extends PureComponent {
 
 export default connect(
   (state) => {
-    return { user: state.user };
+    return {
+      name: state.user ? state.user.name : null,
+      userId: state.user ? state.user.id : null,
+      avatar: state.user ? state.user.services.steam.avatar.large : null,
+    };
   },
   (dispatch) => {
     return {

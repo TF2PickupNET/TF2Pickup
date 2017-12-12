@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
+import { connect } from 'react-redux';
 import {
   Drawer,
   breakpoints,
@@ -9,6 +10,7 @@ import {
 import { devices } from 'materialize-react/lib/styles/breakpoints';
 
 import ErrorBoundary from '../../components/error-boundary';
+import { CLOSE_DRAWER } from '../../redux/drawer-opened/constants';
 
 import DrawerContent from './drawer-content';
 import MainToolbar from './main-toolbar';
@@ -22,45 +24,35 @@ class MainLayout extends PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
     classes: PropTypes.shape({ container: PropTypes.string }).isRequired,
+    open: PropTypes.bool.isRequired,
+    onCloseDrawer: PropTypes.func.isRequired,
   };
 
   static styles = {
     container: {
       padding: 16,
       overflowX: 'hidden',
-      overflowY: 'scroll',
       minHeight: '100%',
+      maxWidth: '100%',
+      boxSizing: 'border-box',
 
       [breakpoints.up('tablet')]: { padding: 24 },
     },
-  };
-
-  /**
-   * Close the drawer.
-   */
-  closeDrawer = () => {
-    this.drawer.close();
-  };
-
-  /**
-   * Open the drawer when the menu button is pressed.
-   */
-  handleMenuButtonPress = () => {
-    this.drawer.open();
   };
 
   render() {
     return (
       <Drawer
         responsiveWidth={devices.tablet[1]}
-        ref={(element) => { this.drawer = element; }}
+        open={this.props.open}
+        onCloseRequest={this.props.onCloseDrawer}
       >
         <Drawer.DrawerContent>
-          <DrawerContent closeDrawer={this.closeDrawer} />
+          <DrawerContent />
         </Drawer.DrawerContent>
 
         <Drawer.MainContent>
-          <MainToolbar onMenuButtonPress={this.handleMenuButtonPress} />
+          <MainToolbar />
 
           <Layout
             direction="column"
@@ -77,4 +69,11 @@ class MainLayout extends PureComponent {
   }
 }
 
-export default injectSheet(MainLayout.styles)(MainLayout);
+export default connect(
+  (state) => {
+    return { open: state.drawerOpened };
+  },
+  (dispatch) => {
+    return { onCloseDrawer: () => dispatch({ type: CLOSE_DRAWER }) };
+  },
+)(injectSheet(MainLayout.styles)(MainLayout));

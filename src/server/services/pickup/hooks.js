@@ -69,7 +69,7 @@ async function populateUsers(hook) {
       map(player => usersService.get(player.id)),
     )(hook.result.teams),
   );
-  const users = arrayToObject('id')(allUsers);
+  const users = arrayToObject(user => user.id)(allUsers);
 
   return {
     ...hook,
@@ -152,7 +152,7 @@ export default {
   after: {
     create(props) {
       props.app.service('pickup').emit('redirect', {
-        url: `/match/${props.result.id}`,
+        id: props.result.id,
         users: pipe(
           Object.values,
           map(Object.values),

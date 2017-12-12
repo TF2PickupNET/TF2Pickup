@@ -120,7 +120,7 @@ async function getUsers(app, players) {
   const service = app.service('users');
   const users = await Promise.all(players.map(player => service.get(player.id)));
 
-  return arrayToObject('id')(users);
+  return arrayToObject(user => user.id)(users);
 }
 
 const repeats = new Array(5).fill(1);

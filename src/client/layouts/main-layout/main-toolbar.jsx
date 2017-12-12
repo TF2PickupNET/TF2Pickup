@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import Aux from 'react-aux';
 import {
   Toolbar,
   Typography,
-  EventHandler,
   IconButton,
   breakpoints,
+  Layout,
 } from 'materialize-react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
@@ -14,6 +15,7 @@ import Helmet from 'react-helmet';
 
 import app from '../../app';
 import steamLoginButton from '../../../assets/images/steam_large_noborder.png';
+import { OPEN_DRAWER } from '../../redux/drawer-opened/constants';
 
 /**
  * The main toolbar above the actual content.
@@ -23,31 +25,26 @@ import steamLoginButton from '../../../assets/images/steam_large_noborder.png';
 export class MainToolbar extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
-      row: PropTypes.string.isRequired,
       steamLoginImage: PropTypes.string.isRequired,
       avatar: PropTypes.string.isRequired,
       rightContainer: PropTypes.string.isRequired,
       menuIcon: PropTypes.string.isRequired,
+      spacer: PropTypes.string.isRequired,
     }).isRequired,
-    user: PropTypes.shape({
-      name: PropTypes.string,
-      services: PropTypes.object.isRequired,
-    }),
     redirect: PropTypes.func.isRequired,
-    onMenuButtonPress: PropTypes.func.isRequired,
+    openDrawer: PropTypes.func.isRequired,
+    userId: PropTypes.string,
+    name: PropTypes.string,
+    avatar: PropTypes.string,
   };
 
-  static defaultProps = { user: null };
+  static defaultProps = {
+    userId: null,
+    name: null,
+    avatar: null,
+  };
 
   static styles = {
-    row: {
-      composes: 'row',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      width: '100%',
-    },
-
     steamLoginImage: {
       height: 40,
       cursor: 'pointer',
@@ -63,7 +60,11 @@ export class MainToolbar extends PureComponent {
     rightContainer: {
       display: 'flex',
       alignItems: 'center',
+
+      [breakpoints.only('mobile')]: { display: 'none' },
     },
+
+    spacer: { flex: 1 },
 
     menuIcon: {
       display: 'inline-block',
@@ -81,22 +82,25 @@ export class MainToolbar extends PureComponent {
    * @param {Object} props - The new props from react-helmet.
    */
   handleClientStateChange = (props) => {
-    this.setState({ title: props.title.split('|')[0].trim() });
+    this.setState({
+      title: props.title
+        ? props.title.split('|')[0].trim()
+        : null,
+    });
   };
 
   /**
    * Redirect the user to the steam login page upon clicking on the login button.
    */
-  handleSteamRedirect = () => {
-    app.redirectToSteamAuth();
+  handleRedirect = () => {
+    if (this.props.userId) {
+      this.props.redirect(`/profile/${this.props.userId}`);
+    } else {
+      app.redirectToSteamAuth();
+    }
   };
 
-  /**
-   * Redirect the user to his profile.
-   */
-  handleProfileRedirect = () => {
-    this.props.redirect('/profile');
-  };
+  handlePress = () => this.props.openDrawer();
 
   /**
    * Render the steam login button.
@@ -105,16 +109,11 @@ export class MainToolbar extends PureComponent {
    */
   renderLoginButton() {
     return (
-      <EventHandler
-        component="span"
-        onPress={this.handleSteamRedirect}
-      >
-        <img
-          className={this.props.classes.steamLoginImage}
-          alt="steam login"
-          src={steamLoginButton}
-        />
-      </EventHandler>
+      <img
+        className={this.props.classes.steamLoginImage}
+        alt="steam login"
+        src={steamLoginButton}
+      />
     );
   }
 
@@ -125,60 +124,81 @@ export class MainToolbar extends PureComponent {
    */
   renderUserInfo() {
     return (
-      <EventHandler
-        component="span"
-        className={this.props.classes.rightContainer}
-        onPress={this.handleProfileRedirect}
-      >
-        {this.props.user.name && (
+      <Aux>
+        {this.props.name && (
           <Typography typography="title">
-            {this.props.user.name}
+            {this.props.name}
           </Typography>
         )}
 
         <img
           className={this.props.classes.avatar}
           alt="avatar"
-          src={this.props.user.services.steam.avatar.large}
+          src={this.props.avatar}
         />
-      </EventHandler>
+      </Aux>
     );
   }
 
-  render() {
-    const {
-      user,
-      onMenuButtonPress,
-    } = this.props;
-    const { title } = this.state;
+  /**
+   * Render the title for the page.
+   *
+   * @returns {JSX} - Returns the title.
+   */
+  renderTitle() {
+    if (this.state.title) {
+      return (
+        <Typography typography="headline">
+          {this.state.title}
+        </Typography>
+      );
+    }
 
+    return null;
+  }
+
+  render() {
     return (
-      <Toolbar>
+      <Layout
+        component={Toolbar}
+        crossAlign="center"
+      >
         <Helmet onChangeClientState={this.handleClientStateChange} />
 
-        <div className={this.props.classes.row}>
-          <div>
-            <IconButton
-              icon="menu"
-              className={this.props.classes.menuIcon}
-              onRelease={onMenuButtonPress}
-            />
+        <IconButton
+          icon="menu"
+          className={this.props.classes.menuIcon}
+          onPress={this.handlePress}
+        />
 
-            {title && <Typography typography="headline">{title}</Typography>}
-          </div>
+        {this.renderTitle()}
 
-          {user ? this.renderUserInfo() : this.renderLoginButton()}
-        </div>
-      </Toolbar>
+        <span className={this.props.classes.spacer} />
+
+        <span // eslint-disable-line jsx-a11y/click-events-have-key-events
+          role="presentation"
+          className={this.props.classes.rightContainer}
+          onClick={this.handleRedirect}
+        >
+          {this.props.name ? this.renderUserInfo() : this.renderLoginButton()}
+        </span>
+      </Layout>
     );
   }
 }
 
 export default connect(
   (state) => {
-    return { user: state.user };
+    return {
+      name: state.user ? state.user.name : null,
+      userId: state.user ? state.user.id : null,
+      avatar: state.user ? state.user.services.steam.avatar.large : null,
+    };
   },
   (dispatch) => {
-    return { redirect: url => dispatch(push(url)) };
+    return {
+      redirect: url => dispatch(push(url)),
+      openDrawer: () => dispatch({ type: OPEN_DRAWER }),
+    };
   },
 )(injectSheet(MainToolbar.styles)(MainToolbar));

@@ -5,17 +5,18 @@ import {
   Dialog,
   Label,
   Button,
+  getNotDeclaredProps,
 } from 'materialize-react';
 import { connect } from 'react-redux';
-import Aux from 'react-aux';
 import PropTypes from 'prop-types';
 
 import {
   getGamemodeFromUrl,
   getPlayer,
 } from '../../../../utils/pickup';
-import maps from '../../../../config/maps';
+import maps from '../../../../config/maps/index';
 import app from '../../../app';
+import { closeDialog } from '../../../redux/dialog/actions';
 
 /**
  * The dialog content for the map voting.
@@ -74,7 +75,7 @@ class MapVoteDialog extends PureComponent {
 
   render() {
     return (
-      <Aux>
+      <Dialog {...getNotDeclaredProps(this.props, MapVoteDialog)}>
         <Dialog.Header>
           Vote for a map
         </Dialog.Header>
@@ -88,16 +89,16 @@ class MapVoteDialog extends PureComponent {
           </RadioButtonGroup>
         </Dialog.Content>
 
-        <Dialog.Buttons>
-          <Button onRelease={this.handleCancelButtonPress}>
+        <Dialog.Actions>
+          <Button onPress={this.handleCancelButtonPress}>
             Cancel
           </Button>
 
-          <Button onRelease={this.handleSelectButtonPress}>
+          <Button onPress={this.handleSelectButtonPress}>
             Select
           </Button>
-        </Dialog.Buttons>
-      </Aux>
+        </Dialog.Actions>
+      </Dialog>
     );
   }
 }
@@ -113,5 +114,8 @@ export default connect(
       maps: pickup.maps,
       selectedMap: player.map,
     };
+  },
+  (dispatch) => {
+    return { close: () => dispatch(closeDialog()) };
   },
 )(MapVoteDialog);

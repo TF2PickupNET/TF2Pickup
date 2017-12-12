@@ -3,11 +3,12 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import hooks from 'feathers-hooks';
-import rest from 'feathers-rest';
 import socketio from 'feathers-socketio';
 import handler from 'feathers-errors/handler';
 import debug from 'debug';
 import config from 'config';
+
+import { pluck } from '../utils/functions';
 
 import services from './services';
 import globalHooks from './global-hooks';
@@ -49,11 +50,16 @@ export default async function setupApp(url, env) {
 
   app
     .configure(hooks())
-    .configure(rest())
     .configure(socketio({
       path: '/ws/',
       wsEngine: 'uws',
     }));
+
+  app.use((req, res, next) => {
+    req.feathers = {}; // eslint-disable-line no-param-reassign
+
+    next();
+  });
 
   app
     .hooks(globalHooks)
@@ -64,13 +70,13 @@ export default async function setupApp(url, env) {
     async html(error, req, res) {
       log('An error occurred!', error.message);
 
-      const { _id } = await app.service('logs').create({
-        message: 'Something went wrong on the server!',
+      const { _id: id } = await app.service('errors').create({
+        message: error.message,
         info: error,
-        environment: 'server',
+        steamId: pluck('feathers.user.id')(req),
       });
 
-      res.redirect(`/error?message=${error.message}&code=${error.code}&id=${_id}`);
+      res.redirect(`/error?message=${error.message}&code=${error.code}&id=${id}`);
     },
   }));
 

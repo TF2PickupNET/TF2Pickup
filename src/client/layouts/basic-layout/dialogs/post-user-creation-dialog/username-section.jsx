@@ -11,9 +11,13 @@ import {
   Layout,
 } from 'materialize-react';
 
-import Link from '../../../components/link';
-import app from '../../../app';
-import { discordUrls } from '../../../../config/client';
+import Link from '../../../../components/link';
+import app from '../../../../app';
+import { discordUrls } from '../../../../../config/client';
+import {
+  map,
+  pipe,
+} from '../../../../../utils/functions';
 
 /**
  * The section for setting the username.
@@ -50,8 +54,8 @@ class UsernameSection extends PureComponent {
 
   state = {
     isLoading: true,
-    names: [],
-    selectedName: null,
+    names: null,
+    selectedName: '',
     error: null,
   };
 
@@ -87,6 +91,17 @@ class UsernameSection extends PureComponent {
     this.setState({ selectedName: name });
   };
 
+  renderNameOptions = () => pipe(
+    Object.keys,
+    map(name => (
+      <Label key={name}>
+        <RadioButton name={name} />
+
+        {name} ({this.state.names[name].join(', ')})
+      </Label>
+    )),
+  )(this.state.names);
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -98,36 +113,28 @@ class UsernameSection extends PureComponent {
 
     return (
       <div className={this.props.classes.container}>
-        {this.state.names.length > 0 ? (
+        {this.state.names ? (
           <RadioButtonGroup
             selected={this.state.selectedName}
             onChange={this.handleNameChange}
           >
-            {this.state.names.map(username => (
-              <Label key={username.name}>
-                <RadioButton name={username.name} />
-
-                {username.name} ({username.serviceName})
-              </Label>
-            ))}
+            {this.renderNameOptions()}
           </RadioButtonGroup>
         ) : (
-          <Layout
-            direction="column"
-            crossAlign="center"
-          >
+          <div style={{ textAlign: 'center' }}>
             No username from your external services is free.
             <br />
             We are working on an automated solution to this problem.
             Until then, please contact a developer on
             <Link
+              primary
               href={discordUrls.help}
               className={this.props.classes.link}
             >
               Discord
             </Link>
             to set your username manually.
-          </Layout>
+          </div>
         )}
 
         {this.state.error && (
@@ -138,7 +145,7 @@ class UsernameSection extends PureComponent {
 
         <Layout mainAlign="center">
           <Button
-            disabled={this.state.names.length === 0 || !this.state.selectedName}
+            disabled={Object.keys(this.state.names).length === 0 || !this.state.selectedName}
             onPress={this.handleSetUsername}
           >
             Set username

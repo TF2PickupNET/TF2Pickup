@@ -1,43 +1,79 @@
-import merge from 'lodash.merge';
 import SteamCommunity from 'steamcommunity';
 import debug from 'debug';
+import config from 'config';
+import errors from 'feathers-errors';
 
 import getUserData from './third-party-services';
+import getTF2Hours from './third-party-services/steam/get-tf2-hours';
+import getGroupMembers from './third-party-services/steam/get-group-members';
 
 const community = new SteamCommunity();
 const log = debug('TF2Pickup:users:hooks');
 
 export default {
   before: {
-    async create(props) {
-      const userData = await getUserData(props.data.id, true, props.app);
+    create: [
+      // Check if the user has enough hours
+      async (hook) => {
+        const tf2Hours = await getTF2Hours(hook.data.id, hook.app);
 
-      return {
-        ...props,
-        data: merge({}, props.data, userData, { createdAt: new Date() }),
-      };
-    },
+        if (tf2Hours === null) {
+          log('Unable to fetch tf2 hours', hook.data.id);
+
+          throw new errors.Timeout([
+            'Something went wrong while trying to get your played hours in TF2!',
+            'Please try again. If the problem persists concat a developer over discord.',
+          ].join(' '));
+        }
+
+        if (tf2Hours < config.get('server.auth.required_hours')) {
+          throw new errors.Forbidden([
+            'You don\'t have the required minimum hours in TF2 to play TF2Pickup',
+            `You will atleast need ${config.get('server.auth.required_hours')} in TF2.`,
+          ].join(' '));
+        }
+      },
+      // Check if the user is in the beta group
+      async (hook) => {
+        if (config.has('beta') && hook.app.get('env') === 'dev') {
+          const groupMembers = await getGroupMembers(
+            config.get('beta.steam-group'),
+            hook.app,
+          );
+
+          if (!groupMembers.includes(hook.data.id)) {
+            log('User is not in the steam group', hook.data.id);
+
+            throw new errors.Forbidden(
+              'The site is currently in beta mode and you are not in the required Steam Group',
+            );
+          }
+        }
+      },
+      async (hook) => {
+        const userData = await getUserData(hook.data.id, true, hook.app);
+
+        return {
+          ...hook,
+          data: {
+            ...hook.data,
+            ...userData,
+            createdAt: new Date(),
+          },
+        };
+      },
+    ],
   },
 
   after: {
-    async create(props) {
-      const logs = props.app.service('logs');
+    create(hook) {
+      log('Created a new user', hook.data.id);
 
-      log('Created a new user', props.data.id);
-
-      await logs.create({
-        message: 'Created a new user',
-        environment: 'server',
-        steamId: props.data.id,
-      });
-
-      await new Promise((resolve) => {
-        community.inviteUserToGroup(props.data.id, '103582791435021680', () => {
+      return new Promise((resolve) => {
+        community.inviteUserToGroup(hook.data.id, '103582791435021680', () => {
           resolve();
         });
       });
-
-      return props;
     },
   },
 };

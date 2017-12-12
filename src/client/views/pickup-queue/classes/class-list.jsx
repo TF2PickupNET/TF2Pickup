@@ -191,11 +191,11 @@ class ClassList extends PureComponent {
           <List inset>
             {this.renderTitle()}
 
-            {this.renderPlayers()}
-
             <List.Divider className={isHidden} />
 
             {this.renderJoinRemoveItem()}
+
+            {this.renderPlayers()}
           </List>
         </Card>
       </div>

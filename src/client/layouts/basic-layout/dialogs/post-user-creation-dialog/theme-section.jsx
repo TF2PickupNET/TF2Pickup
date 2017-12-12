@@ -9,7 +9,7 @@ import {
   Label,
 } from 'materialize-react';
 
-import app from '../../../app';
+import app from '../../../../app';
 
 /**
  * The section for accepting the rules.

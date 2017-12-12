@@ -98,7 +98,7 @@ class Classes extends PureComponent {
   async updatePickups(region) {
     const pickups = await app.service('pickup-queue').find({ query: { region } });
 
-    this.props.updatePickups(arrayToObject('gamemode')(pickups));
+    this.props.updatePickups(arrayToObject(pickup => pickup.gamemode)(pickups));
   }
 
   /**

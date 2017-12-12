@@ -34,10 +34,9 @@ export { divs };
  * Get the data for the user from ozfortress.
  *
  * @param {String} id - The steam id of the user.
- * @param {Object} app - The feathers app object.
  * @returns {Object} - Returns the new data.
  */
-export default async function getOzfortressUserData(id, app) {
+export default async function getOzfortressUserData(id) {
   log('Requesting data from ozfortress', id);
 
   try {
@@ -46,8 +45,6 @@ export default async function getOzfortressUserData(id, app) {
       { headers: { 'X-API-Key': config.get('service.ozfortress.apikey') } },
     );
     const player = result.data.user;
-
-    log('Finished requesting data from ozfortress', id);
 
     return {
       services: {
@@ -64,13 +61,6 @@ export default async function getOzfortressUserData(id, app) {
     }
 
     log('Error while requesting data from ozfortress', id, error);
-
-    app.service('logs').create({
-      message: 'Error while updating ozfortress player data',
-      environment: 'server',
-      info: error,
-      steamId: id,
-    });
 
     return {};
   }

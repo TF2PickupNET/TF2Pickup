@@ -10,7 +10,6 @@ const log = debug('TF2Pickup:authentication:logout');
  */
 export default function createLogoutListener(app) {
   return async (payload, { connection }) => {
-    const logs = app.service('logs');
     const users = app.service('users');
     const update = {
       online: false,
@@ -21,21 +20,8 @@ export default function createLogoutListener(app) {
 
     try {
       await users.patch(connection.user.id, update);
-
-      await logs.create({
-        message: 'User logged out',
-        environment: 'server',
-        steamId: connection.user.id,
-      });
     } catch (error) {
       log('Error in logout callback', connection.user.id, error);
-
-      await logs.create({
-        message: 'Error in logout callback',
-        environment: 'server',
-        info: error,
-        steamId: connection.user.id,
-      });
     }
   };
 }

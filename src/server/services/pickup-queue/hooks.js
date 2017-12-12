@@ -22,7 +22,7 @@ async function populatePickup(app, pickup) {
       map(player => usersService.get(player.id)),
     )(pickup.classes),
   );
-  const users = arrayToObject('id')(allUsers);
+  const users = arrayToObject(user => user.id)(allUsers);
 
   return {
     ...pickup,

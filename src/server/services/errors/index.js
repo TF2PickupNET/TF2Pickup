@@ -10,15 +10,15 @@ const log = debug('TF2Pickup:logs');
 /**
  * Set up the logs service.
  */
-export default function logs() {
+export default function errors() {
   const that = this;
 
-  log('Setting up logs service');
+  log('Setting up errors service');
 
-  that.service('logs', service({
-    Model: mongoose.model('Logs', schema),
+  that.service('errors', service({
+    Model: mongoose.model('Errors', schema),
     id: 'id',
   }));
 
-  that.service('logs').hooks(hooks);
+  that.service('errors').hooks(hooks);
 }

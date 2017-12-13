@@ -26,7 +26,7 @@ class RemoteMarkdown extends PureComponent {
   static defaultProps = { children: component => component };
 
   static renderers = {
-    Heading(props) {
+    heading(props) {
       const typos = {
         1: 'display3',
         2: 'display2',
@@ -42,7 +42,7 @@ class RemoteMarkdown extends PureComponent {
         </Typography>
       );
     },
-    Link(props) {
+    link(props) {
       return (
         <Link
           primary

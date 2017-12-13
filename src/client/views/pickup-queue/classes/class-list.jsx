@@ -52,6 +52,12 @@ class ClassList extends PureComponent {
     isInClass: null,
   };
 
+  /**
+   * The styles for the component.
+   * We use a function here so the theme get's passed as well.
+   *
+   * @returns {Object} - Returns the styles.
+   */
   static styles() {
     return {
       card: { margin: 0 },

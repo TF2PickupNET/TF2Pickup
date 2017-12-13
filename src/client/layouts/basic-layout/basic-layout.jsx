@@ -17,13 +17,13 @@ import app from '../../app';
 import { isInBetaMode } from '../../../config/client';
 import { addNotification } from '../../redux/notifications/actions';
 import { pluck } from '../../../utils/functions';
+import playSound from '../../utils/play-sound';
 
 import Notifications from './notifications';
 import Head from './head';
 import BetaScreen from './beta-screen';
 import NotificationRequester from './notification-requester';
 import Dialogs from './dialogs';
-import playSound from '../../utils/play-sound';
 
 /**
  * Render a basic layout which will try login with the token from a cookie and make sure

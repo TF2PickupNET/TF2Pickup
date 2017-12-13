@@ -23,8 +23,14 @@ export const removePlayersFromClasses = players => mapObject(
   filter(player => !players.includes(player.id)),
 );
 
-export const getGamemodeFromUrl = url => {
-  const match = url.match(/(6v6|9v9|bball|ultiduo)/);
+/**
+ * Get the gamemode from the url.
+ *
+ * @param {String} url - The url to match.
+ * @returns {(String|null)} - Returns the gamemode or null.
+ */
+export const getGamemodeFromUrl = (url) => {
+  const match = url.match(/^\/(6v6|9v9|bball|ultiduo)$/);
 
   return match ? match[1] : null;
 };

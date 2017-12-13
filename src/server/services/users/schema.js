@@ -12,6 +12,7 @@ import {
   isInArray,
 } from '../validators';
 import roles from '../../../config/roles';
+import announcers from '../../../config/announcers';
 
 import { divs as etf2lDivs } from './third-party-services/etf2l/utils';
 import { divs as ozfortressDivs } from './third-party-services/ozfortress/get-ozfortress-user-data';
@@ -182,6 +183,12 @@ export default new Schema({
       type: String,
       validate: isInArray(['light', 'dark'], { nullIsAllowed: true }),
       default: null,
+    },
+
+    announcer: {
+      type: String,
+      validate: isInArray(Object.keys(announcers), {}),
+      default: 'default',
     },
   },
 

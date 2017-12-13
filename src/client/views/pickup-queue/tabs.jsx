@@ -39,11 +39,12 @@ class GamemodeTabs extends PureComponent {
     gamemode: PropTypes.oneOf(Object.keys(gamemodes)).isRequired,
     pickups: PropTypes.shape({}),
     redirect: PropTypes.func.isRequired,
+    userId: PropTypes.string,
   };
 
   static defaultProps = {
     pickups: null,
-    user: null,
+    userId: null,
   };
 
   static styles = {
@@ -86,7 +87,7 @@ class GamemodeTabs extends PureComponent {
       filter(pickup => oldPickups[pickup.gamemode].status === 'waiting'),
       filter(pickup => getPlayer(this.props.userId)(pickup.classes)),
       map((pickup) => {
-        this.props.redirect(`/settings${pickup.gamemode}`);
+        this.props.redirect(`/${pickup.gamemode}`);
 
         return createNotification('Ready Up', {
           timeout: gamemodes[pickup.gamemode].readyUpTime * 1000,

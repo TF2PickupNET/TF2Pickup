@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { composeWithMainLayout } from '../layouts/main-layout';
 
@@ -18,6 +19,20 @@ import Error from './error';
 import Help from './help';
 import Pickup from './pickup';
 
+const pickupQueueRegex = Object
+  .keys(gamemodes)
+  .join('|');
+const aliasesRegex = Object
+  .values(gamemodes)
+  .map(gamemode => gamemode.aliases.join('|'))
+  .join('|');
+
+/**
+ * Render the switch with the routes.
+ *
+ * @param {Object} props - The props for the component.
+ * @returns {JSX} - Returns the JSX.
+ */
 function Routes(props) {
   return (
     <Switch location={props.location}>
@@ -34,17 +49,12 @@ function Routes(props) {
       />
 
       <Route
-        path={`/(${Object.keys(gamemodes).join('|')})`}
+        path={`/(${pickupQueueRegex})`}
         render={composeWithMainLayout(PickupQueue)}
       />
 
       <Route
-        path={`/(${
-          Object
-            .values(gamemodes)
-            .map(gamemode => gamemode.aliases.join('|'))
-            .join('|')
-          })`}
+        path={`/(${aliasesRegex})`}
         render={composeWithMainLayout(RedirectToPickup)}
       />
 
@@ -100,6 +110,8 @@ function Routes(props) {
     </Switch>
   );
 }
+
+Routes.propTypes = { location: PropTypes.shape({}).isRequired };
 
 export default connect(
   (state) => {

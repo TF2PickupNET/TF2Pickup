@@ -26,6 +26,7 @@ import {
 } from '../../../redux/dialog/actions';
 
 import ProgressBar from './progress-bar';
+import PickupSounds from './pickup-sounds';
 
 /**
  * A component which renders info about the current pickup.
@@ -40,18 +41,18 @@ class PickupInfo extends PureComponent {
     }).isRequired,
     openDialog: PropTypes.func.isRequired,
     closeDialog: PropTypes.func.isRequired,
-    pickup: PropTypes.shape({
-      status: PropTypes.string.isRequired,
-      gamemode: PropTypes.string.isRequired,
-      classes: PropTypes.shape({}).isRequired,
-    }),
     dialog: PropTypes.string,
-    user: PropTypes.shape({}),
+    status: PropTypes.string,
+    playerCount: PropTypes.number,
+    gamemode: PropTypes.string,
+    player: PropTypes.shape({}),
   };
 
   static defaultProps = {
-    pickup: null,
-    user: null,
+    status: null,
+    playerCount: 0,
+    gamemode: null,
+    player: null,
     dialog: null,
   };
 
@@ -86,34 +87,15 @@ class PickupInfo extends PureComponent {
   };
 
   /**
-   * If the user is currently logged in, we get the user data from the pickup classes.
-   *
-   * @param {Object} user - The current user object.
-   * @param {Object} pickup - The current pickup.
-   * @returns {(Boolean|Object)} - Returns either false when the player isn't in the pickup
-   * or the object which is associated with him.
-   */
-  static getPlayerData(user, pickup) {
-    if (user && pickup) {
-      return getPlayer(user.id)(pickup.classes);
-    }
-
-    return false;
-  }
-
-  /**
    * Get whether or not the dialog should be opened.
    *
    * @param {Object} props - The props the state should be calculated from.
    * @returns {Boolean} - Returns whether or not the dialog should be opened.
    */
   static getDialogStatus(props) {
-    const player = PickupInfo.getPlayerData(props.user, props.pickup);
-
-    return props.pickup
-      && props.pickup.status === 'ready-up'
-      && player
-      && !player.ready;
+    return props.status === 'ready-up'
+      && props.player
+      && !props.player.ready;
   }
 
   /**
@@ -138,7 +120,7 @@ class PickupInfo extends PureComponent {
    * @returns {String} - Returns the pretty status.
    */
   getStatus() {
-    switch (this.props.pickup.status) {
+    switch (this.props.status) {
       case 'waiting': return 'Waiting';
       case 'ready-up': return 'Ready Up';
       case 'creating-teams': return 'Creating Teams';
@@ -146,53 +128,35 @@ class PickupInfo extends PureComponent {
     }
   }
 
-  /**
-   * Count how many players are in the pickup.
-   *
-   * @returns {Number} - Returns the count.
-   */
-  getPlayerCount() {
-    return pipe(
-      mapObject((players, className) => {
-        const max = gamemodes[this.props.pickup.gamemode].slots[className];
-
-        return Math.min(players.length, max);
-      }),
-      Object.values,
-      reduce((total, count) => total + count, 0),
-    )(this.props.pickup.classes);
-  }
-
   handleMapVoteButtonPress = () => this.props.openDialog('MAP_VOTE_DIALOG');
 
   render() {
-    if (!this.props.pickup) {
+    if (!this.props.status) {
       return (
         <Spinner active />
       );
     }
 
-    const gamemodeInfo = gamemodes[this.props.pickup.gamemode];
-    const playerData = PickupInfo.getPlayerData(this.props.user, this.props.pickup);
+    const gamemodeInfo = gamemodes[this.props.gamemode];
 
     return (
       <Card
         className={this.props.classes.container}
-        data-gamemode={this.props.pickup.gamemode}
+        data-gamemode={this.props.gamemode}
       >
         <span className={this.props.classes.item}>
           Status: {this.getStatus()}
         </span>
 
         <span className={this.props.classes.item}>
-          <Button disabled={!playerData}>
+          <Button disabled={!this.props.player}>
             Pre Ready
           </Button>
         </span>
 
         <span className={this.props.classes.item}>
           <Button
-            disabled={!playerData}
+            disabled={!this.props.player}
             onPress={this.handleMapVoteButtonPress}
           >
             Vote for map
@@ -200,10 +164,12 @@ class PickupInfo extends PureComponent {
         </span>
 
         <span className={this.props.classes.item}>
-          Players: {this.getPlayerCount()} / {gamemodeInfo.maxPlayers}
+          Players: {this.props.playerCount} / {gamemodeInfo.maxPlayers}
         </span>
 
-        <ProgressBar pickup={this.props.pickup} />
+        <ProgressBar gamemode={this.props.gamemode} />
+
+        <PickupSounds gamemode={this.props.gamemode} />
       </Card>
     );
   }
@@ -212,11 +178,27 @@ class PickupInfo extends PureComponent {
 export default connect(
   (state) => {
     const gamemode = getGamemodeFromUrl(state.router.location.pathname);
+    const pickup = pluck(gamemode, null)(state.pickupQueue);
+
+    if (!pickup) {
+      return {};
+    }
+
+    const gamemodeInfo = gamemodes[gamemode];
+    const userId = state.user ? state.user.id : null;
+    const classes = pickup.classes || {};
 
     return {
-      pickup: pluck(gamemode, null)(state.pickupQueue),
-      user: state.user,
+      gamemode,
+      status: pickup.status,
+      userId,
+      player: getPlayer(userId)(classes),
       dialog: state.dialog,
+      playerCounnt: pipe(
+        mapObject((players, className) => Math.min(players.length, gamemodeInfo.slots[className])),
+        Object.values,
+        reduce((total, count) => total + count, 0),
+      )(classes),
     };
   },
   (dispatch) => {

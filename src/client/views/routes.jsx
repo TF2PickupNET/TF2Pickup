@@ -1,8 +1,8 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
+import { connect } from 'react-redux';
 
-import app from '../app';
 import { composeWithMainLayout } from '../layouts/main-layout';
 
 import LandingPage from './landing-page';
@@ -18,103 +18,91 @@ import Error from './error';
 import Help from './help';
 import Pickup from './pickup';
 
-/**
- * The main component.
- *
- * @class
- */
-export default class Routes extends PureComponent {
-  state = { location: app.history.location };
+function Routes(props) {
+  return (
+    <Switch location={props.location}>
+      <Route
+        strict
+        exact
+        path="/"
+        component={LandingPage}
+      />
 
-  /**
-   * Listen for changes in the url.
-   */
-  componentWillMount() {
-    app.history.listen(() => {
-      this.setState({ location: app.history.location });
-    });
-  }
+      <Route
+        path="/pickup/:id"
+        render={composeWithMainLayout(Pickup)}
+      />
 
-  render() {
-    return (
-      <Switch location={this.state.location}>
-        <Route
-          strict
-          exact
-          path="/"
-          component={LandingPage}
-        />
+      <Route
+        path={`/(${Object.keys(gamemodes).join('|')})`}
+        render={composeWithMainLayout(PickupQueue)}
+      />
 
-        <Route
-          path="/pickup/:id"
-          render={composeWithMainLayout(Pickup)}
-        />
-
-        <Route
-          path={`/(${Object.keys(gamemodes).join('|')})`}
-          render={composeWithMainLayout(PickupQueue)}
-        />
-
-        <Route
-          path={`/(${
-            Object
-              .values(gamemodes)
-              .map(gamemode => gamemode.aliases.join('|'))
-              .join('|')
+      <Route
+        path={`/(${
+          Object
+            .values(gamemodes)
+            .map(gamemode => gamemode.aliases.join('|'))
+            .join('|')
           })`}
-          render={composeWithMainLayout(RedirectToPickup)}
-        />
+        render={composeWithMainLayout(RedirectToPickup)}
+      />
 
-        <Route
-          path="/about"
-          render={composeWithMainLayout(About)}
-        />
+      <Route
+        path="/about"
+        render={composeWithMainLayout(About)}
+      />
 
-        <Route
-          path="/recent-pickups"
-          render={composeWithMainLayout(RecentPickups)}
-        />
+      <Route
+        path="/recent-pickups"
+        render={composeWithMainLayout(RecentPickups)}
+      />
 
-        <Route
-          path="/donate"
-          render={composeWithMainLayout(Donate)}
-        />
+      <Route
+        path="/donate"
+        render={composeWithMainLayout(Donate)}
+      />
 
-        <Route
-          path="/servers"
-          render={composeWithMainLayout(Servers)}
-        />
+      <Route
+        path="/servers"
+        render={composeWithMainLayout(Servers)}
+      />
 
-        <Route
-          path="/rules"
-          render={composeWithMainLayout(Rules)}
-        />
+      <Route
+        path="/rules"
+        render={composeWithMainLayout(Rules)}
+      />
 
-        <Route
-          path="/help"
-          render={composeWithMainLayout(Help)}
-        />
+      <Route
+        path="/help"
+        render={composeWithMainLayout(Help)}
+      />
 
-        <Route
-          path="/profile"
-          render={composeWithMainLayout(Profile)}
-        />
+      <Route
+        path="/profile"
+        render={composeWithMainLayout(Profile)}
+      />
 
-        <Route
-          path="/profile/:steamId"
-          render={composeWithMainLayout(Profile)}
-        />
+      <Route
+        path="/profile/:steamId"
+        render={composeWithMainLayout(Profile)}
+      />
 
-        <Route
-          path="/settings"
-          render={composeWithMainLayout(Settings)}
-        />
+      <Route
+        path="/settings"
+        render={composeWithMainLayout(Settings)}
+      />
 
-        <Route
-          path="/error"
-          component={Error}
-        />
-      </Switch>
-    );
-  }
+      <Route
+        path="/error"
+        component={Error}
+      />
+    </Switch>
+  );
 }
+
+export default connect(
+  (state) => {
+    return { location: state.router.location };
+  },
+)(Routes);

@@ -39,7 +39,6 @@ class GamemodeTabs extends PureComponent {
     gamemode: PropTypes.oneOf(Object.keys(gamemodes)).isRequired,
     pickups: PropTypes.shape({}),
     redirect: PropTypes.func.isRequired,
-    user: PropTypes.shape({ id: PropTypes.string }),
   };
 
   static defaultProps = {
@@ -67,7 +66,7 @@ class GamemodeTabs extends PureComponent {
   /**
    * Add an event listener to the redirect event.
    */
-  componentWillMount() {
+  componentDidMount() {
     app.service('pickup').on('redirect', this.handleRedirect);
   }
 
@@ -79,13 +78,15 @@ class GamemodeTabs extends PureComponent {
       return;
     }
 
+    const oldPickups = this.props.pickups;
+
     pipe(
       Object.values,
-      map(pickup => Object.assign({}, pickup, { oldPickup: this.props.pickups[pickup.gamemode] })),
-      filter(pickup => pickup.status === 'ready-up' && pickup.oldPickup.status === 'waiting'),
-      filter(pickup => getPlayer(this.props.user.id)(pickup.classes)),
+      filter(pickup => pickup.status === 'ready-up'),
+      filter(pickup => oldPickups[pickup.gamemode].status === 'waiting'),
+      filter(pickup => getPlayer(this.props.userId)(pickup.classes)),
       map((pickup) => {
-        this.props.redirect(`/${pickup.gamemode}`);
+        this.props.redirect(`/settings${pickup.gamemode}`);
 
         return createNotification('Ready Up', {
           timeout: gamemodes[pickup.gamemode].readyUpTime * 1000,
@@ -124,7 +125,9 @@ class GamemodeTabs extends PureComponent {
    * @param {Object} data - The data from the server.
    */
   handleRedirect = (data) => {
-    window.location = data.url;
+    if (data.users.includes(this.props.userId)) {
+      this.props.redirect(`/pickup/${data.id}`);
+    }
   };
 
   /**
@@ -180,7 +183,7 @@ class GamemodeTabs extends PureComponent {
 export default connect(
   (state) => {
     return {
-      user: state.user,
+      userId: state.user ? state.user.id : null,
       pickups: state.pickupQueue,
       gamemode: getGamemodeFromUrl(state.router.location.pathname),
     };

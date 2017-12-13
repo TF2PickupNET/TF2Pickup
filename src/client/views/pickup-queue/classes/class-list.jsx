@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import injectSheet, { withTheme } from 'react-jss';
+import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
@@ -21,7 +21,6 @@ import {
   find,
   findIndex, add,
 } from '../../../../utils/functions';
-import { getGamemodeFromUrl } from '../../../../utils/pickup';
 
 import Player from './player';
 
@@ -45,38 +44,41 @@ class ClassList extends PureComponent {
     className: PropTypes.string.isRequired,
     gamemode: PropTypes.string.isRequired,
     userId: PropTypes.string,
+    isInClass: PropTypes.shape({}),
   };
 
-  static defaultProps = { userId: null };
-
-  static styles = {
-    card: { margin: 0 },
-
-    listHeader: {
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-
-    hidden: { display: 'none' },
-
-    classIcon: { margin: '8px 0' },
-
-    icon: {
-      margin: '0 8px',
-
-      '&:before': { transition: 'transform 100ms' },
-    },
-
-    leaveIcon: { '&:before': { transform: 'rotate(45deg)' } },
+  static defaultProps = {
+    userId: null,
+    isInClass: null,
   };
 
   /**
-   * Check whether the user is in the class.
+   * The styles for the component.
+   * We use a function here so the theme get's passed as well.
    *
-   * @returns {Boolean} - Returns whether or not the user is in the class.
+   * @returns {Object} - Returns the styles.
    */
-  get isInClass() {
-    return find(player => player.id === this.props.userId)(this.props.players);
+  static styles() {
+    return {
+      card: { margin: 0 },
+
+      listHeader: {
+        display: 'flex',
+        justifyContent: 'space-between',
+      },
+
+      hidden: { display: 'none' },
+
+      classIcon: { margin: '8px 0' },
+
+      icon: {
+        margin: '0 8px',
+
+        '&:before': { transition: 'transform 100ms' },
+      },
+
+      leaveIcon: { '&:before': { transform: 'rotate(45deg)' } },
+    };
   }
 
   /**
@@ -139,24 +141,25 @@ class ClassList extends PureComponent {
    * @returns {JSX} - Returns the JSX.
    */
   renderJoinRemoveItem() {
-    const { userId } = this.props;
-    const isInClass = this.isInClass;
+    if (!this.props.userId) {
+      return null;
+    }
 
     return (
       <List.Item
-        className={userId ? '' : this.props.classes.hidden}
+        className={this.props.userId ? '' : this.props.classes.hidden}
         leftItem={(
           <Icon
             icon="plus"
             className={classnames(
               this.props.classes.icon,
-              { [this.props.classes.leaveIcon]: isInClass },
+              { [this.props.classes.leaveIcon]: this.props.isInClass },
             )}
           />
         )}
-        onClick={isInClass ? this.handleLeaveClass : this.handleJoinClass}
+        onClick={this.props.isInClass ? this.handleLeaveClass : this.handleJoinClass}
       >
-        {isInClass ? 'Remove' : 'Join Class'}
+        {this.props.isInClass ? 'Remove' : 'Join Class'}
 
         <Ripple />
       </List.Item>
@@ -173,6 +176,7 @@ class ClassList extends PureComponent {
       <Player
         key={player.id}
         player={player}
+        gamemode={this.props.gamemode}
       />
     ));
   }
@@ -204,12 +208,15 @@ class ClassList extends PureComponent {
 }
 
 export default pipe(
-  withTheme,
   injectSheet(ClassList.styles),
-  connect((state) => {
+  connect((state, props) => {
+    const players = state.pickupQueue[props.gamemode].classes[props.className];
+    const userId = state.user ? state.user.id : null;
+
     return {
-      gamemode: getGamemodeFromUrl(state.router.location.pathname),
-      userId: state.user ? state.user.id : null,
+      players,
+      userId,
+      isInClass: find(player => player.id === userId)(players),
     };
   }),
 )(ClassList);

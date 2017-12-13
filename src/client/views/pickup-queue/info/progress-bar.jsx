@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { differenceInMilliseconds } from 'date-fns';
 import { Progress } from 'materialize-react';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
+import { connect } from 'react-redux';
 
 /**
  * A component which renders info about the current pickup.
@@ -13,17 +14,16 @@ import gamemodes from '@tf2-pickup/configs/gamemodes';
  */
 class ProgressBar extends PureComponent {
   static propTypes = {
-    pickup: PropTypes.shape({
-      status: PropTypes.string.isRequired,
-      gamemode: PropTypes.string.isRequired,
-      readyUp: PropTypes.string,
-      classes: PropTypes.shape({}).isRequired,
-    }).isRequired,
     classes: PropTypes.shape({
       progress: PropTypes.string.isRequired,
       showProgress: PropTypes.string.isRequired,
     }).isRequired,
+    status: PropTypes.string.isRequired,
+    gamemode: PropTypes.string.isRequired,
+    readyUp: PropTypes.string,
   };
+
+  static defaultProps = { readyUp: null };
 
   static styles = {
     progress: {
@@ -46,7 +46,7 @@ class ProgressBar extends PureComponent {
    * Check if the current pickup entered the ready up phase and create a new interval.
    */
   componentDidUpdate(prevProps) {
-    if (this.props.pickup.status === 'ready-up' && prevProps.pickup.status !== 'ready-up') {
+    if (this.props.status === 'ready-up' && prevProps.status !== 'ready-up') {
       this.interval = setInterval(this.calculateProgress, 150);
     }
   }
@@ -64,8 +64,8 @@ class ProgressBar extends PureComponent {
    * Calculate the progress of the current ready up phase.
    */
   calculateProgress = () => {
-    if (this.props.pickup.status === 'ready-up') {
-      this.setState({ progress: differenceInMilliseconds(new Date(), this.props.pickup.readyUp) });
+    if (this.props.status === 'ready-up') {
+      this.setState({ progress: differenceInMilliseconds(new Date(), this.props.readyUp) });
     } else {
       // Reset the status and clear the interval
       this.setState({ progress: 0 });
@@ -80,7 +80,7 @@ class ProgressBar extends PureComponent {
    * @returns {Number} - Returns the progress.
    */
   get progress() {
-    const gamemodeInfo = gamemodes[this.props.pickup.gamemode];
+    const gamemodeInfo = gamemodes[this.props.gamemode];
 
     return this.state.progress / (gamemodeInfo.readyUpTime * 1000) * 100;
   }
@@ -90,7 +90,7 @@ class ProgressBar extends PureComponent {
       <Progress
         className={classnames(
           this.props.classes.progress,
-          { [this.props.classes.showProgress]: this.props.pickup.status === 'ready-up' },
+          { [this.props.classes.showProgress]: this.props.status === 'ready-up' },
         )}
         progress={this.progress}
       />
@@ -98,4 +98,13 @@ class ProgressBar extends PureComponent {
   }
 }
 
-export default injectSheet(ProgressBar.styles)(ProgressBar);
+export default connect(
+  (state, props) => {
+    const pickup = state.pickupQueue[props.gamemode];
+
+    return {
+      status: pickup.status,
+      readyUp: pickup.readyUp,
+    };
+  },
+)(injectSheet(ProgressBar.styles)(ProgressBar));

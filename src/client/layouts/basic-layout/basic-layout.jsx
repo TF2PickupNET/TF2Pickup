@@ -17,6 +17,7 @@ import app from '../../app';
 import { isInBetaMode } from '../../../config/client';
 import { addNotification } from '../../redux/notifications/actions';
 import { pluck } from '../../../utils/functions';
+import playSound from '../../utils/play-sound';
 
 import Notifications from './notifications';
 import Head from './head';
@@ -77,9 +78,7 @@ class BasicLayout extends PureComponent {
    * Show a snackbar that we use cookies when the user hasn't accepted them yet.
    */
   componentDidMount() {
-    const acceptsCookie = lockr.get('acceptsCookie');
-
-    if (!acceptsCookie) {
+    if (!lockr.get('acceptsCookie')) {
       this.props.addNotification(
         ({ closeSnackbar }) => (
           <Aux>
@@ -93,6 +92,10 @@ class BasicLayout extends PureComponent {
         { autoCloseTimer: 0 },
       );
     }
+
+    this.playSound();
+
+    document.addEventListener('visibilitychange', this.playSound);
   }
 
   /**
@@ -103,6 +106,17 @@ class BasicLayout extends PureComponent {
       lockr.set('theme', nextProps.theme);
     }
   }
+
+  hasPlayedSound = false;
+
+  /**
+   * Play the sound fix when the sound fix hasn't been played and the document is visible.
+   */
+  playSound = () => {
+    if (!this.hasPlayedSound && !document.hidden) {
+      playSound('notification', 0.01);
+    }
+  };
 
   /**
    * Authenticate with the token from the cookies.

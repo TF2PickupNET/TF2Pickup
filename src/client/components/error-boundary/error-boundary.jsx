@@ -76,7 +76,7 @@ class ErrorBoundary extends PureComponent {
         <Divider />
 
         <Card.Actions>
-          <Button onRelease={this.handleButtonPress}>
+          <Button onPress={this.handleButtonPress}>
             Go to discord
           </Button>
         </Card.Actions>

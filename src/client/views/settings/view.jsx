@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import RegionSetting from './region-setting';
 import ThemeSetting from './theme-setting';
+import AnnouncerSetting from './announncer-setting';
 import VolumeSetting from './volume-setting';
 
 /**
@@ -31,6 +32,7 @@ function View(props) {
 
       <RegionSetting />
       <ThemeSetting />
+      <AnnouncerSetting />
       <VolumeSetting />
     </Layout>
   );

@@ -2,7 +2,7 @@ import config from 'config';
 import Discord from 'discord.js';
 import debug from 'debug';
 
-const log = debug('TF2Pickup:discord');
+const log = debug('TF2Pickup:discord-channels');
 const bot = new Discord.Client();
 
 /**

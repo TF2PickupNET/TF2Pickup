@@ -11,7 +11,7 @@ const bot = new Discord.Client();
  * @class Discord Service class.
  */
 class DiscordService {
-  readyFlag = false;
+  isReady = false;
 
   channels = {};
 
@@ -22,7 +22,7 @@ class DiscordService {
     const botToken = config.get('service.discord.token');
 
     bot.on('ready', () => {
-      this.readyFlag = true;
+      this.isReady = true;
 
       log('Service connected!');
     });
@@ -31,21 +31,21 @@ class DiscordService {
   }
 
   /**
-   * Create mumble channel.
+   * Create discord voice channel.
    *
-   * @param {Object} channel - Mumble channel.
-   * @param {Object} channel.region - Mumble channel region.
-   * @param {Object} channel.name - Mumble channel name.
+   * @param {Object} channel - Discord channel.
+   * @param {Object} channel.region - Discord channel region.
+   * @param {Object} channel.name - Discord channel name.
    */
   async create({
     region,
     name,
   }) {
-    if (!this.readyFlag) {
+    if (!this.isReady) {
       throw new Error('Discord bot is not ready!');
     }
 
-    const guildId = config.get(`service.discord.guilds.${region}`);
+    const guildId = config.get(`service.discord.${region}.guild`);
     const guild = bot.guilds.get(guildId);
 
     const pickup = `${region.toUpperCase()}-${name}`;
@@ -62,22 +62,22 @@ class DiscordService {
         blu: channelBLU,
       };
     } catch (error) {
-      throw new Error(`Error while creating discord channels ${error}`);
+      log(`Error while creating discord channels ${error}`);
     }
   }
 
   /**
-   * Delete mumble channel.
+   * Delete discord voice channel.
    *
-   * @param {Object} channel - Mumble channel.
-   * @param {Object} channel.region - Mumble channel region.
-   * @param {Object} channel.name - Mumble channel name.
+   * @param {Object} channel - Discord channel.
+   * @param {Object} channel.region - Discord channel region.
+   * @param {Object} channel.name - Discord channel name.
    */
   delete({
     region,
     name,
   }) {
-    if (!this.readyFlag) {
+    if (!this.isReady) {
       throw new Error('Discord bot is not ready!');
     }
 
@@ -86,7 +86,7 @@ class DiscordService {
     const reason = `Pickup ${pickup} ended`;
 
     if (!channels) {
-      throw new Error(`Discord channels for pickup ${pickup} dose not exist`);
+      log(`Discord channels for pickup ${pickup} does not exist`);
     }
 
     log(`Removed channels for ${pickup}!`);
@@ -95,8 +95,47 @@ class DiscordService {
       channels.red.delete(reason);
       channels.blu.delete(reason);
     } catch (error) {
-      throw new Error(`Error while deleting discord channels ${error}`);
+      log(`Error while deleting discord channels ${error}`);
     }
+  }
+
+  /**
+   * Message Regional Discord Channel.
+   *
+   * @param {Object} message - Message to send.
+   * @param {Object} message.text - Text message to send.
+   * @param {Object} message.region - Region to send message in.
+   */
+  async message({
+    text,
+    region,
+  }) {
+    if (!this.isReady) {
+      throw new Error('Discord bot is not ready!');
+    }
+
+    const guildId = config.get(`service.discord.${region}.guild`);
+    const channelId = config.get(`service.discord.${region}.channel`);
+    const channel = bot.guilds.get(guildId).channels.get(channelId);
+
+    await channel.send(text);
+  }
+
+  /**
+   * Message Global Discord Channel.
+   *
+   * @param {Object} text - Text message to send.
+   */
+  async messageGlobal(text) {
+    if (!this.isReady) {
+      throw new Error('Discord bot is not ready!');
+    }
+
+    const guildId = config.get('service.discord.guild');
+    const channelId = config.get('service.discord.channel');
+    const channel = bot.guilds.get(guildId).channels.get(channelId);
+
+    await channel.send(text);
   }
 }
 
@@ -106,5 +145,5 @@ class DiscordService {
 export default function discordChannels() {
   const that = this;
 
-  that.service('discord-channels', new DiscordService());
+  that.service('discord', new DiscordService());
 }

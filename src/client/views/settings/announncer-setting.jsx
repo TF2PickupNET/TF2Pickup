@@ -44,6 +44,14 @@ class AnnounncerSetting extends PureComponent {
       justifyContent: 'space-between',
       alignItems: 'center',
     },
+
+    rightContainer: {
+      display: 'flex',
+      height: 72,
+      alignItems: 'center',
+    },
+
+    verticalDivider: { marginRight: 12 },
   };
 
   state = {
@@ -136,9 +144,16 @@ class AnnounncerSetting extends PureComponent {
             {this.renderAnnouncers()}
           </RadioButtonGroup>
 
-          <Button onPress={this.handleTestAnnouncerPress}>
-            Test Announcer
-          </Button>
+          <span className={this.props.classes.rightContainer}>
+            <Divider
+              vertical
+              className={this.props.classes.verticalDivider}
+            />
+
+            <Button onPress={this.handleTestAnnouncerPress}>
+              Test Announcer
+            </Button>
+          </span>
         </ExpansionPanel.Details>
 
         <Divider />

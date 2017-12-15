@@ -25,7 +25,9 @@ app
   .configure(configureStore);
 
 app.redirectToSteamAuth = () => {
-  window.location = authUrl;
+  const location = window.location;
+
+  window.location = `${authUrl}?url=${location.pathname}`;
 };
 
 if (isDev) {

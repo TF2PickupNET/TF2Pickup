@@ -15,7 +15,6 @@ import app from '../../../app';
 import UserItem from '../../../components/user-item';
 import openWindowInNewTab from '../../../utils/open-window-in-new-tab';
 import hasPermission from '../../../../utils/has-permission';
-import { getGamemodeFromUrl } from '../../../../utils/pickup';
 
 /**
  * The player component for the pickup queue view.
@@ -35,10 +34,8 @@ class Player extends PureComponent {
       avatar: PropTypes.string.isRequired,
     }).isRequired,
     gamemode: PropTypes.string.isRequired,
-    user: PropTypes.shape({}),
+    canKick: PropTypes.bool.isRequired,
   };
-
-  static defaultProps = { user: null };
 
   static styles = {
     avatar: {
@@ -88,7 +85,7 @@ class Player extends PureComponent {
               />
             </List.Item.Avatar>
           )}
-          rightItem={hasPermission('pickup.kick', this.props.user, this.props.player) ? (
+          rightItem={this.props.canKick ? (
             <Icon
               icon="close"
               className={this.props.classes.clickable}
@@ -108,10 +105,12 @@ class Player extends PureComponent {
 }
 
 export default connect(
-  (state) => {
+  (state, props) => {
     return {
       user: state.user,
-      gamemode: getGamemodeFromUrl(state.router.location.pathname),
+      canKick: state.user
+        ? hasPermission('pickup.kick', { roles: state.user.roles }, props.player)
+        : false,
     };
   },
 )(injectSheet(Player.styles)(Player));

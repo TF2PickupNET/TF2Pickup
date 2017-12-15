@@ -15,7 +15,9 @@ export default function View() {
   return (
     <Aux>
       <Helmet>
-        <title>Rules</title>
+        <title>
+          Rules
+        </title>
       </Helmet>
 
       <MarkdownView url={RULES_URL} />

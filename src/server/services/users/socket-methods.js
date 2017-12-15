@@ -6,6 +6,10 @@ import {
   filter,
   reduce,
 } from '../../../utils/functions';
+import hasPermission from '../../../utils/has-permission';
+import announcers from '../../../config/announcers';
+
+const announcersArray = Object.values(announcers);
 
 /**
  * Get the valid names for a user.
@@ -41,6 +45,23 @@ async function getValidNames(app, user) {
       };
     }, {}),
   )(queries);
+}
+
+/**
+ * Get the announcers the user can select.
+ *
+ * @param {Object} user - The users object.
+ * @returns {String[]} - Returns the selectable announcers for the user.
+ */
+function getValidAnnouncers(user) {
+  if (hasPermission('announcers.use-without-buying', user)) {
+    return map(announcer => announcer.name)(announcersArray);
+  }
+
+  return filter(
+    announcer => !announcer.needsPurchase || user.boughtAnnouncers.includes(announcer.name),
+    map(announcer => announcer.name),
+  )(announcersArray);
 }
 
 /**
@@ -80,6 +101,20 @@ export default function socketMethods(app, socket) {
     }
 
     return cb();
+  });
+
+  socket.on('user.change-announcer', async ({ announcer }, cb) => {
+    if (!socket.feathers.user) {
+      return;
+    }
+
+    const validAnnouncers = getValidAnnouncers(socket.feathers.user);
+
+    if (validAnnouncers.includes(announcer)) {
+      await users.patch(socket.feathers.user.id, { $set: { 'settings.announcer': announcer } });
+    }
+
+    cb();
   });
 
   socket.on('user.get-valid-names', async (cb) => {

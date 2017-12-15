@@ -1,12 +1,12 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
-import { Layout } from 'materialize-react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 
 import RegionSetting from './region-setting';
 import ThemeSetting from './theme-setting';
+import AnnouncerSetting from './announncer-setting';
 import VolumeSetting from './volume-setting';
 
 /**
@@ -21,18 +21,18 @@ function View(props) {
   }
 
   return (
-    <Layout
-      direction="column"
-      className={props.classes.container}
-    >
+    <div className={props.classes.container}>
       <Helmet>
-        <title>Settings</title>
+        <title>
+          Settings
+        </title>
       </Helmet>
 
       <RegionSetting />
       <ThemeSetting />
+      <AnnouncerSetting />
       <VolumeSetting />
-    </Layout>
+    </div>
   );
 }
 

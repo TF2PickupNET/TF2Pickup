@@ -20,6 +20,8 @@ import ultiduo from '../../../assets/images/background/ultiduo.jpg';
 
 import getErrorMessage from './get-error-message';
 
+const redirectToDiscordHelp = () => openWindowInNewTab(discordUrls.help);
+
 /**
  * The error page when an error occurs on the server.
  * The server will redirect the user to this page then.
@@ -30,14 +32,21 @@ import getErrorMessage from './get-error-message';
 function Error(props) {
   const query = queryString.parse(props.location.search);
   const code = Number(query.code);
-  const redirectToDiscordHelp = () => openWindowInNewTab(discordUrls.help);
 
   return (
     <div className={props.classes.container}>
-      <Helmet><title>Error</title></Helmet>
+      <Helmet>
+        <title>
+          Error
+        </title>
+      </Helmet>
 
       <Card className={props.classes.card}>
-        <Card.Header>{code} {getErrorMessage(code)}</Card.Header>
+        <Card.Header>
+          {code}
+          {getErrorMessage(code)}
+        </Card.Header>
+
         <Card.Content>
           {query.message}
 
@@ -57,7 +66,8 @@ function Error(props) {
           <br />
           <br />
 
-          Error ID: {query.id}
+          Error ID:
+          {query.id}
         </Card.Content>
 
         <Card.Actions>

@@ -10,7 +10,9 @@ export default function View() {
   return (
     <div>
       <Helmet>
-        <title>Recent Pickups</title>
+        <title>
+          Recent Pickups
+        </title>
       </Helmet>
     </div>
   );

@@ -17,28 +17,22 @@ import PropTypes from 'prop-types';
  * @param {String} props.imagePosition - The position for the image. Either left or right.
  * @returns {JSX} - Returns the JSX.
  */
-function Section({
-  classes,
-  imgSrc,
-  imgProps,
-  children,
-  imagePosition,
-}) {
-  const imgPositionClass = imagePosition === 'left' && 'image-left';
+function Section(props) {
+  const imgPositionClass = props.imagePosition === 'left' && 'image-left';
 
   return (
-    <section className={`${classes.section} ${imgPositionClass}`}>
+    <section className={`${props.classes.section} ${imgPositionClass}`}>
       <Typography
-        className={classes.text}
+        className={props.classes.text}
         typography="display1"
       >
-        {children}
+        {props.children}
       </Typography>
 
       <img
         alt="presentation"
-        src={imgSrc}
-        {...imgProps}
+        src={props.imgSrc}
+        {...props.imgProps}
       />
     </section>
   );

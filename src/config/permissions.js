@@ -20,4 +20,6 @@ export default {
   },
 
   servers: { configure: { level: roles.admin.level } },
+
+  announcers: { 'use-without-buying': { level: roles.honoraryUser.level } },
 };

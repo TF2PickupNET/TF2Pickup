@@ -5,7 +5,6 @@ import {
   getNotDeclaredProps,
 } from 'materialize-react';
 import PropTypes from 'prop-types';
-import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 
 import app from '../../../app';
@@ -36,10 +35,6 @@ class ReadyUpDialog extends PureComponent {
   render() {
     return (
       <Dialog {...getNotDeclaredProps(this.props, ReadyUpDialog)}>
-        <Helmet>
-          <title>Ready Up</title>
-        </Helmet>
-
         <Dialog.Header>
           Are you ready to play?
         </Dialog.Header>

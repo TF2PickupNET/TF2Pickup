@@ -17,10 +17,10 @@ import {
 export default function setupListeners(app) {
   const users = app.service('users');
 
-  app.on('authenticated', async ({ accessToken }) => {
-    const verifiedToken = await app.passport.verifyJWT(accessToken);
+  app.on('authenticated', async (payload) => {
+    const verifiedToken = await app.passport.verifyJWT(payload.accessToken);
 
-    cookie.set('feathers-jwt', accessToken);
+    cookie.set('feathers-jwt', payload.accessToken);
 
     app.set('userId', verifiedToken.id);
 

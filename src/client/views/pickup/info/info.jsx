@@ -149,19 +149,24 @@ class Info extends PureComponent {
     return (
       <Card className={this.props.classes.card}>
         <div className={this.props.classes.item}>
-          Status: {this.getStatus()}
+          Status:
+          {this.getStatus()}
         </div>
 
         <div className={this.props.classes.item}>
-          Region: {this.getRegion()}
+          Region:
+          {this.getRegion()}
         </div>
 
         <div className={this.props.classes.item}>
-          Gamemode: {this.getGamemode()}
+          Gamemode:
+          {this.getGamemode()}
         </div>
 
         <div className={this.props.classes.item}>
-          {dateInfo.name}: <Date date={dateInfo.date} />
+          {dateInfo.name}
+          :
+          <Date date={dateInfo.date} />
         </div>
 
         <div className={this.props.classes.item}>

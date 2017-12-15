@@ -6,19 +6,24 @@ const log = debug('TF2Pickup:discord-message');
 const guildId = config.get('service.discord.guild.global');
 
 /**
- * Discord service.
+ * The Discord service for creating a message in discord.
  *
- * @class Discord Service class.
+ * @class
  */
 class DiscordMessage {
+  /**
+   * We need to store the app in the class so we can use it later.
+   *
+   * @param {Object} app - The feathers app object.
+   */
   setup(app) {
     this.app = app;
   }
 
   /**
-   * Create discord voice channel.
+   * Create a new message in the discord.
    *
-   * @param {Object} props - Discord channel.
+   * @param {Object} props - Information about the channel and the content of the message.
    */
   async create(props) {
     const bot = await this.app.service('discord').get();
@@ -39,7 +44,7 @@ class DiscordMessage {
 const defaultService = { create: () => Promise.resolve(true) };
 
 /**
- * Mumble service.
+ * Discord message service.
  */
 export default function discordMessage() {
   const that = this;

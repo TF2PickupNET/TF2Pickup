@@ -7,23 +7,23 @@ const log = debug('TF2Pickup:discord');
 const token = config.get('service.discord.token');
 
 /**
- * Discord service.
+ * The Discord service.
  *
- * @class Discord Service class.
+ * @class
  */
 class DiscordService {
-  bot = new Discord.Client();
+  client = new Discord.Client();
 
   /**
-   * Mumble service setup.
+   * Setup the discord client and login with the token.
    *
-   * @returns {Promise} - R.
+   * @returns {Promise} - Returns a promise which will resolve when the client is ready.
    */
   setup() {
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(reject, 3 * 1000);
 
-      this.bot.on('ready', () => {
+      this.client.on('ready', () => {
         clearTimeout(timeout);
 
         log('Discord connected');
@@ -31,19 +31,24 @@ class DiscordService {
         resolve();
       });
 
-      this.bot.login(token);
+      this.client.login(token);
     });
   }
 
+  /**
+   * Get the discord client.
+   *
+   * @returns {Promise} - Returns the client.
+   */
   get() {
-    return Promise.resolve(this.bot);
+    return Promise.resolve(this.client);
   }
 }
 
 const defaultService = { get: () => Promise.resolve() };
 
 /**
- * Mumble service.
+ * Discord service.
  */
 export default function discord() {
   const that = this;

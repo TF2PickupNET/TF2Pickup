@@ -5,19 +5,28 @@ import hooks from 'feathers-hooks-common';
 const log = debug('TF2Pickup:discord-channels');
 
 /**
- * Discord service.
+ * The Discord Channel service for creating and deleting channels.
  *
- * @class Discord Service class.
+ * @class
  */
 class DiscordChannels {
   channels = {};
 
   /**
-   * Create discord voice channel.
+   * We need to store the app in the class so we can use it later.
    *
-   * @param {Object} channel - Discord channel.
-   * @param {Object} channel.region - Discord channel region.
-   * @param {Object} channel.name - Discord channel name.
+   * @param {Object} app - The feathers app object.
+   */
+  setup(app) {
+    this.app = app;
+  }
+
+  /**
+   * Create a Discord voice channel.
+   *
+   * @param {Object} channel - Information about the channel.
+   * @param {Object} channel.region - The region the channel should be created.
+   * @param {Object} channel.name - The name of the channel.
    */
   async create({
     region,
@@ -44,11 +53,10 @@ class DiscordChannels {
   }
 
   /**
-   * Delete discord voice channel.
+   * Delete a Discord voice channel.
    *
-   * @param {Object} channel - Discord channel.
-   * @param {Object} channel.region - Discord channel region.
-   * @param {Object} channel.name - Discord channel name.
+   * @param {Object} channel - Information about the channel.
+   * @param {Object} channel.name - The name of the channel.
    */
   async delete({ name }) {
     const channels = this.channels[name];
@@ -75,7 +83,7 @@ const defaultService = {
 };
 
 /**
- * Mumble service.
+ * Discord channels service.
  */
 export default function discordChannels() {
   const that = this;

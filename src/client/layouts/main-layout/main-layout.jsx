@@ -29,15 +29,22 @@ class MainLayout extends PureComponent {
   };
 
   static styles = {
-    container: {
-      padding: 16,
+    content: {
+      display: 'flex',
+      width: '100%',
       overflowX: 'hidden',
-      minHeight: '100%',
-      maxWidth: '100%',
+      alignItems: 'center',
+      flexDirection: 'column',
+      overflowY: 'scroll',
+      padding: 16,
       boxSizing: 'border-box',
-
-      [breakpoints.up('tablet')]: { padding: 24 },
+      flex: 1,
     },
+
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+    }
   };
 
   render() {
@@ -51,18 +58,14 @@ class MainLayout extends PureComponent {
           <DrawerContent />
         </Drawer.DrawerContent>
 
-        <Drawer.MainContent>
+        <Drawer.MainContent className={this.props.classes.container}>
           <MainToolbar />
 
-          <Layout
-            direction="column"
-            crossAlign="center"
-            className={this.props.classes.container}
-          >
-            <ErrorBoundary>
+          <ErrorBoundary>
+            <div className={this.props.classes.content}>
               {this.props.children}
-            </ErrorBoundary>
-          </Layout>
+            </div>
+          </ErrorBoundary>
         </Drawer.MainContent>
       </Drawer>
     );

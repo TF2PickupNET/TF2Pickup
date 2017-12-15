@@ -22,10 +22,7 @@ function View(props) {
   }
 
   return (
-    <Layout
-      direction="column"
-      className={props.classes.container}
-    >
+    <div className={props.classes.container}>
       <Helmet>
         <title>
           Settings
@@ -36,7 +33,7 @@ function View(props) {
       <ThemeSetting />
       <AnnouncerSetting />
       <VolumeSetting />
-    </Layout>
+    </div>
   );
 }
 

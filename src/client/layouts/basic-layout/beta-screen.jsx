@@ -27,8 +27,20 @@ import ultiduo from '../../../assets/images/background/ultiduo.jpg';
  */
 class BetaScreen extends PureComponent {
   static propTypes = {
-    classes: PropTypes.shape({}).isRequired,
-    router: PropTypes.shape({}).isRequired,
+    classes: PropTypes.shape({
+      container: PropTypes.string.isRequired,
+      backgroundImage: PropTypes.string.isRequired,
+      card: PropTypes.string.isRequired,
+      cardActions: PropTypes.string.isRequired,
+      errorContainer: PropTypes.string.isRequired,
+      errorDivider: PropTypes.string.isRequired,
+      errorText: PropTypes.string.isRequired,
+    }).isRequired,
+    pathname: PropTypes.string.isRequired,
+    query: PropTypes.shape({
+      code: PropTypes.string.isRequired,
+      message: PropTypes.string.isRequired,
+    }).isRequired,
   };
 
   static styles = {
@@ -78,22 +90,18 @@ class BetaScreen extends PureComponent {
   handleLoginRedirect = () => app.redirectToSteamAuth();
 
   render() {
-    const {
-      classes,
-      router,
-    } = this.props;
-
-    const hasError = router.location.pathname === '/error';
-    const query = queryString.parse(router.location.search);
+    const hasError = this.props.pathname === '/error';
 
     if (this.state.showBetaPage) {
       return (
-        <div className={`${classes.container} ${classes.backgroundImage}`}>
+        <div className={`${this.props.classes.container} ${this.props.classes.backgroundImage}`}>
           <Helmet>
-            <title>Beta Mode</title>
+            <title>
+              Beta Mode
+            </title>
           </Helmet>
 
-          <Card className={classes.card}>
+          <Card className={this.props.classes.card}>
             <Card.Header>
               TF2Pickup is currently in beta
             </Card.Header>
@@ -102,21 +110,24 @@ class BetaScreen extends PureComponent {
               You will need to login to check if you have access to TF2Pickup.
             </Card.Content>
 
-            <Card.Actions className={classes.cardActions}>
+            <Card.Actions className={this.props.classes.cardActions}>
               <Button onPress={this.handleLoginRedirect}>
                 Login with Steam
               </Button>
             </Card.Actions>
 
             {hasError && (
-              <Card.Content className={classes.errorContainer}>
-                <Divider className={classes.errorDivider} />
+              <Card.Content className={this.props.classes.errorContainer}>
+                <Divider className={this.props.classes.errorDivider} />
 
                 <Typography typography="title">
-                  {query.code} {getErrorMessage(Number(query.code))}
+                  {this.props.query.code}
+                  {getErrorMessage(Number(this.props.query.code))}
                 </Typography>
 
-                <div className={classes.errorText}>{query.message}</div>
+                <div className={this.props.classes.errorText}>
+                  {this.props.query.message}
+                </div>
               </Card.Content>
             )}
           </Card>
@@ -125,9 +136,11 @@ class BetaScreen extends PureComponent {
     }
 
     return (
-      <div className={classes.container}>
+      <div className={this.props.classes.container}>
         <Helmet>
-          <title>Beta Mode</title>
+          <title>
+            Beta Mode
+          </title>
         </Helmet>
 
         <Spinner active />
@@ -138,6 +151,9 @@ class BetaScreen extends PureComponent {
 
 export default connect(
   (state) => {
-    return { router: state.router };
+    return {
+      pathname: state.router.location.pathname,
+      query: queryString.parse(state.router.location.search),
+    };
   },
 )(injectSheet(BetaScreen.styles)(BetaScreen));

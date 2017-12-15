@@ -145,7 +145,8 @@ class PickupInfo extends PureComponent {
         data-gamemode={this.props.gamemode}
       >
         <span className={this.props.classes.item}>
-          Status: {this.getStatus()}
+          Status:
+          {this.getStatus()}
         </span>
 
         <span className={this.props.classes.item}>
@@ -164,7 +165,10 @@ class PickupInfo extends PureComponent {
         </span>
 
         <span className={this.props.classes.item}>
-          Players: {this.props.playerCount} / {gamemodeInfo.maxPlayers}
+          Players:
+          {this.props.playerCount}
+          /
+          {gamemodeInfo.maxPlayers}
         </span>
 
         <ProgressBar gamemode={this.props.gamemode} />

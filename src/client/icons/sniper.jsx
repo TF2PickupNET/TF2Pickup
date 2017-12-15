@@ -2,22 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { colors } from 'materialize-react';
 
-function Sniper({
-  color,
-  size,
-  ...props
-}) {
+function Sniper(props) {
   return (
     <svg
       x="0px"
       y="0px"
-      width={`${size}px`}
-      height={`${size}px`}
+      width={`${props.size}px`}
+      height={`${props.size}px`}
       viewBox="0 0 37.1 37.1"
       {...props}
     >
       <path
-        fill={color}
+        fill={props.color}
         d={[
           'M18.544,0.006c-10.24,0-18.543,8.299-18.543,18.541c0,10.245,8.303,18.546,18.543,',
           '18.546c10.244,0,18.544-8.301,18.544-18.546C37.088,8.305,28.788,0.006,18.544,',

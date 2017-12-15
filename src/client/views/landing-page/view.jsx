@@ -165,7 +165,11 @@ export class View extends PureComponent {
   render() {
     return (
       <div>
-        <Helmet><title>Welcome</title></Helmet>
+        <Helmet>
+          <title>
+            Welcome
+          </title>
+        </Helmet>
 
         <LandingPageHeader />
 
@@ -174,8 +178,10 @@ export class View extends PureComponent {
           imagePosition="right"
           imgProps={{ className: this.props.classes.image }}
         >
-          High Quality Team Fortress 2 Pickup Games <br />
-          Sign up with your Steam account, join your preferred game modes, <br />
+          High Quality Team Fortress 2 Pickup Games
+          <br />
+          Sign up with your Steam account, join your preferred game
+          <br />
           pick your best/favorite class, we will take care of the rest!
         </LandingPageSection>
 
@@ -186,7 +192,10 @@ export class View extends PureComponent {
           imagePosition="left"
           imgProps={{ className: `${this.props.classes.image} serve-me` }}
         >
-          Powerful American & European Team Fortress 2 servers provided by <Link href="http://serveme.tf">serveme.tf</Link>
+          Powerful American & European Team Fortress 2 servers provided by
+          <Link href="http://serveme.tf">
+            serveme.tf
+          </Link>
         </LandingPageSection>
 
         <section className={this.props.classes.regionContainer}>
@@ -200,7 +209,8 @@ export class View extends PureComponent {
             typography="display1"
             className={this.props.classes.regionText}
           >
-            Currently available in the following regions: <br />
+            Currently available in the following regions:
+            <br />
             {View.arrayToText(regionDisplays)}
           </Typography>
         </section>
@@ -211,7 +221,8 @@ export class View extends PureComponent {
           imgProps={{ className: this.props.classes.image }}
         >
           Buddy system: pick someone as your buddy
-          <br /> and there is a high chance you will end up with that player on your team!
+          <br />
+          and there is a high chance you will end up with that player on your team!
         </LandingPageSection>
 
         <Parallax
@@ -222,7 +233,8 @@ export class View extends PureComponent {
             typography="display2"
             className={this.props.classes.parallaxText}
           >
-            Supporting a wide variety of popular competitive formats: <br />
+            Supporting a wide variety of popular competitive formats:
+            <br />
             {View.arrayToText(gamemodeDisplays)}
           </Typography>
         </Parallax>

@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import RegionSetting from './region-setting';
 import ThemeSetting from './theme-setting';
+import AnnouncerSetting from './announncer-setting';
 import VolumeSetting from './volume-setting';
 
 /**
@@ -26,11 +27,14 @@ function View(props) {
       className={props.classes.container}
     >
       <Helmet>
-        <title>Settings</title>
+        <title>
+          Settings
+        </title>
       </Helmet>
 
       <RegionSetting />
       <ThemeSetting />
+      <AnnouncerSetting />
       <VolumeSetting />
     </Layout>
   );

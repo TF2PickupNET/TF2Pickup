@@ -25,7 +25,9 @@ function View(props) {
   return (
     <Layout mainAlign="center">
       <Helmet>
-        <title>About</title>
+        <title>
+          About
+        </title>
       </Helmet>
 
       <Card className={props.classes.card}>

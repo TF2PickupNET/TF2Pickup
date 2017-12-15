@@ -2,22 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { colors } from 'materialize-react';
 
-function Medic({
-  color,
-  size,
-  ...props
-}) {
+function Medic(props) {
   return (
     <svg
       x="0px"
       y="0px"
-      width={`${size}px`}
-      height={`${size}px`}
+      width={`${props.size}px`}
+      height={`${props.size}px`}
       viewBox="0 0 37.1 37.1"
       {...props}
     >
       <path
-        fill={color}
+        fill={props.color}
         d={[
           'M37.085,10.948v15.206h-10.94v10.939H10.941V26.154H0.004V10.948h10.938V0.006h15.',
           '203v10.942H37.085zM34.998,13.032h-8.854h-1.251H24.06v-0.834v-1.25V2.095H13.027v8.',

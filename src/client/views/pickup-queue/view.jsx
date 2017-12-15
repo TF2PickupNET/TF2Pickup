@@ -77,7 +77,9 @@ class View extends PureComponent {
     return (
       <Aux>
         <Helmet>
-          <title>{this.getTitle()}</title>
+          <title>
+            {this.getTitle()}
+          </title>
         </Helmet>
 
         <Tabs />

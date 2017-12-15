@@ -26,7 +26,7 @@ class RemoteMarkdown extends PureComponent {
   static defaultProps = { children: component => component };
 
   static renderers = {
-    Heading(props) {
+    heading(props) {
       const typos = {
         1: 'display3',
         2: 'display2',
@@ -42,7 +42,7 @@ class RemoteMarkdown extends PureComponent {
         </Typography>
       );
     },
-    Link(props) {
+    link(props) {
       return (
         <Link
           primary
@@ -84,13 +84,11 @@ class RemoteMarkdown extends PureComponent {
   }
 
   render() {
-    const { markdown } = this.state;
-
-    if (markdown) {
+    if (this.state.markdown) {
       return this.props.children(
         <ReactMarkdown
           renderers={RemoteMarkdown.renderers}
-          source={markdown}
+          source={this.state.markdown}
           className={this.props.classes.container}
         />,
       );

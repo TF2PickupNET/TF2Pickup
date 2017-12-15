@@ -145,8 +145,7 @@ class PickupInfo extends PureComponent {
         data-gamemode={this.props.gamemode}
       >
         <span className={this.props.classes.item}>
-          Status:
-          {this.getStatus()}
+          Status: {this.getStatus()}
         </span>
 
         <span className={this.props.classes.item}>
@@ -165,10 +164,7 @@ class PickupInfo extends PureComponent {
         </span>
 
         <span className={this.props.classes.item}>
-          Players:
-          {this.props.playerCount}
-          /
-          {gamemodeInfo.maxPlayers}
+          Players: {this.props.playerCount} / {gamemodeInfo.maxPlayers}
         </span>
 
         <ProgressBar gamemode={this.props.gamemode} />
@@ -198,7 +194,7 @@ export default connect(
       userId,
       player: getPlayer(userId)(classes),
       dialog: state.dialog,
-      playerCounnt: pipe(
+      playerCount: pipe(
         mapObject((players, className) => Math.min(players.length, gamemodeInfo.slots[className])),
         Object.values,
         reduce((total, count) => total + count, 0),

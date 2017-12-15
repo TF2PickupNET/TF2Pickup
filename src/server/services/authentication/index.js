@@ -4,6 +4,7 @@ import jwt, { Verifier } from 'feathers-authentication-jwt';
 import ms from 'ms';
 import debug from 'debug';
 import config from 'config';
+import queryString from 'query-string';
 
 import { authUrl } from '../../../config/index';
 
@@ -103,7 +104,15 @@ export default function authentication() {
     }),
   );
 
-  that.get(authUrl, auth.express.authenticate('steam'));
+  that.get(
+    authUrl,
+    (req, res, next) => {
+      res.cookie('url', req.query.url.slice(1));
+
+      next();
+    },
+    auth.express.authenticate('steam'),
+  );
 
   that.get(
     `${authUrl}/return`,
@@ -117,7 +126,13 @@ export default function authentication() {
 
       next();
     },
-    (req, res) => res.redirect('/'),
+    (req, res) => {
+      const query = queryString.parse(req.headers.cookie);
+
+      res.clearCookie('url');
+
+      res.redirect(`/${query.url ? query.url : ''}`);
+    },
   );
 
   that.on('login', createLoginListener(that));

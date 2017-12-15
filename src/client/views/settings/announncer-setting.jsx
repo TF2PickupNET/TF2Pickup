@@ -29,6 +29,8 @@ class AnnounncerSetting extends PureComponent {
     classes: PropTypes.shape({
       headerPart: PropTypes.string.isRequired,
       details: PropTypes.string.isRequired,
+      rightContainer: PropTypes.string.isRequired,
+      verticalDivider: PropTypes.string.isRequired,
     }).isRequired,
     announcer: PropTypes.string.isRequired,
     announcers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,

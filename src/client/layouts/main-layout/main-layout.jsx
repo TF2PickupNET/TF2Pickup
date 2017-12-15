@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import {
   Drawer,
   breakpoints,
-  Layout,
 } from 'materialize-react';
 import { devices } from 'materialize-react/lib/styles/breakpoints';
 
@@ -23,7 +22,10 @@ import MainToolbar from './main-toolbar';
 class MainLayout extends PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
-    classes: PropTypes.shape({ container: PropTypes.string }).isRequired,
+    classes: PropTypes.shape({
+      container: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+    }).isRequired,
     open: PropTypes.bool.isRequired,
     onCloseDrawer: PropTypes.func.isRequired,
   };
@@ -39,12 +41,14 @@ class MainLayout extends PureComponent {
       padding: 16,
       boxSizing: 'border-box',
       flex: 1,
+
+      [breakpoints.only('desktop')]: { padding: 24 },
     },
 
     container: {
       display: 'flex',
       flexDirection: 'column',
-    }
+    },
   };
 
   render() {

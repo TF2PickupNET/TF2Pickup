@@ -1,7 +1,6 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
-import { Layout } from 'materialize-react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 

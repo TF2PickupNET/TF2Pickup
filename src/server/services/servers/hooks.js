@@ -69,6 +69,11 @@ export default {
           } catch (err) {
             log('Error while second try of configuring server', serverId, err);
 
+            await hook.app.service('discord-message').create({
+              channel: 'errors',
+              message: `Error while configuring server for pickup ${hook.data.id}`,
+            });
+
             // Set the pickup in the error state
             await hook.app.service('pickup').patch(
               pickup[0].id,

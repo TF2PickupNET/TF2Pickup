@@ -4,8 +4,10 @@ import authentication from './authentication';
 import pickup from './pickup';
 import pickupQueue from './pickup-queue';
 import servers from './servers';
-import slack from './slack';
 import mumbleChannels from './mumble-channels';
+import discord from './discord';
+import discordMessage from './discord-message';
+import discordChannels from './discord-channels';
 import voiceChannel from './voice-channel';
 
 /**
@@ -19,7 +21,9 @@ export default function services() {
     .configure(pickup)
     .configure(servers)
     .configure(pickupQueue)
-    .configure(slack)
     .configure(mumbleChannels)
+    .configure(discord)
+    .configure(discordMessage)
+    .configure(discordChannels)
     .configure(voiceChannel);
 }

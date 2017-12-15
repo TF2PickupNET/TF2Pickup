@@ -16,7 +16,6 @@
       "password": ""
     }
   },
-
   "service": {
     "steam": {
       "apikey": "25D833006F834D2FAF1A0A1F217D5606"
@@ -33,6 +32,12 @@
     "serveme": {
       "apikey-eu": "",
       "apikey-na": ""
+    },
+    "discord": {
+      "token": "",
+      "guild": {
+        "global": "101790253651599360"
+      }
     }
   }
 }

@@ -27,7 +27,9 @@ function View(props) {
       className={props.classes.container}
     >
       <Helmet>
-        <title>Settings</title>
+        <title>
+          Settings
+        </title>
       </Helmet>
 
       <RegionSetting />

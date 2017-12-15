@@ -9,7 +9,9 @@ export default function View() {
   return (
     <div>
       <Helmet>
-        <title>Profile</title>
+        <title>
+          Profile
+        </title>
       </Helmet>
     </div>
   );

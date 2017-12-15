@@ -104,11 +104,7 @@ class ClassList extends PureComponent {
    * @returns {JSX} - Returns the JSX.
    */
   renderTitle() {
-    const {
-      className,
-      gamemode,
-    } = this.props;
-    const ClassIcon = Icons[capitalize(className)];
+    const ClassIcon = Icons[capitalize(this.props.className)];
 
     return (
       <List.Item
@@ -124,11 +120,13 @@ class ClassList extends PureComponent {
       >
         <span className={this.props.classes.listHeader}>
           <Typography typography="headline">
-            {capitalize(className)}
+            {capitalize(this.props.className)}
           </Typography>
 
           <Typography typography="title">
-            {this.props.players.length} / {gamemodes[gamemode].slots[className]}
+            {this.props.players.length}
+            /
+            {gamemodes[this.props.gamemode].slots[this.props.className]}
           </Typography>
         </span>
       </List.Item>

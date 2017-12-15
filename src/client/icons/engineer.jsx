@@ -2,22 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { colors } from 'materialize-react';
 
-function Engineer({
-  color,
-  size,
-  ...props
-}) {
+function Engineer(props) {
   return (
     <svg
       x="0px"
       y="0px"
-      width={`${size}px`}
-      height={`${size}px`}
+      width={`${props.size}px`}
+      height={`${props.size}px`}
       viewBox="0 0 37.1 37.1"
-      {...props}
     >
       <path
-        fill={color}
+        fill={props.color}
         d={[
           'M34.853,24.17c1.948,1.949,2.597,4.635,2.042,7.092l-4.544-4.543l-5.657,5.656l4.543,',
           '4.547c-2.456,0.51-5.146-0.094-7.092-2.045c-2.089-2.082-2.689-5.145-1.809-7.783L10.002,',

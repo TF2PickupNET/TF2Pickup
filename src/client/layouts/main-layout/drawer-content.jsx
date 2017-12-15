@@ -115,7 +115,9 @@ class DrawerContent extends PureComponent {
         </Toolbar>
 
         <List>
-          <List.Subheader>Gamemodes</List.Subheader>
+          <List.Subheader>
+            Gamemodes
+          </List.Subheader>
 
           {Object.values(gamemodes).map(gamemode => (
             <ListItem

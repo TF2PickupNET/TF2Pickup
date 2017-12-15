@@ -75,10 +75,14 @@ function Partners(props) {
           />
 
           <Link href={partner.link}>
-            <Typography typography="title">{partner.title}</Typography>
+            <Typography typography="title">
+              {partner.title}
+            </Typography>
           </Link>
 
-          <Typography typography="body1">{partner.description}</Typography>
+          <Typography typography="body1">
+            {partner.description}
+          </Typography>
         </span>
       ))}
     </div>

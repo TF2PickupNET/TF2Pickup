@@ -17,14 +17,16 @@ const handleReconnectPress = () => app.io.connect();
 export default function NoConnectionDialog(props) {
   return (
     <Dialog {...props}>
-      <Dialog.Header>No connection</Dialog.Header>
+      <Dialog.Header>
+        No connection
+      </Dialog.Header>
 
       <Dialog.Content>
         Please make sure you have a working internet connection.
         <br />
         If you have a internet connection, we are most likely restarting the server.
         <br />
-        If the server {'isn\'t'} back online in a few minutes, please contact one of the admins.
+        If the server is not back online in a few minutes, please contact one of the admins.
       </Dialog.Content>
 
       <Dialog.Actions>

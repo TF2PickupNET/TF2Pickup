@@ -84,13 +84,11 @@ class RemoteMarkdown extends PureComponent {
   }
 
   render() {
-    const { markdown } = this.state;
-
-    if (markdown) {
+    if (this.state.markdown) {
       return this.props.children(
         <ReactMarkdown
           renderers={RemoteMarkdown.renderers}
-          source={markdown}
+          source={this.state.markdown}
           className={this.props.classes.container}
         />,
       );

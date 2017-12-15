@@ -2,22 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { colors } from 'materialize-react';
 
-function Heavy({
-  color,
-  size,
-  ...props
-}) {
+function Heavy(props) {
   return (
     <svg
       x="0px"
       y="0px"
-      width={`${size}px`}
-      height={`${size}px`}
+      width={`${props.size}px`}
+      height={`${props.size}px`}
       viewBox="0 0 37.1 37.1"
       {...props}
     >
       <path
-        fill={color}
+        fill={props.color}
         d={[
           'M4.801,30.137l-1.76,1.762l-1.763-1.805l1.763-1.717L4.801,30.137z M3.784,25.459l9.127,',
           '9.129l-1.434,1.439l-9.131-9.133L3.784,25.459z M7.445,32.734l-1.763,1.764l-1.761-',

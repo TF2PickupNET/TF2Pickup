@@ -14,7 +14,9 @@ export default function View() {
   return (
     <div>
       <Helmet>
-        <title>Help</title>
+        <title>
+          Help
+        </title>
       </Helmet>
 
       <MarkdownView url={HELP_URL} />

@@ -15,6 +15,7 @@ import app from '../../app';
 import announcers from '../../announcers';
 import { filter } from '../../../utils/functions';
 import hasPermission from '../../../utils/has-permission';
+import playSound from '../../utils/play-sound';
 
 const announcersAsArray = Object.values(announcers);
 
@@ -25,15 +26,23 @@ const announcersAsArray = Object.values(announcers);
  */
 class AnnounncerSetting extends PureComponent {
   static propTypes = {
-    classes: PropTypes.shape({ headerPart: PropTypes.string.isRequired }).isRequired,
+    classes: PropTypes.shape({
+      headerPart: PropTypes.string.isRequired,
+      details: PropTypes.string.isRequired,
+    }).isRequired,
     announcer: PropTypes.string.isRequired,
-    announcers: PropTypes.arrayOf(PropTypes.string).isRequired,
+    announcers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   };
 
   static styles = {
     headerPart: {
       flexBasis: '40%',
       flexShrink: 0,
+    },
+
+    details: {
+      justifyContent: 'space-between',
+      alignItems: 'center',
     },
   };
 
@@ -71,6 +80,13 @@ class AnnounncerSetting extends PureComponent {
   };
 
   /**
+   * Play the ready up sound of the current announcer.
+   */
+  handleTestAnnouncerPress = () => {
+    playSound(`${this.state.announcer}/ready_up`);
+  };
+
+  /**
    * Emit the change-region event when the save button is clicked.
    */
   handleSave = () => {
@@ -81,6 +97,11 @@ class AnnounncerSetting extends PureComponent {
     );
   };
 
+  /**
+   * Render the announcers that the user can select.
+   *
+   * @returns {JSX} - Returns the JSX.
+   */
   renderAnnouncers() {
     return this.props.announcers.map(announcer => (
       <Label key={announcer.name}>
@@ -107,13 +128,17 @@ class AnnounncerSetting extends PureComponent {
           </span>
         </ExpansionPanel.Summary>
 
-        <ExpansionPanel.Details>
+        <ExpansionPanel.Details className={this.props.classes.details}>
           <RadioButtonGroup
             selected={this.state.announcer}
             onChange={this.handleAnnouncerChange}
           >
             {this.renderAnnouncers()}
           </RadioButtonGroup>
+
+          <Button onPress={this.handleTestAnnouncerPress}>
+            Test Announcer
+          </Button>
         </ExpansionPanel.Details>
 
         <Divider />

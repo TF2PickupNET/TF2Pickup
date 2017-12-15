@@ -110,7 +110,7 @@ class VolumeSetting extends PureComponent {
           </span>
 
           <span className={this.props.classes.headerPart}>
-            {this.props.volume}%
+            {`${this.props.volume}%`}
           </span>
         </ExpansionPanel.Summary>
 

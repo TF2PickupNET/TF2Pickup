@@ -68,11 +68,19 @@ class DiscordChannels {
   }
 }
 
+const defaultService = {
+  create: () => Promise.resolve(true),
+  delete: () => Promise.resolve(true),
+};
+
 /**
  * Mumble service.
  */
 export default function discordChannels() {
   const that = this;
 
-  that.service('discord-channels', new DiscordChannels());
+  that.service(
+    'discord-channels',
+    config.has('service.discord.token') ? new DiscordChannels() : defaultService,
+  );
 }

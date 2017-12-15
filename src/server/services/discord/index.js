@@ -3,6 +3,7 @@ import Discord from 'discord.js';
 import debug from 'debug';
 
 const log = debug('TF2Pickup:discord');
+const token = config.get('service.discord.token');
 
 /**
  * Discord service.
@@ -19,8 +20,6 @@ class DiscordService {
    */
   setup() {
     return new Promise((resolve, reject) => {
-      const botToken = config.get('service.discord.token');
-
       const timeout = setTimeout(reject, 3 * 1000);
 
       this.bot.on('ready', () => {
@@ -31,7 +30,7 @@ class DiscordService {
         resolve();
       });
 
-      this.bot.login(botToken);
+      this.bot.login(token);
     });
   }
 
@@ -40,7 +39,7 @@ class DiscordService {
   }
 }
 
-const devService = { get: () => Promise.resolve() };
+const defaultService = { get: () => Promise.resolve() };
 
 /**
  * Mumble service.
@@ -50,6 +49,6 @@ export default function discord() {
 
   that.service(
     'discord',
-    that.get('env') === 'dev' ? devService : new DiscordService(),
+    token ? new DiscordService() : defaultService,
   );
 }

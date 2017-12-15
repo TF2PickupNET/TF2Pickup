@@ -138,6 +138,11 @@ export default {
         } catch (error) {
           log('Error while getting server for pickup', hook.data.id, error);
 
+          await hook.app.service('discord-message').create({
+            channel: 'errors',
+            message: `Error while reserving server for pickup ${hook.data.id}`,
+          });
+
           return {
             ...hook,
             data: {

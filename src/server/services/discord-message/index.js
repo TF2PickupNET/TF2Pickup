@@ -35,11 +35,16 @@ class DiscordMessage {
   }
 }
 
+const defaultService = { create: () => Promise.resolve(true) };
+
 /**
  * Mumble service.
  */
 export default function discordMessage() {
   const that = this;
 
-  that.service('discord-message', new DiscordMessage());
+  that.service(
+    'discord-message',
+    config.has('service.discord.token') ? new DiscordMessage() : defaultService,
+  );
 }

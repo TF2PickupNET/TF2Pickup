@@ -129,6 +129,8 @@ export default function authentication() {
     (req, res) => {
       const query = queryString.parse(req.headers.cookie);
 
+      res.clearCookie('url');
+
       res.redirect(`/${query.url ? query.url : ''}`);
     },
   );

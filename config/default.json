@@ -35,18 +35,8 @@
     },
     "discord": {
       "token": "",
-      "channel": "",
-      "eu": {
-        "guild": "",
-        "channel": ""
-      },
-      "na": {
-        "guild": "",
-        "channel": ""
-      },
-      "os": {
-        "guild": "",
-        "channel": ""
+      "guild": {
+        "global": "101790253651599360"
       }
     }
   }

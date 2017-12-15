@@ -1,34 +1,15 @@
 import config from 'config';
-import Discord from 'discord.js';
 import debug from 'debug';
 
 const log = debug('TF2Pickup:discord-channels');
-const bot = new Discord.Client();
 
 /**
  * Discord service.
  *
  * @class Discord Service class.
  */
-class DiscordService {
-  isReady = false;
-
+class DiscordChannels {
   channels = {};
-
-  /**
-   * Mumble service setup.
-   */
-  setup() {
-    const botToken = config.get('service.discord.token');
-
-    bot.on('ready', () => {
-      this.isReady = true;
-
-      log('Service connected!');
-    });
-
-    bot.login(botToken);
-  }
 
   /**
    * Create discord voice channel.
@@ -41,28 +22,23 @@ class DiscordService {
     region,
     name,
   }) {
-    if (!this.isReady) {
-      throw new Error('Discord bot is not ready!');
-    }
-
-    const guildId = config.get(`service.discord.${region}.guild`);
+    const bot = await this.app.service('discord').get();
+    const guildId = config.get(`service.discord.guild.${region}`);
     const guild = bot.guilds.get(guildId);
-
-    const pickup = `${region.toUpperCase()}-${name}`;
-    const reason = `Created for pickup ${pickup}`;
+    const reason = `Created for pickup ${name}`;
 
     try {
-      const channelRED = await guild.createChannel(`Pickup ${pickup} RED`, 'voice', [], reason);
-      const channelBLU = await guild.createChannel(`Pickup ${pickup} BLU`, 'voice', [], reason);
+      const channelRED = await guild.createChannel(`Pickup ${name} RED`, 'voice', [], reason);
+      const channelBLU = await guild.createChannel(`Pickup ${name} BLU`, 'voice', [], reason);
 
-      log(`Created channels for ${pickup}!`);
+      log(`Created discord channels for Pickup ${name}!`);
 
-      this.channels[pickup] = {
+      this.channels[name] = {
         red: channelRED,
         blu: channelBLU,
       };
     } catch (error) {
-      log(`Error while creating discord channels ${error}`);
+      log('Error while creating discord channels', error);
     }
   }
 
@@ -73,69 +49,22 @@ class DiscordService {
    * @param {Object} channel.region - Discord channel region.
    * @param {Object} channel.name - Discord channel name.
    */
-  delete({
-    region,
-    name,
-  }) {
-    if (!this.isReady) {
-      throw new Error('Discord bot is not ready!');
-    }
-
-    const pickup = `${region.toUpperCase()}-${name}`;
-    const channels = this.channels[pickup];
-    const reason = `Pickup ${pickup} ended`;
+  async delete({ name }) {
+    const channels = this.channels[name];
+    const reason = `Pickup ${name} ended`;
 
     if (!channels) {
-      log(`Discord channels for pickup ${pickup} does not exist`);
+      log(`Discord channels for pickup ${name} does not exist`);
     }
-
-    log(`Removed channels for ${pickup}!`);
 
     try {
-      channels.red.delete(reason);
-      channels.blu.delete(reason);
+      await channels.red.delete(reason);
+      await channels.blu.delete(reason);
+
+      log(`Removed channels for ${name}!`);
     } catch (error) {
-      log(`Error while deleting discord channels ${error}`);
+      log('Error while deleting discord channels', error);
     }
-  }
-
-  /**
-   * Message Regional Discord Channel.
-   *
-   * @param {Object} message - Message to send.
-   * @param {Object} message.text - Text message to send.
-   * @param {Object} message.region - Region to send message in.
-   */
-  async message({
-    text,
-    region,
-  }) {
-    if (!this.isReady) {
-      throw new Error('Discord bot is not ready!');
-    }
-
-    const guildId = config.get(`service.discord.${region}.guild`);
-    const channelId = config.get(`service.discord.${region}.channel`);
-    const channel = bot.guilds.get(guildId).channels.get(channelId);
-
-    await channel.send(text);
-  }
-
-  /**
-   * Message Global Discord Channel.
-   *
-   * @param {Object} text - Text message to send.
-   */
-  async messageGlobal(text) {
-    if (!this.isReady) {
-      throw new Error('Discord bot is not ready!');
-    }
-
-    const guildId = config.get('service.discord.guild');
-    const channelId = config.get('service.discord.channel');
-    const channel = bot.guilds.get(guildId).channels.get(channelId);
-
-    await channel.send(text);
   }
 }
 
@@ -145,5 +74,5 @@ class DiscordService {
 export default function discordChannels() {
   const that = this;
 
-  that.service('discord', new DiscordService());
+  that.service('discord-channels', new DiscordChannels());
 }

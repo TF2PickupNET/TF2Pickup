@@ -79,7 +79,7 @@ async function populateUsers(hook) {
         mapObject(
           map((player) => {
             const user = users[player.id];
-            
+
             return {
               ...player,
               name: user.name,

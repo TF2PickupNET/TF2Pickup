@@ -1,5 +1,6 @@
 import config from 'config';
 import debug from 'debug';
+import hooks from 'feathers-hooks-common';
 
 const log = debug('TF2Pickup:discord-channels');
 
@@ -79,8 +80,12 @@ const defaultService = {
 export default function discordChannels() {
   const that = this;
 
+  log('Initializing discord-channels service');
+
   that.service(
     'discord-channels',
     config.has('service.discord.token') ? new DiscordChannels() : defaultService,
   );
+
+  that.service('discord-channels').hooks({ before: { all: hooks.disallow('external') } });
 }

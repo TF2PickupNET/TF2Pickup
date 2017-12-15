@@ -1,6 +1,7 @@
 import config from 'config';
 import Discord from 'discord.js';
 import debug from 'debug';
+import hooks from 'feathers-hooks-common';
 
 const log = debug('TF2Pickup:discord');
 const token = config.get('service.discord.token');
@@ -47,8 +48,12 @@ const defaultService = { get: () => Promise.resolve() };
 export default function discord() {
   const that = this;
 
+  log('Initializing discord service');
+
   that.service(
     'discord',
     token ? new DiscordService() : defaultService,
   );
+
+  that.service('discord').hooks({ before: { all: hooks.disallow('external') } });
 }

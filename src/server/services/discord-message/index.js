@@ -1,5 +1,6 @@
 import config from 'config';
 import debug from 'debug';
+import hooks from 'feathers-hooks-common';
 
 const log = debug('TF2Pickup:discord-message');
 const guildId = config.get('service.discord.guild.global');
@@ -43,8 +44,12 @@ const defaultService = { create: () => Promise.resolve(true) };
 export default function discordMessage() {
   const that = this;
 
+  log('Initializing discord-message service');
+
   that.service(
     'discord-message',
     config.has('service.discord.token') ? new DiscordMessage() : defaultService,
   );
+
+  that.service('discord-message').hooks({ before: { all: hooks.disallow('external') } });
 }

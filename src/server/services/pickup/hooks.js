@@ -1,4 +1,3 @@
-import config from 'config';
 import debug from 'debug';
 import classnames from 'classnames';
 import { iff, isProvider } from 'feathers-hooks-common';

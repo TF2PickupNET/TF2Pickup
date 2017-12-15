@@ -7,6 +7,7 @@ import servers from './servers';
 import mumbleChannels from './mumble-channels';
 import discord from './discord';
 import discordMessage from './discord-message';
+import discordChannels from './discord-channels';
 import voiceChannel from './voice-channel';
 
 /**
@@ -23,5 +24,6 @@ export default function services() {
     .configure(mumbleChannels)
     .configure(discord)
     .configure(discordMessage)
+    .configure(discordChannels)
     .configure(voiceChannel);
 }

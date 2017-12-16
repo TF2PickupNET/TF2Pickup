@@ -86,7 +86,13 @@ class View extends PureComponent {
    * Update the state when the patched event get's fired.
    */
   handlePickupUpdate = (data) => {
-    this.setState({ pickup: data });
+    this.setState((state) => {
+      if (state.pickup.id === data.id) {
+        return { pickup: data };
+      }
+
+      return null;
+    });
   };
 
   render() {

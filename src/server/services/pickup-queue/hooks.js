@@ -1,79 +1,67 @@
-import {
-  pipe,
-  map,
-  mapObject, arrayToObject,
-} from '../../../utils/functions';
-import { getPlayers } from '../../../utils/pickup';
+import { map } from '../../../utils/functions';
+import populateUserData from '../populate-user-data';
 
 import statuses from './statuses';
 
 /**
- * Populate the pickup with the correct user data.
+ * Populate a pickup with the user data that is needed on the client.
  *
- * @param {Object} app - The feathers app object.
- * @param {Object} pickup - The pickup to populate.
- * @returns {Object} - Returns the new populated pickup.
+ * @param {Object} hook - The hook object.
+ * @param {Object} pickup - The pickup to populate the classes for.
+ * @returns {Object} - Returns the populated pickup.
  */
-async function populatePickup(app, pickup) {
-  const usersService = app.service('users');
-  const allUsers = await Promise.all(
-    pipe(
-      getPlayers,
-      map(player => usersService.get(player.id)),
-    )(pickup.classes),
-  );
-  const users = arrayToObject(user => user.id)(allUsers);
+async function populatePickup(hook, pickup) {
+  const classes = await populateUserData(hook.app, pickup);
 
   return {
     ...pickup,
-    classes: mapObject(
-      map((player) => {
-        const user = users[player.id];
-
-        return {
-          ...player,
-          name: user.name,
-          avatar: user.services.steam.avatar.medium,
-          roles: user.roles,
-        };
-      }),
-    )(pickup.classes),
+    classes,
   };
 }
 
 export default {
   after: {
-    async find(props) {
+    async find(hook) {
       const pickups = await Promise.all(
-        map(pickup => populatePickup(props.app, pickup))(props.result),
+        map(pickup => populatePickup(hook.app, pickup))(hook.result),
       );
 
       return {
-        ...props,
+        ...hook,
         result: pickups,
       };
     },
+
+    async get(hook) {
+      const populatedPickup = await populatePickup(hook.app, hook.result);
+
+      return {
+        ...hook,
+        result: populatedPickup,
+      };
+    },
+
     patch: [
-      (props) => {
-        switch (props.result.status) {
+      (hook) => {
+        switch (hook.result.status) {
           case 'waiting': {
-            statuses.waiting(props);
+            statuses.waiting(hook);
             break;
           }
           case 'ready-up': {
-            statuses.readyUp(props);
+            statuses.readyUp(hook);
             break;
           }
           default: break;
         }
 
-        return props;
+        return hook;
       },
-      async (props) => {
-        const populatedPickup = await populatePickup(props.app, props.result);
+      async (hook) => {
+        const populatedPickup = await populatePickup(hook.app, hook.result);
 
         return {
-          ...props,
+          ...hook,
           result: populatedPickup,
         };
       },

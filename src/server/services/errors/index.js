@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 import service from 'feathers-mongoose';
 import debug from 'debug';
+import hooks from 'feathers-hooks-common';
 
 import schema from './schema';
-import hooks from './hooks';
 
 const log = debug('TF2Pickup:logs');
 
@@ -20,5 +20,14 @@ export default function errors() {
     id: 'id',
   }));
 
-  that.service('errors').hooks(hooks);
+  that.service('errors').hooks({
+    before: {
+      create: hooks.disallow('external'),
+      get: hooks.disallow(),
+      find: hooks.disallow(),
+      update: hooks.disallow(),
+      patch: hooks.disallow(),
+      remove: hooks.disallow(),
+    },
+  });
 }

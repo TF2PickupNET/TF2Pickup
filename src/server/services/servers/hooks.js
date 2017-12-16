@@ -36,47 +36,48 @@ export default {
         // Wait 60 seconds, we might be able to change this dependent on the region
         await sleep(60 * 1000);
 
-        log('Configuring server with id', serverId);
+        const pickupQuery = await hook.app.service('pickup').find({ query: { serverId } });
+        const pickup = pickupQuery[0];
 
-        const pickup = await hook.app.service('pickup').find({ query: { serverId } });
+        log('Configuring server for pickup', pickup.id);
 
         // Try for the first time configuring the server
         try {
           await configureServer(hook.app, serverId);
 
-          log('Successfully configured server for pickup', pickup[0].id);
+          log('Successfully configured server for pickup', pickup.id);
 
           // Setting the pickup state to waiting-for-game-to-start
           await hook.app.service('pickup').patch(
-            pickup[0].id,
+            pickup.id,
             { $set: { status: 'waiting-for-game-to-start' } },
           );
         } catch (error) {
-          log('Error while first try of configuring server', serverId, error);
+          log('Error while first try of configuring server', pickup.id, error);
 
           // Wait another 30 seconds before trying again
-          await sleep(30 * 1000);
+          await sleep(15 * 1000);
 
-          log('Retrying configuration of server', serverId);
+          log('Retrying configuration of server', pickup.id);
 
           try {
             await configureServer(hook.app, serverId);
 
             await hook.app.service('pickup').patch(
-              pickup[0].id,
+              pickup.id,
               { $set: { status: 'waiting-for-game-to-start' } },
             );
           } catch (err) {
-            log('Error while second try of configuring server', serverId, err);
+            log('Error while second try of configuring server', pickup.id, err);
 
             await hook.app.service('discord-message').create({
               channel: 'errors',
-              message: `Error while configuring server for pickup ${hook.data.id}`,
+              message: `Error while configuring server for pickup ${pickup.id}`,
             });
 
             // Set the pickup in the error state
             await hook.app.service('pickup').patch(
-              pickup[0].id,
+              pickup.id,
               { $set: { status: 'server-configuration-error' } },
             );
           }

@@ -1,4 +1,5 @@
 import debug from 'debug';
+import hooks from 'feathers-hooks-common';
 
 const log = debug('TF2Pickup:voice-channel');
 
@@ -92,4 +93,6 @@ export default function voiceChannel() {
   const that = this;
 
   that.service('voice-channel', that.get('env') === 'dev' ? devService : service);
+
+  that.service('voice-channel').hooks({ before: { all: hooks.disallow('external') } });
 }

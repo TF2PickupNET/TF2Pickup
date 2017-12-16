@@ -148,7 +148,7 @@ export default async function generateTeams(props, players, mode) {
     const playersForClass = pipe(
       map((player) => {
         return {
-          ...player,
+          id: player.id,
           elo: users[player.id].elos[className],
         };
       }),

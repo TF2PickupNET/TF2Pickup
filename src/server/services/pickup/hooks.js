@@ -138,12 +138,16 @@ export default {
 
     async patch(hook) {
       if (hook.data.$set.status === 'game-finished') {
+        const pickup = await hook.service.get(hook.id);
+
         await hook.app.service('voice-channel').delete({
-          region: hook.result.region,
-          name: hook.result.id,
+          region: pickup.region,
+          name: hook.id,
         });
 
-        await cleanupServer(hook.app, hook.result.id);
+        if (pickup.serverId) {
+          await cleanupServer(hook.app, hook.id);
+        }
       }
 
       return hook;

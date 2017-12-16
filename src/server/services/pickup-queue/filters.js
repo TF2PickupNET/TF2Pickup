@@ -1,8 +1,8 @@
-import get from 'lodash.get';
+import { pluck } from '../../../utils/functions';
 
 export default {
   patched(data, connection) {
-    const region = get(connection, 'user.settings.region', 'eu');
+    const region = pluck('user.settings.region', 'eu')(connection);
 
     return data.region === region ? data : false;
   },

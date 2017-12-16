@@ -7,6 +7,8 @@ import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
 import app from '../../app';
+import playSound from '../../utils/play-sound';
+import { pluck } from '../../../utils/functions';
 
 import Info from './info/info';
 import Connect from './info/connect';
@@ -24,10 +26,14 @@ class View extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({ container: PropTypes.string.isRequired }).isRequired,
     match: PropTypes.shape({ params: PropTypes.shape({ id: PropTypes.string }) }).isRequired,
-    user: PropTypes.shape({}),
+    userId: PropTypes.string,
+    announcer: PropTypes.string,
   };
 
-  static defaultProps = { user: null };
+  static defaultProps = {
+    userId: null,
+    announcer: null,
+  };
 
   static styles = {
     container: {
@@ -46,18 +52,19 @@ class View extends PureComponent {
    */
   async componentWillMount() {
     const service = app.service('pickup');
+
+    service.on('patched', this.handlePickupUpdate);
+
     const pickup = await service.get(this.id);
 
     this.setState({ pickup });
-
-    service.on('patched', this.handlePickupUpdate);
   }
 
   /**
-   * When the users object changes, we refetch the pickup.
+   * When the user id changes, the user log in / out we refetch the pickup.
    */
   async componentWillReceiveProps(nextProps) {
-    if (nextProps.user !== this.props.user) {
+    if (nextProps.userId !== this.props.userId) {
       const pickup = await app.service('pickup').get(this.id);
 
       this.setState({ pickup });
@@ -88,6 +95,14 @@ class View extends PureComponent {
   handlePickupUpdate = (data) => {
     this.setState((state) => {
       if (state.pickup.id === data.id) {
+        if (
+          state.pickup.status !== 'waiting-for-game-to-start'
+          && data.status === 'waiting-for-game-to-start'
+          && this.props.announcer
+        ) {
+          playSound(`${this.props.announcer}/gamestart`);
+        }
+
         return { pickup: data };
       }
 
@@ -131,6 +146,9 @@ class View extends PureComponent {
 
 export default connect(
   (state) => {
-    return { user: state.user };
+    return {
+      userId: pluck('id')(state.user),
+      announcer: pluck('settings.announcer')(state.user),
+    };
   },
 )(injectSheet(View.styles)(View));

@@ -49,7 +49,7 @@ export default function authentication() {
 
   const that = this;
   const options = {
-    secret: config.get('server.auth.secret'),
+    secret: config.get('auth.secret'),
     cookie: {
       enabled: true,
       name: 'feathers-jwt',

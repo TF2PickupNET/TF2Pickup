@@ -1,15 +1,27 @@
 import mumble from 'mumble';
 import config from 'config';
 import debug from 'debug';
-import regions from '@tf2-pickup/configs/regions';
+import fs from 'fs';
+import path from 'path';
+import hooks from 'feathers-hooks-common';
 
-import { getMumbleIP } from '../../../config';
 import {
   map,
   pipe,
 } from '../../../utils/functions';
 
-const log = debug('TF2Pickup:mumble');
+const log = debug('TF2Pickup:mumble-channels');
+
+const readFile = url => new Promise((resolve, reject) => {
+  // eslint-disable-next-line promise/prefer-await-to-callbacks
+  fs.readFile(url, (err, data) => {
+    if (err) {
+      return reject(err);
+    }
+
+    return resolve(data);
+  });
+});
 
 /**
  * Mumble service.
@@ -25,35 +37,51 @@ class MumbleService {
    * @returns {Promise} - Returns a promise for .
    */
   setup() {
+    const configPath = path.join(process.cwd(), '/config');
+
     return Promise.all(
       pipe(
-        Object.keys,
-        map(region => this.connect(getMumbleIP(region), region)),
-      )(regions),
+        Object.entries,
+        map(async ([region, options]) => {
+          if (!options.key || !options.cert || !options.ip) {
+            return;
+          }
+
+          try {
+            const key = await readFile(path.join(configPath, options.key));
+            const cert = await readFile(path.join(configPath, options.cert));
+
+            await this.connect(region, options.ip, {
+              key,
+              cert,
+            });
+          } catch (error) {
+            log('Error while getting one of the pem files', region, error);
+          }
+        }),
+      )(config.get('mumble.servers')),
     );
   }
 
   /**
    * Connect to a specific mumble server.
    *
-   * @param {String} url - The url of the mumble server.
-   * @param {String} region - The name of the region.
+   * @param {String} region - The region of the mumble server.
+   * @param {String} ip - The url of the region.
+   * @param {Object} options - The options for the connection.
    * @returns {Promise} - Returns a promise which will resolve
    * when the connection has been established.
    */
-  connect(url, region) {
-    return new Promise((resolve, reject) => {
-      const mumbleUsername = config.get('server.mumble.username');
-      const mumblePassword = config.get('server.mumble.password');
-
-      mumble.connect(url, {}, (error, connection) => {
+  connect(region, ip, options) {
+    return new Promise((resolve) => {
+      mumble.connect(ip, options, (error, connection) => {
         if (error) {
           log(`Error while connecting to ${region} mumble server`, error);
 
-          reject(error);
+          return;
         }
 
-        connection.authenticate(mumbleUsername, mumblePassword);
+        connection.authenticate('TF2Pickup');
 
         connection.on('initialized', () => {
           log(`Successfully connected to ${region} mumble`);
@@ -126,6 +154,8 @@ export default function mumbleChannels() {
 
   that.service(
     'mumble-channels',
-    that.get('env') === 'dev' ? devService : new MumbleService(),
+    that.get('env') === 'd' ? devService : new MumbleService(),
   );
+
+  that.service('mumble-channels').hooks({ before: { all: hooks.disallow('external') } });
 }

@@ -41,10 +41,7 @@ async function executeCommands(connection, server, pickup) {
   await connection.send(`logaddress_add ${listenerAddr}`);
   await connection.send(`tftrue_logs_prefix TF2Pickup ${regionFullname} #${pickup.id}`);
   await connection.send(`sv_logsecret ${pickup.logSecret}`);
-
-  if (config.has('service.logstf.apikey')) {
-    await connection.send(`tftrue_logs_apikey ${config.get('service.logstf.apikey')}`);
-  }
+  await connection.send(`tftrue_logs_apikey ${config.get('service.logstf.apikey')}`);
 }
 
 /**

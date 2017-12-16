@@ -36,7 +36,7 @@ async function startServer() {
 }
 
 process.on('unhandledRejection', (reason, promise) => {
-  log('Unhandled promise rejection', promise);
+  log('Unhandled promise rejection', promise, reason);
 });
 
 startServer();

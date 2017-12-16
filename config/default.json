@@ -2,33 +2,25 @@
   "server": {
     "port": 3000,
     "ip": "localhost",
-    "mongourl": "mongodb://localhost:27017/tf2pickup",
-    "log_listener_port": 3500,
-    "auth": {
-      "required_hours": 1000,
-      "secret": "someamazingsecret"
-    },
-    "mumble": {
-      "eu": "",
-      "na": "",
-      "oc": "",
-      "username": "MumbleUser",
-      "password": ""
-    }
+    "log_listener_port": 3500
   },
+
+  "beta": true,
+
+  "mongourl": "mongodb://localhost:27017/tf2pickup",
+
+  "auth": {
+    "required_hours": 1000,
+    "secret": "someamazingsecret",
+    "steam-group": ""
+  },
+
+  "mumble": { "servers": {} },
+
   "service": {
-    "steam": {
-      "apikey": "25D833006F834D2FAF1A0A1F217D5606"
-    },
-    "ozfortress": {
-      "apikey": ""
-    },
-    "etf2l": {
-      "divs": [
-        "6v6",
-        "9v9"
-      ]
-    },
+    "steam": { "apikey": "25D833006F834D2FAF1A0A1F217D5606" },
+    "ozfortress": { "apikey": "" },
+    "logstf": { "apikey": "" },
     "serveme": {
       "apikey-eu": "",
       "apikey-na": ""

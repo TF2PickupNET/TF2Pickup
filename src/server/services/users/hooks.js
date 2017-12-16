@@ -2,6 +2,9 @@ import SteamCommunity from 'steamcommunity';
 import debug from 'debug';
 import config from 'config';
 import errors from 'feathers-errors';
+import hooks from 'feathers-hooks-common';
+
+import { omit } from '../../../utils/functions';
 
 import getUserData from './third-party-services';
 import getTF2Hours from './third-party-services/steam/get-tf2-hours';
@@ -10,8 +13,40 @@ import getGroupMembers from './third-party-services/steam/get-group-members';
 const community = new SteamCommunity();
 const log = debug('TF2Pickup:users:hooks');
 
+/**
+ * Remove the sensible data from the users object.
+ *
+ * @param {Object} hook - The hook object.
+ * @returns {Object} - Returns the new hook object.
+ */
+function removeSensibleData(hook) {
+  if (hook.id === hook.params.user.id) {
+    return {
+      ...hook,
+      result: omit(
+        'elos',
+        'lastUpdate',
+      )(hook.result),
+    };
+  }
+
+  return {
+    ...hook,
+    result: omit(
+      'elos',
+      'settings',
+      'hasAcceptedTheRules',
+      'lastUpdate',
+      'friends',
+      'boughtAnnouncers',
+    )(hook.result),
+  };
+}
+
 export default {
   before: {
+    find: hooks.disallow('external'),
+
     create: [
       // Check if the user has enough hours
       async (hook) => {
@@ -26,18 +61,18 @@ export default {
           ].join(' '));
         }
 
-        if (tf2Hours < config.get('server.auth.required_hours')) {
+        if (tf2Hours < config.get('auth.required_hours')) {
           throw new errors.Forbidden([
             'You don\'t have the required minimum hours in TF2 to play TF2Pickup',
-            `You will atleast need ${config.get('server.auth.required_hours')} in TF2.`,
+            `You will atleast need ${config.get('auth.required_hours')} in TF2.`,
           ].join(' '));
         }
       },
       // Check if the user is in the beta group
       async (hook) => {
-        if (config.has('beta') && hook.app.get('env') === 'dev') {
+        if (config.get('beta') && hook.app.get('env') !== 'dev') {
           const groupMembers = await getGroupMembers(
-            config.get('beta.steam-group'),
+            config.get('auth.steam-group'),
             hook.app,
           );
 
@@ -75,5 +110,8 @@ export default {
         });
       });
     },
+
+    get: hooks.iff(hooks.isProvider('external'), removeSensibleData),
+    patch: hooks.iff(hooks.isProvider('external'), removeSensibleData),
   },
 };

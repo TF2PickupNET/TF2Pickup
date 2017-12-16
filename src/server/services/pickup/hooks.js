@@ -1,6 +1,5 @@
 import debug from 'debug';
 import classnames from 'classnames';
-import { iff, isProvider } from 'feathers-hooks-common';
 
 import hasPermission from '../../../utils/has-permission';
 import {
@@ -9,10 +8,8 @@ import {
   omit,
   assign,
   map,
-  flatten,
-  arrayToObject,
-  mapObject,
 } from '../../../utils/functions';
+import populateUserData from '../populate-user-data';
 
 import reserveServer from './reserve-server';
 import cleanupServer from './cleanup-server';
@@ -31,8 +28,11 @@ async function populateServer(hook) {
     'game-is-live',
   ].includes(hook.result.status);
 
-  if (!isActiveGame) {
-    return Object.assign({}, hook, { result: omit('serverId', 'logSecret')(hook.result) });
+  if (!isActiveGame || !hook.result.serverId) {
+    return {
+      ...hook,
+      result: omit('serverId', 'logSecret')(hook.result),
+    };
   }
 
   const server = await hook.app.service('servers').get(hook.result.serverId);
@@ -44,12 +44,13 @@ async function populateServer(hook) {
     rconPassword: canSeeServer,
   }).split(' ');
 
-  return Object.assign({}, hook, {
+  return {
+    ...hook,
     result: pipe(
       omit('serverId', 'logSecret'),
       assign({ server: pick(...validKeys)(server) }),
     )(hook.result),
-  });
+  };
 }
 
 /**
@@ -59,35 +60,17 @@ async function populateServer(hook) {
  * @returns {Object} - The transformed hook.
  */
 async function populateUsers(hook) {
-  const usersService = hook.app.service('users');
-  const allUsers = await Promise.all(
-    pipe(
-      Object.values,
-      map(Object.values),
-      flatten,
-      map(player => usersService.get(player.id)),
-    )(hook.result.teams),
-  );
-  const users = arrayToObject(user => user.id)(allUsers);
+  const redTeam = await populateUserData(hook.app, hook.result.teams.red);
+  const bluTeam = await populateUserData(hook.app, hook.result.teams.blu);
 
   return {
     ...hook,
     result: {
       ...hook.result,
-      teams: mapObject(
-        mapObject(
-          map((player) => {
-            const user = users[player.id];
-
-            return {
-              ...player,
-              name: user.name,
-              avatar: user.services.steam.avatar.medium,
-              roles: user.roles,
-            };
-          }),
-        ),
-      )(hook.result.teams),
+      teams: {
+        red: redTeam,
+        blu: bluTeam,
+      },
     },
   };
 }
@@ -152,39 +135,40 @@ export default {
         }
       },
     ],
+
+    async patch(hook) {
+      if (hook.data.$set.status === 'game-finished') {
+        await hook.app.service('voice-channel').delete({
+          region: hook.result.region,
+          name: hook.result.id,
+        });
+
+        await cleanupServer(hook.app, hook.result.id);
+      }
+
+      return hook;
+    },
   },
   after: {
-    create(props) {
-      props.app.service('pickup').emit('redirect', {
-        id: props.result.id,
+    create(hook) {
+      hook.app.service('pickup').emit('redirect', {
+        id: hook.result.id,
         users: pipe(
           Object.values,
           map(Object.values),
           map(player => player.id),
-        )(props.result.teams),
+        )(hook.result.teams),
       });
     },
 
     patch: [
-      async (hook) => {
-        if (hook.result.status === 'game-finished') {
-          await hook.app.service('voice-channel').delete({
-            region: hook.result.region,
-            name: hook.result.id,
-          });
-
-          await cleanupServer(hook.app, hook.result.id);
-        }
-      },
-      iff(isProvider('external'), [
-        populateServer,
-        populateUsers,
-      ]),
-    ],
-
-    get: iff(isProvider('external'), [
       populateServer,
       populateUsers,
-    ]),
+    ],
+
+    get: [
+      populateServer,
+      populateUsers,
+    ],
   },
 };

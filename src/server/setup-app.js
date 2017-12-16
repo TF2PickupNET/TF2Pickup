@@ -27,7 +27,7 @@ export default async function setupApp(url, env) {
   log('Creating Feathers app');
 
   const app = feathers();
-  const mongourl = config.get('server.mongourl');
+  const mongourl = config.get('mongourl');
 
   app.set('env', env);
   app.set('url', url);

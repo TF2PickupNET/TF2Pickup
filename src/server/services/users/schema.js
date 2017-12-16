@@ -196,10 +196,15 @@ export default new Schema({
     type: [String],
     validate: {
       validator(userRoles) {
-        return userRoles.every(role => Object.keys(roles).includes(role));
+        return userRoles.every(role => roles[role]);
       },
       msg: 'user.roles contains a not valid role',
     },
+    default: [],
+  },
+
+  boughtAnnouncers: {
+    type: [String],
     default: [],
   },
 

@@ -5511,9 +5511,9 @@ markdown-escapes@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/markdown-escapes/-/markdown-escapes-1.0.1.tgz#1994df2d3af4811de59a6714934c2b2292734518"
 
-materialize-react@0.2.0-alpha.15:
-  version "0.2.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/materialize-react/-/materialize-react-0.2.0-alpha.15.tgz#7bc3bb3e8c4e7b907f89147fd47bed696a1da3a4"
+materialize-react@0.2.0-alpha.16:
+  version "0.2.0-alpha.16"
+  resolved "https://registry.yarnpkg.com/materialize-react/-/materialize-react-0.2.0-alpha.16.tgz#93547af3858cbd42efd14358b1286914777130ce"
   dependencies:
     brcast "3.0.1"
     classnames "2.2.5"

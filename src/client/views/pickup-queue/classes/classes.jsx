@@ -44,7 +44,7 @@ class Classes extends PureComponent {
       [breakpoints.up('tablet')]: { gridTemplateColumns: '1fr 1fr' },
 
       [breakpoints.up('desktop')]: {
-        '&.gamemode-6v6': { gridTemplateColumns: 'minmax(240px, 300px) '.repeat(5) },
+        '&.gamemode-6v6': { gridTemplateColumns: 'minmax(220px, 280px) '.repeat(5) },
 
         '&.gamemode-9v9': { gridTemplateColumns: minmax.repeat(3) },
 
@@ -52,6 +52,12 @@ class Classes extends PureComponent {
       },
 
       '&.gamemode-bball': { gridTemplateColumns: 'minmax(736px, 1fr)' },
+
+      // eslint-disable-next-line
+      '@media screen and (max-width: 1500px) and (min-width: 1024px)': {
+        '&.gamemode-6v6': { gridTemplateColumns: 'minmax(240px, 300px) '.repeat(3) },
+        // eslint-disable-next-line
+      },
     },
   };
 

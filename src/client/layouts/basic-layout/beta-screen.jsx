@@ -38,8 +38,8 @@ class BetaScreen extends PureComponent {
     }).isRequired,
     pathname: PropTypes.string.isRequired,
     query: PropTypes.shape({
-      code: PropTypes.string.isRequired,
-      message: PropTypes.string.isRequired,
+      code: PropTypes.string,
+      message: PropTypes.string,
     }).isRequired,
   };
 

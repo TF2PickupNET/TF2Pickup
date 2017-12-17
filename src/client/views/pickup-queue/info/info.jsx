@@ -58,16 +58,26 @@ class PickupInfo extends PureComponent {
 
   static styles = {
     container: {
-      display: 'flex',
-      height: 64,
+      display: 'grid',
       padding: 8,
-      marginBottom: 24,
+      marginLeft: 0,
+      marginRight: 0,
       width: '100%',
       boxSizing: 'border-box',
       position: 'relative',
+      gridTemplateColumns: '1fr 1fr 1fr 1fr',
+      gridTemplateRows: '48px',
+      gridGap: '8px',
+
+      [breakpoints.only('mobile')]: {
+        gridTemplateColumns: '1fr 1fr',
+        gridTemplateRows: '48px 48px',
+
+        '& > .buttons': { order: 2 },
+      },
 
       [breakpoints.up('desktop')]: {
-        '&[data-gamemode="6v6"]': { maxWidth: 300 * 5 + 4 * 16 },
+        '&[data-gamemode="6v6"]': { maxWidth: 280 * 5 + 4 * 16 },
 
         '&[data-gamemode="9v9"]': { maxWidth: 360 * 3 + 2 * 16 },
 
@@ -76,9 +86,6 @@ class PickupInfo extends PureComponent {
     },
 
     item: {
-      padding: '0 8px',
-      height: 48,
-      flex: 1,
       textAlign: 'center',
       display: 'flex',
       justifyContent: 'center',
@@ -148,13 +155,13 @@ class PickupInfo extends PureComponent {
           Status: {this.getStatus()}
         </span>
 
-        <span className={this.props.classes.item}>
+        <span className={`${this.props.classes.item} buttons`}>
           <Button disabled={!this.props.player}>
             Pre Ready
           </Button>
         </span>
 
-        <span className={this.props.classes.item}>
+        <span className={`${this.props.classes.item} buttons`}>
           <Button
             disabled={!this.props.player}
             onPress={this.handleMapVoteButtonPress}

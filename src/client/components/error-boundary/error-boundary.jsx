@@ -27,7 +27,12 @@ class ErrorBoundary extends PureComponent {
 
   static defaultProps = { isTopLevel: false };
 
-  static styles = { card: { marginTop: 100 } };
+  static styles = {
+    card: {
+      marginTop: 100,
+      maxWidth: 400,
+    },
+  };
 
   state = { hasError: false };
 

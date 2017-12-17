@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import {
   Drawer,
   breakpoints,
+  colors,
 } from 'materialize-react';
 import { devices } from 'materialize-react/lib/styles/breakpoints';
 
@@ -30,26 +31,48 @@ class MainLayout extends PureComponent {
     onCloseDrawer: PropTypes.func.isRequired,
   };
 
-  static styles = {
-    content: {
-      display: 'flex',
-      width: '100%',
-      overflowX: 'hidden',
-      alignItems: 'center',
-      flexDirection: 'column',
-      overflowY: 'scroll',
-      padding: 16,
-      boxSizing: 'border-box',
-      flex: 1,
+  static styles(theme) {
+    return {
+      content: {
+        display: 'flex',
+        width: '100%',
+        overflowX: 'hidden',
+        alignItems: 'center',
+        flexDirection: 'column',
+        overflowY: 'scroll',
+        padding: 16,
+        boxSizing: 'border-box',
+        flex: 1,
 
-      [breakpoints.only('desktop')]: { padding: 24 },
-    },
+        '&::-webkit-scrollbar': { width: 10 },
 
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-    },
-  };
+        '&::-webkit-scrollbar-track': { background: 'transparent' },
+
+        '&::-webkit-scrollbar-thumb': {
+          background: theme.type === 'light'
+            ? colors.grey400
+            : colors.grey800,
+        },
+
+        '&::-moz-scrollbar': { width: 10 },
+
+        '&::-moz-scrollbar-track': { background: 'transparent' },
+
+        '&::-moz-scrollbar-thumb': {
+          background: theme.type === 'light'
+            ? colors.grey400
+            : colors.grey800,
+        },
+
+        [breakpoints.only('desktop')]: { padding: 24 },
+      },
+
+      container: {
+        display: 'flex',
+        flexDirection: 'column',
+      },
+    };
+  }
 
   render() {
     return (

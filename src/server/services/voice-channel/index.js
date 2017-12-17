@@ -55,34 +55,52 @@ const devService = {
 };
 
 const service = {
-  create({
+  async create({
     region,
     name,
   }) {
     if (!createStrategies[region]) {
       log('No CREATE strategy was specified for the region', region);
 
-      return Promise.reject(new Error(`No CREATE strategy was specified for the region ${region}`));
+      return;
     }
 
-    log('Creating new voice channel for region', region, name);
+    try {
+      log('Creating new voice channel', region, name);
 
-    return createStrategies[region](this.app, name);
+      await createStrategies[region](this.app, name);
+    } catch (error) {
+      log('Error while creating voice channel', region, name, error);
+
+      await this.app.service('discord-message').create({
+        message: `An error happened while creating voice channel for pickup ${name}`,
+        channel: 'errors',
+      });
+    }
   },
 
-  delete({
+  async delete({
     region,
     name,
   }) {
     if (!deleteStrategies[region]) {
       log('No DELETE strategy was specified for the region', region);
 
-      return Promise.reject(new Error(`No DELETE strategy was specified for the region ${region}`));
+      return;
     }
 
-    log('Removing voice channel for region', region, name);
+    try {
+      log('Removing voice channel', region, name);
 
-    return deleteStrategies[region](this.app, name);
+      await deleteStrategies[region](this.app, name);
+    } catch (error) {
+      log('Error while deleting voice channel', region, name, error);
+
+      await this.app.service('discord-message').create({
+        message: `An error happened while deleting voice channel for pickup ${name}`,
+        channel: 'errors',
+      });
+    }
   },
 };
 

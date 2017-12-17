@@ -6,6 +6,7 @@ import path from 'path';
 import hooks from 'feathers-hooks-common';
 
 import {
+  filter,
   map,
   pipe,
 } from '../../../utils/functions';
@@ -42,11 +43,8 @@ class MumbleService {
     return Promise.all(
       pipe(
         Object.entries,
+        filter(([, options]) => options.key && options.cert && options.ip),
         map(async ([region, options]) => {
-          if (!options.key || !options.cert || !options.ip) {
-            return;
-          }
-
           try {
             const key = await readFile(path.join(configPath, options.key));
             const cert = await readFile(path.join(configPath, options.cert));

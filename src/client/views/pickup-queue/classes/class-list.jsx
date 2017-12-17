@@ -105,6 +105,7 @@ class ClassList extends PureComponent {
    */
   renderTitle() {
     const ClassIcon = Icons[capitalize(this.props.className)];
+    const gamemodeInfo = gamemodes[this.props.gamemode];
 
     return (
       <List.Item
@@ -124,9 +125,7 @@ class ClassList extends PureComponent {
           </Typography>
 
           <Typography typography="title">
-            {this.props.players.length}
-            /
-            {gamemodes[this.props.gamemode].slots[this.props.className]}
+            {this.props.players.length} / {gamemodeInfo.slots[this.props.className]}
           </Typography>
         </span>
       </List.Item>

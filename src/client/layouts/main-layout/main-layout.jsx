@@ -31,6 +31,12 @@ class MainLayout extends PureComponent {
     onCloseDrawer: PropTypes.func.isRequired,
   };
 
+  /**
+   * The styles for the main layout and content.
+   *
+   * @param {Object} theme - The theme provided by Jss.
+   * @returns {Object} - Returns the styles.
+   */
   static styles(theme) {
     return {
       content: {

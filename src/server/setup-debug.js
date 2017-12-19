@@ -18,6 +18,9 @@ const startText = `
 
 `;
 
+/**
+ * Change the debug log to write the lines to a file when in production mode.
+ */
 export default async function setupDebug() {
   await fs.ensureDir(path.join(__dirname, '../../logs'));
 

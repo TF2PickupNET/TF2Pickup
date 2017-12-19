@@ -10,6 +10,7 @@ import config from 'config';
 
 import { pluck } from '../utils/functions';
 
+import setupDebug from './setup-debug';
 import services from './services';
 import globalHooks from './global-hooks';
 import client from './client';
@@ -24,6 +25,10 @@ const log = debug('TF2Pickup');
  * @returns {JSX} - Returns the app.
  */
 export default async function setupApp(url, env) {
+  if (env === 'prod') {
+    await setupDebug();
+  }
+
   log('Creating Feathers app');
 
   const app = feathers();

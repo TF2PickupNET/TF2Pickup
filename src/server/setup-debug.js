@@ -6,8 +6,10 @@ import { format } from 'date-fns';
 
 import {
   add,
+  flatten,
   map,
   pipe,
+  reduce,
   spreadArgs,
 } from '../utils/functions';
 
@@ -40,16 +42,40 @@ export default async function setupDebug() {
   await fs.writeFile(filePath, startText);
 
   debug.log = async (...messages) => {
-    const [
-      date,
-      namespace,
-      ...rest
-    ] = messages[0].split(' ');
-    const formattedDate = format(date, 'DD.M.YYYY | HH:mm');
+    const message = pipe(
+      map((item) => {
+        if (typeof item === 'string') {
+          return item;
+        }
+
+        return JSON.stringify(item, null, '\t');
+      }),
+      map((item, index) => {
+        if (index === 0) {
+          const [
+            date,
+            level,
+            ...rest
+          ] = item.split(' ');
+
+          return [
+            `[${format(date, 'DD.MM.YYYY | HH:mm')}]`,
+            `[${level}]`,
+            ...rest,
+          ];
+        }
+
+        return item;
+      }),
+      flatten,
+      reduce((current, str) => `${current} ${str}`, ''),
+      str => str.trim(),
+      str => `${str}\n`,
+    )(messages);
 
     await fs.appendFile(
       filePath,
-      `[${formattedDate}] [${namespace}] ${rest.join(' ')} ${messages.slice(1).join(' ')}\n`,
+      message,
     );
   };
 }

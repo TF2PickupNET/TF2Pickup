@@ -6,7 +6,6 @@ import { format } from 'date-fns';
 
 import {
   add,
-  concat,
   flatten,
   map,
   pipe,

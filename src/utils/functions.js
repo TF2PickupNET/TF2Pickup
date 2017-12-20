@@ -4,12 +4,12 @@ export const undef = x => typeof x === 'undefined';
 
 export const first = ([x]) => x;
 
-export const map = fn => ([x, ...xs]) => {
+export const map = fn => ([x, ...xs], index = 0) => {
   if (undef(x)) {
     return [];
   }
 
-  return [fn(x), ...map(fn)(xs)];
+  return [fn(x, index), ...map(fn)(xs, index + 1)];
 };
 
 export const has = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
@@ -153,3 +153,5 @@ export const pick = (...keys) => obj => pipe(
     };
   }, {}),
 )(obj);
+
+export const concat = (...array) => arr => [...arr, ...flatten(array)];

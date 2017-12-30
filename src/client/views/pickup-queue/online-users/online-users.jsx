@@ -4,6 +4,8 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import { computeLevel } from '../../../../utils/has-permission';
+
 import OnlineUserItem from './online-user-item';
 
 /**
@@ -53,6 +55,11 @@ OnlineUsers.styles = {
 
 export default connect(
   (state) => {
-    return { onlineUsers: Object.keys(state.onlineUsers) };
+    return {
+      onlineUsers: Object
+        .values(state.onlineUsers)
+        .sort((userA, userB) => computeLevel(userA) - computeLevel(userB))
+        .map(user => user.id),
+    };
   },
 )(injectSheet(OnlineUsers.styles)(OnlineUsers));

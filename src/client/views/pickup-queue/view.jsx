@@ -4,19 +4,18 @@ import PropTypes from 'prop-types';
 import lockr from 'lockr';
 import { connect } from 'react-redux';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
+import injectSheet from 'react-jss';
 import Aux from 'react-aux';
+import { breakpoints } from 'materialize-react';
 
 import { getGamemodeFromUrl } from '../../../utils/pickup';
-import {
-  arrayToObject,
-  pluck,
-} from '../../../utils/functions';
-import app from '../../app';
-import { updatePickups } from '../../redux/pickup-queue/actions';
+import { pluck } from '../../../utils/functions';
 
 import Tabs from './tabs';
 import Info from './info';
 import Classes from './classes';
+import Chat from './chat';
+import OnlineUsers from './online-users';
 
 /**
  * The view for the pickup page.
@@ -24,44 +23,38 @@ import Classes from './classes';
  * @class
  */
 class View extends PureComponent {
-  static propTypes = {
-    gamemode: PropTypes.string.isRequired,
-    region: PropTypes.string.isRequired,
-    connected: PropTypes.bool.isRequired,
-    updatePickups: PropTypes.func.isRequired,
+  static propTypes = { gamemode: PropTypes.string.isRequired };
+
+  static styles = {
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+      boxSizing: 'border-box',
+      height: 'auto',
+
+      [breakpoints.down('tablet')]: { width: '100%' },
+    },
+
+    chatContainer: {
+      display: 'grid',
+      gridTemplateColumns: '3fr 1fr',
+      gridGap: '16px',
+      gridTemplateRows: '340px',
+
+      [breakpoints.only('tablet')]: { gridTemplateColumns: '2fr 1fr' },
+
+      [breakpoints.only('mobile')]: {
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: '340px 340px',
+      },
+    },
   };
 
   /**
    * Set the last gamemode property in the local storage on mount.
    */
-  componentWillMount() {
+  componentWillUnmount() {
     lockr.set('lastGamemode', this.props.gamemode);
-
-    this.updatePickups(this.props.region);
-  }
-
-  /**
-   * Update the pickups when the user reconnects or the user changes the region.
-   */
-  componentWillReceiveProps(nextProps) {
-    const reconnected = nextProps.connected && !this.props.connected;
-
-    lockr.set('lastGamemode', nextProps.gamemode);
-
-    if (reconnected || this.props.region !== nextProps.region) {
-      this.updatePickups(nextProps.region);
-    }
-  }
-
-  /**
-   * Fetch the pickups for the passed region.
-   *
-   * @param {String} region - The regions name.
-   */
-  async updatePickups(region) {
-    const pickups = await app.service('pickup-queue').find({ query: { region } });
-
-    this.props.updatePickups(arrayToObject(pickup => pickup.gamemode)(pickups));
   }
 
   /**
@@ -84,9 +77,17 @@ class View extends PureComponent {
 
         <Tabs />
 
-        <Info />
+        <div className={this.props.classes.container}>
+          <Info />
 
-        <Classes />
+          <Classes />
+
+          <div className={this.props.classes.chatContainer}>
+            <Chat />
+
+            <OnlineUsers />
+          </div>
+        </div>
       </Aux>
     );
   }
@@ -94,13 +95,6 @@ class View extends PureComponent {
 
 export default connect(
   (state) => {
-    return {
-      gamemode: getGamemodeFromUrl(state.router.location.pathname),
-      region: pluck('settings.region', 'eu')(state.user),
-      connected: state.connected,
-    };
+    return { gamemode: getGamemodeFromUrl(state.router.location.pathname) };
   },
-  (dispatch) => {
-    return { updatePickups: pickups => dispatch(updatePickups(pickups)) };
-  },
-)(View);
+)(injectSheet(View.styles)(View));

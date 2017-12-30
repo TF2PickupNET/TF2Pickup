@@ -8,9 +8,6 @@ import queryString from 'query-string';
 
 import { authUrl } from '../../../config/index';
 
-import createLoginListener from './create-login-listener';
-import createLogoutListener from './create-logout-listener';
-
 const log = debug('TF2Pickup:authentication');
 
 /**
@@ -134,7 +131,4 @@ export default function authentication() {
       res.redirect(`/${query.url ? query.url : ''}`);
     },
   );
-
-  that.on('login', createLoginListener(that));
-  that.on('logout', createLogoutListener(that));
 }

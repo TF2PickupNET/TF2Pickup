@@ -2,9 +2,9 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
+import Aux from 'react-aux';
 import {
   Card,
-  Layout,
   Typography,
 } from 'materialize-react';
 
@@ -23,7 +23,7 @@ const README_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/R
  */
 function View(props) {
   return (
-    <Layout mainAlign="center">
+    <Aux>
       <Helmet>
         <title>
           About
@@ -53,7 +53,7 @@ function View(props) {
           <Partners />
         </Card.Content>
       </Card>
-    </Layout>
+    </Aux>
   );
 }
 
@@ -68,6 +68,8 @@ View.styles = {
   card: {
     maxWidth: 1024,
     width: '100%',
+    marginTop: 0,
+    marginBottom: 0,
   },
 
   headline: {

@@ -50,7 +50,10 @@ class BasicLayout extends PureComponent {
 
   static styles = {
     background: {
-      width: '100vw',
+      display: 'flex',
+      flexDirection: 'column',
+      minWidth: '100vw',
+      maxWidth: '100vw',
       minHeight: '100vh',
     },
 

@@ -1,6 +1,6 @@
 import { PureComponent } from 'react';
 import axios from 'axios';
-import { format } from 'date-fns';
+import { format } from 'date-fns/esm';
 import PropTypes from 'prop-types';
 
 const hoursFormats = {

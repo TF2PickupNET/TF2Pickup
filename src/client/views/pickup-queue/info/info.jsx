@@ -63,25 +63,18 @@ class PickupInfo extends PureComponent {
       marginLeft: 0,
       marginRight: 0,
       width: '100%',
+      minHeight: 64,
       boxSizing: 'border-box',
-      position: 'relative',
       gridTemplateColumns: '1fr 1fr 1fr 1fr',
       gridTemplateRows: '48px',
       gridGap: '8px',
 
       [breakpoints.only('mobile')]: {
+        minHeight: 120,
         gridTemplateColumns: '1fr 1fr',
         gridTemplateRows: '48px 48px',
 
         '& > .buttons': { order: 2 },
-      },
-
-      [breakpoints.up('desktop')]: {
-        '&[data-gamemode="6v6"]': { maxWidth: 280 * 5 + 4 * 16 },
-
-        '&[data-gamemode="9v9"]': { maxWidth: 360 * 3 + 2 * 16 },
-
-        '&[data-gamemode="bball"], &[data-gamemode="ultiduo"]': { maxWidth: 360 * 2 + 16 },
       },
     },
 

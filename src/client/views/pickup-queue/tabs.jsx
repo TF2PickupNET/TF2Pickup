@@ -52,6 +52,7 @@ class GamemodeTabs extends PureComponent {
       display: 'inline-flex',
       flexWrap: 'nowrap',
       marginBottom: 8,
+      minHeight: 48,
 
       [breakpoints.down('mobile')]: { display: 'none' },
     },

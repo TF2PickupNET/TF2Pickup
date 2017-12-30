@@ -22,18 +22,12 @@ async function registerServiceWorker() {
 
     console.log('Service Worker registered successfully');
 
-    let prevState = app.store.getState();
-
     // Try updating the service worker after reconnecting
     // We need this because we might have pushed a new version
-    app.store.subscribe(async () => {
-      const newState = app.store.getState();
-
+    app.store.on('state.change', async (prevState, newState) => {
       if (newState.connected === true && prevState.connected === false) {
         await worker.update();
       }
-
-      prevState = newState;
     });
 
     worker.onupdatefound = async () => {

@@ -29,6 +29,8 @@ export default function client() {
     // Use the webpack middleware in dev mode to recompile when a file changes
     that.use(webpackDevMiddleware(webpack(config), {
       noInfo: true,
+      lazy: true,
+      logLevel: 'silent',
       stats: { colors: true },
       reporter({
         state,

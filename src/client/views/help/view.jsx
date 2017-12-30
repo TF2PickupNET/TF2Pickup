@@ -1,5 +1,6 @@
 import React from 'react';
 import Helmet from 'react-helmet';
+import Aux from 'react-aux';
 
 import MarkdownView from '../../components/markdown-view';
 
@@ -12,7 +13,7 @@ const HELP_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/HEL
  */
 export default function View() {
   return (
-    <div>
+    <Aux>
       <Helmet>
         <title>
           Help
@@ -20,6 +21,6 @@ export default function View() {
       </Helmet>
 
       <MarkdownView url={HELP_URL} />
-    </div>
+    </Aux>
   );
 }

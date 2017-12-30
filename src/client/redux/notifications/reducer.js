@@ -2,6 +2,7 @@ import {
   ADD_NOTIFICATION,
   REMOVE_NOTIFICATION,
 } from './constants';
+import setupListeners from './setup-listeners';
 
 /**
  * The reducer for the notification store.
@@ -20,5 +21,7 @@ function reducer(state = [], action) {
       return state;
   }
 }
+
+reducer.setupListeners = setupListeners;
 
 export default reducer;

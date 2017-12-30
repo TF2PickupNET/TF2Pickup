@@ -44,6 +44,11 @@ class DrawerContent extends PureComponent {
     },
 
     logo: { height: 48 },
+
+    contentContainer: {
+      composes: 'scrollbar',
+      overflowY: 'scroll',
+    },
   };
 
   handleLogoutClick = () => app.logout();
@@ -114,85 +119,87 @@ class DrawerContent extends PureComponent {
           <Logo className={this.props.classes.logo} />
         </Toolbar>
 
-        <List>
-          <List.Subheader>
-            Gamemodes
-          </List.Subheader>
+        <div className={this.props.classes.contentContainer}>
+          <List>
+            <List.Subheader>
+              Gamemodes
+            </List.Subheader>
 
-          {Object.values(gamemodes).map(gamemode => (
+            {Object.values(gamemodes).map(gamemode => (
+              <ListItem
+                key={gamemode.name}
+                redirectTo={`/${gamemode.name}`}
+              >
+                {gamemode.display}
+              </ListItem>
+            ))}
+          </List>
+
+          <Divider />
+
+          <List inset>
             <ListItem
-              key={gamemode.name}
-              redirectTo={`/${gamemode.name}`}
+              leftItem={<Icon icon="history" />}
+              redirectTo="/recent-pickups"
             >
-              {gamemode.display}
+              Recent Pickups
             </ListItem>
-          ))}
-        </List>
 
-        <Divider />
+            <ListItem
+              leftItem={<Icon icon="server" />}
+              redirectTo="/servers"
+            >
+              Servers
+            </ListItem>
 
-        <List inset>
-          <ListItem
-            leftItem={<Icon icon="history" />}
-            redirectTo="/recent-pickups"
-          >
-            Recent Pickups
-          </ListItem>
+            <ListItem
+              leftItem={<Icon icon="format-list-bulleted" />}
+              redirectTo="/rules"
+            >
+              Rules
+            </ListItem>
 
-          <ListItem
-            leftItem={<Icon icon="server" />}
-            redirectTo="/servers"
-          >
-            Servers
-          </ListItem>
+            <ListItem
+              leftItem={<Icon icon="information" />}
+              redirectTo="/about"
+            >
+              About
+            </ListItem>
 
-          <ListItem
-            leftItem={<Icon icon="format-list-bulleted" />}
-            redirectTo="/rules"
-          >
-            Rules
-          </ListItem>
+            <ListItem
+              leftItem={<Icon icon="currency-usd" />}
+              redirectTo="/donate"
+            >
+              Donate
+            </ListItem>
+          </List>
 
-          <ListItem
-            leftItem={<Icon icon="information" />}
-            redirectTo="/about"
-          >
-            About
-          </ListItem>
+          <Divider />
 
-          <ListItem
-            leftItem={<Icon icon="currency-usd" />}
-            redirectTo="/donate"
-          >
-            Donate
-          </ListItem>
-        </List>
+          <List inset>
+            {this.renderUserList()}
+          </List>
 
-        <Divider />
+          <Divider />
 
-        <List inset>
-          {this.renderUserList()}
-        </List>
+          <List inset>
+            <ListItem
+              leftItem={<Icon icon="message-alert" />}
+              onClick={this.handleSuggestionsClick}
+            >
+              Send feedback
 
-        <Divider />
+              <Ripple />
+            </ListItem>
 
-        <List inset>
-          <ListItem
-            leftItem={<Icon icon="message-alert" />}
-            onClick={this.handleSuggestionsClick}
-          >
-            Send feedback
-
-            <Ripple />
-          </ListItem>
-
-          <ListItem
-            leftItem={<Icon icon="help-circle" />}
-            redirectTo="/help"
-          >
-            Help
-          </ListItem>
-        </List>
+            <ListItem
+              leftItem={<Icon icon="help-circle" />}
+              redirectTo="/help"
+            >
+              Help
+            </ListItem>
+          </List>
+        </div>
       </Aux>
     );
   }

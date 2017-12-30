@@ -11,6 +11,7 @@ import {
   Spinner,
   Divider,
   Typography,
+  Collapse,
 } from 'materialize-react';
 
 import app from '../../app';
@@ -48,7 +49,7 @@ class BetaScreen extends PureComponent {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      height: '100vh',
+      flex: 1,
     },
 
     backgroundImage: {
@@ -116,7 +117,7 @@ class BetaScreen extends PureComponent {
               </Button>
             </Card.Actions>
 
-            {hasError && (
+            <Collapse isOpen={hasError}>
               <Card.Content className={this.props.classes.errorContainer}>
                 <Divider className={this.props.classes.errorDivider} />
 
@@ -129,7 +130,7 @@ class BetaScreen extends PureComponent {
                   {this.props.query.message}
                 </div>
               </Card.Content>
-            )}
+            </Collapse>
           </Card>
         </div>
       );

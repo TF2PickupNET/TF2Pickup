@@ -5,7 +5,7 @@
     "log_listener_port": 3500
   },
 
-  "beta": true,
+  "beta": false,
 
   "mongourl": "mongodb://localhost:27017/tf2pickup",
 

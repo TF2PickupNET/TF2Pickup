@@ -4,7 +4,10 @@ import config from 'config';
 import errors from 'feathers-errors';
 import hooks from 'feathers-hooks-common';
 
-import { omit } from '../../../utils/functions';
+import {
+  omit,
+  pluck,
+} from '../../../utils/functions';
 
 import getUserData from './third-party-services';
 import getTF2Hours from './third-party-services/steam/get-tf2-hours';
@@ -19,34 +22,26 @@ const log = debug('TF2Pickup:users:hooks');
  * @param {Object} hook - The hook object.
  * @returns {Object} - Returns the new hook object.
  */
-function removeSensibleData(hook) {
-  if (hook.id === hook.params.user.id) {
-    return {
-      ...hook,
-      result: omit(
-        'elos',
-        'lastUpdate',
-      )(hook.result),
-    };
+function removeSensibleData(user, hook) {
+  if (user.id === pluck('params.user.id')(hook)) {
+    return omit(
+      'elos',
+      'lastUpdate',
+    )(user);
   }
 
-  return {
-    ...hook,
-    result: omit(
-      'elos',
-      'settings',
-      'hasAcceptedTheRules',
-      'lastUpdate',
-      'friends',
-      'boughtAnnouncers',
-    )(hook.result),
-  };
+  return omit(
+    'elos',
+    'settings',
+    'hasAcceptedTheRules',
+    'lastUpdate',
+    'friends',
+    'boughtAnnouncers',
+  )(user);
 }
 
 export default {
   before: {
-    find: hooks.disallow('external'),
-
     create: [
       // Check if the user has enough hours
       async (hook) => {
@@ -111,7 +106,25 @@ export default {
       });
     },
 
-    get: hooks.iff(hooks.isProvider('external'), removeSensibleData),
-    patch: hooks.iff(hooks.isProvider('external'), removeSensibleData),
+    find: hooks.iff(hooks.isProvider('external'), (hook) => {
+      return {
+        ...hook,
+        result: hook.result.map(user => removeSensibleData(user, hook)),
+      };
+    }),
+
+    get: hooks.iff(hooks.isProvider('external'), (hook) => {
+      return {
+        ...hook,
+        result: removeSensibleData(hook.result, hook),
+      };
+    }),
+
+    patch: hooks.iff(hooks.isProvider('external'), (hook) => {
+      return {
+        ...hook,
+        result: removeSensibleData(hook.result, hook),
+      };
+    }),
   },
 };

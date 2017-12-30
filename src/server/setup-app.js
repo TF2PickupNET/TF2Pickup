@@ -40,7 +40,7 @@ export default async function setupApp(url, env) {
   mongoose.Promise = global.Promise;
 
   try {
-    await mongoose.connect(mongourl, { useMongoClient: true });
+    await mongoose.connect(mongourl);
   } catch (error) { // eslint-disable-line no-unused-vars
     if (!process.env.IS_CI_TEST) {
       throw new Error(`Can't connect to MongoDB server with url: ${mongourl}`);

@@ -177,6 +177,7 @@ export default function socketMethods(app, socket) {
 
       app.io.emit('notifications.add', {
         forUsers: [userId],
+        sound: 'alert',
         message: `You got kicked by ${socket.feathers.user.name}`,
       });
     }

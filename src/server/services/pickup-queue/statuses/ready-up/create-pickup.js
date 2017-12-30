@@ -131,6 +131,7 @@ export default async function createPickup(props) {
 
     props.app.io.emit('notifications.add', {
       forUsers: playerIds,
+      sound: 'alert',
       message: error.message,
     });
   }

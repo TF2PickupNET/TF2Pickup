@@ -10,8 +10,9 @@ import {
   flatten,
   pluck,
   filter,
-} from '../../../utils/functions';
-import mapInfo from '../../../config/maps';
+} from '../utils/functions';
+
+import mapInfo from './maps';
 
 const ultiduoMaps = [
   'koth_ultiduo_r_b7',

@@ -14,7 +14,6 @@ import { pluck } from '../../../utils/functions';
 import Tabs from './tabs';
 import Info from './info';
 import Classes from './classes';
-import Chat from './chat';
 import OnlineUsers from './online-users';
 
 /**
@@ -23,7 +22,13 @@ import OnlineUsers from './online-users';
  * @class
  */
 class View extends PureComponent {
-  static propTypes = { gamemode: PropTypes.string.isRequired };
+  static propTypes = {
+    classes: PropTypes.shape({
+      container: PropTypes.string.isRequired,
+      chatContainer: PropTypes.string.isRequired,
+    }).isRequired,
+    gamemode: PropTypes.string.isRequired,
+  };
 
   static styles = {
     container: {
@@ -83,7 +88,7 @@ class View extends PureComponent {
           <Classes />
 
           <div className={this.props.classes.chatContainer}>
-            <Chat />
+            <div />
 
             <OnlineUsers />
           </div>

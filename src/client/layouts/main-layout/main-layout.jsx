@@ -26,6 +26,8 @@ class MainLayout extends PureComponent {
     classes: PropTypes.shape({
       container: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,
+      drawer: PropTypes.string.isRequired,
+      drawerContent: PropTypes.string.isRequired,
     }).isRequired,
     open: PropTypes.bool.isRequired,
     onCloseDrawer: PropTypes.func.isRequired,

@@ -19,8 +19,9 @@ const log = debug('TF2Pickup:users:hooks');
 /**
  * Remove the sensible data from the users object.
  *
- * @param {Object} hook - The hook object.
- * @returns {Object} - Returns the new hook object.
+ * @param {Object} user - The user object.
+ * @param {Object} hook - The complete hook data.
+ * @returns {Object} - Returns the new user object.
  */
 function removeSensibleData(user, hook) {
   if (user.id === pluck('params.user.id')(hook)) {
@@ -45,7 +46,7 @@ export default {
     create: [
       // Check if the user has enough hours
       async (hook) => {
-        const tf2Hours = await getTF2Hours(hook.data.id, hook.app);
+        const tf2Hours = await getTF2Hours(hook.data.id);
 
         if (tf2Hours === null) {
           log('Unable to fetch tf2 hours', hook.data.id);

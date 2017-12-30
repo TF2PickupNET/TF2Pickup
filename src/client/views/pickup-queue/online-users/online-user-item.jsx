@@ -1,9 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 
 import UserItem from '../../../components/user-item/index';
 
+/**
+ * The list item for a user in the online users list.
+ *
+ * @param {Object} props - The props for the component.
+ * @returns {JSX} - Returns the JSX.
+ */
 function OnlineUserItem(props) {
   return (
     <span className={props.classes.item}>
@@ -20,6 +27,15 @@ function OnlineUserItem(props) {
     </span>
   );
 }
+
+OnlineUserItem.propTypes = {
+  classes: PropTypes.shape({
+    item: PropTypes.string.isRequired,
+    avatar: PropTypes.string.isRequired,
+    userItem: PropTypes.string.isRequired,
+  }).isRequired,
+  user: PropTypes.shape({ avatar: PropTypes.string.isRequired }).isRequired,
+};
 
 OnlineUserItem.styles = {
   avatar: {

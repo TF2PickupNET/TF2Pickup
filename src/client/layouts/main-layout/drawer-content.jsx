@@ -30,6 +30,7 @@ class DrawerContent extends PureComponent {
     classes: PropTypes.shape({
       toolbar: PropTypes.string.isRequired,
       logo: PropTypes.string.isRequired,
+      contentContainer: PropTypes.string.isRequired,
     }).isRequired,
     userId: PropTypes.string,
   };

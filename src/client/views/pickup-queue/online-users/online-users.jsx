@@ -2,9 +2,16 @@ import React from 'react';
 import { Card } from 'materialize-react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import OnlineUserItem from './online-user-item';
 
+/**
+ * Render the online users for the users region.
+ *
+ * @param {Object} props - The props for the component.
+ * @returns {JSX} - Returns the JSX.
+ */
 function OnlineUsers(props) {
   return (
     <Card className={props.classes.card}>
@@ -23,6 +30,14 @@ function OnlineUsers(props) {
     </Card>
   );
 }
+
+OnlineUsers.propTypes = {
+  classes: PropTypes.shape({
+    card: PropTypes.string.isRequired,
+    list: PropTypes.string.isRequired,
+  }).isRequired,
+  onlineUsers: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 OnlineUsers.styles = {
   card: {

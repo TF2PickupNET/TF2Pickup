@@ -4,13 +4,13 @@ import {
   pipe,
   pluck,
 } from '../../../utils/functions';
+import { getDataForUserItem } from '../../../utils/users';
 
 import {
   updateAllUsers,
   userCameOnline,
   userWentOffline,
 } from './actions';
-import { getDataForUserItem } from '../../../utils/users';
 
 const getRegion = pluck('user.settings.region', 'eu');
 

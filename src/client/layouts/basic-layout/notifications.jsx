@@ -5,6 +5,12 @@ import { Snackbar } from 'materialize-react';
 
 import { removeNotification } from '../../redux/notifications/actions';
 
+/**
+ * Render the snackbars on the page.
+ *
+ * @param {Object} props - The props for the component.
+ * @returns {JSX} - Returns the JSX.
+ */
 function Notifications(props) {
   return (
     <Snackbar

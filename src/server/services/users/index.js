@@ -66,7 +66,7 @@ export default function users() {
     log('User logged out', connection.user.id);
 
     try {
-      await users.patch(connection.user.id, {
+      await that.service('users').patch(connection.user.id, {
         $set: {
           online: false,
           lastOnline: Date.now(),
@@ -76,6 +76,6 @@ export default function users() {
       log('Error in logout callback', connection.user.id, error);
     }
 
-    that.service('users').emit('logout', connection.user.id);
+    that.service('users').emit('logout', { id: connection.user.id });
   });
 }

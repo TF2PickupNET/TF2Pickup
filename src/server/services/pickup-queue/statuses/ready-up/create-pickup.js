@@ -2,7 +2,7 @@ import pickRandom from 'pick-random';
 import debug from 'debug';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
-import { generateRandomMaps } from '../../map-pool';
+import { generateRandomMaps } from '../../../../../config/map-pool';
 import {
   pipe,
   map,

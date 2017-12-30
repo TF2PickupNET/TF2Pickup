@@ -2,12 +2,14 @@ import mongoose from 'mongoose';
 import service from 'feathers-mongoose';
 import debug from 'debug';
 
+import { validateMapPool } from '../../../config/map-pool';
+
 import schema from './schema';
 import hooks from './hooks';
 import filters from './filters';
 import setupDb from './setup-db';
 import socketMethods from './socket-methods';
-import { validateMapPool } from './map-pool';
+import onUserDisconnect from './on-user-disconnect';
 
 const log = debug('TF2Pickup:pickup-queue');
 
@@ -32,6 +34,10 @@ export default async function pickupQueue() {
   });
 
   await setupDb(that.service('pickup-queue'));
+
+  that.service('users').on('logout', ({ id }) => {
+    onUserDisconnect(that, id);
+  });
 
   validateMapPool();
 }

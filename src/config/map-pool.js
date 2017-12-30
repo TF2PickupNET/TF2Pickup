@@ -11,7 +11,8 @@ import {
   pluck,
   filter,
 } from '../utils/functions';
-import mapInfo from './maps/index';
+
+import mapInfo from './maps';
 
 const ultiduoMaps = [
   'koth_ultiduo_r_b7',

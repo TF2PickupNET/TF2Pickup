@@ -7,7 +7,7 @@ import hooks from './hooks';
 import filters from './filters';
 import setupDb from './setup-db';
 import socketMethods from './socket-methods';
-import { validateMapPool } from './map-pool';
+import { validateMapPool } from '../../../config/map-pool';
 
 const log = debug('TF2Pickup:pickup-queue');
 

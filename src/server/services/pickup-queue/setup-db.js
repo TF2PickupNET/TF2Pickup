@@ -11,7 +11,7 @@ import {
   pipe,
 } from '../../../utils/functions';
 
-import { generateRandomMaps } from './map-pool';
+import { generateRandomMaps } from '../../../config/map-pool';
 
 const log = debug('TF2Pickup:pickup-queue:setup-db');
 

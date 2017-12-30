@@ -4,8 +4,9 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import OnlineUserItem from './online-user-item';
 import { computeLevel } from '../../../../utils/has-permission';
+
+import OnlineUserItem from './online-user-item';
 
 /**
  * Render the online users for the users region.

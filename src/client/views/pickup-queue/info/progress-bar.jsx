@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import classnames from 'classnames';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
-import { differenceInMilliseconds } from 'date-fns';
+import { differenceInMilliseconds } from 'date-fns/esm';
 import { Progress } from 'materialize-react';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 import { connect } from 'react-redux';

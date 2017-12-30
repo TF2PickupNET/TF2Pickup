@@ -1,11 +1,15 @@
 import {
   arrayToObject,
+  map,
+  pipe,
   pluck,
 } from '../../../utils/functions';
+import { getDataForUserItem } from '../../../utils/users';
 
 import {
-  updatePickup,
-  updatePickups,
+  updateAllUsers,
+  userCameOnline,
+  userWentOffline,
 } from './actions';
 
 const getRegion = pluck('user.settings.region', 'eu');
@@ -17,10 +21,14 @@ const getRegion = pluck('user.settings.region', 'eu');
  * @param {Object} app - The feathers app.
  */
 export default function setupListeners(app) {
-  const pickupQueue = app.service('pickup-queue');
+  const users = app.service('users');
 
-  pickupQueue.on('patched', (data) => {
-    app.store.dispatch(updatePickup(data.gamemode, data));
+  users.on('logout', (data) => {
+    app.store.dispatch(userWentOffline(data.id));
+  });
+
+  users.on('login', (data) => {
+    app.store.dispatch(userCameOnline(data));
   });
 
   app.on('state.change', async (prevState, newState) => {
@@ -28,11 +36,19 @@ export default function setupListeners(app) {
     const nextRegion = getRegion(newState);
 
     if ((!prevState.connected && newState.connected) || prevRegion !== nextRegion) {
-      const pickups = await pickupQueue.find({ query: { region: nextRegion } });
+      const onlineUsers = await users.find({
+        query: {
+          'settings.region': nextRegion,
+          online: true,
+        },
+      });
 
-      app.store.dispatch(
-        updatePickups(arrayToObject(pickup => pickup.gamemode)(pickups)),
-      );
+      pipe(
+        map(getDataForUserItem),
+        arrayToObject(user => user.id),
+        updateAllUsers,
+        app.store.dispatch,
+      )(onlineUsers);
     }
   });
 }

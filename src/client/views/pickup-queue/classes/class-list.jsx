@@ -138,10 +138,6 @@ class ClassList extends PureComponent {
    * @returns {JSX} - Returns the JSX.
    */
   renderJoinRemoveItem() {
-    if (!this.props.userId) {
-      return null;
-    }
-
     return (
       <List.Item
         className={this.props.userId ? '' : this.props.classes.hidden}

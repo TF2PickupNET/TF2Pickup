@@ -21,6 +21,8 @@ class MarkdownView extends PureComponent {
     content: {
       width: '100%',
       maxWidth: 960,
+      marginTop: 0,
+      marginBottom: 0,
     },
   };
 

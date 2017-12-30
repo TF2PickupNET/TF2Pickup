@@ -17,4 +17,14 @@ export default function configureStore() {
     composeWithDevTools(applyMiddleware(routerMiddleware(history))),
   );
   that.history = history;
+
+  let prevState = {};
+
+  that.store.subscribe(() => {
+    const newState = that.store.getState();
+
+    that.emit('state.change', prevState, newState);
+
+    prevState = newState;
+  });
 }

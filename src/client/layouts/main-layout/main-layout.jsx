@@ -26,6 +26,8 @@ class MainLayout extends PureComponent {
     classes: PropTypes.shape({
       container: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,
+      drawer: PropTypes.string.isRequired,
+      drawerContent: PropTypes.string.isRequired,
     }).isRequired,
     open: PropTypes.bool.isRequired,
     onCloseDrawer: PropTypes.func.isRequired,
@@ -39,7 +41,31 @@ class MainLayout extends PureComponent {
    */
   static styles(theme) {
     return {
+      drawer: {
+        flex: 1,
+        height: 'auto',
+
+        '& .scrollbar': {
+          '&::-webkit-scrollbar': { width: 10 },
+
+          '&::-webkit-scrollbar-track': { background: 'transparent' },
+
+          '&::-webkit-scrollbar-thumb': { background: theme.dividerColor },
+
+          '&::-moz-scrollbar': { width: 10 },
+
+          '&::-moz-scrollbar-track': { background: 'transparent' },
+
+          '&::-moz-scrollbar-thumb': {
+            background: theme.type === 'light'
+              ? colors.grey400
+              : colors.grey800,
+          },
+        },
+      },
+
       content: {
+        composes: 'scrollbar',
         display: 'flex',
         width: '100%',
         overflowX: 'hidden',
@@ -47,33 +73,21 @@ class MainLayout extends PureComponent {
         flexDirection: 'column',
         overflowY: 'scroll',
         padding: 16,
+        height: '100%',
         boxSizing: 'border-box',
         flex: 1,
-
-        '&::-webkit-scrollbar': { width: 10 },
-
-        '&::-webkit-scrollbar-track': { background: 'transparent' },
-
-        '&::-webkit-scrollbar-thumb': {
-          background: theme.type === 'light'
-            ? colors.grey400
-            : colors.grey800,
-        },
-
-        '&::-moz-scrollbar': { width: 10 },
-
-        '&::-moz-scrollbar-track': { background: 'transparent' },
-
-        '&::-moz-scrollbar-thumb': {
-          background: theme.type === 'light'
-            ? colors.grey400
-            : colors.grey800,
-        },
 
         [breakpoints.only('desktop')]: { padding: 24 },
       },
 
+      drawerContent: {
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: 'auto 1fr',
+      },
+
       container: {
+        height: '100%',
         display: 'flex',
         flexDirection: 'column',
       },
@@ -85,20 +99,21 @@ class MainLayout extends PureComponent {
       <Drawer
         responsiveWidth={devices.tablet[1]}
         open={this.props.open}
+        className={this.props.classes.drawer}
         onCloseRequest={this.props.onCloseDrawer}
       >
-        <Drawer.DrawerContent>
+        <Drawer.DrawerContent className={this.props.classes.drawerContent}>
           <DrawerContent />
         </Drawer.DrawerContent>
 
         <Drawer.MainContent className={this.props.classes.container}>
           <MainToolbar />
 
-          <ErrorBoundary>
-            <div className={this.props.classes.content}>
+          <div className={this.props.classes.content}>
+            <ErrorBoundary>
               {this.props.children}
-            </div>
-          </ErrorBoundary>
+            </ErrorBoundary>
+          </div>
         </Drawer.MainContent>
       </Drawer>
     );

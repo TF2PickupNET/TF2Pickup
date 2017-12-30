@@ -5,6 +5,7 @@ import {
   pipe,
 } from '../../utils/functions';
 import { getPlayers } from '../../utils/pickup';
+import { getDataForUserItem } from '../../utils/users';
 
 /**
  * Populate the pickup with the correct user data.
@@ -22,14 +23,7 @@ export default async function populateUserData(app, players) {
     )(players),
   );
   const users = pipe(
-    map((user) => {
-      return {
-        id: user.id,
-        name: user.name,
-        avatar: user.services.steam.avatar.medium,
-        roles: user.roles,
-      };
-    }),
+    map(getDataForUserItem),
     arrayToObject(user => user.id),
   )(usersArray);
 

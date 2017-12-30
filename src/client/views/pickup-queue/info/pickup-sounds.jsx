@@ -1,6 +1,6 @@
 import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { differenceInMilliseconds } from 'date-fns';
+import { differenceInMilliseconds } from 'date-fns/esm';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 import { connect } from 'react-redux';
 

@@ -1,6 +1,5 @@
 /* eslint-disable promise/prefer-await-to-callbacks */
 
-import sleep from 'sleep-promise';
 import debug from 'debug';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
@@ -207,32 +206,4 @@ export default function socketMethods(app, socket) {
       });
     });
   }
-
-  socket.on('disconnect', async () => {
-    if (socket.feathers.user) {
-      const userId = socket.feathers.user.id;
-
-      await sleep(60 * 1000);
-
-      const user = await app.service('users').get(userId);
-
-      if (!user.online) {
-        log('Removing user from pickup because of disconnect', userId);
-
-        const pickups = await Promise.all(
-          pipe(
-            Object.keys,
-            map(gamemode => pickupQueue.get(`${user.settings.region}-${gamemode}`)),
-          )(gamemodes),
-        );
-
-        await Promise.all(
-          map(pickup => pickupQueue.patch(
-            pickup.id,
-            { $set: { classes: removePlayersFromClasses([userId])(pickup.classes) } },
-          ))(pickups),
-        );
-      }
-    }
-  });
 }

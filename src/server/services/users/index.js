@@ -6,6 +6,8 @@ import {
   isBefore,
 } from 'date-fns';
 
+import { pluck } from '../../../utils/functions';
+
 import schema from './schema';
 import hooks from './hooks';
 import filters from './filters';
@@ -63,9 +65,17 @@ export default function users() {
   });
 
   that.on('logout', async (payload, { connection }) => {
-    log('User logged out', connection.user.id);
+    const isStillConnected = Object
+      .values(that.io.sockets.sockets)
+      .some(socket => pluck('feathers.user.id')(socket) === connection.user.id);
+
+    if (isStillConnected) {
+      return;
+    }
 
     try {
+      log('User logged out', connection.user.id);
+
       await that.service('users').patch(connection.user.id, {
         $set: {
           online: false,

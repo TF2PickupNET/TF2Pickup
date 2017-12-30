@@ -1,4 +1,5 @@
 import { pluck } from '../../../utils/functions';
+import playSound from '../../utils/play-sound';
 
 import { addNotification } from './actions';
 
@@ -16,6 +17,10 @@ export default function setupListeners(app) {
       app.store.dispatch(
         addNotification(data.message, data.options),
       );
+
+      if (data.sound) {
+        playSound(data.sound);
+      }
     }
   });
 }

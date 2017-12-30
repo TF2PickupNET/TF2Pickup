@@ -33,6 +33,9 @@ const sounds = {
   ...announcerSounds,
   notification: require('../../assets/sounds/notification.mp3'),
   soundFix: require('../../assets/sounds/notification.mp3'),
+  alert: require('../../assets/sounds/admin/alert.mp3'),
+  attention: require('../../assets/sounds/admin/attention.mp3'),
+  warning: require('../../assets/sounds/admin/warning.mp3'),
 };
 
 const getVolume = () => pluck('user.settings.volume')(app.store.getState());

@@ -34,6 +34,7 @@ class RulesSection extends PureComponent {
     },
 
     rules: {
+      composes: 'scrollbar',
       overflowY: 'scroll',
 
       '& ol, ul': {

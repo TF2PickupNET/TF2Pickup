@@ -40,6 +40,7 @@ class OnlineUserItem extends PureComponent {
       alignItems: 'center',
       gridGap: '8px',
       padding: '4px 12px',
+      height: 32,
     },
 
     iconContainer: {

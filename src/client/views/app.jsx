@@ -8,6 +8,7 @@ import app from '../app';
 import jss from '../jss';
 import { isDev } from '../../config/client';
 
+import ThemeProvider from './theme-provider';
 import Routes from './routes';
 
 const MAX_RULES = 1e10;
@@ -46,9 +47,11 @@ export default function App() {
     >
       <Provider store={app.store}>
         <ConnectedRouter history={app.history}>
-          <BasicLayout>
-            <Routes />
-          </BasicLayout>
+          <ThemeProvider>
+            <BasicLayout>
+              <Routes />
+            </BasicLayout>
+          </ThemeProvider>
         </ConnectedRouter>
       </Provider>
     </JssProvider>

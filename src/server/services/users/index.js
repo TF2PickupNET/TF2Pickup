@@ -7,13 +7,13 @@ import {
 } from 'date-fns';
 
 import { pluck } from '../../../utils/functions';
+import { getDataForUserItem } from '../../../utils/users';
 
 import schema from './schema';
 import hooks from './hooks';
 import filters from './filters';
 import socketMethods from './socket-methods';
 import getNewUserData from './third-party-services';
-import { getDataForUserItem } from '../../../utils/users';
 
 const log = debug('TF2Pickup:users');
 

@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import {
   Drawer,
   breakpoints,
-  colors,
 } from 'materialize-react';
 import { devices } from 'materialize-react/lib/styles/breakpoints';
 

@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import Aux from 'react-aux';
 import injectSheet from 'react-jss';
 import {
-  Theme,
   Background,
   Button,
   Spinner,
@@ -40,25 +39,43 @@ class BasicLayout extends PureComponent {
     children: PropTypes.node.isRequired,
     addNotification: PropTypes.func.isRequired,
     userId: PropTypes.string,
-    theme: PropTypes.string,
   };
 
-  static defaultProps = {
-    userId: null,
-    theme: null,
-  };
+  static defaultProps = { userId: null };
 
-  static styles = {
-    background: {
-      display: 'flex',
-      flexDirection: 'column',
-      minWidth: '100vw',
-      maxWidth: '100vw',
-      minHeight: '100vh',
-    },
+  /**
+   * The styles for the component.
+   *
+   * @param {Object} theme - The theme provided by Jss.
+   * @returns {Object} - Returns the styles.
+   */
+  static styles(theme) {
+    return {
+      background: {
+        display: 'flex',
+        flexDirection: 'column',
+        minWidth: '100vw',
+        maxWidth: '100vw',
+        minHeight: '100vh',
 
-    loadingContainer: { height: '100vh' },
-  };
+        '& .scrollbar': {
+          '&::-webkit-scrollbar': { width: 10 },
+
+          '&::-webkit-scrollbar-track': { background: 'transparent' },
+
+          '&::-webkit-scrollbar-thumb': { background: theme.dividerColor },
+
+          '&::-moz-scrollbar': { width: 10 },
+
+          '&::-moz-scrollbar-track': { background: 'transparent' },
+
+          '&::-moz-scrollbar-thumb': { background: theme.dividerColor },
+        },
+      },
+
+      loadingContainer: { height: '100vh' },
+    };
+  }
 
   state = { hasAuthenticated: false };
 
@@ -101,15 +118,6 @@ class BasicLayout extends PureComponent {
     document.addEventListener('visibilitychange', this.playSound);
   }
 
-  /**
-   * Update the local storage when the user state changes.
-   */
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.theme !== this.props.theme) {
-      lockr.set('theme', nextProps.theme);
-    }
-  }
-
   hasPlayedSound = false;
 
   /**
@@ -118,6 +126,8 @@ class BasicLayout extends PureComponent {
   playSound = () => {
     if (!this.hasPlayedSound && !document.hidden) {
       playSound('notification', 0.01);
+
+      document.removeEventListener('visibilitychange', this.playSound);
     }
   };
 
@@ -142,15 +152,6 @@ class BasicLayout extends PureComponent {
   };
 
   /**
-   * Calculate the current theme.
-   *
-   * @returns {String} - Returns the theme type.
-   */
-  getTheme() {
-    return this.props.theme || lockr.get('theme') || 'light';
-  }
-
-  /**
    * Render the content when the user tried to authenticate.
    *
    * @returns {JSX} - Returns the content.
@@ -163,40 +164,34 @@ class BasicLayout extends PureComponent {
 
   render() {
     return (
-      <Theme type={this.getTheme()}>
-        <Background className={this.props.classes.background}>
-          <Dialogs />
+      <Background className={this.props.classes.background}>
+        <Dialogs />
 
-          <Head />
+        <Head />
 
-          <Notifications />
+        <Notifications />
 
-          <NotificationRequester />
+        <NotificationRequester />
 
-          {this.state.hasAuthenticated ? this.renderContent() : (
-            <Layout
-              mainAlign="center"
-              crossAlign="center"
-              className={this.props.classes.loadingContainer}
-            >
-              <Spinner active />
-            </Layout>
-          )}
-        </Background>
-      </Theme>
+        {this.state.hasAuthenticated ? this.renderContent() : (
+          <Layout
+            mainAlign="center"
+            crossAlign="center"
+            className={this.props.classes.loadingContainer}
+          >
+            <Spinner active />
+          </Layout>
+        )}
+      </Background>
     );
   }
 }
 
 export default connect(
   (state) => {
-    return {
-      theme: pluck('settings.theme')(state.user),
-      userId: state.user ? state.user.id : null,
-    };
+    return { userId: pluck('id')(state.user) };
   },
   (dispatch) => {
     return { addNotification: (...args) => dispatch(addNotification(...args)) };
   },
 )(injectSheet(BasicLayout.styles)(BasicLayout));
-

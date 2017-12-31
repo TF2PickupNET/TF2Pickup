@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import {
   Drawer,
   breakpoints,
-  colors,
 } from 'materialize-react';
 import { devices } from 'materialize-react/lib/styles/breakpoints';
 
@@ -33,66 +32,40 @@ class MainLayout extends PureComponent {
     onCloseDrawer: PropTypes.func.isRequired,
   };
 
-  /**
-   * The styles for the main layout and content.
-   *
-   * @param {Object} theme - The theme provided by Jss.
-   * @returns {Object} - Returns the styles.
-   */
-  static styles(theme) {
-    return {
-      drawer: {
-        flex: 1,
-        height: 'auto',
+  static styles = {
+    drawer: {
+      flex: 1,
+      height: 'auto',
+    },
 
-        '& .scrollbar': {
-          '&::-webkit-scrollbar': { width: 10 },
+    content: {
+      composes: 'scrollbar',
+      display: 'flex',
+      width: '100%',
+      overflowX: 'hidden',
+      alignItems: 'center',
+      flexDirection: 'column',
+      overflowY: 'scroll',
+      padding: 16,
+      height: '100%',
+      boxSizing: 'border-box',
+      flex: 1,
 
-          '&::-webkit-scrollbar-track': { background: 'transparent' },
+      [breakpoints.only('desktop')]: { padding: 24 },
+    },
 
-          '&::-webkit-scrollbar-thumb': { background: theme.dividerColor },
+    drawerContent: {
+      display: 'grid',
+      gridTemplateColumns: '1fr',
+      gridTemplateRows: 'auto 1fr',
+    },
 
-          '&::-moz-scrollbar': { width: 10 },
-
-          '&::-moz-scrollbar-track': { background: 'transparent' },
-
-          '&::-moz-scrollbar-thumb': {
-            background: theme.type === 'light'
-              ? colors.grey400
-              : colors.grey800,
-          },
-        },
-      },
-
-      content: {
-        composes: 'scrollbar',
-        display: 'flex',
-        width: '100%',
-        overflowX: 'hidden',
-        alignItems: 'center',
-        flexDirection: 'column',
-        overflowY: 'scroll',
-        padding: 16,
-        height: '100%',
-        boxSizing: 'border-box',
-        flex: 1,
-
-        [breakpoints.only('desktop')]: { padding: 24 },
-      },
-
-      drawerContent: {
-        display: 'grid',
-        gridTemplateColumns: '1fr',
-        gridTemplateRows: 'auto 1fr',
-      },
-
-      container: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-      },
-    };
-  }
+    container: {
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+    },
+  };
 
   render() {
     return (

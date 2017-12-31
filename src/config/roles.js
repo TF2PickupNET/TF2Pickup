@@ -50,4 +50,14 @@ export default {
       dark: colors.orange500,
     },
   },
+
+  user: {
+    name: 'user',
+    display: 'User',
+    level: 0,
+    color: {
+      light: null,
+      dark: null,
+    },
+  },
 };

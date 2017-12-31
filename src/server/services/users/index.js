@@ -7,6 +7,7 @@ import {
 } from 'date-fns';
 
 import { pluck } from '../../../utils/functions';
+import { getDataForUserItem } from '../../../utils/users';
 
 import schema from './schema';
 import hooks from './hooks';
@@ -56,12 +57,10 @@ export default function users() {
       log('Error in login callback', connection.user.id, error);
     }
 
-    that.service('users').emit('login', {
-      id: connection.user.id,
-      name: connection.user.name,
-      avatar: connection.user.services.steam.avatar.medium,
-      roles: connection.user.roles,
-    });
+    // This is needed because on the first login the user doesn't have a name yet
+    if (connection.user.name) {
+      that.service('users').emit('login', getDataForUserItem(connection.user));
+    }
   });
 
   that.on('logout', async (payload, { connection }) => {

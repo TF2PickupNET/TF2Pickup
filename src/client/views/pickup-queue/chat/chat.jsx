@@ -13,16 +13,20 @@ import {
   pluck,
 } from '../../../../utils/functions';
 
+import Input from './input';
+
 class Chat extends PureComponent {
   static styles = {
     card: {
       marginLeft: 0,
       marginRight: 0,
       display: 'grid',
-      padding: 8,
+      padding: '8px 8px 0 8px',
       gridTemplateColumns: '1fr',
       gridTemplateRows: 'auto 1fr auto',
     },
+
+    tabs: { marginBottom: 8 },
   };
 
   state = { selectedChat: this.props.region };
@@ -48,6 +52,7 @@ class Chat extends PureComponent {
       <Card className={this.props.classes.card}>
         <Tabs
           tab={this.state.selectedChat}
+          className={this.props.classes.tabs}
           onChange={this.handleTabChange}
         >
           <Tab name="global">
@@ -58,6 +63,10 @@ class Chat extends PureComponent {
             {regions[this.props.region].fullName}
           </Tab>
         </Tabs>
+
+        <div />
+
+        <Input chat={this.state.selectedChat} />
       </Card>
     );
   }

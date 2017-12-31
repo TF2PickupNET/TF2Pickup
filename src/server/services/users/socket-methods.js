@@ -8,6 +8,7 @@ import {
 } from '../../../utils/functions';
 import hasPermission from '../../../utils/has-permission';
 import announcers from '../../../config/announcers';
+import { getDataForUserItem } from '../../../utils/users';
 
 const announcersArray = Object.values(announcers);
 
@@ -79,7 +80,7 @@ export default function socketMethods(app, socket) {
     }
   });
 
-  socket.on('user.change-region', async ({ region }, cb) => {
+  socket.on('user.change-region', async ({ region }, cb = () => {}) => {
     if (socket.feathers.user) {
       await users.patch(socket.feathers.user.id, { $set: { 'settings.region': region } });
     }
@@ -87,7 +88,7 @@ export default function socketMethods(app, socket) {
     return cb();
   });
 
-  socket.on('user.change-theme', async ({ theme }, cb) => {
+  socket.on('user.change-theme', async ({ theme }, cb = () => {}) => {
     if (socket.feathers.user) {
       await users.patch(socket.feathers.user.id, { $set: { 'settings.theme': theme } });
     }
@@ -95,7 +96,7 @@ export default function socketMethods(app, socket) {
     return cb();
   });
 
-  socket.on('user.change-volume', async ({ volume }, cb) => {
+  socket.on('user.change-volume', async ({ volume }, cb = () => {}) => {
     if (socket.feathers.user) {
       await users.patch(socket.feathers.user.id, { $set: { 'settings.volume': volume } });
     }
@@ -103,7 +104,7 @@ export default function socketMethods(app, socket) {
     return cb();
   });
 
-  socket.on('user.change-announcer', async ({ announcer }, cb) => {
+  socket.on('user.change-announcer', async ({ announcer }, cb = () => {}) => {
     if (!socket.feathers.user) {
       return;
     }
@@ -141,7 +142,9 @@ export default function socketMethods(app, socket) {
     if (Object.keys(names).length === 1) {
       const name = Object.keys(names)[0];
 
-      await app.service('users').patch(currentUser.id, { $set: { name } });
+      const user = await users.patch(currentUser.id, { $set: { name } });
+
+      users.emit('login', getDataForUserItem(user));
 
       return false;
     }
@@ -154,7 +157,9 @@ export default function socketMethods(app, socket) {
       const userWithName = await users.find({ query: { name } });
 
       if (userWithName.length === 0) {
-        await users.patch(socket.feathers.user.id, { $set: { name } });
+        const user = await users.patch(socket.feathers.user.id, { $set: { name } });
+
+        users.emit('login', getDataForUserItem(user));
 
         return cb({});
       }

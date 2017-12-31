@@ -155,3 +155,15 @@ export const pick = (...keys) => obj => pipe(
 )(obj);
 
 export const concat = (...array) => arr => [...arr, ...flatten(array)];
+
+export const includes = item => ([x, ...xs]) => {
+  if (undef(x)) {
+    return false;
+  }
+
+  if (item === x) {
+    return true;
+  }
+
+  return includes(item)(xs);
+};

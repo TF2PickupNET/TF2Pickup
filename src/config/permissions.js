@@ -4,10 +4,7 @@ export default {
   user: {
     'change-role': { level: roles.headAdmin.level },
 
-    alert: {
-      level: roles.admin.level,
-      selfEditing: true,
-    },
+    alert: { level: roles.admin.level },
   },
 
   chat: {

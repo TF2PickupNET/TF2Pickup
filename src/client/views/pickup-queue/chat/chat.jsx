@@ -14,6 +14,7 @@ import {
 } from '../../../../utils/functions';
 
 import Input from './input';
+import MessagesContainer from './messages-container';
 
 class Chat extends PureComponent {
   static styles = {
@@ -64,7 +65,7 @@ class Chat extends PureComponent {
           </Tab>
         </Tabs>
 
-        <div />
+        <MessagesContainer chat={this.state.selectedChat} />
 
         <Input chat={this.state.selectedChat} />
       </Card>

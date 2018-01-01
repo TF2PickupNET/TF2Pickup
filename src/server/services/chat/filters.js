@@ -2,7 +2,7 @@ import { pluck } from '../../../utils/functions';
 
 export default {
   created(data, connection) {
-    const region = pluck('setting.region')(connection.user);
+    const region = pluck('settings.region')(connection.user);
 
     if (data.chat === 'global' || data.chat === region) {
       return data;
@@ -12,7 +12,7 @@ export default {
   },
 
   removed(data, connection) {
-    const region = pluck('setting.region')(connection.user);
+    const region = pluck('settings.region')(connection.user);
 
     if (data.chat === 'global' || data.chat === region) {
       return data;

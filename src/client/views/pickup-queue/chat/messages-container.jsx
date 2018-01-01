@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 
 import {
@@ -9,27 +10,47 @@ import {
 
 import Message from './message';
 
-function MessagesContainer(props) {
-  return (
-    <div className={props.classes.container}>
-      {props.messages.map(message => (
-        <Message
-          key={message._id}
-          message={message}
-        />
-      ))}
-    </div>
-  );
-}
+class MessagesContainer extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({ container: PropTypes.string.isRequired }).isRequired,
+    messages: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  };
 
-MessagesContainer.styles = {
-  container: {
-    composes: 'scrollbar',
-    overflowY: 'scroll',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-};
+  static styles = {
+    container: {
+      composes: 'scrollbar',
+      overflowY: 'scroll',
+      display: 'flex',
+      flexDirection: 'column',
+    },
+  };
+
+  componentDidMount() {
+    this.container.scrollTop = this.container.scrollHeight;
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.messages.length < this.props.messages.length) {
+      this.container.scrollTop = this.container.scrollHeight;
+    }
+  }
+
+  render() {
+    return (
+      <div
+        className={this.props.classes.container}
+        ref={(element) => { this.container = element; }}
+      >
+        {this.props.messages.map(message => (
+          <Message
+            key={message._id}
+            message={message}
+          />
+        ))}
+      </div>
+    );
+  }
+}
 
 export default pipe(
   injectSheet(MessagesContainer.styles),

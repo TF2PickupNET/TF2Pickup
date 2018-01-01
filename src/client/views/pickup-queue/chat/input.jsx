@@ -30,7 +30,7 @@ export default class Input extends PureComponent {
    */
   handleKeyDown = (ev) => {
     if (ev.keyCode === 13) {
-      app.io.emit('chat.add-message', {
+      app.io.emit('chat.new-message', {
         chat: this.props.chat,
         message: ev.target.value,
       });

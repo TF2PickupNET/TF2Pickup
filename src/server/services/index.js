@@ -10,6 +10,7 @@ import discordMessage from './discord-message';
 import discordChannels from './discord-channels';
 import voiceChannel from './voice-channel';
 import chat from './chat';
+import notifications from './notifications';
 
 /**
  * Setup all of the services.
@@ -27,5 +28,6 @@ export default function services() {
     .configure(discordMessage)
     .configure(discordChannels)
     .configure(voiceChannel)
-    .configure(chat);
+    .configure(chat)
+    .configure(notifications);
 }

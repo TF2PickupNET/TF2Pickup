@@ -129,7 +129,7 @@ export default async function createPickup(props) {
     // Reset the pickup queue to waiting status
     // await pickupQueueService.patch(props.id, { $set: { status: 'waiting' } });
 
-    props.app.io.emit('notifications.add', {
+    props.app.service('notifications').create({
       forUsers: playerIds,
       sound: 'alert',
       message: error.message,

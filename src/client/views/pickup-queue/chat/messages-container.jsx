@@ -10,6 +10,11 @@ import {
 
 import Message from './message';
 
+/**
+ * The container for the messages.
+ *
+ * @class
+ */
 class MessagesContainer extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({ container: PropTypes.string.isRequired }).isRequired,
@@ -25,12 +30,18 @@ class MessagesContainer extends PureComponent {
     },
   };
 
+  /**
+   * Scroll down to the bottom on mount.
+   */
   componentDidMount() {
     this.container.scrollTop = this.container.scrollHeight;
   }
 
+  /**
+   * Scroll to the bottom the messages change.
+   */
   componentDidUpdate(prevProps) {
-    if (prevProps.messages.length < this.props.messages.length) {
+    if (prevProps.messages.length !== this.props.messages.length) {
       this.container.scrollTop = this.container.scrollHeight;
     }
   }

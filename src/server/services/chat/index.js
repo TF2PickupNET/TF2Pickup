@@ -6,6 +6,9 @@ import filters from './filters';
 import socketMethods from './socket-methods';
 import hooks from './hooks';
 
+/**
+ * Setup the chat service.
+ */
 export default function chat() {
   const that = this;
 

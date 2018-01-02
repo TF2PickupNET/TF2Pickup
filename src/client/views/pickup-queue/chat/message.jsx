@@ -1,9 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import UserItem from '../../../components/user-item';
 import Date from '../../../components/date';
 
-export default function Message(props) {
+/**
+ * Render the message of a user.
+ *
+ * @param {Object} props - The props for the component.
+ * @returns {JSX} - Returns the JSX.
+ */
+function Message(props) {
   return (
     <span>
       <Date
@@ -13,3 +20,13 @@ export default function Message(props) {
     </span>
   );
 }
+
+Message.propTypes = {
+  message: PropTypes.shape({
+    createdOn: PropTypes.string.isRequired,
+    user: PropTypes.shape({}).isRequired,
+    message: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+export default Message;

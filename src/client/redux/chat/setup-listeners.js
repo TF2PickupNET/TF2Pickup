@@ -13,6 +13,11 @@ import {
 const transformMessages = arrayToObject(pluck('_id'));
 const getRegion = pluck('user.settings.region', 'eu');
 
+/**
+ * Setup the listeners for the chat.
+ *
+ * @param {Object} app - The feathers app object.
+ */
 export default function setupListeners(app) {
   const chatService = app.service('chat');
   const yesterday = subDays(new Date(), 1);

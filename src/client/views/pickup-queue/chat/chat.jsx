@@ -4,6 +4,7 @@ import {
   Tab,
   Tabs,
 } from 'materialize-react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
 import regions from '@tf2-pickup/configs/regions';
@@ -16,7 +17,20 @@ import {
 import Input from './input';
 import MessagesContainer from './messages-container';
 
+/**
+ * The chat component.
+ *
+ * @class
+ */
 class Chat extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({
+      card: PropTypes.string.isRequired,
+      tabs: PropTypes.string.isRequired,
+    }).isRequired,
+    region: PropTypes.string.isRequired,
+  };
+
   static styles = {
     card: {
       marginLeft: 0,
@@ -32,6 +46,9 @@ class Chat extends PureComponent {
 
   state = { selectedChat: this.props.region };
 
+  /**
+   * Change the region when the user changes his region.
+   */
   componentWillReceiveProps(nextProps) {
     if (nextProps.region !== this.props.region) {
       this.setState((state) => {
@@ -44,6 +61,9 @@ class Chat extends PureComponent {
     }
   }
 
+  /**
+   * Change the selected chat when the tab changes.
+   */
   handleTabChange = (tab) => {
     this.setState({ selectedChat: tab });
   };

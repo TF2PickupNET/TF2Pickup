@@ -69,7 +69,7 @@ export default function socketMethods(app, socket) {
       if (await isPlayerInPickup(app, userId)) {
         log('User blocked for pickup', userId);
 
-        app.io.emit('notifications.add', {
+        app.service('notifications').create({
           forUsers: [ userId ],
           message: 'You are already in a pickup',
         });
@@ -175,7 +175,7 @@ export default function socketMethods(app, socket) {
         { $set: { classes: removePlayersFromClasses([userId])(queue.classes) } },
       );
 
-      app.io.emit('notifications.add', {
+      app.service('notifications').create({
         forUsers: [userId],
         sound: 'alert',
         message: `You got kicked by ${socket.feathers.user.name}`,

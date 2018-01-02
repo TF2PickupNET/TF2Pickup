@@ -122,7 +122,7 @@ export default function socketMethods(app, socket) {
     const user = await users.get(userId);
 
     if (hasPermission('user.alert', socket.feathers.user, user)) {
-      app.io.emit('notifications.add', {
+      app.service('notifications').create({
         forUsers: [userId],
         sound: 'alert',
         message: `You got alerted by ${socket.feathers.user.name}`,

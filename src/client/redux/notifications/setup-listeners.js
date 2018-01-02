@@ -1,4 +1,3 @@
-import { pluck } from '../../../utils/functions';
 import playSound from '../../utils/play-sound';
 
 import { addNotification } from './actions';
@@ -10,17 +9,13 @@ import { addNotification } from './actions';
  * @param {Object} app - The feathers app object.
  */
 export default function setupListeners(app) {
-  app.io.on('notifications.add', (data) => {
-    const userId = pluck('user.id')(app.store.getState());
+  app.service('notifications').on('created', (notification) => {
+    app.store.dispatch(
+      addNotification(notification.message, notification.options),
+    );
 
-    if (data.forUsers === null || data.forUsers.includes(userId)) {
-      app.store.dispatch(
-        addNotification(data.message, data.options),
-      );
-
-      if (data.sound) {
-        playSound(data.sound);
-      }
+    if (notification.sound) {
+      playSound(notification.sound);
     }
   });
 }

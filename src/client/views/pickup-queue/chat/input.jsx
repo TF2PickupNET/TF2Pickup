@@ -28,9 +28,9 @@ export default class Input extends PureComponent {
    *
    * @param {Object} ev - The event object.
    */
-  handleKeyDown = (ev) => {
+  handleKeyDown = async (ev) => {
     if (ev.keyCode === 13) {
-      app.io.emit('chat.new-message', {
+      await app.service('chat').create({
         chat: this.props.chat,
         message: ev.target.value,
       });

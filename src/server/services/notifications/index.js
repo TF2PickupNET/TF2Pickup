@@ -1,3 +1,5 @@
+import hooks from 'feathers-hooks-common';
+
 import { pluck } from '../../../utils/functions';
 
 const service = { create: notification => Promise.resolve(notification) };
@@ -11,6 +13,8 @@ export default function notifications() {
   const that = this;
 
   that.service('notifications', service);
+
+  that.service('notifications').hooks({ before: { all: hooks.disallow('external') } });
 
   that.service('notifications').filter({
     created(data, connection) {

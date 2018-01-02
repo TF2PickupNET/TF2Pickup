@@ -31,18 +31,6 @@ class RedirectToPickup extends PureComponent {
   }
 }
 
-/**
- * Connect the Redirect with redux.
- *
- * @param {Function} dispatch - The dispatch function from redux.
- * @returns {Object} - Returns the props for the BasicLayout component.
- */
-function mapDispatchToProps(dispatch) {
-  return {
-    redirect(url) {
-      return dispatch(push(url));
-    },
-  };
-}
-
-export default connect(null, mapDispatchToProps)(RedirectToPickup);
+export default connect(null, (dispatch) => {
+  return { redirect: url => dispatch(push(url)) };
+})(RedirectToPickup);

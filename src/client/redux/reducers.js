@@ -8,6 +8,7 @@ import connected from './connected/reducer';
 import pickupQueue from './pickup-queue/reducer';
 import drawerOpened from './drawer-opened/reducer';
 import onlineUsers from './online-users/reducer';
+import chat from './chat/reducer';
 
 /**
  * Combine the reducers and setup all of the event listeners for the stores.
@@ -21,6 +22,7 @@ export default function reducers(app) {
   pickupQueue.setupListeners(app);
   onlineUsers.setupListeners(app);
   notifications.setupListeners(app);
+  chat.setupListeners(app);
 
   return combineReducers({
     user,
@@ -30,6 +32,7 @@ export default function reducers(app) {
     pickupQueue,
     drawerOpened,
     onlineUsers,
+    chat,
     router: routerReducer,
   });
 }

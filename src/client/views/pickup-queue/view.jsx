@@ -15,6 +15,7 @@ import Tabs from './tabs';
 import Info from './info';
 import Classes from './classes';
 import OnlineUsers from './online-users';
+import Chat from './chat';
 
 /**
  * The view for the pickup page.
@@ -44,13 +45,13 @@ class View extends PureComponent {
       display: 'grid',
       gridTemplateColumns: '3fr 1fr',
       gridGap: '16px',
-      gridTemplateRows: '340px',
+      gridTemplateRows: '380px',
 
       [breakpoints.only('tablet')]: { gridTemplateColumns: '2fr 1fr' },
 
       [breakpoints.only('mobile')]: {
         gridTemplateColumns: '1fr',
-        gridTemplateRows: '340px 340px',
+        gridTemplateRows: '380px 380px',
       },
     },
   };
@@ -88,7 +89,7 @@ class View extends PureComponent {
           <Classes />
 
           <div className={this.props.classes.chatContainer}>
-            <div />
+            <Chat />
 
             <OnlineUsers />
           </div>

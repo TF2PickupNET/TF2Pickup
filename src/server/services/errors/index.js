@@ -28,6 +28,8 @@ export default function errors() {
     before: {
       create(hook) {
         if (!hook.params.provider) {
+          log('Creating server side error:', hook.data.message);
+
           return hook;
         }
 
@@ -36,6 +38,8 @@ export default function errors() {
         if (!userId) {
           throw new Forbidden('You are not allowed to create an error!');
         }
+
+        log('Creating client error from user:', userId, hook.data.message);
 
         return {
           ...hook,

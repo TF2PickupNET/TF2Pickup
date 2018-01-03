@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 
 import openWindowInNewTab from '../../utils/open-window-in-new-tab';
 import { discordUrls } from '../../../config/client';
+import app from '../../app';
 
 /**
  * An error boundary which catches errors in the react vdom tree.
@@ -49,6 +50,11 @@ class ErrorBoundary extends PureComponent {
     this.info = info;
 
     this.setState({ hasError: true });
+
+    app.service('errors').create({
+      message: error,
+      info,
+    });
   }
 
   /**

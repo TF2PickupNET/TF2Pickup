@@ -24,7 +24,7 @@ async function registerServiceWorker() {
 
     // Try updating the service worker after reconnecting
     // We need this because we might have pushed a new version
-    app.store.on('state.change', async (prevState, newState) => {
+    app.on('state.change', async (prevState, newState) => {
       if (newState.connected === true && prevState.connected === false) {
         await worker.update();
       }

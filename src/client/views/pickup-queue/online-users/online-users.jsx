@@ -17,7 +17,7 @@ import OnlineUserItem from './online-user-item';
 function OnlineUsers(props) {
   return (
     <Card className={props.classes.card}>
-      <Card.Header>
+      <Card.Header className={props.classes.header}>
         Online Users
       </Card.Header>
 
@@ -37,6 +37,7 @@ OnlineUsers.propTypes = {
   classes: PropTypes.shape({
     card: PropTypes.string.isRequired,
     list: PropTypes.string.isRequired,
+    header: PropTypes.string.isRequired,
   }).isRequired,
   onlineUsers: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
@@ -51,6 +52,12 @@ OnlineUsers.styles = {
   },
 
   list: { paddingBottom: 8 },
+
+  header: {
+    marginBottom: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
 };
 
 export default connect(

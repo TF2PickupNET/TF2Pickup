@@ -58,7 +58,7 @@ export default connect(
     return {
       onlineUsers: Object
         .values(state.onlineUsers)
-        .sort((userA, userB) => computeLevel(userB) - computeLevel(userA))
+        .sort((userA, userB) => computeLevel(userB.roles) - computeLevel(userA.roles))
         .map(user => user.id),
     };
   },

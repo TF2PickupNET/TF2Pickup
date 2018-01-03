@@ -9,11 +9,11 @@ import {
 export default {
   before: {
     all(hook) {
-      if (hook.method === 'create') {
+      if (hook.method === 'create' || hook.method === 'find') {
         return hook;
       }
 
-      return hooks.disallow();
+      return hooks.disallow()(hook);
     },
 
     create(hook) {

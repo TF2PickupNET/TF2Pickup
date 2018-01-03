@@ -1,5 +1,6 @@
 import debug from 'debug';
 import classnames from 'classnames';
+import hooks from 'feathers-hooks-common';
 
 import hasPermission from '../../../utils/has-permission';
 import {
@@ -77,10 +78,18 @@ async function populateUsers(hook) {
 
 export default {
   before: {
+    all(hook) {
+      if (hook.method === 'get' || hook.method === 'find') {
+        return hook;
+      }
+
+      return hooks.disallow('external')(hook);
+    },
+
     create: [
       // Calculate the id of the pickup
       async (hook) => {
-        const lastPickup = await hook.app.service('pickup').find({
+        const lastPickup = await hook.service.find({
           query: {
             $limit: 1,
             $sort: { launchedOn: -1 },
@@ -155,7 +164,7 @@ export default {
   },
   after: {
     create(hook) {
-      hook.app.service('pickup').emit('redirect', {
+      hook.service.emit('redirect', {
         id: hook.result.id,
         users: pipe(
           Object.values,

@@ -14,5 +14,6 @@ export default {
     ],
 
     update: hooks.disallow(),
+    patch: hooks.disallow('external'),
   },
 };

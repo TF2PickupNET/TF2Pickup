@@ -120,12 +120,5 @@ export default {
         result: removeSensibleData(hook.result, hook),
       };
     }),
-
-    patch: hooks.iff(hooks.isProvider('external'), (hook) => {
-      return {
-        ...hook,
-        result: removeSensibleData(hook.result, hook),
-      };
-    }),
   },
 };

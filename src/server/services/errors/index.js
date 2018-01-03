@@ -4,12 +4,11 @@ import debug from 'debug';
 import hooks from 'feathers-hooks-common';
 import { Forbidden } from 'feathers-errors';
 
-import { pluck } from '../../../utils/functions';
+import { getUserIdFromHook } from '../../../utils/users';
 
 import schema from './schema';
 
 const log = debug('TF2Pickup:errors');
-const getUserId = pluck('params.user.id');
 
 /**
  * Set up the logs service.
@@ -33,7 +32,7 @@ export default function errors() {
           return hook;
         }
 
-        const userId = getUserId(hook);
+        const userId = getUserIdFromHook(hook);
 
         if (!userId) {
           throw new Forbidden('You are not allowed to create an error!');

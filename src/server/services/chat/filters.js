@@ -10,14 +10,4 @@ export default {
 
     return false;
   },
-
-  removed(data, connection) {
-    const region = pluck('settings.region')(connection.user);
-
-    if (data.chat === 'global' || data.chat === region) {
-      return data;
-    }
-
-    return false;
-  },
 };

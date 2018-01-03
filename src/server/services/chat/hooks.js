@@ -1,10 +1,10 @@
 import hooks from 'feathers-hooks-common';
 
-import { getDataForUserItem } from '../../../utils/users';
 import {
-  map,
-  pluck,
-} from '../../../utils/functions';
+  getDataForUserItem,
+  getUserIdFromHook,
+} from '../../../utils/users';
+import { map } from '../../../utils/functions';
 
 export default {
   before: {
@@ -21,7 +21,7 @@ export default {
         ...hook,
         data: {
           ...hook.data,
-          userId: pluck('params.user.id')(hook),
+          userId: getUserIdFromHook(hook),
         },
       };
     },

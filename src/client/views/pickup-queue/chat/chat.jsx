@@ -13,6 +13,7 @@ import {
   pipe,
   pluck,
 } from '../../../../utils/functions';
+import { getGamemodeFromUrl } from '../../../../utils/pickup';
 
 import Input from './input';
 import MessagesContainer from './messages-container';
@@ -29,6 +30,7 @@ class Chat extends PureComponent {
       tabs: PropTypes.string.isRequired,
     }).isRequired,
     region: PropTypes.string.isRequired,
+    gamemode: PropTypes.string.isRequired,
   };
 
   static styles = {
@@ -57,6 +59,19 @@ class Chat extends PureComponent {
         }
 
         return null;
+      });
+    }
+
+    /**
+     * Hack for updating the tabs bar when the gamemode changes and with that the width.
+     */
+    if (nextProps.gamemode !== this.props.gamemode) {
+      this.setState((state) => {
+        return { selectedChat: state.selectedChat === 'global' ? nextProps.region : 'global' };
+      }, () => {
+        this.setState((state) => {
+          return { selectedChat: state.selectedChat === 'global' ? nextProps.region : 'global' };
+        });
       });
     }
   }
@@ -95,7 +110,10 @@ class Chat extends PureComponent {
 
 export default pipe(
   connect((state) => {
-    return { region: pluck('settings.region', 'eu')(state.user) };
+    return {
+      region: pluck('settings.region', 'eu')(state.user),
+      gamemode: getGamemodeFromUrl(state.router.location.pathname),
+    };
   }),
   injectSheet(Chat.styles),
 )(Chat);

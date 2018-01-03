@@ -7395,9 +7395,9 @@ react-side-effect@^1.1.0:
     exenv "^1.2.1"
     shallowequal "^1.0.1"
 
-react-smart-parallax@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/react-smart-parallax/-/react-smart-parallax-4.0.0.tgz#ae97854fe1fde8af82f042871e4f1cb8c4506f48"
+react-smart-parallax@4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-smart-parallax/-/react-smart-parallax-4.0.1.tgz#4d843ca5ce663a8303fb2328f421ac2de075249a"
   dependencies:
     prop-types "15.6.0"
     react-event-listener "0.5.3"

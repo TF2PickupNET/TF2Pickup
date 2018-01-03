@@ -4,7 +4,14 @@ import {
   getDataForUserItem,
   getUserIdFromHook,
 } from '../../../utils/users';
-import { map } from '../../../utils/functions';
+import {
+  filter,
+  map,
+  pipe,
+} from '../../../utils/functions';
+import hasPermission from '../../../utils/has-permission';
+
+const globalMention = 'this';
 
 export default {
   before: {
@@ -16,15 +23,54 @@ export default {
       return hooks.disallow()(hook);
     },
 
-    create(hook) {
-      return {
-        ...hook,
-        data: {
-          ...hook.data,
-          userId: getUserIdFromHook(hook),
-        },
-      };
-    },
+    create: [
+      (hook) => {
+        return {
+          ...hook,
+          data: {
+            ...hook.data,
+            userId: getUserIdFromHook(hook),
+          },
+        };
+      },
+
+      async (hook) => {
+        await Promise.all(
+          pipe(
+            filter(word => word.startsWith('@')),
+            map(mention => mention.slice(1)),
+            filter((mention) => {
+              if (mention === globalMention) {
+                return hasPermission('chat.use-global-mention', hook.params.user);
+              }
+
+              return true;
+            }),
+            map((mention) => {
+              if (mention === globalMention) {
+                return hook.data.chat === 'global' ? null : {
+                  online: true,
+                  'settings.region': hook.data.chat,
+                };
+              }
+
+              return { name: mention };
+            }),
+            map(async (query) => {
+              const users = query
+                ? await hook.app.service('users').find({ query })
+                : null;
+
+              await hook.app.service('notifications').create({
+                forUsers: users ? users.map(user => user.id) : null,
+                message: `${hook.params.user.name} mentioned you`,
+                sound: 'notification',
+              });
+            }),
+          )(hook.data.message.split(' ')),
+        );
+      },
+    ],
   },
 
   after: {

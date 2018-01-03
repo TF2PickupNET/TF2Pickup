@@ -3,6 +3,13 @@ import { TextField } from 'materialize-react';
 import PropTypes from 'prop-types';
 
 import app from '../../../app';
+import {
+  filter,
+  pipe,
+  pluck,
+} from '../../../../utils/functions';
+
+const lastMentionRegex = /.*@\w+$/;
 
 /**
  * The input field for the chat.
@@ -29,13 +36,40 @@ export default class Input extends PureComponent {
    * @param {Object} ev - The event object.
    */
   handleKeyDown = async (ev) => {
-    if (ev.keyCode === 13) {
-      await app.service('chat').create({
-        chat: this.props.chat,
-        message: ev.target.value,
-      });
+    switch (ev.keyCode) {
+      case 13: {
+        await app.service('chat').create({
+          chat: this.props.chat,
+          message: ev.target.value,
+        });
 
-      this.setState({ value: '' });
+        this.setState({ value: '' });
+        break;
+      }
+      case 9: {
+        const mention = ev.target.value.match(lastMentionRegex);
+
+        if (mention[0]) {
+          ev.preventDefault();
+
+          const name = mention[0].slice(1);
+
+          const users = pipe(
+            pluck('onlineUsers'),
+            Object.values,
+            filter(user => user.name.startsWith(name)),
+          )(app.store.getState());
+
+          if (users.length === 1) {
+            const newValue = ev.target.value.replace(lastMentionRegex, `@${users[0].name}`);
+
+            this.setState({ value: newValue });
+          }
+        }
+
+        break;
+      }
+      default: break;
     }
   };
 

@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start-dev": "NODE_ENV=\"development\" babel-node src/server",
-    "start-prod": "NODE_ENV=\"production\" DEBUG_COLORS=FALSE node dist/server",
+    "start-prod": "NODE_ENV=\"production\" DEBUG=\"TF2Pickup*\" DEBUG_COLORS=FALSE node dist/server",
     "clear-dist": "rm -rf dist/",
     "build": "yarn run build-icons && yarn run build-server && yarn run build-client",
     "build-icons": "babel src/client/icons --presets react,env -d .temp-icons && babel-node scripts/build-icons.js",

@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+import { pluck } from './functions';
 
 /**
  * Only return the actual needed properties for rendering a user item.
@@ -14,3 +14,5 @@ export function getDataForUserItem(user) {
     avatar: user.services.steam.avatar.medium,
   };
 }
+
+export const getUserIdFromHook = pluck('params.user.id');

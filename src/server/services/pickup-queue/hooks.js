@@ -17,6 +17,16 @@ function populateClasses(hook, pickup) {
 }
 
 export default {
+  before: {
+    all(hook) {
+      if (hook.method === 'get' || hook.method === 'find') {
+        return hook;
+      }
+
+      return hooks.disallow('external')(hook);
+    },
+  },
+
   after: {
     find: hooks.iff(hooks.isProvider('external'), [
       async (hook) => {

@@ -1,7 +1,32 @@
-import { getDataForUserItem } from '../../../utils/users';
+import hooks from 'feathers-hooks-common';
+
+import {
+  getDataForUserItem,
+  getUserIdFromHook,
+} from '../../../utils/users';
 import { map } from '../../../utils/functions';
 
 export default {
+  before: {
+    all(hook) {
+      if (hook.method === 'create' || hook.method === 'find') {
+        return hook;
+      }
+
+      return hooks.disallow()(hook);
+    },
+
+    create(hook) {
+      return {
+        ...hook,
+        data: {
+          ...hook.data,
+          userId: getUserIdFromHook(hook),
+        },
+      };
+    },
+  },
+
   after: {
     async create(hook) {
       const user = await hook.app.service('users').get(hook.result.userId);

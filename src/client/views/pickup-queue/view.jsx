@@ -51,7 +51,7 @@ class View extends PureComponent {
 
       [breakpoints.only('mobile')]: {
         gridTemplateColumns: '1fr',
-        gridTemplateRows: '380px 380px',
+        gridTemplateRows: '400px 400px',
       },
     },
   };

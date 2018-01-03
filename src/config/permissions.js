@@ -10,7 +10,7 @@ export default {
   chat: {
     delete: { level: roles.admin.level },
 
-    'use-global-mentions': { level: roles.admin.level },
+    'use-global-mention': { level: roles.admin.level },
   },
 
   pickup: {

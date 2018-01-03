@@ -7304,6 +7304,15 @@ react-event-listener@0.5.1:
     prop-types "^15.6.0"
     warning "^3.0.0"
 
+react-event-listener@0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/react-event-listener/-/react-event-listener-0.5.3.tgz#a8b492596ad601865314fcc2c18cb87b6ce3876e"
+  dependencies:
+    babel-runtime "^6.26.0"
+    fbjs "^0.8.16"
+    prop-types "^15.6.0"
+    warning "^3.0.0"
+
 react-get-not-declared-props@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/react-get-not-declared-props/-/react-get-not-declared-props-0.2.0.tgz#76834f7acedcf330eefc8d79e49165083299dc24"
@@ -7386,11 +7395,12 @@ react-side-effect@^1.1.0:
     exenv "^1.2.1"
     shallowequal "^1.0.1"
 
-react-smart-parallax@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-smart-parallax/-/react-smart-parallax-2.0.0.tgz#a2df051ab3f2ed760056a06c66cfdc3a7cc55aef"
+react-smart-parallax@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/react-smart-parallax/-/react-smart-parallax-4.0.0.tgz#ae97854fe1fde8af82f042871e4f1cb8c4506f48"
   dependencies:
     prop-types "15.6.0"
+    react-event-listener "0.5.3"
     react-get-not-declared-props "0.2.0"
     warning "3.0.0"
 

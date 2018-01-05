@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
 import Helmet from 'react-helmet';
-import Aux from 'react-aux';
 import { connect } from 'react-redux';
-import { Spinner } from 'materialize-react';
+import {
+  Spinner,
+  Card,
+} from 'materialize-react';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
@@ -45,7 +47,10 @@ class View extends PureComponent {
     },
   };
 
-  state = { pickup: null };
+  state = {
+    pickup: null,
+    isLoading: true,
+  };
 
   /**
    * Get the initial pickup and setup the event listener.
@@ -53,18 +58,22 @@ class View extends PureComponent {
   async componentWillMount() {
     const service = app.service('pickup');
 
-    service.on('patched', this.handlePickupUpdate);
+    try {
+      const pickup = await service.get(this.id);
 
-    const pickup = await service.get(this.id);
+      service.on('patched', this.handlePickupUpdate);
 
-    this.setState({ pickup });
+      this.setState({ pickup });
+    } finally {
+      this.setState({ isLoading: false });
+    }
   }
 
   /**
    * When the user id changes, the user log in / out we refetch the pickup.
    */
   async componentWillReceiveProps(nextProps) {
-    if (nextProps.userId !== this.props.userId) {
+    if (nextProps.userId !== this.props.userId && this.state.pickup) {
       const pickup = await app.service('pickup').get(this.id);
 
       this.setState({ pickup });
@@ -111,35 +120,53 @@ class View extends PureComponent {
   };
 
   render() {
+    if (this.state.isLoading) {
+      return (
+        <Spinner active />
+      );
+    }
+
+    if (!this.state.pickup) {
+      return (
+        <Card>
+          <Helmet>
+            <title>Not Found</title>
+          </Helmet>
+
+          <Card.Header>
+            Pickup with the id {this.id} doesn&apos;t exists
+          </Card.Header>
+
+          <Card.Content>
+            Please go back to the future you came from and come back later
+          </Card.Content>
+        </Card>
+      );
+    }
+
     return (
-      <Aux>
+      <div className={this.props.classes.container}>
         <Helmet>
           <title>
-            {`Pickup ${this.state.pickup ? this.state.pickup.id : ''}`}
+            {`Pickup ${this.state.pickup.id}`}
           </title>
         </Helmet>
 
-        {this.state.pickup ? (
-          <div className={this.props.classes.container}>
-            <Info pickup={this.state.pickup} />
+        <Info pickup={this.state.pickup} />
 
-            <Connect pickup={this.state.pickup} />
+        <Connect pickup={this.state.pickup} />
 
-            <StvConnect pickup={this.state.pickup} />
+        <StvConnect pickup={this.state.pickup} />
 
-            <RconPassword pickup={this.state.pickup} />
+        <RconPassword pickup={this.state.pickup} />
 
-            <Teams
-              teams={this.state.pickup.teams}
-              scores={this.state.pickup.scores}
-            />
+        <Teams
+          teams={this.state.pickup.teams}
+          scores={this.state.pickup.scores}
+        />
 
-            <Actions pickup={this.state.pickup} />
-          </div>
-        ) : (
-          <Spinner active />
-        )}
-      </Aux>
+        <Actions pickup={this.state.pickup} />
+      </div>
     );
   }
 }

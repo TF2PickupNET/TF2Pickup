@@ -4,6 +4,78 @@ import PropTypes from 'prop-types';
 
 import UserItem from '../../../components/user-item';
 import Date from '../../../components/date';
+import Link from '../../../components/link';
+
+function getProps(str) {
+  const match = str.match(/\w+=("|{).*("|})/g);
+
+  if (!match) {
+    return {};
+  }
+
+  return match[0]
+    .split(' ')
+    .reduce((props, prop) => {
+      const [
+        ,
+        name,
+        delimiter,
+        value,
+      ] = prop.match(/(\w+)=("|{)(.*)("|})/);
+
+      return {
+        ...props,
+        [name]: delimiter === '{' ? JSON.parse(value) : value,
+      };
+    }, {});
+}
+
+const getContent = str => str.match(/<\w+.*>(.+)<\/\w+>/);
+
+function formatMessage(message, userItemClass) {
+  return message
+    .split(/(<[A-Z]\w+.+>.+<\/[A-Z]\w+>|<[A-Z]\w+.+ \/>)/)
+    .map((str, index) => {
+      if (str.startsWith('<') && str.endsWith('>')) {
+        const Component = str.match(/^<(\w+)/)[1];
+        const content = getContent(str);
+        const props = {
+          ...getProps(str),
+          key: index,
+        };
+
+        if (!Component) {
+          return str;
+        }
+
+        if (Component === 'Link') {
+          return (
+            <Link
+              primary
+              {...props}
+            >
+              {content ? content[1] : content}
+            </Link>
+          );
+        } else if (Component === 'UserItem') {
+          return (
+            <UserItem
+              {...props}
+              className={userItemClass}
+            />
+          );
+        } else if (Component.charAt(0).toLowerCase() === Component.charAt(0)) {
+          return (
+            <Component {...props}>
+              {content ? content[1] : null}
+            </Component>
+          );
+        }
+      }
+
+      return str;
+    });
+}
 
 /**
  * Render the message of a user.
@@ -27,7 +99,7 @@ function Message(props) {
       />:
 
       <span className={props.classes.message}>
-        {props.message.message}
+        {formatMessage(props.message.message, props.classes.userItem)}
       </span>
     </span>
   );
@@ -54,10 +126,12 @@ Message.styles = {
     minHeight: 20,
   },
 
-  date: { lineHeight: '20px' },
+  date: {
+    lineHeight: '20px',
+    marginRight: 4,
+  },
 
   userItem: {
-    marginLeft: 4,
     lineHeight: '20px',
     height: 20,
 

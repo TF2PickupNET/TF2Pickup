@@ -9,7 +9,7 @@ import {
   pluck,
 } from '../../../../utils/functions';
 
-const lastMentionRegex = /.*@\w+$/;
+const lastMentionRegex = /.*@(\w+)$/;
 
 /**
  * The input field for the chat.
@@ -47,13 +47,12 @@ export default class Input extends PureComponent {
         break;
       }
       case 9: {
-        const mention = ev.target.value.match(lastMentionRegex);
+        const mention = ev.target.value.match(/.*@(\w+)$/);
 
-        if (mention[0]) {
+        if (mention) {
           ev.preventDefault();
 
-          const name = mention[0].slice(1);
-
+          const name = mention[1];
           const users = pipe(
             pluck('onlineUsers'),
             Object.values,
@@ -61,7 +60,7 @@ export default class Input extends PureComponent {
           )(app.store.getState());
 
           if (users.length === 1) {
-            const newValue = ev.target.value.replace(lastMentionRegex, `@${users[0].name}`);
+            const newValue = ev.target.value.replace(`@${name}`, `@${users[0].name}`);
 
             this.setState({ value: newValue });
           }

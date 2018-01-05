@@ -42,7 +42,7 @@ class View extends PureComponent {
       width: '100%',
 
       [breakpoints.only('desktop')]: {
-        '&.gamemode-9v9': { maxWidth: 360 * 3 + 2 * 16 },
+        '&.gamemode-9v9, &.gamemode-6v6': { maxWidth: 360 * 3 + 2 * 16 },
 
         '&.gamemode-ultiduo, &.gamemode-bball': { maxWidth: 400 * 2 + 16 },
       },

@@ -10,7 +10,10 @@ async function mentionFormatter(word, hook) {
   const users = await hook.app.service('users').find({ query: { name: word.slice(1) } });
 
   if (users.length === 1) {
-    const data = getDataForUserItem(users[0]);
+    const data = {
+      ...getDataForUserItem(users[0]),
+      name: `@${users[0].name}`,
+    };
 
     return `<UserItem user={${JSON.stringify(data)}} />`;
   }
@@ -37,7 +40,7 @@ async function hasttagFormatter(word, hook) {
 hasttagFormatter.test = word => /^#\d+$/.test(word);
 
 function linkFormatter(word) {
-  return `<Link href="${word}">${word}</Link>`;
+  return `<Link href="https://${word}">${word}</Link>`;
 }
 
 linkFormatter.test = word => is.url(word);

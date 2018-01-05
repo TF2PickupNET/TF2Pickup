@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import {
   Card,
   Button,
@@ -6,40 +6,43 @@ import {
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { goBack } from 'react-router-redux';
+import PropTypes from 'prop-types';
 
-class View extends PureComponent {
-  handleGoBackPress = () => {
-    this.props.goBack();
-  };
+/**
+ * The view for the Not Found page.
+ *
+ * @param {Object} props - The props for the component.
+ * @returns {JSX} - Returns the JSX.
+ */
+function View(props) {
+  return (
+    <Card>
+      <Helmet>
+        <title>Not Found</title>
+      </Helmet>
 
-  render() {
-    return (
-      <Card>
-        <Helmet>
-          <title>Not Found</title>
-        </Helmet>
+      <Card.Header>
+        Not Found
+      </Card.Header>
 
-        <Card.Header>
-          Not Found
-        </Card.Header>
+      <Card.Content>
+        This is propably not what you are looking for
+      </Card.Content>
 
-        <Card.Content>
-          This is propably not what you are looking for
-        </Card.Content>
-
-        <Card.Actions>
-          <Button onPress={this.handleGoBackPress}>
-            Go back
-          </Button>
-        </Card.Actions>
-      </Card>
-    );
-  }
+      <Card.Actions>
+        <Button onPress={props.handleGoBack}>
+          Go back
+        </Button>
+      </Card.Actions>
+    </Card>
+  );
 }
+
+View.propTypes = { handleGoBack: PropTypes.func.isRequired };
 
 export default connect(
   null,
   (dispatch) => {
-    return { goBack: () => dispatch(goBack()) };
+    return { handleGoBack: () => dispatch(goBack()) };
   },
 )(View);

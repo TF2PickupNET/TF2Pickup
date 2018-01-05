@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import lockr from 'lockr';
 import { connect } from 'react-redux';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
@@ -39,6 +40,12 @@ class View extends PureComponent {
       height: 'auto',
 
       [breakpoints.down('tablet')]: { width: '100%' },
+
+      [breakpoints.only('desktop')]: {
+        '&.gamemode-9v9': { maxWidth: 360 * 3 + 2 * 16 },
+
+        '&.gamemode-ultiduo, &.gamemode-bball': { maxWidth: 400 * 2 + 16 },
+      },
     },
 
     chatContainer: {
@@ -83,7 +90,12 @@ class View extends PureComponent {
 
         <Tabs />
 
-        <div className={this.props.classes.container}>
+        <div
+          className={classnames(
+            this.props.classes.container,
+            `gamemode-${this.props.gamemode}`,
+          )}
+        >
           <Info />
 
           <Classes />

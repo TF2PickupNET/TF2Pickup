@@ -15,8 +15,6 @@ import { getGamemodeFromUrl } from '../../../../utils/pickup';
 
 import ClassList from './class-list';
 
-const minmax = 'minmax(240px, 360px) ';
-
 /**
  * The classes for the current gamemode.
  *
@@ -44,18 +42,18 @@ class Classes extends PureComponent {
       [breakpoints.up('tablet')]: { gridTemplateColumns: '1fr 1fr' },
 
       [breakpoints.up('desktop')]: {
-        '&.gamemode-6v6': { gridTemplateColumns: 'minmax(220px, 280px) '.repeat(5) },
+        '&.gamemode-6v6': { gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr' },
 
-        '&.gamemode-9v9': { gridTemplateColumns: minmax.repeat(3) },
+        '&.gamemode-9v9': { gridTemplateColumns: '1fr 1fr 1fr' },
 
-        '&.gamemode-ultiduo': { gridTemplateColumns: minmax.repeat(2) },
+        '&.gamemode-ultiduo': { gridTemplateColumns: '1fr 1fr' },
       },
 
-      '&.gamemode-bball': { gridTemplateColumns: 'minmax(736px, 1fr)' },
+      '&.gamemode-bball': { gridTemplateColumns: '1fr' },
 
       // eslint-disable-next-line
       '@media screen and (max-width: 1500px) and (min-width: 1024px)': {
-        '&.gamemode-6v6': { gridTemplateColumns: 'minmax(240px, 300px) '.repeat(3) },
+        '&.gamemode-6v6': { gridTemplateColumns: '1fr 1fr 1fr' },
         // eslint-disable-next-line
       },
     },

@@ -22,7 +22,10 @@ function Message(props) {
         user={props.message.user}
         className={props.classes.userItem}
       />:
-      <span className={props.classes.message}>{props.message.message}</span>
+
+      <span className={props.classes.message}>
+        {props.message.message}
+      </span>
     </span>
   );
 }
@@ -43,7 +46,7 @@ Message.propTypes = {
 Message.styles = {
   container: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     minHeight: 20,
     lineHeight: '20px',
   },

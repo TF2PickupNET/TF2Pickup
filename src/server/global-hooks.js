@@ -5,7 +5,11 @@ export default {
   before: {
     all: [
       (hook) => {
-        if (hook.path === 'authentication' || !hook.params.accessToken) {
+        if (hook.path === 'authentication') {
+          return hook;
+        }
+
+        if ((hook.method === 'find' || hook.method === 'get') && !hook.params.accessToken) {
           return hook;
         }
 

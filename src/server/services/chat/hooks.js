@@ -11,6 +11,11 @@ import {
 } from '../../../utils/functions';
 import hasPermission from '../../../utils/has-permission';
 
+import {
+  hasttagFormatter,
+  mentionFormatter,
+} from './message-formatters';
+
 const globalMention = 'this';
 
 export default {
@@ -69,6 +74,32 @@ export default {
             }),
           )(hook.data.message.split(' ')),
         );
+      },
+
+      async (hook) => {
+        const formattedWords = await Promise.all(
+          pipe(
+            map((word) => {
+              switch (word.charAt(0)) {
+                case '@': {
+                  return mentionFormatter(word, hook);
+                }
+                case '#': {
+                  return hasttagFormatter(word, hook);
+                }
+                default: return Promise.resolve(word);
+              }
+            }),
+          )(hook.data.message.split(' ')),
+        );
+
+        return {
+          ...hook,
+          data: {
+            ...hook.data,
+            message: formattedWords.join(' '),
+          },
+        };
       },
     ],
   },

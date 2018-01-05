@@ -25,8 +25,7 @@ class MessagesContainer extends PureComponent {
     container: {
       composes: 'scrollbar',
       overflowY: 'scroll',
-      display: 'flex',
-      flexDirection: 'column',
+      overflowX: 'hidden',
     },
   };
 

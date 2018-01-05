@@ -29,3 +29,13 @@ export async function hasttagFormatter(word, hook) {
 
   return word;
 }
+
+export function markdownFormatter(message) {
+  return message
+    .replace(/__.+__/g, (word) => {
+      return `<b>${word.slice(2, word.length - 2)}</b>`;
+    })
+    .replace(/\*\*.+\*\*/g, (word) => {
+      return `<em>${word.slice(2, word.length - 2)}</em>`;
+    });
+}

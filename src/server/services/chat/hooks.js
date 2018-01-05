@@ -13,6 +13,7 @@ import hasPermission from '../../../utils/has-permission';
 
 import {
   hasttagFormatter,
+  markdownFormatter,
   mentionFormatter,
 } from './message-formatters';
 
@@ -90,7 +91,7 @@ export default {
                 default: return Promise.resolve(word);
               }
             }),
-          )(hook.data.message.split(' ')),
+          )(markdownFormatter(hook.data.message).split(' ')),
         );
 
         return {

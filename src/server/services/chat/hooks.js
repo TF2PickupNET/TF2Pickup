@@ -6,15 +6,15 @@ import {
 } from '../../../utils/users';
 import {
   filter,
+  find,
   map,
   pipe,
 } from '../../../utils/functions';
 import hasPermission from '../../../utils/has-permission';
 
 import {
-  hasttagFormatter,
+  formatters,
   markdownFormatter,
-  mentionFormatter,
 } from './message-formatters';
 
 const globalMention = 'this';
@@ -77,21 +77,27 @@ export default {
         );
       },
 
+      // Format some markdown things like __ and **
+      (hook) => {
+        return {
+          ...hook,
+          data: {
+            ...hook.data,
+            message: markdownFormatter(hook.data.message),
+          },
+        };
+      },
+
+      // Format the words with a special formatter
       async (hook) => {
+        const findFormatter = word => find(formatter => formatter.test(word), () => word);
         const formattedWords = await Promise.all(
-          pipe(
-            map((word) => {
-              switch (word.charAt(0)) {
-                case '@': {
-                  return mentionFormatter(word, hook);
-                }
-                case '#': {
-                  return hasttagFormatter(word, hook);
-                }
-                default: return Promise.resolve(word);
-              }
-            }),
-          )(markdownFormatter(hook.data.message).split(' ')),
+          hook.data.message
+            .split(' ')
+            .map(word => pipe(
+              findFormatter(word),
+              formatter => formatter(word, hook),
+            )(formatters)),
         );
 
         return {

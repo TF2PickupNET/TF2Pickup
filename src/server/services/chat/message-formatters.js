@@ -1,6 +1,8 @@
+import is from 'is_js';
+
 import { getDataForUserItem } from '../../../utils/users';
 
-export async function mentionFormatter(word, hook) {
+async function mentionFormatter(word, hook) {
   if (word === '@this') {
     return '<Link href="">@this</Link>';
   }
@@ -16,7 +18,9 @@ export async function mentionFormatter(word, hook) {
   return word;
 }
 
-export async function hasttagFormatter(word, hook) {
+mentionFormatter.test = word => /^@\w+$/.test(word);
+
+async function hasttagFormatter(word, hook) {
   const id = parseInt(word.slice(1), 10);
 
   if (id) {
@@ -30,8 +34,24 @@ export async function hasttagFormatter(word, hook) {
   return word;
 }
 
+hasttagFormatter.test = word => /^#\d+$/.test(word);
+
+function linkFormatter(word) {
+  return `<Link href="${word}">${word}</Link>`;
+}
+
+linkFormatter.test = word => is.url(word);
+
+export const formatters = [
+  mentionFormatter,
+  hasttagFormatter,
+  linkFormatter,
+];
+
 export function markdownFormatter(message) {
   return message
+    .replace(/</g, '&gt;')
+    .replace(/>/g, '&lt;')
     .replace(/__.+__/g, (word) => {
       return `<b>${word.slice(2, word.length - 2)}</b>`;
     })

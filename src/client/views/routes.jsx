@@ -18,6 +18,7 @@ import RecentPickups from './recent-pickups';
 import Error from './error';
 import Help from './help';
 import Pickup from './pickup';
+import NotFound from './not-found';
 
 const pickupQueueRegex = Object
   .keys(gamemodes)
@@ -107,6 +108,8 @@ function Routes(props) {
         path="/error"
         component={Error}
       />
+
+      <Route component={composeWithMainLayout(NotFound)} />
     </Switch>
   );
 }

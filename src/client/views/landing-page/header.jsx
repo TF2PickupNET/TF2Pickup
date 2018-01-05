@@ -52,9 +52,6 @@ Header.propTypes = {
 Header.styles = {
   header: {
     composes: gamemodeImage,
-    animationDelay: '250ms',
-    animation: 'fade-in-image 750ms',
-    animationFillMode: 'forwards',
     display: 'flex',
     boxShadow: elevation(4),
     width: '100%',

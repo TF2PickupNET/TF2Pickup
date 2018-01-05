@@ -38,6 +38,7 @@ Message.propTypes = {
     container: PropTypes.string.isRequired,
     userItem: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
   }).isRequired,
   message: PropTypes.shape({
     createdOn: PropTypes.string.isRequired,

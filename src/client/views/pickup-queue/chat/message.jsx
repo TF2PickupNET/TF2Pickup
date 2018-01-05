@@ -14,10 +14,13 @@ import Date from '../../../components/date';
 function Message(props) {
   return (
     <span className={props.classes.container}>
-      <Date
-        withoutDay
-        date={props.message.createdOn}
-      />
+      <span className={props.classes.date}>
+        <Date
+          withoutDay
+          date={props.message.createdOn}
+        />
+      </span>
+
       <UserItem
         user={props.message.user}
         className={props.classes.userItem}
@@ -35,6 +38,7 @@ Message.propTypes = {
     container: PropTypes.string.isRequired,
     userItem: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
   }).isRequired,
   message: PropTypes.shape({
     createdOn: PropTypes.string.isRequired,
@@ -46,14 +50,16 @@ Message.propTypes = {
 Message.styles = {
   container: {
     display: 'flex',
-    alignItems: 'flex-start',
+    boxSizing: 'border-box',
     minHeight: 20,
-    lineHeight: '20px',
   },
+
+  date: { lineHeight: '20px' },
 
   userItem: {
     marginLeft: 4,
     lineHeight: '20px',
+    height: 20,
 
     '& .icon::before': { lineHeight: '1 !important' },
   },
@@ -61,6 +67,8 @@ Message.styles = {
   message: {
     marginLeft: 4,
     lineHeight: '20px',
+    flex: 1,
+    wordBreak: 'break-word',
   },
 };
 

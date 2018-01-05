@@ -68,6 +68,7 @@ export default {
                 : null;
 
               await hook.app.service('notifications').create({
+                fromUser: hook.params.user.id,
                 forUsers: users ? users.map(user => user.id) : null,
                 message: `${hook.params.user.name} mentioned you`,
                 sound: 'notification',

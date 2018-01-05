@@ -18,11 +18,17 @@ export default function notifications() {
 
   that.service('notifications').filter({
     created(data, connection) {
+      const userId = getUserId(connection);
+
+      if (userId === data.fromUser) {
+        return false;
+      }
+
       if (!data.forUsers) {
         return data;
       }
 
-      if (data.forUsers.includes(getUserId(connection))) {
+      if (data.forUsers.includes(userId)) {
         return data;
       }
 

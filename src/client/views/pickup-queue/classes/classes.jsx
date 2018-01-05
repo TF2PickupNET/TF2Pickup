@@ -42,7 +42,35 @@ class Classes extends PureComponent {
       [breakpoints.up('tablet')]: { gridTemplateColumns: '1fr 1fr' },
 
       [breakpoints.up('desktop')]: {
-        '&.gamemode-6v6': { gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr' },
+        '&.gamemode-6v6': {
+          gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr',
+          gridTemplateRows: 'auto auto',
+
+          '& > *:nth-child(1)': {
+            gridColumn: '1 / 3',
+            gridRow: 1,
+          },
+
+          '& > *:nth-child(2)': {
+            gridColumn: '3 / 5',
+            gridRow: 1,
+          },
+
+          '& > *:nth-child(3)': {
+            gridColumn: '5 / 7',
+            gridRow: 1,
+          },
+
+          '& > *:nth-child(4)': {
+            gridColumn: '1 / 4',
+            gridRow: 2,
+          },
+
+          '& > *:nth-child(5)': {
+            gridColumn: '4 / 7',
+            gridRow: 2,
+          },
+        },
 
         '&.gamemode-9v9': { gridTemplateColumns: '1fr 1fr 1fr' },
 
@@ -50,12 +78,6 @@ class Classes extends PureComponent {
       },
 
       '&.gamemode-bball': { gridTemplateColumns: '1fr' },
-
-      // eslint-disable-next-line
-      '@media screen and (max-width: 1500px) and (min-width: 1024px)': {
-        '&.gamemode-6v6': { gridTemplateColumns: '1fr 1fr 1fr' },
-        // eslint-disable-next-line
-      },
     },
   };
 

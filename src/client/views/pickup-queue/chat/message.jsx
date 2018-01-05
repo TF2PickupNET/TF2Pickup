@@ -6,7 +6,14 @@ import UserItem from '../../../components/user-item';
 import Date from '../../../components/date';
 import Link from '../../../components/link';
 
-function getProps(str) {
+/**
+ * Get the props for the current element.
+ *
+ * @param {String} str - The element as a string.
+ * @param {Object} defaultProps - The default props for an element.
+ * @returns {Object} - Returns the merged props.
+ */
+function getProps(str, defaultProps) {
   const match = str.match(/\w+=("|{).*("|})/g);
 
   if (!match) {
@@ -27,11 +34,18 @@ function getProps(str) {
         ...props,
         [name]: delimiter === '{' ? JSON.parse(value) : value,
       };
-    }, {});
+    }, defaultProps);
 }
 
 const getContent = str => str.match(/<\w+.*>(.+)<\/\w+>/);
 
+/**
+ * Format the message and create the necessary react elements.
+ *
+ * @param {String} message - The message to format.
+ * @param {String} userItemClass - The className for the UserItem.
+ * @returns {String[]} - Returns the new message.
+ */
 function formatMessage(message, userItemClass) {
   return message
     .split(/(<[A-Z]\w+.+>.+<\/[A-Z]\w+>|<[A-Z]\w+.+ \/>)/)
@@ -39,10 +53,7 @@ function formatMessage(message, userItemClass) {
       if (str.startsWith('<') && str.endsWith('>')) {
         const Component = str.match(/^<(\w+)/)[1];
         const content = getContent(str);
-        const props = {
-          ...getProps(str),
-          key: index,
-        };
+        const props = getProps(str, { key: index });
 
         if (!Component) {
           return str;

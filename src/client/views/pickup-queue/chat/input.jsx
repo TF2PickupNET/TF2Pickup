@@ -9,8 +9,6 @@ import {
   pluck,
 } from '../../../../utils/functions';
 
-const lastMentionRegex = /.*@(\w+)$/;
-
 /**
  * The input field for the chat.
  *

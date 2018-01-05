@@ -39,7 +39,7 @@ class View extends PureComponent {
       boxSizing: 'border-box',
       height: 'auto',
 
-      [breakpoints.down('tablet')]: { width: '100%' },
+      width: '100%',
 
       [breakpoints.only('desktop')]: {
         '&.gamemode-9v9': { maxWidth: 360 * 3 + 2 * 16 },

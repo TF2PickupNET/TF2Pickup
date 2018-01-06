@@ -8,37 +8,37 @@ export default {
   },
 
   cp_process_final: {
-    configType: 'cp',
+    configType: '5cp',
     display: 'CP Process',
     isStockMap: true,
   },
 
   cp_prolands_b2c: {
-    configType: 'cp',
+    configType: '5cp',
     display: 'CP Prolands B2C',
     isStockMap: false,
   },
 
   cp_gullywash_final1: {
-    configType: 'cp',
+    configType: '5cp',
     display: 'CP Gullywash',
     isStockMap: true,
   },
 
   cp_snakewater_final1: {
-    configType: 'cp',
+    configType: '5cp',
     display: 'CP Snakewater',
     isStockMap: true,
   },
 
   cp_sunshine: {
-    configType: 'cp',
+    configType: '5cp',
     display: 'CP Sunshine',
     isStockMap: true,
   },
 
   cp_reckoner_rc2: {
-    configType: 'cp',
+    configType: '5cp',
     display: 'CP Reckoner RC2',
     isStockMap: false,
   },
@@ -49,7 +49,7 @@ export default {
     isStockMap: true,
   },
 
-  pl_borneo: {
+  pl_borneo: { // TODO
     configType: 'stopwatch',
     display: 'PL Borneo',
     isStockMap: true,

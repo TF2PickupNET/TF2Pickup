@@ -97,7 +97,7 @@ class STVConnect extends PureComponent {
         </span>
 
         <span className={this.props.classes.button}>
-          <Button onRelease={this.handleButtonPress}>
+          <Button onPress={this.handleButtonPress}>
             Join STV
           </Button>
         </span>

@@ -80,6 +80,9 @@ class UsernameSection extends PureComponent {
     });
   }
 
+  /**
+   * Select the username from the region the user selected in the previous step.
+   */
   componentWillReceiveProps(nextProps) {
     if (nextProps.region !== null && this.props.region === null) {
       const serviceName = serviceNames[nextProps.region] || null;

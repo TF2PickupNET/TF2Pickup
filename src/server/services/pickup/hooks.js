@@ -9,6 +9,9 @@ import {
   omit,
   assign,
   map,
+  flatten,
+  find,
+  pluck,
 } from '../../../utils/functions';
 import populateUserData from '../populate-user-data';
 
@@ -36,9 +39,15 @@ async function populateServer(hook) {
     };
   }
 
+  const userId = pluck('params.user.id')(hook);
   const server = await hook.app.service('servers').get(hook.result.serverId);
-  const isInPickup = false;
-  const canSeeServer = isInPickup || hasPermission('pickup.see-server', hook.params.user);
+  const isInPickup = pipe(
+    Object.values,
+    map(Object.values),
+    flatten,
+    find(user => user.id === userId),
+  )(hook.result.teams);
+  const canSeeServer = hasPermission('pickup.see-server', hook.params.user);
   const validKeys = classnames('ip stvPort stvPassword', {
     port: isInPickup || canSeeServer,
     password: isInPickup || canSeeServer,

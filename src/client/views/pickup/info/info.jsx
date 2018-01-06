@@ -9,7 +9,7 @@ import regions from '@tf2-pickup/configs/regions';
 import PropTypes from 'prop-types';
 
 import Date from '../../../components/date';
-import maps from '../../../../config/maps';
+import maps from '../../../maps';
 
 /**
  * The info for the pickup.
@@ -174,7 +174,7 @@ class Info extends PureComponent {
 
         <div className={this.props.classes.imageContainer}>
           <img
-            src={`/assets/images/maps/${this.props.pickup.map}.jpg`}
+            src={maps[this.props.pickup.map].image}
             className={this.props.classes.image}
             alt="map"
           />

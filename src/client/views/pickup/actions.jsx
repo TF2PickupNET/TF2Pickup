@@ -24,7 +24,7 @@ class Actions extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({ card: PropTypes.string.isRequired }).isRequired,
     pickup: PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
       status: PropTypes.string.isRequired,
       teams: PropTypes.shape({}),
     }).isRequired,

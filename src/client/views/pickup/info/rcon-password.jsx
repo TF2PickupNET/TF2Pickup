@@ -78,7 +78,7 @@ class RCONPassword extends PureComponent {
         </span>
 
         <span className={this.props.classes.button}>
-          <Button onRelease={this.handleButtonPress}>
+          <Button onPress={this.handleButtonPress}>
             Copy RCON
           </Button>
         </span>

@@ -5,7 +5,6 @@ import {
   Stepper,
   Button,
   Dialog,
-  breakpoints,
   getNotDeclaredProps,
 } from 'materialize-react';
 import { connect } from 'react-redux';
@@ -47,31 +46,29 @@ class PostUserCreationDialog extends PureComponent {
 
   static styles = {
     dialog: {
-      height: '80vh',
-      width: '85vw',
       display: 'grid',
       gridTemplateRows: 'auto 1fr',
 
-      [breakpoints.up('tablet')]: {
-        maxHeight: '80vh',
-        minHeight: '60vh',
-        width: '55vw',
-      },
+      '@media (max-height: 900px)': { height: '80vh' },
 
-      [breakpoints.up('desktop')]: {
-        maxHeight: '50vh',
-        minHeight: '40vh',
-        width: 550,
-      },
+      '@media (min-height: 901px)': { height: '60vh' },
+
+      '@media (max-width: 800px)': { width: '80vw' },
+
+      '@media (min-width: 801px) and (max-width: 1200px)': { width: '60vw' },
+
+      '@media (min-width: 1201px)': { width: '40vw' },
     },
 
     title: { textAlign: 'center' },
 
     sectionContainer: {
+      composes: 'scrollbar',
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'start',
+      overflowY: 'scroll',
     },
 
     finishSection: {
@@ -143,13 +140,13 @@ class PostUserCreationDialog extends PureComponent {
         className={this.props.classes.dialog}
         {...getNotDeclaredProps(this.props, PostUserCreationDialog)}
       >
-        <Dialog.Header>
+        <Dialog.Header className={section === 4 ? this.props.classes.finishSection : ''}>
           {PostUserCreationDialog.getTitle(section)}
         </Dialog.Header>
 
         <Stepper
           headerAtBottom
-          header={Stepper.Headers.Progress}
+          header={Stepper.Headers.Dot}
           headerProps={{
             backButton: <HeaderButton />,
             nextButton: <HeaderButton />,
@@ -165,7 +162,7 @@ class PostUserCreationDialog extends PureComponent {
           </Stepper.Section>
 
           <Stepper.Section className={this.props.classes.sectionContainer}>
-            <UsernameSection />
+            <UsernameSection region={this.props.user.settings.region} />
           </Stepper.Section>
 
           <Stepper.Section className={this.props.classes.sectionContainer}>

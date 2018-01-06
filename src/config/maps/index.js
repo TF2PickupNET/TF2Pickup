@@ -49,7 +49,7 @@ export default {
     isStockMap: true,
   },
 
-  pl_borneo: { // TODO
+  pl_borneo: {
     configType: 'stopwatch',
     display: 'PL Borneo',
     isStockMap: true,

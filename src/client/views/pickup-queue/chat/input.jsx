@@ -18,8 +18,10 @@ import {
 class Input extends PureComponent {
   static propTypes = {
     chat: PropTypes.string.isRequired,
-    userId: PropTypes.string.isRequired,
+    userId: PropTypes.string,
   };
+
+  static defaultProps = { userId: null };
 
   state = { value: '' };
 

@@ -17,7 +17,7 @@ function getProps(str, defaultProps) {
   const match = str.match(/\w+=("|{).*("|})/g);
 
   if (!match) {
-    return {};
+    return defaultProps;
   }
 
   return match[0]

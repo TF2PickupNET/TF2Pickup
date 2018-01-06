@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { TextField } from 'materialize-react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import app from '../../../app';
 import {
@@ -14,8 +15,13 @@ import {
  *
  * @class
  */
-export default class Input extends PureComponent {
-  static propTypes = { chat: PropTypes.string.isRequired };
+class Input extends PureComponent {
+  static propTypes = {
+    chat: PropTypes.string.isRequired,
+    userId: PropTypes.string,
+  };
+
+  static defaultProps = { userId: null };
 
   state = { value: '' };
 
@@ -51,10 +57,11 @@ export default class Input extends PureComponent {
           ev.preventDefault();
 
           const name = mention[1];
+          const regex = new RegExp(`^${name}`, 'i');
           const users = pipe(
             pluck('onlineUsers'),
             Object.values,
-            filter(user => user.name.startsWith(name)),
+            filter(user => regex.test(user.name)),
           )(app.store.getState());
 
           if (users.length === 1) {
@@ -71,6 +78,10 @@ export default class Input extends PureComponent {
   };
 
   render() {
+    if (!this.props.userId) {
+      return null;
+    }
+
     return (
       <TextField
         value={this.state.value}
@@ -81,3 +92,9 @@ export default class Input extends PureComponent {
     );
   }
 }
+
+export default connect(
+  (state) => {
+    return { userId: pluck('user.id')(state) };
+  },
+)(Input);

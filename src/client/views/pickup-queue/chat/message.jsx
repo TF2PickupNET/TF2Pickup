@@ -17,7 +17,7 @@ function getProps(str, defaultProps) {
   const match = str.match(/\w+=("|{).*("|})/g);
 
   if (!match) {
-    return {};
+    return defaultProps;
   }
 
   return match[0]
@@ -48,7 +48,7 @@ const getContent = str => str.match(/<\w+.*>(.+)<\/\w+>/);
  */
 function formatMessage(message, userItemClass) {
   return message
-    .split(/(<[A-Z]\w+.+>.+<\/[A-Z]\w+>|<[A-Z]\w+.+ \/>)/)
+    .split(/(<\w+.*?>.*?<\/\w+>|<[A-Z]\w+.*?\/>)/)
     .map((str, index) => {
       if (str.startsWith('<') && str.endsWith('>')) {
         const Component = str.match(/^<(\w+)/)[1];

@@ -15,9 +15,15 @@ import Link from '../../../../components/link';
 import app from '../../../../app';
 import { discordUrls } from '../../../../../config/client';
 import {
+  filter,
   map,
   pipe,
 } from '../../../../../utils/functions';
+
+const serviceNames = {
+  eu: 'etf2l',
+  oz: 'ozfortress',
+};
 
 /**
  * The section for setting the username.
@@ -31,6 +37,7 @@ class UsernameSection extends PureComponent {
       link: PropTypes.string.isRequired,
       errorText: PropTypes.string.isRequired,
     }).isRequired,
+    region: PropTypes.string.isRequired,
   };
 
   static styles = {
@@ -71,6 +78,23 @@ class UsernameSection extends PureComponent {
         });
       }
     });
+  }
+
+  /**
+   * Select the username from the region the user selected in the previous step.
+   */
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.region !== null && this.props.region === null) {
+      const serviceName = serviceNames[nextProps.region] || null;
+      const names = pipe(
+        Object.entries,
+        filter(([, services]) => services.includes(serviceName)),
+      )(this.state.names);
+
+      if (names.length === 1) {
+        this.setState({ selectedName: names[0][0] });
+      }
+    }
   }
 
   /**

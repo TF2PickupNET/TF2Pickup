@@ -2,6 +2,8 @@ import udp from 'datagram-stream';
 import config from 'config';
 import debug from 'debug';
 
+import { find } from '../../../../utils/functions';
+
 import events from './events';
 
 const log = debug('TF2Pickup:pickup:log-listener');
@@ -45,19 +47,19 @@ export default function logListener(app) {
     reuseAddr: true,
   });
 
-  connection.on('data', (data) => {
+  connection.on('data', async (data) => {
     const line = processLine(data.toString('utf8'));
+    const handler = find(event => event.line.test(line.data))(events);
 
-    Object
-      .values(events)
-      .forEach((event) => {
-        const match = event.line.exec(line.data);
+    if (handler) {
+      const pickups = await app.service('pickup').find({ query: { logsecret: line.secret } });
 
-        if (match) {
-          line.data = match;
-
-          event.handler(app, line);
-        }
-      });
+      if (pickups.length === 1) {
+        await handler.handler(app, pickups[0], {
+          ...line,
+          data: handler.line.exec(line.data),
+        });
+      }
+    }
   });
 }

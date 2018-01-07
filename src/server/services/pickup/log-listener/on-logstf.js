@@ -9,14 +9,12 @@ export default {
   // Data[1] - Protocol.
   // Data[2] - Website.
   // Data[3] - Logs.tf ID.
-  async handler(app, line) {
-    const pickup = await app.service('pickup').find({ query: { logsecret: line.secret } });
-
-    await app.service('pickup').patch(pickup[0].id, { $set: { logsTFID: line.data[3] } });
+  async handler(app, pickup, line) {
+    await app.service('pickup').patch(pickup.id, { $set: { logsTFID: line.data[3] } });
 
     if (app.get('env') === 'prod') {
       try {
-        await axios.post('localhost:9000/calculate-elo', { pickupId: pickup[0].id });
+        await axios.post('localhost:9000/calculate-elo', { pickupId: pickup.id });
       } catch (error) {
         log('Error while calculating the elo for pickup', pickup.id, error);
 

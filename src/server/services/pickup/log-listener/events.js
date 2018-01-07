@@ -5,11 +5,11 @@ import onRoundWin from './on-round-win';
 import onLogstf from './on-logstf';
 import onSay from './on-say';
 
-export default {
+export default [
   onDisconnect,
   onRoundStart,
   onRoundEnd,
   onRoundWin,
   onLogstf,
   onSay,
-};
+];

@@ -32,4 +32,15 @@ export default new Schema({
     required: true,
     default: Date.now,
   },
+
+  removed: {
+    type: Boolean,
+    default: false,
+  },
+
+  removedBy: {
+    type: String,
+    validate: steamId({ nullIsAllowed: true }),
+    default: null,
+  },
 });

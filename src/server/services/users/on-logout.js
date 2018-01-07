@@ -21,8 +21,6 @@ export default function onLogout(app) {
     }
 
     try {
-      log('User logged out', connection.user.id);
-
       await app.service('users').patch(connection.user.id, {
         $set: {
           online: false,

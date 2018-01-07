@@ -19,8 +19,6 @@ const log = debug('TF2Pickup:users:etf2l');
  * @returns {Object} - Returns the updated data.
  */
 export default async function getETF2LData(id, app, oneDaySinceLastUpdate) {
-  log('Requesting ETF2L player data', id);
-
   try {
     const response = await axios.get(`http://api.etf2l.org/player/${id}.json`);
     const player = response.data.player;
@@ -28,16 +26,12 @@ export default async function getETF2LData(id, app, oneDaySinceLastUpdate) {
     const divs = oneDaySinceLastUpdate ? await getDivisions(id, player.id) : {};
 
     return {
-      services: {
-        etf2l: {
-          id: player.id,
-          name: player.name,
-          isBanned: player.bans === null ? false : some(
-            ban => isBefore(ban.start, new Date()) && isBefore(new Date(), ban.end),
-          )(player.bans),
-          ...divs,
-        },
-      },
+      ...divs,
+      'services.etf2l.id': player.id,
+      'services.etf2l.name': player.name,
+      'services.etf2l.isBanned': player.bans === null ? false : some(
+        ban => isBefore(ban.start, new Date()) && isBefore(new Date(), ban.end),
+      )(player.bans),
     };
   } catch (error) {
     log('Error while requesting ETF2L player data', id, error);

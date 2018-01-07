@@ -11,6 +11,7 @@ import {
   pipe,
 } from '../../../utils/functions';
 import hasPermission from '../../../utils/has-permission';
+import { populateResult } from '../hooks';
 
 import {
   formatters,
@@ -19,10 +20,26 @@ import {
 
 const globalMention = 'this';
 
+/**
+ * Populate a message with the user data.
+ *
+ * @param {Object} message - The message object.
+ * @param {Object} hook - The hook object.
+ * @returns {Object} - Returns the populated data.
+ */
+async function populate(message, hook) {
+  const user = await hook.app.service('users').get(message.userId);
+
+  return {
+    ...message,
+    user: getDataForUserItem(user),
+  };
+}
+
 export default {
   before: {
     all(hook) {
-      if (hook.method === 'create' || hook.method === 'find') {
+      if (hook.method === 'create' || hook.method === 'find' || hook.method === 'get') {
         return hook;
       }
 
@@ -113,34 +130,7 @@ export default {
   },
 
   after: {
-    async create(hook) {
-      const user = await hook.app.service('users').get(hook.result.userId);
-
-      return {
-        ...hook,
-        result: {
-          ...hook.result,
-          user: getDataForUserItem(user),
-        },
-      };
-    },
-
-    async find(hook) {
-      const populatedMessages = await Promise.all(
-        map(async (message) => {
-          const user = await hook.app.service('users').get(message.userId);
-
-          return {
-            ...message,
-            user: getDataForUserItem(user),
-          };
-        })(hook.result),
-      );
-
-      return {
-        ...hook,
-        result: populatedMessages,
-      };
-    },
+    create: populateResult(populate),
+    find: populateResult(populate),
   },
 };

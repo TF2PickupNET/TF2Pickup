@@ -22,7 +22,7 @@ const log = debug('TF2Pickup');
  *
  * @param {String} url - URL for the app.
  * @param {String} env - The environment the server is started in.
- * @returns {JSX} - Returns the app.
+ * @returns {Object} - Returns the app.
  */
 export default async function setupApp(url, env) {
   if (env === 'prod') {
@@ -75,13 +75,13 @@ export default async function setupApp(url, env) {
     async html(error, req, res) {
       log('An error occurred!', error.message);
 
-      const { _id: id } = await app.service('errors').create({
+      const { _id } = await app.service('errors').create({
         message: error.message,
         info: error,
         steamId: pluck('feathers.user.id')(req),
       });
 
-      res.redirect(`/error?message=${error.message}&code=${error.code}&id=${id}`);
+      res.redirect(`/error?message=${error.message}&code=${error.code}&id=${_id}`);
     },
   }));
 

@@ -15,7 +15,7 @@ import {
 import {
   getPlayers,
   removePlayersFromClasses,
-} from '../../../../../utils/pickup';
+} from '../../../../../utils/pickup-queue';
 
 import generateTeams from './generate-teams';
 
@@ -85,14 +85,13 @@ export default async function createPickup(props) {
         gamemode: pickupQueue.gamemode,
 
         $limit: 1,
-        $sort: { launchedOn: -1 },
+        $sort: { id: -1 },
       },
     });
 
     // Create a new pickup
     const pickup = await pickupService.create({
       teams,
-      status: 'setting-up-server',
       map: mapName,
       region: pickupQueue.region,
       gamemode: pickupQueue.gamemode,

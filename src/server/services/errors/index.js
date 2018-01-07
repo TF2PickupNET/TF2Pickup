@@ -38,7 +38,7 @@ export default function errors() {
           throw new Forbidden('You are not allowed to create an error!');
         }
 
-        log('Creating client error from user:', userId, hook.data.message);
+        log('Creating client error from user', userId, hook.data.message);
 
         return {
           ...hook,

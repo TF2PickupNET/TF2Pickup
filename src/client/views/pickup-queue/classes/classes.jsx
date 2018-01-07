@@ -11,7 +11,7 @@ import {
   pipe,
   pluck,
 } from '../../../../utils/functions';
-import { getGamemodeFromUrl } from '../../../../utils/pickup';
+import { getGamemodeFromUrl } from '../../../../utils/pickup-queue';
 
 import ClassList from './class-list';
 

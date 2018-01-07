@@ -1,19 +1,13 @@
 import debug from 'debug';
-import classnames from 'classnames';
 import hooks from 'feathers-hooks-common';
 
-import hasPermission from '../../../utils/has-permission';
+import { omit } from '../../../utils/functions';
 import {
-  pipe,
-  pick,
-  omit,
-  assign,
-  map,
-  flatten,
-  find,
-  pluck,
-} from '../../../utils/functions';
-import populateUserData from '../populate-user-data';
+  incrementIdHook,
+  populateResult,
+  populateUserData,
+} from '../hooks';
+import { getPlayers } from '../../../utils/pickup';
 
 import reserveServer from './reserve-server';
 import cleanupServer from './cleanup-server';
@@ -21,66 +15,21 @@ import cleanupServer from './cleanup-server';
 const log = debug('TF2Pickup:pickup:hooks');
 
 /**
- * Populate the result with the server data.
- *
- * @param {Object} hook - The hooks data.
- * @returns {Object} - The transformed hook.
- */
-async function populateServer(hook) {
-  const isActiveGame = [
-    'waiting-for-game-to-start',
-    'game-is-live',
-  ].includes(hook.result.status);
-
-  if (!isActiveGame || !hook.result.serverId) {
-    return {
-      ...hook,
-      result: omit('serverId', 'logSecret')(hook.result),
-    };
-  }
-
-  const userId = pluck('params.user.id')(hook);
-  const server = await hook.app.service('servers').get(hook.result.serverId);
-  const isInPickup = pipe(
-    Object.values,
-    map(Object.values),
-    flatten,
-    find(user => user.id === userId),
-  )(hook.result.teams);
-  const canSeeServer = hasPermission('pickup.see-server', hook.params.user);
-  const validKeys = classnames('ip stvPort stvPassword', {
-    port: isInPickup || canSeeServer,
-    password: isInPickup || canSeeServer,
-    rconPassword: canSeeServer,
-  }).split(' ');
-
-  return {
-    ...hook,
-    result: pipe(
-      omit('serverId', 'logSecret'),
-      assign({ server: pick(...validKeys)(server) }),
-    )(hook.result),
-  };
-}
-
-/**
  * Populate the user data for each team player.
  *
+ * @param {Object} pickup - The pickup to populate.
  * @param {Object} hook - The hooks data.
  * @returns {Object} - The transformed hook.
  */
-async function populateUsers(hook) {
-  const redTeam = await populateUserData(hook.app, hook.result.teams.red);
-  const bluTeam = await populateUserData(hook.app, hook.result.teams.blu);
+export async function populateTeams(pickup, hook) {
+  const redTeam = await populateUserData(pickup.teams.red, hook);
+  const bluTeam = await populateUserData(pickup.teams.blu, hook);
 
   return {
-    ...hook,
-    result: {
-      ...hook.result,
-      teams: {
-        red: redTeam,
-        blu: bluTeam,
-      },
+    ...pickup,
+    teams: {
+      red: redTeam,
+      blu: bluTeam,
     },
   };
 }
@@ -96,29 +45,13 @@ export default {
     },
 
     create: [
-      // Calculate the id of the pickup
-      async (hook) => {
-        const lastPickup = await hook.service.find({
-          query: {
-            $limit: 1,
-            $sort: { launchedOn: -1 },
-          },
-        });
+      incrementIdHook,
 
-        return {
-          ...hook,
-          data: {
-            ...hook.data,
-            id: lastPickup[0] ? lastPickup[0].id + 1 : 1,
-          },
-        };
-      },
-
-      // Create a mumble channel
+      // Create a voice channel
       async (hook) => {
         await hook.app.service('voice-channel').create({
           region: hook.data.region,
-          name: hook.data.id,
+          name: `Pickup ${hook.data.id}`,
         });
       },
 
@@ -160,11 +93,11 @@ export default {
 
         await hook.app.service('voice-channel').delete({
           region: pickup.region,
-          name: hook.id,
+          name: `Pickup ${hook.id}`,
         });
 
         if (pickup.serverId) {
-          await cleanupServer(hook.app, hook.id);
+          await cleanupServer(hook.app, pickup);
         }
       }
 
@@ -172,25 +105,25 @@ export default {
     },
   },
   after: {
+    all(hook) {
+      if ((hook.method === 'get' || hook.method === 'find') && !hook.params.provider) {
+        return hook;
+      }
+
+      return populateResult(omit('logSecret'))(hook);
+    },
+
     create(hook) {
       hook.service.emit('redirect', {
         id: hook.result.id,
-        users: pipe(
-          Object.values,
-          map(Object.values),
-          map(player => player.id),
-        )(hook.result.teams),
+        users: getPlayers(hook),
       });
     },
 
-    patch: [
-      populateServer,
-      populateUsers,
-    ],
+    patched: populateResult(populateTeams),
 
-    get: [
-      populateServer,
-      populateUsers,
-    ],
+    get: hooks.iff(hooks.isProvider('external'), populateResult(populateTeams)),
+
+    find: hooks.iff(hooks.isProvider('external'), populateResult(populateTeams)),
   },
 };

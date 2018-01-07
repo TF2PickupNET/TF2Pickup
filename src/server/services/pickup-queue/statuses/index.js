@@ -3,5 +3,5 @@ import readyUp from './ready-up';
 
 export default {
   waiting,
-  readyUp,
+  'ready-up': readyUp,
 };

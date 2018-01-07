@@ -18,6 +18,8 @@ export default {
     ],
 
     update: hooks.disallow(),
+    remove: hooks.disallow(),
     patch: hooks.disallow('external'),
+    create: hooks.disallow('external'),
   },
 };

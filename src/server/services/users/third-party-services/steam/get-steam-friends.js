@@ -17,10 +17,6 @@ export default async function getSteamFriends(id, app, oneDaySinceLastUpdate) {
     return {};
   }
 
-  log('Requesting steam friends', id);
-
-  let friends = [];
-
   try {
     const result = await steamApi.get('ISteamUser/GetFriendList/v0001/', {
       params: {
@@ -28,13 +24,12 @@ export default async function getSteamFriends(id, app, oneDaySinceLastUpdate) {
         relationship: 'friend',
       },
     });
+    const friends = result.data.friendslist.friends;
 
-    friends = result.data.friendslist.friends;
+    return { friends: friends.map(friend => friend.steamid) };
   } catch (error) {
     log('Error while requesting steam friends', id, error);
 
     return {};
   }
-
-  return { friends: friends.map(friend => friend.steamid) };
 }

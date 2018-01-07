@@ -11,24 +11,17 @@ const log = debug('TF2Pickup:users:steam:data');
  * @returns {Object} - Returns the data from steam.
  */
 export default async function getSteamData(id) {
-  log('Requesting steam data', id);
-
   try {
     const params = { steamids: id };
     const result = await steamApi.get('ISteamUser/GetPlayerSummaries/v0002/', { params });
     const player = result.data.response.players[0];
 
     return {
-      services: {
-        steam: {
-          customUrl: player.profileurl,
-          avatar: {
-            small: player.avatar,
-            medium: player.avatarmedium,
-            large: player.avatarfull,
-          },
-        },
-      },
+      'services.steam.customUrl': player.profileurl,
+      'services.steam.avatar.small': player.avatar,
+      'services.steam.avatar.medium': player.avatarmedium,
+      'services.steam.avatar.large': player.avatarfull,
+
     };
   } catch (error) {
     log('Error while requesting steam data', id, error);

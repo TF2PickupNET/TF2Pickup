@@ -1,51 +1,20 @@
 /* eslint-disable promise/prefer-await-to-callbacks */
 
-import debug from 'debug';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
 import {
-  map,
   pipe,
   mapObject,
 } from '../../../utils/functions';
 import {
+  addPlayerToClass,
   getPlayer,
+  isPlayerInPickup,
   removePlayersFromClasses,
-} from '../../../utils/pickup';
+  sortClasses,
+  updateUserItem,
+} from '../../../utils/pickup-queue';
 import hasPermission from '../../../utils/has-permission';
-
-const log = debug('TF2Pickup:pickup-queue:socket-methods');
-
-const addPlayerToClass = (className, player) => classes => Object.assign({}, classes, {
-  [className]: [
-    ...classes[className],
-    player,
-  ],
-});
-
-const sortClasses = mapObject(
-  players => players.sort((player1, player2) => player1.joinedOn - player2.joinedOn),
-);
-
-/**
- * Checks if players is blocked for join the pickup queue.
- *
- * @param {Object} app - The feathers app object.
- * @param {String} userId - Player's ID.
- * @returns {Boolean} - Is player blocked.
- */
-async function isPlayerInPickup(app, userId) {
-  const serverStatus = [
-    'setting-up-server',
-    'waiting-for-game-to-start',
-    'game-is-live',
-  ];
-  const query = { status: { $in: serverStatus } };
-  const pickups = await app.service('pickup').find({ query });
-  const regex = new RegExp(userId);
-
-  return pickups.some(pickup => regex.test(JSON.stringify(pickup.teams)));
-}
 
 /**
  * Setup the socket methods for the users.
@@ -63,18 +32,15 @@ export default function socketMethods(app, socket) {
     if (socket.feathers.user) {
       const region = socket.feathers.user.settings.region;
       const userId = socket.feathers.user.id;
-      const queue = await pickupQueue.get(`${region}-${gamemode}`);
-      const playerData = getPlayer(userId)(queue.classes);
 
       if (await isPlayerInPickup(app, userId)) {
-        log('User blocked for pickup', userId);
-
         app.service('notifications').create({
           forUsers: [ userId ],
           message: 'You are already in a pickup',
         });
       } else {
-        log('Adding user to pickup', userId);
+        const queue = await pickupQueue.get(`${region}-${gamemode}`);
+        const playerData = getPlayer(userId)(queue);
 
         await pickupQueue.patch(queue.id, {
           $set: {
@@ -100,8 +66,6 @@ export default function socketMethods(app, socket) {
       const userId = socket.feathers.user.id;
       const queue = await pickupQueue.get(`${region}-${gamemode}`);
 
-      log('Removing user from pickup', userId);
-
       await pickupQueue.patch(
         queue.id,
         { $set: { classes: removePlayersFromClasses([userId])(queue.classes) } },
@@ -115,19 +79,9 @@ export default function socketMethods(app, socket) {
       const userId = socket.feathers.user.id;
       const queue = await pickupQueue.get(`${region}-${gamemode}`);
 
-      const setReady = map((player) => {
-        if (player.id === userId) {
-          return Object.assign({}, player, { ready: true });
-        }
-
-        return player;
-      });
-
-      log('Readying user up', userId);
-
       await pickupQueue.patch(
         queue.id,
-        { $set: { classes: mapObject(setReady)(queue.classes) } },
+        { $set: { classes: updateUserItem(userId, { ready: true })(queue.classes) } },
       );
     }
   });
@@ -141,19 +95,9 @@ export default function socketMethods(app, socket) {
       const userId = socket.feathers.user.id;
       const queue = await pickupQueue.get(`${region}-${gamemode}`);
 
-      const setMap = map((player) => {
-        if (player.id === userId) {
-          return Object.assign({}, player, { map: mapName });
-        }
-
-        return player;
-      });
-
-      log('Setting map for user', userId, mapName);
-
       await pickupQueue.patch(
         queue.id,
-        { $set: { classes: mapObject(setMap)(queue.classes) } },
+        { $set: { classes: updateUserItem(userId, { map: mapName })(queue.classes) } },
       );
     }
   });
@@ -167,8 +111,6 @@ export default function socketMethods(app, socket) {
     if (hasPermission('pickup.kick', socket.feathers.user, user)) {
       const region = socket.feathers.user.settings.region;
       const queue = await pickupQueue.get(`${region}-${gamemode}`);
-
-      log('Kicking user from pickup', userId);
 
       await pickupQueue.patch(
         queue.id,

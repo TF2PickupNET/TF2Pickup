@@ -6,7 +6,7 @@ import {
   map,
   pipe,
 } from '../../../utils/functions';
-import { removePlayersFromClasses } from '../../../utils/pickup';
+import { removePlayersFromClasses } from '../../../utils/pickup-queue';
 
 const log = debug('TF2Pickup:pickup-queue:on-user-disconnect');
 

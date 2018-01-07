@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import {
   getGamemodeFromUrl,
   getPlayer,
-} from '../../../../utils/pickup';
+} from '../../../../utils/pickup-queue';
 import maps from '../../../../config/maps/index';
 import app from '../../../app';
 import { closeDialog } from '../../../redux/dialog/actions';

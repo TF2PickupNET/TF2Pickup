@@ -5,7 +5,8 @@ import gamemodes from '@tf2-pickup/configs/gamemodes';
 import { connect } from 'react-redux';
 
 import playSound from '../../../utils/play-sound';
-import { getPlayer } from '../../../../utils/pickup';
+import { getPlayer } from '../../../../utils/pickup-queue';
+import { pluck } from '../../../../utils/functions';
 
 /**
  * A component which renders info about the current pickup.
@@ -101,7 +102,7 @@ export default connect(
       status: pickup.status,
       readyUp: pickup.readyUp,
       announcer: state.user ? state.user.settings.announcer : null,
-      isInPickup: Boolean(getPlayer(state.user ? state.user.id : null)(pickup.classes)),
+      isInPickup: Boolean(getPlayer(pluck('user.id')(state))(pickup)),
     };
   },
 )(PickupSounds);

@@ -10,16 +10,12 @@ import {
 } from 'materialize-react';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 
-import {
-  pipe,
-  mapObject,
-  reduce,
-  pluck,
-} from '../../../../utils/functions';
+import { pluck } from '../../../../utils/functions';
 import {
   getPlayer,
   getGamemodeFromUrl,
-} from '../../../../utils/pickup';
+  countPlayers,
+} from '../../../../utils/pickup-queue';
 import {
   closeDialog,
   openDialog,
@@ -184,21 +180,15 @@ export default connect(
       return {};
     }
 
-    const gamemodeInfo = gamemodes[gamemode];
-    const userId = state.user ? state.user.id : null;
-    const classes = pickup.classes || {};
+    const userId = pluck('user.id')(state);
 
     return {
       gamemode,
       status: pickup.status,
       userId,
-      player: getPlayer(userId)(classes),
+      player: getPlayer(userId)(pickup),
       dialog: state.dialog,
-      playerCount: pipe(
-        mapObject((players, className) => Math.min(players.length, gamemodeInfo.slots[className])),
-        Object.values,
-        reduce((total, count) => total + count, 0),
-      )(classes),
+      playerCount: countPlayers(gamemode)(pickup),
     };
   },
   (dispatch) => {

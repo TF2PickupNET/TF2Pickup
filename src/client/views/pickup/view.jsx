@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import app from '../../app';
 import playSound from '../../utils/play-sound';
 import { pluck } from '../../../utils/functions';
+import { getPlayer } from '../../../utils/pickup';
 
 import Info from './info/info';
 import Connect from './info/connect';
@@ -70,17 +71,6 @@ class View extends PureComponent {
   }
 
   /**
-   * When the user id changes, the user log in / out we refetch the pickup.
-   */
-  async componentWillReceiveProps(nextProps) {
-    if (nextProps.userId !== this.props.userId && this.state.pickup) {
-      const pickup = await app.service('pickup').get(this.id);
-
-      this.setState({ pickup });
-    }
-  }
-
-  /**
    * Remove the event listener.
    */
   componentWillUnmount() {
@@ -102,21 +92,18 @@ class View extends PureComponent {
    * Update the state when the patched event get's fired.
    */
   handlePickupUpdate = (data) => {
-    this.setState((state) => {
-      if (state.pickup.id === data.id) {
-        if (
-          state.pickup.status !== 'waiting-for-game-to-start'
-          && data.status === 'waiting-for-game-to-start'
-          && this.props.announcer
-        ) {
-          playSound(`${this.props.announcer}/gamestart`);
-        }
-
-        return { pickup: data };
+    if (this.id === data.id) {
+      if (
+        this.state.pickup.status !== 'waiting-for-game-to-start'
+        && data.status === 'waiting-for-game-to-start'
+        && this.props.announcer
+        && getPlayer(this.props.userId)(data)
+      ) {
+        playSound(`${this.props.announcer}/gamestart`);
       }
 
-      return null;
-    });
+      this.setState({ pickup: data });
+    }
   };
 
   render() {

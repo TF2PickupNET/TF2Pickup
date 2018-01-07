@@ -11,20 +11,15 @@ const log = debug('TF2Pickup:users:steam:vac');
  * @returns {Object} - Returns the update data for the user.
  */
 export default async function getVACBans(id) {
-  let player = {};
-
-  log('Requesting VAC bans', id);
-
   try {
     const params = { steamids: id };
     const result = await steamApi.get('ISteamUser/GetPlayerBans/v1/', { params });
+    const player = result.data.players[0];
 
-    player = result.data.players[0];
+    return { 'services.steam.vacBanned': player.VACBanned && player.DaysSinceLastBan < 365 };
   } catch (error) {
     log('Error while requesting VAC bans', id, error);
 
     return {};
   }
-
-  return { services: { steam: { vacBanned: player.VACBanned && player.DaysSinceLastBan < 365 } } };
 }

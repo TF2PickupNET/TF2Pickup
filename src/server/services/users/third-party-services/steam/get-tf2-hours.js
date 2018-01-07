@@ -13,8 +13,6 @@ const log = debug('TF2Pickup:authentication:tf2-hours');
  * @returns {Number} - The updated data for the user.
  */
 export default async function getTF2Hours(id) {
-  log('Getting tf2 hours', id);
-
   try {
     const result = await steamApi.get('IPlayerService/GetOwnedGames/v0001/', {
       params: {

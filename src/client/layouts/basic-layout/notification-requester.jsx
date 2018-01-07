@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
+import { connect } from 'react-redux';
 import {
   Button,
   colors,
@@ -7,6 +8,10 @@ import {
 import PropTypes from 'prop-types';
 
 import createNotification from '../../utils/create-notification';
+import {
+  pipe,
+  pluck,
+} from '../../../utils/functions';
 
 /**
  * Renders a bar at the top to ask the user about notification permissions.
@@ -19,7 +24,10 @@ class NotificationRequester extends PureComponent {
       bar: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
     }).isRequired,
+    userId: PropTypes.string,
   };
+
+  static defaultProps = { userId: null };
 
   static styles = {
     bar: {
@@ -31,18 +39,31 @@ class NotificationRequester extends PureComponent {
       lineHeight: '40px',
       alignItems: 'center',
       color: colors.whiteText,
-      backgroundColor: colors.orange500,
+      backgroundColor: colors.orange600,
     },
 
     button: { color: 'inherit' },
   };
 
-  state = { hideBar: Notification.permission !== 'default' };
+  state = { hideBar: !Notification || Notification.permission !== 'default' || !this.props.userId };
+
+  /**
+   * Update the hideBar state when the user logs in or out.
+   */
+  componentWillReceiveProps(nextProps) {
+    if (this.props.userId === null && nextProps.userId !== null && Notification) {
+      this.setState({ hideBar: Notification.permission !== 'default' });
+    }
+  }
 
   /**
    * Request the permission whether or not we can create notifications.
    */
   async requestPermission() {
+    if (!Notification) {
+      return;
+    }
+
     const permission = await Notification.requestPermission();
 
     if (permission === 'granted') {
@@ -82,4 +103,9 @@ class NotificationRequester extends PureComponent {
   }
 }
 
-export default injectSheet(NotificationRequester.styles)(NotificationRequester);
+export default pipe(
+  injectSheet(NotificationRequester.styles),
+  connect((state) => {
+    return { userId: pluck('user.id')(state) };
+  }),
+)(NotificationRequester);

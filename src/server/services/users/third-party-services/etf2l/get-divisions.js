@@ -52,8 +52,6 @@ export { divs };
  * @returns {Promise} - Returns a promise which will resolve with an object.
  */
 export default async function getDivisions(id, etf2lId) {
-  log('Updating users ETF2L divisions', id);
-
   try {
     const response = await axios.get(`http://api.etf2l.org/player/${etf2lId}/results.json`, {
       params: {

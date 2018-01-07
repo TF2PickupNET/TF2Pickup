@@ -1,6 +1,9 @@
 import hooks from 'feathers-hooks-common';
 
-import { pluck } from '../../../utils/functions';
+import {
+  omit,
+  pluck,
+} from '../../../utils/functions';
 
 const service = { create: notification => Promise.resolve(notification) };
 
@@ -24,12 +27,16 @@ export default function notifications() {
         return false;
       }
 
+      if (data.forRegion === pluck('user.settings.region', false)(connection)) {
+        return data;
+      }
+
       if (!data.forUsers) {
         return data;
       }
 
       if (data.forUsers.includes(userId)) {
-        return data;
+        return omit('forUsers')(data);
       }
 
       return false;

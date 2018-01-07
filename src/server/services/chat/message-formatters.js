@@ -1,6 +1,5 @@
-import is from 'is_js';
-
 import { getDataForUserItem } from '../../../utils/users';
+import hasPermission from '../../../utils/has-permission';
 
 /**
  * The mention formatter.
@@ -10,8 +9,22 @@ import { getDataForUserItem } from '../../../utils/users';
  * @returns {Promise} - Returns the formatted mention.
  */
 async function mentionFormatter(word, hook) {
-  if (word === '@this') {
-    return '<Link href="">@this</Link>';
+  const user = await hook.app.service('users').get(hook.data.userId);
+
+  if (word === '@this' && hasPermission('chat.use-global-mention', user)) {
+    if (hasPermission('chat.use-global-mention', user)) {
+      hook.app.service('notifications').create({
+        fromUser: user.id,
+        forUsers: null,
+        forRegion: hook.data.chat === 'global' ? null : hook.data.chat,
+        message: `${user.name} mentioned you`,
+        sound: 'notification',
+      });
+
+      return '<Link href="">@this</Link>';
+    }
+
+    return word;
   }
 
   const users = await hook.app.service('users').find({ query: { name: word.slice(1) } });
@@ -21,6 +34,12 @@ async function mentionFormatter(word, hook) {
       ...getDataForUserItem(users[0]),
       name: `@${users[0].name}`,
     };
+
+    hook.app.service('notifications').create({
+      forUsers: [users[0].id],
+      message: `${user.name} mentioned you`,
+      sound: 'notification',
+    });
 
     return `<UserItem user={${JSON.stringify(data)}} />`;
   }
@@ -53,6 +72,8 @@ async function hashtagFormatter(word, hook) {
 
 hashtagFormatter.test = word => /^#\d+$/.test(word);
 
+const urlRegex = /^(https:\/\/)?(www\.)?([a-z0-9-]+?\.[a-z]+)(\/.*)?$/;
+
 /**
  * Format a link.
  *
@@ -60,10 +81,17 @@ hashtagFormatter.test = word => /^#\d+$/.test(word);
  * @returns {String} - Returns the new string.
  */
 function linkFormatter(word) {
-  return `<Link href="https://${word}">${word}</Link>`;
+  const [,
+    protocol = 'https://',
+    ,
+    host,
+    rest = '',
+  ] = urlRegex.exec(word);
+
+  return `<Link href="${protocol}${host}${rest}">${host}${rest}</Link>`;
 }
 
-linkFormatter.test = word => is.url(word);
+linkFormatter.test = word => urlRegex.test(word);
 
 export const formatters = [
   mentionFormatter,

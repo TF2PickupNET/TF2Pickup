@@ -39,10 +39,10 @@ class Input extends PureComponent {
    *
    * @param {Object} ev - The event object.
    */
-  handleKeyDown = async (ev) => {
+  handleKeyDown = (ev) => {
     switch (ev.keyCode) {
       case 13: {
-        await app.service('chat').create({
+        app.io.emit('chat.add-message', {
           chat: this.props.chat,
           message: ev.target.value,
         });

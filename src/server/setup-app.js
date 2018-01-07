@@ -45,6 +45,8 @@ export default async function setupApp(url, env) {
     console.log(process.env); // eslint-disable-line
 
     if (!process.env.CIRCLECI) {
+      console.log(true); // eslint-disable-line
+
       throw new Error(`Can't connect to MongoDB server with url: ${mongourl}`);
     }
   }

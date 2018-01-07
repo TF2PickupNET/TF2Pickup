@@ -18,7 +18,7 @@ jobs:
           command: yarn run build
       - run:
           name: Start server
-          command: DEBUG="TF2Pickup" yarn run start-prod
+          command: echo "{}" > config/production.json && yarn run start-prod
 
 workflows:
   version: 2

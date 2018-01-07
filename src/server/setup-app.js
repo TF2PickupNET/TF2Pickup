@@ -25,7 +25,7 @@ const log = debug('TF2Pickup');
  * @returns {Object} - Returns the app.
  */
 export default async function setupApp(url, env) {
-  if (env === 'prod') {
+  if (env === 'prod' && !process.env.CIRCLECI) {
     await setupDebug();
   }
 

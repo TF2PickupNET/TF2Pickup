@@ -24,7 +24,7 @@ async function startServer() {
 
       log('Server started on port', port);
 
-      if (process.env.IS_CI_TEST) {
+      if (process.env.CIRCLECI) {
         process.exit(0); // eslint-disable-line no-process-exit
       }
     });

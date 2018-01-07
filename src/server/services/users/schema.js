@@ -181,8 +181,8 @@ export default new Schema({
 
     theme: {
       type: String,
-      validate: isInArray(['light', 'dark'], { nullIsAllowed: true }),
-      default: null,
+      validate: isInArray(['light', 'dark'], {}),
+      default: 'dark',
     },
 
     announcer: {

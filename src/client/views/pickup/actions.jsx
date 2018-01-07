@@ -8,12 +8,8 @@ import {
 import { connect } from 'react-redux';
 
 import hasPermission from '../../../utils/has-permission';
-import {
-  map,
-  pipe,
-  find,
-} from '../../../utils/functions';
 import app from '../../app';
+import { getPlayer } from '../../../utils/pickup';
 
 /**
  * The actions row for a match.
@@ -79,11 +75,7 @@ class Actions extends PureComponent {
    * @returns {Boolean} - Returns true or false.
    */
   get isInPickup() {
-    return pipe(
-      Object.values,
-      map(Object.values),
-      find(player => player.id === this.props.user.id),
-    )(this.props.pickup.teams);
+    return getPlayer(this.props.user.id)(this.props.pickup);
   }
 
   /**

@@ -27,8 +27,6 @@ export default function socketMethods(app, socket) {
         return;
       }
 
-      log('Manually configuring server for pickup', pickupId);
-
       try {
         await configureServer(app, pickup.serverId);
       } catch (error) {

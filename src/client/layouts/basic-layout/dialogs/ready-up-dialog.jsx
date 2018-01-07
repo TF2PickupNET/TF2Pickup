@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import app from '../../../app';
-import { getGamemodeFromUrl } from '../../../../utils/pickup';
+import { getGamemodeFromUrl } from '../../../../utils/pickup-queue';
 
 /**
  * The component to render the ready up dialog and open or close it when needed.

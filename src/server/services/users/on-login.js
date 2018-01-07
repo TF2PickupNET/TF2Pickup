@@ -18,8 +18,6 @@ const log = debug('TF2Pickup:users:on-login');
  */
 export default function onLogin(app) {
   return async (payload, { connection }) => {
-    log('User logged in', connection.user.id);
-
     try {
       const yesterday = subDays(new Date(), 1);
       const oneDaySinceLastUpdate = isBefore(connection.user.lastUpdate, yesterday);

@@ -53,14 +53,13 @@ async function executeCommands(connection, server, pickup) {
  * @returns {String} - Returns the CFG name.
  */
 function getCfgName(region, format, map) {
-  const prefix = 'tf2pickup';
   const mapInfo = maps[map];
 
   if (mapInfo.configType === null) {
-    return `${prefix}_${region}_${format}`;
+    return `tf2pickup_${region}_${format}`;
   }
 
-  return `${prefix}_${region}_${format}_${mapInfo.configType}`;
+  return `tf2pickup_${region}_${format}_${mapInfo.configType}`;
 }
 
 /**
@@ -81,20 +80,13 @@ async function setup(connection, server, pickup) {
  * Configure the server.
  *
  * @param {Object} app - The feathers app object.
- * @param {Boolean} serverId - The server to configure.
+ * @param {Object} server - The servers object.
+ * @param {Object} pickup - The pickups object.
  */
-export default async function configureServer(app, serverId) {
-  const server = await app.service('servers').get(serverId);
-  const pickupService = app.service('pickup');
-  const pickup = await pickupService.find({
-    query: {
-      $limit: 1,
-      serverId: server.id,
-    },
-  });
+export default async function configureServer(app, server, pickup) {
   const connection = new Rcon(server.ip, server.port, server.rconPassword);
 
   await connection.connect();
-  await setup(connection, server, pickup[0]);
+  await setup(connection, server, pickup);
   await connection.disconnect();
 }

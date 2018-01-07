@@ -13,7 +13,7 @@ import {
   pipe,
   pluck,
 } from '../../../../utils/functions';
-import { getGamemodeFromUrl } from '../../../../utils/pickup';
+import { getGamemodeFromUrl } from '../../../../utils/pickup-queue';
 
 import Input from './input';
 import MessagesContainer from './messages-container';

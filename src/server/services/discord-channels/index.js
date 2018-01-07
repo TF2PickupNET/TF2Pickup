@@ -32,24 +32,17 @@ class DiscordChannels {
     region,
     name,
   }) {
-    const bot = await this.app.service('discord').get();
-    const guildId = config.get(`service.discord.guild.${region}`);
-    const guild = bot.guilds.get(guildId);
     const reason = `Created for pickup ${name}`;
+    const guildId = config.get(`service.discord.guild.${region}`);
+    const bot = await this.app.service('discord').get();
+    const guild = bot.guilds.get(guildId);
+    const channelRED = await guild.createChannel(`${name} RED`, 'voice', [], reason);
+    const channelBLU = await guild.createChannel(`${name} BLU`, 'voice', [], reason);
 
-    try {
-      const channelRED = await guild.createChannel(`Pickup ${name} RED`, 'voice', [], reason);
-      const channelBLU = await guild.createChannel(`Pickup ${name} BLU`, 'voice', [], reason);
-
-      log(`Created discord channels for Pickup ${name}!`);
-
-      this.channels[name] = {
-        red: channelRED,
-        blu: channelBLU,
-      };
-    } catch (error) {
-      log('Error while creating discord channels', error);
-    }
+    this.channels[name] = {
+      red: channelRED,
+      blu: channelBLU,
+    };
   }
 
   /**
@@ -60,20 +53,16 @@ class DiscordChannels {
    */
   async delete({ name }) {
     const channels = this.channels[name];
-    const reason = `Pickup ${name} ended`;
+    const reason = `${name} ended`;
 
     if (!channels) {
       log(`Discord channels for pickup ${name} does not exist`);
+
+      return;
     }
 
-    try {
-      await channels.red.delete(reason);
-      await channels.blu.delete(reason);
-
-      log(`Removed channels for ${name}!`);
-    } catch (error) {
-      log('Error while deleting discord channels', error);
-    }
+    await channels.red.delete(reason);
+    await channels.blu.delete(reason);
   }
 }
 

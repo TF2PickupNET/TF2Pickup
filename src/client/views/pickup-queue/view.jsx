@@ -9,7 +9,7 @@ import injectSheet from 'react-jss';
 import Aux from 'react-aux';
 import { breakpoints } from 'materialize-react';
 
-import { getGamemodeFromUrl } from '../../../utils/pickup';
+import { getGamemodeFromUrl } from '../../../utils/pickup-queue';
 import { pluck } from '../../../utils/functions';
 
 import Tabs from './tabs';

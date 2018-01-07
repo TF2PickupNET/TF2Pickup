@@ -37,8 +37,6 @@ export { divs };
  * @returns {Object} - Returns the new data.
  */
 export default async function getOzfortressUserData(id) {
-  log('Requesting data from ozfortress', id);
-
   try {
     const result = await axios.get(
       `https://warzone.ozfortress.com/api/v1/users/steam_id/${id}`,
@@ -47,13 +45,9 @@ export default async function getOzfortressUserData(id) {
     const player = result.data.user;
 
     return {
-      services: {
-        ozfortress: {
-          id: player.id,
-          name: player.name,
-          div6v6: findHighestDiv(player.rosters),
-        },
-      },
+      'services.ozfortress.id': player.id,
+      'services.ozfortress.name': player.name,
+      'services.ozfortress.div6v6': findHighestDiv(player.rosters),
     };
   } catch (error) {
     if (error.response && error.response.status === 404) {

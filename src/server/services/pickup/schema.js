@@ -22,6 +22,7 @@ export default new Schema({
       'server-reservation-error',
     ], {}),
     required: true,
+    default: 'setting-up-server',
   },
 
   region: {

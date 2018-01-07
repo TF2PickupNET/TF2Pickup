@@ -54,13 +54,39 @@ const devService = {
   delete: () => Promise.resolve(true),
 };
 
-const service = {
+/**
+ * The service class for the voice channels.
+ *
+ * @class
+ */
+class VoiceChannelService {
+  /**
+   * Setup method for the services.
+   *
+   * @param {Object} app - The feathers app object.
+   */
+  setup(app) {
+    this.app = app;
+  }
+
+  /**
+   * Create a new voice channel for a pickup.
+   *
+   * @param {Object} data - The data for the channel.
+   * @param {String} data.region - The region of the pickup.
+   * @param {String} data.name - The name of the voice channel.
+   */
   async create({
     region,
     name,
   }) {
     if (!createStrategies[region]) {
       log('No CREATE strategy was specified for the region', region);
+
+      await this.app.service('discord-message').create({
+        message: `No CREATE strategy was specified for the region ${region}`,
+        channel: 'errors',
+      });
 
       return;
     }
@@ -73,12 +99,19 @@ const service = {
       log('Error while creating voice channel', region, name, error);
 
       await this.app.service('discord-message').create({
-        message: `An error happened while creating voice channel for pickup ${name}`,
+        message: `An error happened while creating voice channel ${name}`,
         channel: 'errors',
       });
     }
-  },
+  }
 
+  /**
+   * Delete a voice channel again when a pickup has finished.
+   *
+   * @param {Object} data - The data for the channel.
+   * @param {String} data.region - The region of the channel.
+   * @param {String} data.name - The name of the channel.
+   */
   async delete({
     region,
     name,
@@ -86,7 +119,10 @@ const service = {
     if (!deleteStrategies[region]) {
       log('No DELETE strategy was specified for the region', region);
 
-      return;
+      await this.app.service('discord-message').create({
+        message: `No DELETE strategy was specified for the region ${region}`,
+        channel: 'errors',
+      });
     }
 
     try {
@@ -97,20 +133,20 @@ const service = {
       log('Error while deleting voice channel', region, name, error);
 
       await this.app.service('discord-message').create({
-        message: `An error happened while deleting voice channel for pickup ${name}`,
+        message: `An error happened while deleting voice channel ${name}`,
         channel: 'errors',
       });
     }
-  },
-};
+  }
+}
 
 /**
- * Setup the slack service for sending custom messages to slack.
+ * Setup the voice channel service.
  */
 export default function voiceChannel() {
   const that = this;
 
-  that.service('voice-channel', that.get('env') === 'dev' ? devService : service);
+  that.service('voice-channel', that.get('env') === 'dev' ? devService : new VoiceChannelService());
 
   that.service('voice-channel').hooks({ before: { all: hooks.disallow('external') } });
 }

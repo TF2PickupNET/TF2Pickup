@@ -2,6 +2,8 @@ import sleep from 'sleep-promise';
 import debug from 'debug';
 import hooks from 'feathers-hooks-common';
 
+import { incrementIdHook } from '../hooks';
+
 import configureServer from './configure-server';
 
 const log = debug('TF2Pickup:servers:hooks');
@@ -10,22 +12,7 @@ export default {
   before: {
     all: hooks.disallow('external'),
 
-    async create(hook) {
-      const lastServer = await hook.app.service('servers').find({
-        query: {
-          $limit: 1,
-          $sort: { id: -1 },
-        },
-      });
-
-      return {
-        ...hook,
-        data: {
-          ...hook.data,
-          id: lastServer[0] ? lastServer[0].id + 1 : 1,
-        },
-      };
-    },
+    create: incrementIdHook,
   },
 
   after: {
@@ -43,7 +30,7 @@ export default {
 
         // Try for the first time configuring the server
         try {
-          await configureServer(hook.app, serverId);
+          await configureServer(hook.app, hook.result, pickup);
 
           log('Successfully configured server for pickup', pickup.id);
 
@@ -61,7 +48,7 @@ export default {
           log('Retrying configuration of server', pickup.id);
 
           try {
-            await configureServer(hook.app, serverId);
+            await configureServer(hook.app, hook.result, pickup);
 
             await hook.app.service('pickup').patch(
               pickup.id,

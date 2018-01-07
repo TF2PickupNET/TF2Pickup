@@ -98,21 +98,18 @@ class MumbleService {
    * @param {Object} data - Mumble channel.
    * @param {Object} data.region - The region of the mumble channel.
    * @param {Object} data.name - The name of the mumble channel.
-   * @returns {(Error|Boolean)} - Throws an error or returns true if the channel has been created.
    */
   create({
     region,
     name,
   }) {
     if (!this.connections[region]) {
-      return Promise.reject(new Error(`No connection for region ${region} has been established`));
+      throw new Error(`No connection for region ${region} has been established`);
     }
 
     const channel = this.connections[region].channelByName('Pickups');
 
     channel.addSubChannel(name);
-
-    return Promise.resolve(true);
   }
 
   /**
@@ -121,21 +118,18 @@ class MumbleService {
    * @param {Object} data - Mumble channel.
    * @param {Object} data.region - The region of the mumble channel.
    * @param {Object} data.name - The name of the mumble channel.
-   * @returns {(Error|Boolean)} - Throws an error or returns true if the channel has been deleted.
    */
   delete({
     region,
     name,
   }) {
     if (!this.connections[region]) {
-      return Promise.reject(new Error(`No connection for region ${region} has been established`));
+      throw new Error(`No connection for region ${region} has been established`);
     }
 
     const channel = this.connections[region].channelByName(name);
 
     channel.remove(name);
-
-    return Promise.resolve(true);
   }
 }
 
@@ -152,7 +146,7 @@ export default function mumbleChannels() {
 
   that.service(
     'mumble-channels',
-    that.get('env') === 'd' ? devService : new MumbleService(),
+    that.get('env') === 'dev' ? devService : new MumbleService(),
   );
 
   that.service('mumble-channels').hooks({ before: { all: hooks.disallow('external') } });

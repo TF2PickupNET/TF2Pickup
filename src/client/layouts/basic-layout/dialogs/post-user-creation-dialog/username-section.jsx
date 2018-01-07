@@ -37,8 +37,10 @@ class UsernameSection extends PureComponent {
       link: PropTypes.string.isRequired,
       errorText: PropTypes.string.isRequired,
     }).isRequired,
-    region: PropTypes.string.isRequired,
+    region: PropTypes.string,
   };
+
+  static defaultProps = { region: null };
 
   static styles = {
     container: {

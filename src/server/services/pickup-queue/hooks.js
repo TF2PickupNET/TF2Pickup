@@ -1,19 +1,26 @@
 import hooks from 'feathers-hooks-common';
 
-import { map } from '../../../utils/functions';
-import populateUserData from '../populate-user-data';
+import {
+  populateResult,
+  populateUserData,
+} from '../hooks';
 
 import statuses from './statuses';
 
 /**
  * Populate a pickup with the user data that is needed on the client.
  *
- * @param {Object} hook - The hook object.
  * @param {Object} pickup - The pickup to populate the classes for.
+ * @param {Object} hook - The hook object.
  * @returns {Object} - Returns the populated pickup.
  */
-function populateClasses(hook, pickup) {
-  return populateUserData(hook.app, pickup.classes);
+async function populatePickup(pickup, hook) {
+  const classes = await populateUserData(pickup.classes, hook);
+
+  return {
+    ...pickup,
+    classes,
+  };
 }
 
 export default {
@@ -28,58 +35,18 @@ export default {
   },
 
   after: {
-    find: hooks.iff(hooks.isProvider('external'), [
-      async (hook) => {
-        const pickups = await Promise.all(
-          map(async (pickup) => {
-            const classes = await populateClasses(hook, pickup);
-
-            return Object.assign({}, pickup, { classes });
-          })(hook.result),
-        );
-
-        return {
-          ...hook,
-          result: pickups,
-        };
-      },
-    ]),
-
-    get: hooks.iff(hooks.isProvider('external'), [
-      async (hook) => {
-        const classes = await populateClasses(hook, hook.result);
-
-        return {
-          ...hook,
-          result: Object.assign({}, hook.result, { classes }),
-        };
-      },
-    ]),
+    get: hooks.iff(hooks.isProvider('external'), populateResult(populatePickup)),
+    find: hooks.iff(hooks.isProvider('external'), populateResult(populatePickup)),
 
     patch: [
       (hook) => {
-        switch (hook.result.status) {
-          case 'waiting': {
-            statuses.waiting(hook);
-            break;
-          }
-          case 'ready-up': {
-            statuses.readyUp(hook);
-            break;
-          }
-          default: break;
+        if (statuses[hook.result.status]) {
+          statuses[hook.result.status](hook);
         }
 
         return hook;
       },
-      async (hook) => {
-        const classes = await populateClasses(hook, hook.result);
-
-        return {
-          ...hook,
-          result: Object.assign({}, hook.result, { classes }),
-        };
-      },
+      populateResult(populatePickup),
     ],
   },
 };

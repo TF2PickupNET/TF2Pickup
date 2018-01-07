@@ -15,12 +15,13 @@ import {
   pipe,
   map,
   filter,
+  pluck,
 } from '../../../utils/functions';
 import {
   getPlayer,
   getGamemodeFromUrl,
   countPlayers,
-} from '../../../utils/pickup';
+} from '../../../utils/pickup-queue';
 import createNotification from '../../utils/create-notification';
 import app from '../../app';
 
@@ -86,7 +87,7 @@ class GamemodeTabs extends PureComponent {
       Object.values,
       filter(pickup => pickup.status === 'ready-up'),
       filter(pickup => oldPickups[pickup.gamemode].status === 'waiting'),
-      filter(pickup => getPlayer(this.props.userId)(pickup.classes)),
+      filter(pickup => getPlayer(this.props.userId)(pickup)),
       map((pickup) => {
         this.props.redirect(`/${pickup.gamemode}`);
 
@@ -118,7 +119,7 @@ class GamemodeTabs extends PureComponent {
       return 0;
     }
 
-    return countPlayers(gamemode)(this.props.pickups[gamemode].classes);
+    return countPlayers(gamemode)(this.props.pickups[gamemode]);
   }
 
   /**
@@ -127,9 +128,7 @@ class GamemodeTabs extends PureComponent {
    * @param {Object} data - The data from the server.
    */
   handleRedirect = (data) => {
-    if (data.users.includes(this.props.userId)) {
-      this.props.redirect(`/pickup/${data.id}`);
-    }
+    this.props.redirect(`/pickup/${data.id}`);
   };
 
   /**
@@ -185,7 +184,7 @@ class GamemodeTabs extends PureComponent {
 export default connect(
   (state) => {
     return {
-      userId: state.user ? state.user.id : null,
+      userId: pluck('user.id')(state),
       pickups: state.pickupQueue,
       gamemode: getGamemodeFromUrl(state.router.location.pathname),
     };

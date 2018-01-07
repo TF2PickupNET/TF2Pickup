@@ -42,11 +42,7 @@ export default async function setupApp(url, env) {
   try {
     await mongoose.connect(mongourl);
   } catch (error) { // eslint-disable-line no-unused-vars
-    console.log(process.env); // eslint-disable-line
-
     if (!process.env.CIRCLECI) {
-      console.log(true); // eslint-disable-line
-
       throw new Error(`Can't connect to MongoDB server with url: ${mongourl}`);
     }
   }

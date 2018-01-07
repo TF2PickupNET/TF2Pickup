@@ -120,7 +120,7 @@ export default {
       });
     },
 
-    patched: populateResult(populateTeams),
+    patch: populateResult(populateTeams),
 
     get: hooks.iff(hooks.isProvider('external'), populateResult(populateTeams)),
 

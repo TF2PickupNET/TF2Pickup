@@ -42,7 +42,7 @@ export default async function setupApp(url, env) {
   try {
     await mongoose.connect(mongourl);
   } catch (error) { // eslint-disable-line no-unused-vars
-    if (!process.env.IS_CI_TEST) {
+    if (!process.env.CIRCLECI) {
       throw new Error(`Can't connect to MongoDB server with url: ${mongourl}`);
     }
   }

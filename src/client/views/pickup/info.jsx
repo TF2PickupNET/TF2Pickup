@@ -8,8 +8,8 @@ import gamemodes from '@tf2-pickup/configs/gamemodes';
 import regions from '@tf2-pickup/configs/regions';
 import PropTypes from 'prop-types';
 
-import Date from '../../../components/date';
-import maps from '../../../maps';
+import Date from '../../components/date/index';
+import maps from '../../maps';
 
 /**
  * The info for the pickup.

@@ -28,7 +28,9 @@ export default function socketMethods(app, socket) {
       }
 
       try {
-        await configureServer(app, pickup.serverId);
+        const server = await app.service('server').get(pickup.serverId);
+
+        await configureServer(app, server, pickup);
       } catch (error) {
         log('Error while manually configuring server for pickup', pickupId, error);
       }

@@ -25,12 +25,25 @@ export default new Schema({
     required: true,
   },
 
-  password: String,
+  password: {
+    type: String,
+    required: true,
+  },
 
-  rconPassword: String,
+  rconPassword: {
+    type: String,
+    required: true,
+  },
 
-  stvPort: Number,
-  stvPassword: String,
+  stvPort: {
+    type: Number,
+    required: true,
+  },
+
+  stvPassword: {
+    type: String,
+    required: true,
+  },
 
   reservationId: Number,
 });

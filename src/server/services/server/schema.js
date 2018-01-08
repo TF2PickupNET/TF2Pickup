@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+import regions from '@tf2-pickup/configs/regions';
 
 import { isInArray } from '../validators';
 
@@ -12,6 +13,12 @@ export default new Schema({
   type: {
     type: String,
     validate: isInArray(['serveme'], {}),
+    required: true,
+  },
+
+  region: {
+    type: String,
+    validate: isInArray(Object.keys(regions), {}),
     required: true,
   },
 

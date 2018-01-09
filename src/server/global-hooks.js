@@ -1,5 +1,8 @@
 import hooks from 'feathers-hooks-common';
 import auth from 'feathers-authentication';
+import debug from 'debug';
+
+const log = debug('TF2Pickup:global-hooks');
 
 export default {
   before: {
@@ -29,5 +32,14 @@ export default {
 
       return hooks.disallow('external')(hook);
     },
+  },
+
+  error(hook) {
+    const type = hook.error.hook.type;
+
+    log(
+      `Error in '${hook.path}' service method ${type.toUpperCase()} ${hook.method.toUpperCase()}`,
+      hook.error.stack,
+    );
   },
 };

@@ -20,13 +20,9 @@ class Connect extends PureComponent {
       item: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
     }).isRequired,
-    pickup: PropTypes.shape({
-      server: PropTypes.shape({
-        ip: PropTypes.string,
-        port: PropTypes.number,
-        password: PropTypes.string,
-      }),
-    }).isRequired,
+    ip: PropTypes.string.isRequired,
+    port: PropTypes.number.isRequired,
+    password: PropTypes.string.isRequired,
   };
 
   static styles = {
@@ -52,13 +48,7 @@ class Connect extends PureComponent {
    * @returns {String} - Returns the connect command.
    */
   getConnect() {
-    const {
-      ip,
-      port,
-      password,
-    } = this.props.pickup.server;
-
-    return `connect ${ip}:${port}; password ${password}`;
+    return `connect ${this.props.ip}:${this.props.port}; password ${this.props.password}`;
   }
 
   /**
@@ -67,29 +57,17 @@ class Connect extends PureComponent {
    * @returns {String} - Returns the connect url.
    */
   getConnectUrl() {
-    const {
-      ip,
-      port,
-      password,
-    } = this.props.pickup.server;
-
-    return `steam://connect/${ip}:${port}/${password}`;
+    return `steam://connect/${this.props.ip}:${this.props.port}/${this.props.password}`;
   }
 
   /**
    * Create a new window and close it when the button get's pressed.
    */
   handleButtonPress = () => {
-    const tab = openWindowInNewTab(this.getConnectUrl());
-
-    setTimeout(() => tab.close(), 100);
+    openWindowInNewTab(this.getConnectUrl());
   };
 
   render() {
-    if (!this.props.pickup.server || !this.props.pickup.server.password) {
-      return null;
-    }
-
     return (
       <Card className={this.props.classes.card}>
         <span className={this.props.classes.item}>

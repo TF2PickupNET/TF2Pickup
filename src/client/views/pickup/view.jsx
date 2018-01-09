@@ -13,10 +13,8 @@ import playSound from '../../utils/play-sound';
 import { pluck } from '../../../utils/functions';
 import { getPlayer } from '../../../utils/pickup';
 
-import Info from './info/info';
-import Connect from './info/connect';
-import StvConnect from './info/stv-connect';
-import RconPassword from './info/rcon-password';
+import Info from './info';
+import ServerInfo from './server-info';
 import Teams from './teams';
 import Actions from './actions';
 
@@ -85,7 +83,7 @@ class View extends PureComponent {
    * @returns {Number} - Returns the id of the pickup.
    */
   get id() {
-    return this.props.match.params.id;
+    return parseInt(this.props.match.params.id, 10);
   }
 
   /**
@@ -141,11 +139,10 @@ class View extends PureComponent {
 
         <Info pickup={this.state.pickup} />
 
-        <Connect pickup={this.state.pickup} />
-
-        <StvConnect pickup={this.state.pickup} />
-
-        <RconPassword pickup={this.state.pickup} />
+        <ServerInfo
+          status={this.state.pickup.status}
+          serverId={this.state.pickup.serverId}
+        />
 
         <Teams
           teams={this.state.pickup.teams}

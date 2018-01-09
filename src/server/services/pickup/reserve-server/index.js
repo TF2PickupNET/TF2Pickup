@@ -23,7 +23,7 @@ const strategies = {
 
 /**
  * Reserve a server for a new pickup.
- * This will create a new server in the servers database.
+ * This will create a new server in the server database.
  * This will call the appropriate handler for the different regions.
  *
  * @param {Object} app - The feathers app object.
@@ -31,7 +31,7 @@ const strategies = {
  * @returns {Object} - Returns an object with the server id and the logsecret.
  */
 export default async function reserveServer(app, region) {
-  const serverService = app.service('servers');
+  const serverService = app.service('server');
   const {
     data,
     logSecret,

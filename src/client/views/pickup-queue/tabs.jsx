@@ -106,7 +106,11 @@ class GamemodeTabs extends PureComponent {
     app
       .service('pickup')
       .removeListener('redirect', this.handleRedirect);
+
+    clearTimeout(this.timeout);
   }
+
+  timeout = null;
 
   /**
    * Count the players for the gamemode.
@@ -128,7 +132,7 @@ class GamemodeTabs extends PureComponent {
    * @param {Object} data - The data from the server.
    */
   handleRedirect = (data) => {
-    this.props.redirect(`/pickup/${data.id}`);
+    this.timeout = setTimeout(() => this.props.redirect(`/pickup/${data.id}`), 10 * 1000);
   };
 
   /**

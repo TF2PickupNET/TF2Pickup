@@ -68,7 +68,7 @@ export default async function createPickup(props) {
   const playerIds = pipe(
     getPlayers,
     map(player => player.id),
-  )(players);
+  )({ classes: players });
 
   log('Creating pickup for', pickupQueue.region, pickupQueue.gamemode);
 
@@ -77,7 +77,7 @@ export default async function createPickup(props) {
     const teams = await generateTeams(props, players, pickupQueue.gamemode);
     const mapName = getMostVotedMap(
       pickupQueue.maps,
-      getPlayers(players),
+      getPlayers({ classes: players }),
     );
     const lastPickupForGamemodeAndRegion = await pickupService.find({
       query: {
@@ -125,6 +125,7 @@ export default async function createPickup(props) {
       },
     });
   } catch (error) {
+    log('Error in pickup creation', error);
     // Reset the pickup queue to waiting status
     // await pickupQueueService.patch(props.id, { $set: { status: 'waiting' } });
 

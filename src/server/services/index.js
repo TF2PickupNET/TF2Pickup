@@ -3,7 +3,7 @@ import errors from './errors';
 import authentication from './authentication';
 import pickup from './pickup';
 import pickupQueue from './pickup-queue';
-import servers from './servers';
+import server from './server';
 import mumbleChannels from './mumble-channels';
 import discord from './discord';
 import discordMessage from './discord-message';
@@ -21,7 +21,7 @@ export default function services() {
     .configure(errors)
     .configure(authentication)
     .configure(pickup)
-    .configure(servers)
+    .configure(server)
     .configure(pickupQueue)
     .configure(mumbleChannels)
     .configure(discord)

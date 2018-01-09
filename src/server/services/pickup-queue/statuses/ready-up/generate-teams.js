@@ -1,4 +1,4 @@
-import { getPlayers } from '../../../../../utils/pickup';
+import { getPlayers } from '../../../../../utils/pickup-queue';
 import {
   arrayToObject,
   map,
@@ -49,7 +49,7 @@ const getEloSum = pipe(
    * @returns {Number} - Average elo of the team.
    */
 function getAverageEloForTeam(classes) {
-  const allPlayers = getPlayers(classes);
+  const allPlayers = getPlayers({ classes });
 
   return Math.round(getEloSum(allPlayers) / allPlayers.length);
 }
@@ -138,7 +138,7 @@ export default async function generateTeams(props, players, mode) {
     red: {},
     blu: {},
   };
-  const users = await getUsers(props.app, getPlayers(players));
+  const users = await getUsers(props.app, getPlayers({ classes: players }));
 
   // Get user elos per class and sort
   priorities[mode].forEach((className) => {

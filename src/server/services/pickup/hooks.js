@@ -1,7 +1,11 @@
 import debug from 'debug';
 import hooks from 'feathers-hooks-common';
 
-import { omit } from '../../../utils/functions';
+import {
+  map,
+  omit,
+  pipe,
+} from '../../../utils/functions';
 import {
   incrementIdHook,
   populateResult,
@@ -116,7 +120,10 @@ export default {
     create(hook) {
       hook.service.emit('redirect', {
         id: hook.result.id,
-        users: getPlayers(hook),
+        users: pipe(
+          getPlayers,
+          map(user => user.id),
+        )(hook.result),
       });
     },
 

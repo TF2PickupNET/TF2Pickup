@@ -46,8 +46,12 @@ export default class ServerInfo extends PureComponent {
       return;
     }
 
-    if (status === 'game-is-live' && status === 'waiting-for-game-to-start') {
+    console.log(serverId, status);
+
+    if (status === 'game-is-live' || status === 'waiting-for-game-to-start') {
       const server = await app.service('server').get(serverId);
+
+      console.log(server);
 
       this.setState({ server });
     } else {

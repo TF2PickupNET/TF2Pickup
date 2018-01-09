@@ -83,7 +83,7 @@ class View extends PureComponent {
    * @returns {Number} - Returns the id of the pickup.
    */
   get id() {
-    return this.props.match.params.id;
+    return parseInt(this.props.match.params.id, 10);
   }
 
   /**

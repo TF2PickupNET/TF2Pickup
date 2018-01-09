@@ -24,6 +24,7 @@ import {
 } from '../../../utils/pickup-queue';
 import createNotification from '../../utils/create-notification';
 import app from '../../app';
+import openWindowInNewTab from '../../utils/open-window-in-new-tab';
 
 /**
  * Render the tabs for the different gamemodes.

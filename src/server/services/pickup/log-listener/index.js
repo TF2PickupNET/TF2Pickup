@@ -52,10 +52,10 @@ export default function logListener(app) {
     const handler = find(event => event.line.test(line.data))(events);
 
     if (handler) {
-      const pickups = await app.service('pickup').find({ query: { logsecret: line.secret } });
+      const [pickup] = await app.service('pickup').find({ query: { logsecret: line.secret } });
 
-      if (pickups.length === 1) {
-        await handler.handler(app, pickups[0], {
+      if (pickup) {
+        await handler.handler(app, pickup, {
           ...line,
           data: handler.line.exec(line.data),
         });

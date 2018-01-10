@@ -7,5 +7,7 @@ export default {
   // Data[4] - Player's team in server.
   // Data[5] - say or say_team.
   // Data[6] - Player's chat.
-  handler: () => {},
+  handler(app, pickup, data) {
+    console.log(data);
+  },
 };

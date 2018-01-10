@@ -31,7 +31,7 @@ const strategies = {
  * @returns {Boolean} - Returns whether or not the clean up was successful.
  */
 export default async function cleanupServer(app, pickup) {
-  const server = await app.service('servers').get(pickup.serverId);
+  const server = await app.service('server').get(pickup.serverId);
 
   log('Cleaning server up for pickup', pickup.id);
 

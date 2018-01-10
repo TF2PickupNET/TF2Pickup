@@ -1,4 +1,5 @@
 import { Schema } from 'mongoose';
+import regions from '@tf2-pickup/configs/regions';
 
 import { isInArray } from '../validators';
 
@@ -15,6 +16,12 @@ export default new Schema({
     required: true,
   },
 
+  region: {
+    type: String,
+    validate: isInArray(Object.keys(regions), {}),
+    required: true,
+  },
+
   ip: {
     type: String,
     required: true,
@@ -25,12 +32,25 @@ export default new Schema({
     required: true,
   },
 
-  password: String,
+  password: {
+    type: String,
+    required: true,
+  },
 
-  rconPassword: String,
+  rconPassword: {
+    type: String,
+    required: true,
+  },
 
-  stvPort: Number,
-  stvPassword: String,
+  stvPort: {
+    type: Number,
+    required: true,
+  },
+
+  stvPassword: {
+    type: String,
+    required: true,
+  },
 
   reservationId: Number,
 });

@@ -1,21 +1,59 @@
 import sleep from 'sleep-promise';
 import debug from 'debug';
+import classnames from 'classnames';
 import hooks from 'feathers-hooks-common';
 
-import { incrementIdHook } from '../hooks';
+import {
+  incrementIdHook,
+  populateResult,
+} from '../hooks';
+import { getPlayer } from '../../../utils/pickup';
+import {
+  pick,
+  pluck,
+} from '../../../utils/functions';
+import hasPermission from '../../../utils/has-permission';
 
 import configureServer from './configure-server';
 
-const log = debug('TF2Pickup:servers:hooks');
+const log = debug('TF2Pickup:server:hooks');
+
+/**
+ * Remove the restricted data for the user.
+ *
+ * @param {Object} server - The servers object.
+ * @param {Object} hook - The actual hook object.
+ * @returns {Object} - Returns the new data.
+ */
+async function restrictData(server, hook) {
+  const [pickup] = await hook.app.service('pickup').find({ query: { serverId: server.id } });
+  const isActiveGame = pickup.status === 'game-is-live'
+    || pickup.status === 'waiting-for-game-to-start';
+
+  if (pickup && isActiveGame) {
+    const userId = pluck('params.user.id')(hook);
+    const isInPickup = getPlayer(userId)(pickup);
+    const canSeeServerInfo = hasPermission('', hook.params.user);
+    const validKeys = classnames('ip stvPort stvPassword', {
+      port: isInPickup || canSeeServerInfo,
+      password: isInPickup || canSeeServerInfo,
+      rconPassword: canSeeServerInfo,
+    }).split(' ');
+
+    return pick(...validKeys)(server);
+  }
+
+  return {};
+}
 
 export default {
-  before: {
-    all: hooks.disallow('external'),
-
-    create: incrementIdHook,
-  },
+  before: { create: incrementIdHook },
 
   after: {
+    find: hooks.iff(hooks.isProvider('external'), populateResult(restrictData)),
+
+    get: hooks.iff(hooks.isProvider('external'), populateResult(restrictData)),
+
     create(hook) {
       const serverId = hook.result.id;
 

@@ -6,27 +6,23 @@ import {
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
-import copy from '../../../utils/copy';
+import openWindowInNewTab from '../../../utils/open-window-in-new-tab';
 
 /**
- * The rcon password command.
+ * The STV connect for the pickup.
  *
  * @class
  */
-class RCONPassword extends PureComponent {
+class STVConnect extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
       card: PropTypes.string.isRequired,
       item: PropTypes.string.isRequired,
       button: PropTypes.string.isRequired,
     }).isRequired,
-    pickup: PropTypes.shape({
-      server: PropTypes.shape({
-        ip: PropTypes.string,
-        port: PropTypes.number,
-        rconPassword: PropTypes.string,
-      }),
-    }).isRequired,
+    ip: PropTypes.string.isRequired,
+    stvPort: PropTypes.number.isRequired,
+    stvPassword: PropTypes.string.isRequired,
   };
 
   static styles = {
@@ -47,30 +43,31 @@ class RCONPassword extends PureComponent {
   };
 
   /**
-   * Get the rcon connect command.
+   * Get the stv connect string for the pickup.
    *
    * @returns {String} - Returns the command.
    */
   getConnect() {
-    const {
-      ip,
-      port,
-      rconPassword,
-    } = this.props.pickup.server;
-
-    return `rcon_address ${ip}:${port}; rcon_password ${rconPassword}`;
+    return `connect ${this.props.ip}:${this.props.stvPort}; password ${this.props.stvPassword}`;
   }
 
   /**
-   * Copy the rcon connect command.
+   * Get the stv connect link.
+   *
+   * @returns {String} - Returns the link.
    */
-  handleButtonPress = () => copy(this.getConnectUrl());
+  getConnectUrl() {
+    return `steam://connect/${this.props.ip}:${this.props.stvPort}/${this.props.stvPassword}`;
+  }
+
+  /**
+   * Open a new window with the link and close it after 100ms.
+   */
+  handleButtonPress = () => {
+    openWindowInNewTab(this.getConnectUrl());
+  };
 
   render() {
-    if (!this.props.pickup.server || !this.props.pickup.server.rconPassword) {
-      return null;
-    }
-
     return (
       <Card className={this.props.classes.card}>
         <span className={this.props.classes.item}>
@@ -79,7 +76,7 @@ class RCONPassword extends PureComponent {
 
         <span className={this.props.classes.button}>
           <Button onPress={this.handleButtonPress}>
-            Copy RCON
+            Join STV
           </Button>
         </span>
       </Card>
@@ -87,4 +84,4 @@ class RCONPassword extends PureComponent {
   }
 }
 
-export default injectSheet(RCONPassword.styles)(RCONPassword);
+export default injectSheet(STVConnect.styles)(STVConnect);

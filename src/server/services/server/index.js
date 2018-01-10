@@ -6,22 +6,22 @@ import schema from './schema';
 import hooks from './hooks';
 import socketMethods from './socket-methods';
 
-const log = debug('TF2Pickup:servers');
+const log = debug('TF2Pickup:server');
 
 /**
- * Setup the servers service.
+ * Setup the server service.
  */
-export default function servers() {
+export default function server() {
   const that = this;
 
-  log('Setting up servers service');
+  log('Setting up server service');
 
-  that.service('servers', service({
-    Model: mongoose.model('Servers', schema),
+  that.service('server', service({
+    Model: mongoose.model('Server', schema),
     id: 'id',
   }));
 
-  that.service('servers').hooks(hooks);
+  that.service('server').hooks(hooks);
 
   that.on('listening', () => {
     that.io.on('connection', socket => socketMethods(that, socket));

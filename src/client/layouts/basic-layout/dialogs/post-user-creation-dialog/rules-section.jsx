@@ -44,7 +44,12 @@ class RulesSection extends PureComponent {
     },
   };
 
-  handleAcceptRules = () => app.io.emit('user.accept-rules');
+  /**
+   * Emit the user.accept-rules socket io event.
+   */
+  handleAcceptRules = () => {
+    app.io.emit('user.accept-rules');
+  };
 
   render() {
     return (

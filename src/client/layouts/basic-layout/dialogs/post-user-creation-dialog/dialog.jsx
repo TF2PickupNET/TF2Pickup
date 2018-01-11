@@ -10,11 +10,13 @@ import {
 import { connect } from 'react-redux';
 
 import { closeDialog } from '../../../../redux/dialog/actions';
+import openWindowInNewTab from '../../../../utils/open-window-in-new-tab';
+import { discordUrls } from '../../../../../config/client';
 
 import RulesSection from './rules-section';
 import RegionSection from './region-section';
 import UsernameSection from './username-section';
-import ThemeSection from './theme-section';
+import JoinDiscordSection from './join-discord-section';
 
 const HeaderButton = () => null;
 
@@ -89,11 +91,13 @@ class PostUserCreationDialog extends PureComponent {
       case 0: return 'Rules';
       case 1: return 'Select a region';
       case 2: return 'Select a username';
-      case 3: return 'Select a theme';
+      case 3: return 'Join our discord server';
       case 4: return 'You are ready to go';
       default: return null;
     }
   }
+
+  state = { skipDiscord: false };
 
   /**
    * Clear the timeout when the dialog unmounts (hides the page).
@@ -116,7 +120,7 @@ class PostUserCreationDialog extends PureComponent {
       return 1;
     } else if (this.props.user.name === null) {
       return 2;
-    } else if (this.props.user.settings.theme === null) {
+    } else if (!this.state.skipDiscord) {
       return 3;
     }
 
@@ -128,8 +132,24 @@ class PostUserCreationDialog extends PureComponent {
   /**
    * Set a timeout after which the dialog will be closed automatically.
    */
-  handleShow = () => {
+  handleFinishShow = () => {
     this.timeout = setTimeout(this.props.close, 3 * 1000);
+  };
+
+  /**
+   * Open the discord invite in a new tab and switch to the next section.
+   */
+  onDiscordJoin = () => {
+    openWindowInNewTab(discordUrls.invite);
+
+    this.onDiscordSkip();
+  };
+
+  /**
+   * When the user either wants to skip joining discord or clicked the join discord button.
+   */
+  onDiscordSkip = () => {
+    this.setState({ skipDiscord: true });
   };
 
   render() {
@@ -140,7 +160,7 @@ class PostUserCreationDialog extends PureComponent {
         className={this.props.classes.dialog}
         {...getNotDeclaredProps(this.props, PostUserCreationDialog)}
       >
-        <Dialog.Header className={section === 4 ? this.props.classes.finishSection : ''}>
+        <Dialog.Header className={section >= 3 ? this.props.classes.finishSection : ''}>
           {PostUserCreationDialog.getTitle(section)}
         </Dialog.Header>
 
@@ -166,12 +186,15 @@ class PostUserCreationDialog extends PureComponent {
           </Stepper.Section>
 
           <Stepper.Section className={this.props.classes.sectionContainer}>
-            <ThemeSection />
+            <JoinDiscordSection
+              handleDiscordJoin={this.onDiscordJoin}
+              handleSkipPress={this.onDiscordSkip}
+            />
           </Stepper.Section>
 
           <Stepper.Section
             className={this.props.classes.finishSection}
-            onShow={this.handleShow}
+            onShow={this.handleFinishShow}
           >
             <Button onPress={this.handleClose}>
               Finish

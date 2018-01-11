@@ -136,12 +136,18 @@ class PostUserCreationDialog extends PureComponent {
     this.timeout = setTimeout(this.props.close, 3 * 1000);
   };
 
+  /**
+   * Open the discord invite in a new tab and switch to the next section.
+   */
   onDiscordJoin = () => {
     openWindowInNewTab(discordUrls.invite);
 
     this.onDiscordSkip();
   };
 
+  /**
+   * When the user either wants to skip joining discord or clicked the join discord button.
+   */
   onDiscordSkip = () => {
     this.setState({ skipDiscord: true });
   };
@@ -154,7 +160,7 @@ class PostUserCreationDialog extends PureComponent {
         className={this.props.classes.dialog}
         {...getNotDeclaredProps(this.props, PostUserCreationDialog)}
       >
-        <Dialog.Header className={section === 3 ? this.props.classes.finishSection : ''}>
+        <Dialog.Header className={section >= 3 ? this.props.classes.finishSection : ''}>
           {PostUserCreationDialog.getTitle(section)}
         </Dialog.Header>
 

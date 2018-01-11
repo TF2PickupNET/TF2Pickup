@@ -1,5 +1,15 @@
 import debug from 'debug';
+import regions from '@tf2-pickup/configs/regions';
 import hooks from 'feathers-hooks-common';
+import {
+  isBefore,
+  subMinutes,
+} from 'date-fns';
+
+import {
+  flatten,
+  map,
+} from '../../../utils/functions';
 
 const log = debug('TF2Pickup:voice-channel');
 
@@ -49,6 +59,20 @@ const deleteStrategies = {
   },
 };
 
+const findStrategies = {
+  eu(app) {
+    return app.service('mumble-channels').find({ region: 'eu' });
+  },
+
+  na(app) {
+    return app.service('mumble-channels').find({ region: 'na' });
+  },
+
+  oz(app) {
+    return app.service('mumble-channels').find({ region: 'oz' });
+  },
+};
+
 const devService = {
   create: () => Promise.resolve(true),
   delete: () => Promise.resolve(true),
@@ -67,7 +91,43 @@ class VoiceChannelService {
    */
   setup(app) {
     this.app = app;
+
+    setTimeout(this.checkVoiceChannels, 10 * 60 * 1000);
   }
+
+  checkVoiceChannels = async () => {
+    try {
+      await Promise.all(
+        map(async (region) => {
+          const channels = await findStrategies[region](this.app);
+
+          return Promise.all(
+            map(async ({
+              pickupId,
+              isChannelEmpty,
+            }) => {
+              const pickup = await this.app.service('pickup').get(pickupId);
+              const is30MinutesOld = isBefore(new Date(pickup.endedOn), subMinutes(new Date(), 30));
+
+              if (isChannelEmpty || is30MinutesOld) {
+                await this.app.service('voice-channel').delete({
+                  name: `Pickup ${pickup.id}`,
+                  region,
+                });
+              }
+            })(channels),
+          );
+        })(Object.keys(regions)),
+      );
+    } catch (error) {
+      log('Error in checking voice channels for deletion', error);
+
+      this.app.service('discord-message').create({
+        message: '',
+        channel: 'errors',
+      });
+    }
+  };
 
   /**
    * Create a new voice channel for a pickup.

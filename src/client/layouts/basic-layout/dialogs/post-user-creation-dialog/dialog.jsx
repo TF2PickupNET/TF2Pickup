@@ -10,13 +10,13 @@ import {
 import { connect } from 'react-redux';
 
 import { closeDialog } from '../../../../redux/dialog/actions';
+import openWindowInNewTab from '../../../../utils/open-window-in-new-tab';
+import { discordUrls } from '../../../../../config/client';
 
 import RulesSection from './rules-section';
 import RegionSection from './region-section';
 import UsernameSection from './username-section';
 import JoinDiscordSection from './join-discord-section';
-import openWindowInNewTab from '../../../../utils/open-window-in-new-tab';
-import { discordUrls } from '../../../../../config/client';
 
 const HeaderButton = () => null;
 
@@ -80,8 +80,6 @@ class PostUserCreationDialog extends PureComponent {
     },
   };
 
-  state = { skipDiscord: false };
-
   /**
    * Get the title for the current section.
    *
@@ -98,6 +96,8 @@ class PostUserCreationDialog extends PureComponent {
       default: return null;
     }
   }
+
+  state = { skipDiscord: false };
 
   /**
    * Clear the timeout when the dialog unmounts (hides the page).

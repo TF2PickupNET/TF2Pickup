@@ -6,6 +6,12 @@ import {
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
+/**
+ * The section for joining discord.
+ *
+ * @param {Object} props - The props for the component.
+ * @returns {JSX} - Returns the JSX.
+ */
 function JoinDiscordSection(props) {
   return (
     <div className={props.classes.container}>

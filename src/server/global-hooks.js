@@ -1,6 +1,7 @@
 import hooks from 'feathers-hooks-common';
 import auth from 'feathers-authentication';
 import debug from 'debug';
+
 import { pluck } from '../utils/functions';
 
 const log = debug('TF2Pickup:global-hooks');

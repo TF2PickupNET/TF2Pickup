@@ -185,7 +185,6 @@ class PostUserCreationDialog extends PureComponent {
             <UsernameSection region={this.props.user.settings.region} />
           </Stepper.Section>
 
-
           <Stepper.Section className={this.props.classes.sectionContainer}>
             <JoinDiscordSection
               handleDiscordJoin={this.onDiscordJoin}

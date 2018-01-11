@@ -1,6 +1,6 @@
 import debug from 'debug';
 
-const log = debug('TF2Pickup:pickup:log-listener');
+const log = debug('TF2Pickup:log-listener:on-round-start');
 
 export default {
   line: /World triggered "Round_Start"/,

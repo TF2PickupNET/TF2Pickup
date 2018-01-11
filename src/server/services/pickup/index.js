@@ -4,7 +4,7 @@ import debug from 'debug';
 
 import schema from './schema';
 import hooks from './hooks';
-import logListener from './log-listener';
+import logListener from '../log-listener';
 import socketMethods from './socket-methods';
 import filters from './filters';
 
@@ -25,10 +25,7 @@ export default function pickup() {
   }));
 
   that.service('pickup').hooks(hooks);
-
   that.service('pickup').filter(filters);
-
-  logListener(that);
 
   that.on('listening', () => {
     that.io.on('connection', socket => socketMethods(that, socket));

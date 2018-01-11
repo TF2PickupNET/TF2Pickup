@@ -5,7 +5,7 @@ import onRoundWin from './on-round-win';
 import onLogstf from './on-logstf';
 import onSay from './on-say';
 
-export default [
+const events = [
   onDisconnect,
   onRoundStart,
   onRoundEnd,
@@ -13,3 +13,5 @@ export default [
   onLogstf,
   onSay,
 ];
+
+export default events;

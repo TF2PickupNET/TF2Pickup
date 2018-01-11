@@ -1,16 +1,16 @@
 import axios from 'axios';
 import debug from 'debug';
 
-const log = debug('TF2Pickup:pickup:log-listener:logstf');
+const log = debug('TF2Pickup:log-listener:on-logs.tf');
 
 export default {
-  line: /The log is available here: (http|https):\/\/(.*?)\/(.*?) \./,
+  line: /The log is available here: https:\/\/logs.tf\/(.*?) \./,
 
-  // Data[1] - Protocol.
-  // Data[2] - Website.
-  // Data[3] - Logs.tf ID.
-  async handler(app, pickup, line) {
-    await app.service('pickup').patch(pickup.id, { $set: { logsTFID: line.data[3] } });
+  // Data[1] - Logs.tf ID.
+  async handler(app, pickup, [, id]) {
+    await app.service('pickup').patch(pickup.id, { $set: { logsTFID: parseInt(id, 10) } });
+
+    log('Got Logs.tf id for pickup', pickup.id, id);
 
     if (app.get('env') === 'prod') {
       try {

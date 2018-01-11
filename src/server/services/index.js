@@ -11,6 +11,7 @@ import discordChannels from './discord-channels';
 import voiceChannel from './voice-channel';
 import chat from './chat';
 import notifications from './notifications';
+import logListener from './log-listener';
 
 /**
  * Setup all of the services.
@@ -29,5 +30,6 @@ export default function services() {
     .configure(discordChannels)
     .configure(voiceChannel)
     .configure(chat)
-    .configure(notifications);
+    .configure(notifications)
+    .configure(logListener);
 }

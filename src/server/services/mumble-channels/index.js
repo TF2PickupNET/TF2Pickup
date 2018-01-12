@@ -94,6 +94,13 @@ class MumbleService {
     });
   }
 
+  /**
+   * Find all of the current pickup channels.
+   *
+   * @param {Object} data - The data for the channels.
+   * @param {String} data.region - The region of the server.
+   * @returns {Object[]} - Returns an array of the channels.
+   */
   find({ region }) {
     if (!this.connections[region]) {
       throw new Error(`No connection for region ${region} has been established`);

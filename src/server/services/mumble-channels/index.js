@@ -98,7 +98,11 @@ class MumbleService {
       throw new Error(`No connection for region ${region} has been established`);
     }
 
-    return this.connections[region].channelByName('Pickups');
+    const channel = this.connections[region].channelByName('Pickups');
+
+    console.log(channel.children);
+
+    return Promise.resolve(channel.children);
   }
 
   /**
@@ -174,10 +178,5 @@ export default function mumbleChannels() {
   }), 30 * 1000);
 
 
-  setTimeout(() => that.service('mumble-channels').find({ region: 'eu' }).then(channels => log(channels)), 45 * 1000);
-
-  setTimeout(() => that.service('mumble-channels').create({
-    region: 'eu',
-    name: 'Pickup 1',
-  }), 60 * 1000);
+  setTimeout(() => that.service('mumble-channels').find({ region: 'eu' }).then(channels => console.log(channels)), 45 * 1000);
 }

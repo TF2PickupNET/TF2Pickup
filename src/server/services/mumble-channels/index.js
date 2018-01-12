@@ -105,7 +105,7 @@ class MumbleService {
       map((channel) => {
         return {
           region,
-          pickupId: /Pickup (\d+)/.exec(channel.name)[1],
+          pickupId: parseInt(/Pickup (\d+)/.exec(channel.name)[1], 10),
           isChannelEmpty: every(
             teamChannel => teamChannel.users.length === 0,
           )(channel.children),

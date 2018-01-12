@@ -110,6 +110,12 @@ class MumbleService {
     const channel = this.connections[region].channelByName('Pickups');
 
     channel.addSubChannel(name);
+
+    const pickupChannel = this.connections[region].channelByName(name);
+
+    pickupChannel.addSubChannel('Blu');
+
+    pickupChannel.addSubChannel('Red');
   }
 
   /**
@@ -150,4 +156,9 @@ export default function mumbleChannels() {
   );
 
   that.service('mumble-channels').hooks({ before: { all: hooks.disallow('external') } });
+
+  that.service('mumble-channels').create({
+    region: 'eu',
+    name: 'Pickup 1',
+  });
 }

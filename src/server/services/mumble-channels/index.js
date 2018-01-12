@@ -157,8 +157,8 @@ export default function mumbleChannels() {
 
   that.service('mumble-channels').hooks({ before: { all: hooks.disallow('external') } });
 
-  that.service('mumble-channels').create({
+  setTimeout(() => that.service('mumble-channels').create({
     region: 'eu',
     name: 'Pickup 1',
-  });
+  }), 30 * 1000);
 }

@@ -93,6 +93,14 @@ class MumbleService {
     });
   }
 
+  find({ region }) {
+    if (!this.connections[region]) {
+      throw new Error(`No connection for region ${region} has been established`);
+    }
+
+    return this.connections[region].channelByName('Pickups');
+  }
+
   /**
    * Create a mumble channel.
    *
@@ -164,4 +172,13 @@ export default function mumbleChannels() {
     region: 'eu',
     name: 'Pickup 1',
   }), 30 * 1000);
+
+
+  setTimeout(() => that.service('mumble-channels').find({ region: 'eu' }).then(channels => console.log(channels)), 45 * 1000);
+
+
+  setTimeout(() => that.service('mumble-channels').create({
+    region: 'eu',
+    name: 'Pickup 1',
+  }), 60 * 1000);
 }

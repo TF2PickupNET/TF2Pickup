@@ -1,5 +1,16 @@
 import debug from 'debug';
+import regions from '@tf2-pickup/configs/regions';
 import hooks from 'feathers-hooks-common';
+import {
+  isBefore,
+  subMinutes,
+} from 'date-fns';
+
+import {
+  flatten,
+  map,
+  pipe,
+} from '../../../utils/functions';
 
 const log = debug('TF2Pickup:voice-channel');
 
@@ -28,8 +39,8 @@ const createStrategies = {
 
 const deleteStrategies = {
   eu(app, name) {
-    return app.service('mumble-channels').delete({
-      region: 'eu',
+    return app.service('discord-channels').delete({
+      region: 'global',
       name,
     });
   },
@@ -49,6 +60,20 @@ const deleteStrategies = {
   },
 };
 
+const findStrategies = {
+  eu(app) {
+    return app.service('discord-channels').find({ region: 'eu' });
+  },
+
+  na(app) {
+    return app.service('mumble-channels').find({ region: 'na' });
+  },
+
+  oz(app) {
+    return app.service('mumble-channels').find({ region: 'oz' });
+  },
+};
+
 const devService = {
   create: () => Promise.resolve(true),
   delete: () => Promise.resolve(true),
@@ -61,12 +86,69 @@ const devService = {
  */
 class VoiceChannelService {
   /**
+   * Check all of the voice channels for each region if the voice channel can be deleted.
+   *
+   * @param {Object} app - The feathers app object.
+   * @returns {Function} - Returns a function.
+   */
+  static checkVoiceChannels(app) {
+    return async () => {
+      try {
+        const channels = await Promise.all(
+          pipe(
+            Object.keys,
+            map(region => findStrategies[region](app)),
+          )(regions),
+        );
+
+        await Promise.all(
+          pipe(
+            flatten,
+            map(async (channel) => {
+              let is30MinutesOld = false;
+
+              try {
+                const pickup = await app.service('pickup').get(channel.pickupId);
+
+                is30MinutesOld = isBefore(
+                  pickup.endedOn ? new Date(pickup.endedOn) : new Date(),
+                  subMinutes(new Date(), 30),
+                );
+              } catch (error) {
+                log('Couldn\'t find pickup for voice channel', channel.name, error);
+              }
+
+              if (channel.isChannelEmpty || is30MinutesOld) {
+                await app.service('voice-channel').delete({
+                  name: channel.name,
+                  region: channel.region,
+                });
+              }
+            }),
+          )(channels),
+        );
+      } catch (error) {
+        log('Error in checking voice channels for deletion', error);
+
+        app.service('discord-message').create({
+          message: 'Error in checking voice channels for deletion',
+          channel: 'errors',
+        });
+      }
+    };
+  }
+
+  /**
    * Setup method for the services.
    *
    * @param {Object} app - The feathers app object.
    */
   setup(app) {
     this.app = app;
+
+    setTimeout(VoiceChannelService.checkVoiceChannels(app), 60 * 1000);
+
+    setInterval(VoiceChannelService.checkVoiceChannels(app), 10 * 60 * 1000);
   }
 
   /**
@@ -146,7 +228,7 @@ class VoiceChannelService {
 export default function voiceChannel() {
   const that = this;
 
-  that.service('voice-channel', that.get('env') === 'dev' ? devService : new VoiceChannelService());
+  that.service('voice-channel', that.get('env') === 'd' ? devService : new VoiceChannelService());
 
   that.service('voice-channel').hooks({ before: { all: hooks.disallow('external') } });
 }

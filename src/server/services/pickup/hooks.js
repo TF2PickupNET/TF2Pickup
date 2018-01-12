@@ -51,14 +51,6 @@ export default {
     create: [
       incrementIdHook,
 
-      // Create a voice channel
-      async (hook) => {
-        await hook.app.service('voice-channel').create({
-          region: hook.data.region,
-          name: `Pickup ${hook.data.id}`,
-        });
-      },
-
       // Get a server for the pickup
       async (hook) => {
         try {
@@ -95,11 +87,6 @@ export default {
       if (hook.data.$set.status === 'game-finished') {
         const pickup = await hook.service.get(hook.id);
 
-        await hook.app.service('voice-channel').delete({
-          region: pickup.region,
-          name: `Pickup ${hook.id}`,
-        });
-
         if (pickup.serverId) {
           await cleanupServer(hook.app, pickup);
         }
@@ -124,6 +111,11 @@ export default {
           getPlayers,
           map(user => user.id),
         )(hook.result),
+      });
+
+      hook.app.service('voice-channel').create({
+        region: hook.result.region,
+        name: `Pickup ${hook.result.id}`,
       });
     },
 

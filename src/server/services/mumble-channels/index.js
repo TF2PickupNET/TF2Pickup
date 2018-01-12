@@ -7,6 +7,7 @@ import path from 'path';
 import hooks from 'feathers-hooks-common';
 
 import {
+  every,
   filter,
   map,
   pipe,
@@ -98,11 +99,19 @@ class MumbleService {
       throw new Error(`No connection for region ${region} has been established`);
     }
 
-    const channel = this.connections[region].channelByName('Pickups');
+    const pickupsChannel = this.connections[region].channelByName('Pickups');
 
-    console.log(channel.children);
-
-    return Promise.resolve(channel.children);
+    return Promise.resolve(
+      map((channel) => {
+        return {
+          region,
+          pickupId: /Pickup (\d+)/.exec(channel.name)[1],
+          isChannelEmpty: every(
+            teamChannel => teamChannel.users.length === 0,
+          )(channel.children),
+        };
+      })(pickupsChannel.children),
+    );
   }
 
   /**
@@ -174,9 +183,8 @@ export default function mumbleChannels() {
 
   setTimeout(() => that.service('mumble-channels').create({
     region: 'eu',
-    name: 'Pickup 1',
+    name: 'Pickup 2',
   }), 30 * 1000);
-
 
   setTimeout(() => that.service('mumble-channels').find({ region: 'eu' }).then(channels => console.log(channels)), 45 * 1000);
 }

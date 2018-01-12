@@ -1,6 +1,7 @@
 import mumble from 'mumble';
 import config from 'config';
 import debug from 'debug';
+import sleep from 'sleep-promise';
 import fs from 'fs';
 import path from 'path';
 import hooks from 'feathers-hooks-common';
@@ -99,7 +100,7 @@ class MumbleService {
    * @param {Object} data.region - The region of the mumble channel.
    * @param {Object} data.name - The name of the mumble channel.
    */
-  create({
+  async create({
     region,
     name,
   }) {
@@ -110,6 +111,8 @@ class MumbleService {
     const channel = this.connections[region].channelByName('Pickups');
 
     channel.addSubChannel(name);
+
+    await sleep(5 * 1000);
 
     const pickupChannel = this.connections[region].channelByName(name);
 

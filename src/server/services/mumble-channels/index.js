@@ -164,6 +164,7 @@ class MumbleService {
 }
 
 const devService = {
+  find: () => Promise.resolve([]),
   create: () => Promise.resolve(true),
   delete: () => Promise.resolve(true),
 };
@@ -180,11 +181,4 @@ export default function mumbleChannels() {
   );
 
   that.service('mumble-channels').hooks({ before: { all: hooks.disallow('external') } });
-
-  setTimeout(() => that.service('mumble-channels').create({
-    region: 'eu',
-    name: 'Pickup 2',
-  }), 30 * 1000);
-
-  setTimeout(() => that.service('mumble-channels').find({ region: 'eu' }).then(channels => console.log(channels)), 45 * 1000);
 }

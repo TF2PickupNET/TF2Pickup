@@ -8,6 +8,6 @@ export default {
   // Data[5] - say or say_team.
   // Data[6] - Player's chat.
   handler(app, pickup, data) {
-    console.log(data);
+    console.log(pickup, data);
   },
 };

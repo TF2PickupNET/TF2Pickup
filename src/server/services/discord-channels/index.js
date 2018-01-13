@@ -10,8 +10,6 @@ const log = debug('TF2Pickup:discord-channels');
  * @class
  */
 class DiscordChannels {
-  channels = {};
-
   /**
    * We need to store the app in the class so we can use it later.
    *
@@ -22,11 +20,37 @@ class DiscordChannels {
   }
 
   /**
+   * Find all of the current pickup voice channels.
+   *
+   * @param {Object} data - The data for the voice channels.
+   * @param {String} data.region - The region for the channels.
+   * @returns {Object[]} - Returns the channels.
+   */
+  async find({ region }) {
+    const guildId = config.get(`service.discord.guild.${region}`);
+    const bot = await this.app.service('discord').get();
+    const guild = bot.guilds.get(guildId);
+    const regex = /Pickup (\d+) (Blu|Red)/;
+
+    return guild.channels
+      .filterArray(channel => channel.type === 'voice')
+      .filter(channel => regex.test(channel.name))
+      .map((channel) => {
+        return {
+          region,
+          name: channel.name,
+          pickupId: parseInt(regex.exec(channel.name)[1], 10),
+          isChannelEmpty: channel.members.array().length === 0,
+        };
+      });
+  }
+
+  /**
    * Create a Discord voice channel.
    *
-   * @param {Object} channel - Information about the channel.
-   * @param {Object} channel.region - The region the channel should be created.
-   * @param {Object} channel.name - The name of the channel.
+   * @param {Object} data - Information about the channel.
+   * @param {Object} data.region - The region the channel should be created.
+   * @param {Object} data.name - The name of the channel.
    */
   async create({
     region,
@@ -36,33 +60,32 @@ class DiscordChannels {
     const guildId = config.get(`service.discord.guild.${region}`);
     const bot = await this.app.service('discord').get();
     const guild = bot.guilds.get(guildId);
-    const channelRED = await guild.createChannel(`${name} RED`, 'voice', [], reason);
-    const channelBLU = await guild.createChannel(`${name} BLU`, 'voice', [], reason);
 
-    this.channels[name] = {
-      red: channelRED,
-      blu: channelBLU,
-    };
+    await guild.createChannel(`${name} Red`, 'voice', [], reason);
+    await guild.createChannel(`${name} Blu`, 'voice', [], reason);
   }
 
   /**
    * Delete a Discord voice channel.
    *
-   * @param {Object} channel - Information about the channel.
-   * @param {Object} channel.name - The name of the channel.
+   * @param {Object} data - Information about the channel.
+   * @param {Object} data.name - The name of the channel.
+   * @param {String} data.region - The region of the channel.
    */
-  async delete({ name }) {
-    const channels = this.channels[name];
+  async delete({
+    name,
+    region,
+  }) {
     const reason = `${name} ended`;
+    const guildId = config.get(`service.discord.guild.${region}`);
+    const bot = await this.app.service('discord').get();
+    const guild = bot.guilds.get(guildId);
 
-    if (!channels) {
-      log(`Discord channels for pickup ${name} does not exist`);
-
-      return;
-    }
-
-    await channels.red.delete(reason);
-    await channels.blu.delete(reason);
+    await Promise.all(
+      guild.channels
+        .filterArray(channel => channel.type === 'voice' && channel.name === name)
+        .map(channel => channel.delete(reason)),
+    );
   }
 }
 

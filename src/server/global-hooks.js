@@ -2,6 +2,8 @@ import hooks from 'feathers-hooks-common';
 import auth from 'feathers-authentication';
 import debug from 'debug';
 
+import { pluck } from '../utils/functions';
+
 const log = debug('TF2Pickup:global-hooks');
 
 export default {
@@ -35,11 +37,17 @@ export default {
   },
 
   error(hook) {
-    const type = hook.error.hook.type;
+    if (hook.error.code === 404) {
+      return hook;
+    }
+
+    const type = pluck('error.hook.type', '')(hook);
 
     log(
       `Error in '${hook.path}' service method ${type.toUpperCase()} ${hook.method.toUpperCase()}`,
       hook.error.stack,
     );
+
+    return hook;
   },
 };

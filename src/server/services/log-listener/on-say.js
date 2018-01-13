@@ -1,3 +1,7 @@
+import debug from 'debug';
+
+const log = debug('TF2Pickup:log-listener:on-say');
+
 export default {
   line: /"(.*?)<(.*?)><(.*?)><(.*?)>" (say|say_team) "(.*?)"/,
 
@@ -8,6 +12,6 @@ export default {
   // Data[5] - say or say_team.
   // Data[6] - Player's chat.
   handler(app, pickup, data) {
-    console.log(pickup, data);
+    log('Received say from server', pickup.id, data);
   },
 };

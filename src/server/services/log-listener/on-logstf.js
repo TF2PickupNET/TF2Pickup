@@ -20,7 +20,7 @@ export default {
 
         await app.service('discord-message').create({
           channel: 'errors',
-          message: `The request for calculating the elo after the pickup ${pickup[0].id}
+          message: `The request for calculating the elo after the pickup ${pickup.id}
            returned with an error`,
         });
       }

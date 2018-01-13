@@ -52,10 +52,7 @@ async function onDataHandler(app, data) {
     const [pickup] = await app.service('pickup').find({ query: { logSecret: line.secret } });
 
     if (pickup) {
-      await handler.handler(app, pickup, {
-        ...line,
-        data: handler.line.exec(line.data),
-      });
+      await handler.handler(app, pickup, handler.line.exec(line.data));
     }
   }
 }

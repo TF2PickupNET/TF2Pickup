@@ -8,6 +8,12 @@ import events from './events';
 
 const log = debug('TF2Pickup:log-listener');
 
+/**
+ * Process the raw line and extract things like date, secret etc.
+ *
+ * @param {String} rawLine - The raw line as a string.
+ * @returns {Object} - Returns the data.
+ */
 function processLine(rawLine) {
   const regex = /S(.*?)L (.*?) - (.*?): (.*)/g;
   const matches = regex.exec(rawLine);
@@ -21,14 +27,25 @@ function processLine(rawLine) {
   };
 
   if (!line.secret || !line.date || !line.time || !line.data) {
-    throw new Error('Unknown line');
+    return null;
   }
 
   return line;
 }
 
+/**
+ * Find the first appropiate handler for the line.
+ *
+ * @param {Object} app - The feathers app object.
+ * @param {Object} data - The line data.
+ */
 async function onDataHandler(app, data) {
   const line = processLine(data.toString('utf8'));
+
+  if (!line) {
+    return;
+  }
+
   const handler = find(event => event.line.test(line.data))(events);
 
   if (handler) {
@@ -43,20 +60,6 @@ async function onDataHandler(app, data) {
   }
 }
 
-const LogListenerService = {
-  setup(app) {
-    const connection = udp({
-      address: config.get('server.ip'),
-      bindingPort: config.get('server.log_listener_port'),
-      reuseAddr: true,
-    });
-
-    connection.on('data', (data) => {
-      onDataHandler(app, data);
-    });
-  },
-};
-
 /**
  * Setup the log listener service.
  */
@@ -65,5 +68,17 @@ export default function logListener() {
 
   log('Setting up log listener service');
 
-  that.service('log-listener', LogListenerService);
+  that.service('log-listener', {
+    setup(app) {
+      const connection = udp({
+        address: config.get('server.ip'),
+        bindingPort: config.get('server.log_listener_port'),
+        reuseAddr: true,
+      });
+
+      connection.on('data', (data) => {
+        onDataHandler(app, data);
+      });
+    },
+  });
 }

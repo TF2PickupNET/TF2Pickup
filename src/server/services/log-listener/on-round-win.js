@@ -9,7 +9,7 @@ export default {
   async handler(app, pickup, line) {
     const team = line.data[0] === 'Blue' ? 'blu' : 'red';
 
-    log('Incrementing the score', team);
+    log('Incrementing the score', team, pickup.id);
 
     await app.service('pickup').patch(
       pickup.id,

@@ -8,9 +8,9 @@ export default {
 
   // Data[1] - Logs.tf ID.
   async handler(app, pickup, [, id]) {
-    await app.service('pickup').patch(pickup.id, { $set: { logsTFID: parseInt(id, 10) } });
-
     log('Got Logs.tf id for pickup', pickup.id, id);
+
+    await app.service('pickup').patch(pickup.id, { $set: { logsTFID: parseInt(id, 10) } });
 
     if (app.get('env') === 'prod') {
       try {

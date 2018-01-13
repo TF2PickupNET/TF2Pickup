@@ -6,12 +6,12 @@ import onLogstf from './on-logstf';
 import onSay from './on-say';
 
 const events = [
+  onSay,
   onDisconnect,
   onRoundStart,
   onRoundEnd,
   onRoundWin,
   onLogstf,
-  onSay,
 ];
 
 export default events;

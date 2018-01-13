@@ -4,7 +4,7 @@ import debug from 'debug';
 const log = debug('TF2Pickup:log-listener:on-logs.tf');
 
 export default {
-  line: /The log is available here: https:\/\/logs.tf\/(.*?) \./,
+  line: /\[TFTrue] The log is available here: (?:https|http):\/\/logs\.tf\/(\d+)/,
 
   // Data[1] - Logs.tf ID.
   async handler(app, pickup, [, id]) {

@@ -39,8 +39,8 @@ const createStrategies = {
 
 const deleteStrategies = {
   eu(app, name) {
-    return app.service('discord-channels').delete({
-      region: 'global',
+    return app.service('mumble-channels').delete({
+      region: 'eu',
       name,
     });
   },

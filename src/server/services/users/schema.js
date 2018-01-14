@@ -95,6 +95,11 @@ export default new Schema({
     default: Date.now,
   },
 
+  lastPickupId: {
+    type: Number,
+    default: null,
+  },
+
   services: {
     steam: {
       avatar: {

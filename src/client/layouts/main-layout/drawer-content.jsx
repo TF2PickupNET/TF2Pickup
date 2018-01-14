@@ -17,6 +17,7 @@ import app from '../../app';
 import { Logo } from '../../icons';
 import openWindowInNewTab from '../../utils/open-window-in-new-tab';
 import { discordUrls } from '../../../config/client';
+import { pluck } from '../../../utils/functions';
 
 import ListItem from './drawer-list-item';
 
@@ -33,9 +34,13 @@ class DrawerContent extends PureComponent {
       contentContainer: PropTypes.string.isRequired,
     }).isRequired,
     userId: PropTypes.string,
+    lastPickupId: PropTypes.number,
   };
 
-  static defaultProps = { userId: null };
+  static defaultProps = {
+    userId: null,
+    lastPickupId: null,
+  };
 
   static styles = {
     toolbar: {
@@ -67,13 +72,15 @@ class DrawerContent extends PureComponent {
     if (this.props.userId) {
       return (
         <Aux>
-          <ListItem
-            inset
-            leftItem={<Icon icon="gamepad" />}
-            redirectTo="/last-pickup"
-          >
-            Last Pickup
-          </ListItem>
+          {this.props.lastPickupId ? (
+            <ListItem
+              inset
+              leftItem={<Icon icon="gamepad" />}
+              redirectTo={`/pickup/${this.props.lastPickupId}`}
+            >
+              Last Pickup
+            </ListItem>
+          ) : null}
 
           <ListItem
             inset
@@ -208,7 +215,10 @@ class DrawerContent extends PureComponent {
 
 export default connect(
   (state) => {
-    return { userId: state.user ? state.user.id : null };
+    return {
+      userId: pluck('user.id')(state),
+      lastPickupId: pluck('user.lastPickupId')(state),
+    };
   },
   (dispatch) => {
     return { redirect: url => dispatch(push(url)) };

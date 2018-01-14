@@ -104,20 +104,35 @@ export default {
       return populateResult(omit('logSecret'))(hook);
     },
 
-    create(hook) {
-      hook.service.emit('redirect', {
-        id: hook.result.id,
-        users: pipe(
-          getPlayers,
-          map(user => user.id),
-        )(hook.result),
-      });
+    create: [
+      async (hook) => {
+        const users = hook.app.service('users');
 
-      hook.app.service('voice-channel').create({
-        region: hook.result.region,
-        name: `Pickup ${hook.result.id}`,
-      });
-    },
+        await Promise.all(
+          pipe(
+            getPlayers,
+            map(user => users.patch(user.id, { $set: { lastPickupId: hook.result.id } })),
+          )(hook.result),
+        );
+      },
+
+      async (hook) => {
+        await hook.app.service('voice-channel').create({
+          region: hook.result.region,
+          name: `Pickup ${hook.result.id}`,
+        });
+      },
+
+      (hook) => {
+        hook.service.emit('redirect', {
+          id: hook.result.id,
+          users: pipe(
+            getPlayers,
+            map(user => user.id),
+          )(hook.result),
+        });
+      },
+    ],
 
     patch: populateResult(populateTeams),
 

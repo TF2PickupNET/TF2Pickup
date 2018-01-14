@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Aux from 'react-aux';
 import {
   Button,
   Card,
@@ -23,6 +24,7 @@ import {
 
 import ProgressBar from './progress-bar';
 import PickupSounds from './pickup-sounds';
+import PickupRedirect from './pickup-redirect';
 
 /**
  * A component which renders info about the current pickup.
@@ -136,37 +138,41 @@ class PickupInfo extends PureComponent {
     const gamemodeInfo = gamemodes[this.props.gamemode];
 
     return (
-      <Card
-        className={this.props.classes.container}
-        data-gamemode={this.props.gamemode}
-      >
-        <span className={this.props.classes.item}>
-          Status: {this.getStatus()}
-        </span>
+      <Aux>
+        <Card
+          className={this.props.classes.container}
+          data-gamemode={this.props.gamemode}
+        >
+          <span className={this.props.classes.item}>
+            Status: {this.getStatus()}
+          </span>
 
-        <span className={`${this.props.classes.item} buttons`}>
-          <Button disabled={!this.props.player}>
-            Pre Ready
-          </Button>
-        </span>
+          <span className={`${this.props.classes.item} buttons`}>
+            <Button disabled={!this.props.player}>
+              Pre Ready
+            </Button>
+          </span>
 
-        <span className={`${this.props.classes.item} buttons`}>
-          <Button
-            disabled={!this.props.player}
-            onPress={this.handleMapVoteButtonPress}
-          >
-            Vote for map
-          </Button>
-        </span>
+          <span className={`${this.props.classes.item} buttons`}>
+            <Button
+              disabled={!this.props.player}
+              onPress={this.handleMapVoteButtonPress}
+            >
+              Vote for map
+            </Button>
+          </span>
 
-        <span className={this.props.classes.item}>
-          Players: {this.props.playerCount} / {gamemodeInfo.maxPlayers}
-        </span>
+          <span className={this.props.classes.item}>
+            Players: {this.props.playerCount} / {gamemodeInfo.maxPlayers}
+          </span>
 
-        <ProgressBar gamemode={this.props.gamemode} />
+          <ProgressBar gamemode={this.props.gamemode} />
+        </Card>
 
         <PickupSounds gamemode={this.props.gamemode} />
-      </Card>
+
+        <PickupRedirect />
+      </Aux>
     );
   }
 }

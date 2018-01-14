@@ -23,7 +23,6 @@ import {
   countPlayers,
 } from '../../../utils/pickup-queue';
 import createNotification from '../../utils/create-notification';
-import app from '../../app';
 
 /**
  * Render the tabs for the different gamemodes.
@@ -67,13 +66,6 @@ class GamemodeTabs extends PureComponent {
   };
 
   /**
-   * Add an event listener to the redirect event.
-   */
-  componentDidMount() {
-    app.service('pickup').on('redirect', this.handleRedirect);
-  }
-
-  /**
    * Switch the tab when one of the pickups changes into ready-up mode.
    */
   componentWillReceiveProps(nextProps) {
@@ -100,19 +92,6 @@ class GamemodeTabs extends PureComponent {
   }
 
   /**
-   * Remove the event listener for the redirect.
-   */
-  componentWillUnmount() {
-    app
-      .service('pickup')
-      .removeListener('redirect', this.handleRedirect);
-
-    clearTimeout(this.timeout);
-  }
-
-  timeout = null;
-
-  /**
    * Count the players for the gamemode.
    *
    * @param {String} gamemode - The gamemodes name.
@@ -125,15 +104,6 @@ class GamemodeTabs extends PureComponent {
 
     return countPlayers(gamemode)(this.props.pickups[gamemode]);
   }
-
-  /**
-   * Redirect the user to the match.
-   *
-   * @param {Object} data - The data from the server.
-   */
-  handleRedirect = (data) => {
-    this.timeout = setTimeout(() => this.props.redirect(`/pickup/${data.id}`), 10 * 1000);
-  };
 
   /**
    * Redirect the user when he clicks one of the tabs.

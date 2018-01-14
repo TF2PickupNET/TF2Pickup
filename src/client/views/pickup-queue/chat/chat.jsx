@@ -37,10 +37,9 @@ class Chat extends PureComponent {
     card: {
       marginLeft: 0,
       marginRight: 0,
-      display: 'grid',
+      display: 'flex',
+      flexDirection: 'column',
       padding: '8px 8px 0 8px',
-      gridTemplateColumns: '1fr',
-      gridTemplateRows: 'auto 1fr auto',
     },
 
     tabs: { marginBottom: 8 },

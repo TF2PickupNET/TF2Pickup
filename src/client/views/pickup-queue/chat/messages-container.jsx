@@ -24,6 +24,7 @@ class MessagesContainer extends PureComponent {
   static styles = {
     container: {
       composes: 'scrollbar',
+      flex: 1,
       overflowY: 'scroll',
       overflowX: 'hidden',
     },

@@ -47,8 +47,6 @@ class PickupRedirect extends PureComponent {
 
     this.timeout = setTimeout(() => {
       this.props.redirect(`/pickup/${data.id}`);
-
-      this.setState({ isRedirecting: false });
     }, 15 * 1000);
   };
 

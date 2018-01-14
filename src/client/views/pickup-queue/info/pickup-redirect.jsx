@@ -12,6 +12,11 @@ import PropTypes from 'prop-types';
 import app from '../../../app';
 import { pipe } from '../../../../utils/functions';
 
+/**
+ * The redirect to the match page.
+ *
+ * @class
+ */
 class PickupRedirect extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({ card: PropTypes.string.isRequired }).isRequired,
@@ -32,16 +37,25 @@ class PickupRedirect extends PureComponent {
 
   state = { isRedirecting: false };
 
+  /**
+   * Listen for the redirect event.
+   */
   componentWillMount() {
     app
       .service('pickup')
       .on('redirect', this.handleRedirect);
   }
 
+  /**
+   * Clear the timeout when the component unmounts.
+   */
   componentWillUnmount() {
     clearTimeout(this.timeout);
   }
 
+  /**
+   * Change the state and create a timeout for redirecting after.
+   */
   handleRedirect = (data) => {
     this.setState({ isRedirecting: true });
 
@@ -50,6 +64,10 @@ class PickupRedirect extends PureComponent {
     }, 15 * 1000);
   };
 
+  /**
+   * When the user cancels the redirect, we want to clear the timeout
+   * and remove the information about the redirect.
+   */
   handleCancelPress = () => {
     clearTimeout(this.timeout);
 

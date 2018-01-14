@@ -17,9 +17,9 @@ import app from '../../app';
 import { Logo } from '../../icons';
 import openWindowInNewTab from '../../utils/open-window-in-new-tab';
 import { discordUrls } from '../../../config/client';
+import { pluck } from '../../../utils/functions';
 
 import ListItem from './drawer-list-item';
-import { pluck } from '../../../utils/functions';
 
 /**
  * The content for the drawer.
@@ -37,7 +37,10 @@ class DrawerContent extends PureComponent {
     lastPickupId: PropTypes.number,
   };
 
-  static defaultProps = { userId: null };
+  static defaultProps = {
+    userId: null,
+    lastPickupId: null,
+  };
 
   static styles = {
     toolbar: {

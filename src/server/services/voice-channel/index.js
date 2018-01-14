@@ -62,7 +62,7 @@ const deleteStrategies = {
 
 const findStrategies = {
   eu(app) {
-    return app.service('discord-channels').find({ region: 'eu' });
+    return app.service('mumble-channels').find({ region: 'eu' });
   },
 
   na(app) {
@@ -228,7 +228,7 @@ class VoiceChannelService {
 export default function voiceChannel() {
   const that = this;
 
-  that.service('voice-channel', that.get('env') === 'd' ? devService : new VoiceChannelService());
+  that.service('voice-channel', that.get('env') === 'dev' ? devService : new VoiceChannelService());
 
   that.service('voice-channel').hooks({ before: { all: hooks.disallow('external') } });
 }

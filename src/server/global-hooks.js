@@ -28,7 +28,7 @@ export default {
     },
 
     create(hook) {
-      if (hook.path === 'authentication') {
+      if (hook.path === 'authentication' || hook.path === 'errors') {
         return hook;
       }
 

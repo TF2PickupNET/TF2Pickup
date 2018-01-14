@@ -24,27 +24,6 @@ async function executeConfig(connection, cfg) {
 }
 
 /**
- * Execute commands in the server.
- *
- * @param {Object} connection - RCON connection object to server.
- * @param {Object} server - The server object.
- * @param {Object} pickup - The pickup object.
- */
-async function executeCommands(connection, server, pickup) {
-  const listenerAddr = `${config.get('server.ip')}:${config.get('server.log_listener_port')}`;
-  const regionFullname = regions[pickup.region].fullName;
-
-  await connection.send(`changelevel ${pickup.map}`);
-
-  await connection.send(`sv_password ${server.password}`);
-  await connection.send('kickall');
-  await connection.send(`logaddress_add ${listenerAddr}`);
-  await connection.send(`tftrue_logs_prefix TF2Pickup ${regionFullname} #${pickup.id}`);
-  await connection.send(`sv_logsecret ${pickup.logSecret}`);
-  await connection.send(`tftrue_logs_apikey ${config.get('service.logstf.apikey')}`);
-}
-
-/**
  * Generates CFG name.
  *
  * @param {String} region - Region of the game.
@@ -71,9 +50,20 @@ function getCfgName(region, format, map) {
  */
 async function setup(connection, server, pickup) {
   const cfg = getCfgName(pickup.region, pickup.gamemode, pickup.map);
+  const listenerAddr = `${config.get('server.ip')}:${config.get('server.log_listener_port')}`;
+  const regionFullname = regions[pickup.region].fullName;
 
-  await executeCommands(connection, server, pickup);
+  await connection.send(`changelevel ${pickup.map}`);
+  await connection.send(`sv_password ${server.password}`);
+  await connection.send('kickall');
+  await connection.send(`changelevel ${pickup.map}`);
+
   await executeConfig(connection, cfg);
+
+  await connection.send(`logaddress_add ${listenerAddr}`);
+  await connection.send(`tftrue_logs_prefix TF2Pickup ${regionFullname} #${pickup.id}`);
+  await connection.send(`sv_logsecret ${pickup.logSecret}`);
+  await connection.send(`tftrue_logs_apikey ${config.get('service.logstf.apikey')}`);
 }
 
 /**

@@ -47,13 +47,11 @@ Player.propTypes = {
   classes: PropTypes.shape({
     player: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired,
     userItem: PropTypes.string.isRequired,
+    userItemContainer: PropTypes.string.isRequired,
+    divider: PropTypes.string.isRequired,
   }).isRequired,
-  player: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    avatar: PropTypes.string.isRequired,
-  }).isRequired,
+  player: PropTypes.shape({ avatar: PropTypes.string.isRequired }).isRequired,
   name: PropTypes.string.isRequired,
 };
 

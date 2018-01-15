@@ -27,7 +27,7 @@ function TeamHeader(props) {
 
       <Typography
         typography="headline"
-        className={props.classes.headerTitle}
+        className={props.classes.title}
       >
         {props.name}
       </Typography>
@@ -37,7 +37,8 @@ function TeamHeader(props) {
 
 TeamHeader.propTypes = {
   classes: PropTypes.shape({
-    headerTitle: PropTypes.string.isRequired,
+    header: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
     score: PropTypes.string.isRequired,
   }).isRequired,
   name: PropTypes.string.isRequired,
@@ -50,8 +51,7 @@ TeamHeader.styles = {
     padding: 8,
   },
 
-  headerTitle: {
-    composes: '$item',
+  title: {
     flex: 1,
     lineHeight: '48px',
     textAlign: 'center',

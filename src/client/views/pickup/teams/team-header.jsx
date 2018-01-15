@@ -14,7 +14,10 @@ import PropTypes from 'prop-types';
  */
 function TeamHeader(props) {
   return (
-    <Layout reverse={props.name === 'BLU'}>
+    <Layout
+      reverse={props.name === 'BLU'}
+      className={props.classes.header}
+    >
       <Typography
         typography="display1"
         className={props.classes.score}
@@ -24,7 +27,7 @@ function TeamHeader(props) {
 
       <Typography
         typography="headline"
-        className={props.classes.headerTitle}
+        className={props.classes.title}
       >
         {props.name}
       </Typography>
@@ -34,7 +37,8 @@ function TeamHeader(props) {
 
 TeamHeader.propTypes = {
   classes: PropTypes.shape({
-    headerTitle: PropTypes.string.isRequired,
+    header: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
     score: PropTypes.string.isRequired,
   }).isRequired,
   name: PropTypes.string.isRequired,
@@ -42,22 +46,23 @@ TeamHeader.propTypes = {
 };
 
 TeamHeader.styles = {
-  item: {
-    textAlign: 'center',
-    lineHeight: '48px',
-    padding: '8px 16px',
-    boxSizing: 'border-box',
+  header: {
+    display: 'flex',
+    padding: 8,
   },
 
-  headerTitle: {
-    composes: '$item',
+  title: {
     flex: 1,
+    lineHeight: '48px',
+    textAlign: 'center',
   },
 
   score: {
-    composes: '$item',
-    width: 72,
-    height: 64,
+    textAlign: 'center',
+    lineHeight: '48px',
+    width: 40,
+    height: 48,
+    padding: '0 8px',
   },
 };
 

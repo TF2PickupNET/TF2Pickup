@@ -15,7 +15,6 @@ import {
 import hasPermission from '../../../utils/has-permission';
 
 import configureServer from './configure-server';
-import roles from '../../../config/roles';
 
 const log = debug('TF2Pickup:server:hooks');
 

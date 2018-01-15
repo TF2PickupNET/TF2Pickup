@@ -12,10 +12,7 @@ import {
   mapObject,
   first,
 } from '../../../../../utils/functions';
-import {
-  getPlayers,
-  removePlayersFromClasses,
-} from '../../../../../utils/pickup-queue';
+import { getPlayers } from '../../../../../utils/pickup-queue';
 
 import generateTeams from './generate-teams';
 
@@ -65,10 +62,6 @@ export default async function createPickup(props) {
       .filter(player => player.ready)
       .slice(0, min);
   })(pickupQueue.classes);
-  const playerIds = pipe(
-    getPlayers,
-    map(player => player.id),
-  )({ classes: players });
 
   log('Creating pickup for', pickupQueue.region, pickupQueue.gamemode);
 
@@ -99,21 +92,6 @@ export default async function createPickup(props) {
 
     log('Created pickup with id', pickup.id);
 
-    // Remove players from every gamemode queue
-    await Promise.all(
-      pipe(
-        Object.keys,
-        map(async (gamemode) => {
-          const queue = await pickupQueueService.get(`${pickupQueue.region}-${gamemode}`);
-
-          return pickupQueueService.patch(
-            queue.id,
-            { $set: { classes: removePlayersFromClasses(playerIds)(queue.classes) } },
-          );
-        }),
-      )(gamemodes),
-    );
-
     // Reset the pickup queue to waiting status and generate three new maps
     await pickupQueueService.patch(props.id, {
       $set: {
@@ -128,11 +106,5 @@ export default async function createPickup(props) {
     log('Error in pickup creation', error);
     // Reset the pickup queue to waiting status
     // await pickupQueueService.patch(props.id, { $set: { status: 'waiting' } });
-
-    props.app.service('notifications').create({
-      forUsers: playerIds,
-      sound: 'alert',
-      message: error.message,
-    });
   }
 }

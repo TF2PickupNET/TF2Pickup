@@ -14,8 +14,6 @@ export default {
   },
 
   pickup: {
-    'see-server': { level: roles.admin.level },
-
     kick: { level: roles.admin.level },
 
     end: { level: roles.admin.level },
@@ -23,7 +21,11 @@ export default {
     'reserve-server': { level: roles.admin.level },
   },
 
-  servers: { configure: { level: roles.admin.level } },
+  server: {
+    configure: { level: roles.admin.level },
+
+    'see-rcon': { level: roles.admin.level },
+  },
 
   announcers: { 'use-without-buying': { level: roles.honoraryUser.level } },
 };

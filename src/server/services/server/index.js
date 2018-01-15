@@ -5,6 +5,7 @@ import debug from 'debug';
 import schema from './schema';
 import hooks from './hooks';
 import socketMethods from './socket-methods';
+import cleanupServer from './cleanup-server';
 
 const log = debug('TF2Pickup:server');
 
@@ -26,4 +27,8 @@ export default function server() {
   that.on('listening', () => {
     that.io.on('connection', socket => socketMethods(that, socket));
   });
+
+  setTimeout(cleanupServer(that), 60 * 1000);
+
+  setInterval(cleanupServer(that), 5 * 60 * 1000);
 }

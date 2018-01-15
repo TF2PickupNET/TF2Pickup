@@ -22,6 +22,11 @@ export default new Schema({
     required: true,
   },
 
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
+
   ip: {
     type: String,
     required: true,

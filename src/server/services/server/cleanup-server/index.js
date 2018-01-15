@@ -54,11 +54,11 @@ export default function cleanupServer(app) {
 
         if (is5MinutesOld) {
           try {
-            log('Cleaning server up for pickup', pickup.id);
-
             await strategies[server.region](server);
 
             await app.service('server').patch(server.id, { $set: { isActive: false } });
+
+            log('Cleaned server up for pickup', pickup.id);
           } catch (error) {
             log('Error while cleaning up server for pickup', pickup.id, error);
           }

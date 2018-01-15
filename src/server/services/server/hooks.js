@@ -15,6 +15,7 @@ import {
 import hasPermission from '../../../utils/has-permission';
 
 import configureServer from './configure-server';
+import roles from '../../../config/roles';
 
 const log = debug('TF2Pickup:server:hooks');
 
@@ -38,7 +39,7 @@ async function restrictData(server, hook) {
   if (isActiveGame) {
     const userId = pluck('params.user.id')(hook);
     const isInPickup = getPlayer(userId)(pickup);
-    const canSeeServerInfo = hasPermission('', hook.params.user);
+    const canSeeServerInfo = hasPermission('server.see-rcon', hook.params.user);
     const validKeys = classnames('ip stvPort stvPassword', {
       port: isInPickup || canSeeServerInfo,
       password: isInPickup || canSeeServerInfo,

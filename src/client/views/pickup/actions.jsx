@@ -57,7 +57,7 @@ class Actions extends PureComponent {
 
     return status !== 'setting-up-server'
            && status !== 'server-reservation-error'
-           && hasPermission('servers.configure', this.props.user);
+           && hasPermission('server.configure', this.props.user);
   }
 
   /**

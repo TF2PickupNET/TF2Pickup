@@ -8,7 +8,6 @@ import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 
 import UserItem from '../../../components/user-item';
-import Link from '../../../components/link';
 
 /**
  * The component to render a player in the match page.
@@ -19,7 +18,9 @@ import Link from '../../../components/link';
 function Player(props) {
   return (
     <Aux>
-      <Divider />
+      <span className={props.classes.divider}>
+        <Divider />
+      </span>
 
       <Layout
         reverse={props.name === 'BLU'}
@@ -31,15 +32,12 @@ function Player(props) {
           alt="avatar"
         />
 
-        <Link
-          href={`/profile/${props.player.id}`}
-          className={props.classes.link}
-        >
+        <span className={props.classes.userItemContainer}>
           <UserItem
             user={props.player}
             className={props.classes.userItem}
           />
-        </Link>
+        </span>
       </Layout>
     </Aux>
   );
@@ -60,9 +58,24 @@ Player.propTypes = {
 };
 
 Player.styles = {
+  divider: {
+    width: '100%',
+    boxSizing: 'border-box',
+    display: 'flex',
+    padding(props) {
+      if (props.name === 'BLU') {
+        return '0 64px 0 0';
+      }
+
+      return '0 0 0 64px';
+    },
+  },
+
   player: {
     height: 56,
     padding: '0 8px',
+
+    '&:last-child': { marginBottom: 8 },
   },
 
   avatar: {
@@ -72,16 +85,14 @@ Player.styles = {
     borderRadius: '50%',
   },
 
-  link: {
+  userItemContainer: {
     flex: 1,
-    padding: 8,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
-  userItem: {
-    lineHeight: '40px',
-    fontSize: 18,
-    height: 40,
-  },
+  userItem: { fontSize: 16 },
 };
 
 export default injectSheet(Player.styles)(Player);

@@ -27,10 +27,15 @@ const log = debug('TF2Pickup:server:hooks');
  */
 async function restrictData(server, hook) {
   const [pickup] = await hook.app.service('pickup').find({ query: { serverId: server.id } });
+
+  if (!pickup) {
+    return {};
+  }
+
   const isActiveGame = pickup.status === 'game-is-live'
     || pickup.status === 'waiting-for-game-to-start';
 
-  if (pickup && isActiveGame) {
+  if (isActiveGame) {
     const userId = pluck('params.user.id')(hook);
     const isInPickup = getPlayer(userId)(pickup);
     const canSeeServerInfo = hasPermission('', hook.params.user);

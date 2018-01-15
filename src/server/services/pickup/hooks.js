@@ -1,4 +1,5 @@
 import debug from 'debug';
+import gamemodes from '@tf2-pickup/configs/gamemodes';
 import hooks from 'feathers-hooks-common';
 
 import {
@@ -12,9 +13,9 @@ import {
   populateUserData,
 } from '../hooks';
 import { getPlayers } from '../../../utils/pickup';
+import { removePlayersFromClasses } from '../../../utils/pickup-queue';
 
 import reserveServer from './reserve-server';
-import cleanupServer from './cleanup-server';
 
 const log = debug('TF2Pickup:pickup:hooks');
 
@@ -82,19 +83,8 @@ export default {
         }
       },
     ],
-
-    async patch(hook) {
-      if (hook.data.$set.status === 'game-finished') {
-        const pickup = await hook.service.get(hook.id);
-
-        if (pickup.serverId) {
-          await cleanupServer(hook.app, pickup);
-        }
-      }
-
-      return hook;
-    },
   },
+
   after: {
     all(hook) {
       if ((hook.method === 'get' || hook.method === 'find') && !hook.params.provider) {
@@ -121,6 +111,28 @@ export default {
           region: hook.result.region,
           name: `Pickup ${hook.result.id}`,
         });
+      },
+
+      async (hook) => {
+        const pickupQueue = hook.app.service('pickup-queue');
+        const players = pipe(
+          getPlayers,
+          map(user => user.id),
+        )(hook.result);
+
+        await Promise.all(
+          pipe(
+            Object.keys,
+            map(async (gamemode) => {
+              const queue = await pickupQueue.get(`${hook.result.region}-${gamemode}`);
+
+              return pickupQueue.patch(
+                queue.id,
+                { $set: { classes: removePlayersFromClasses(players)(queue.classes) } },
+              );
+            }),
+          )(gamemodes),
+        );
       },
 
       (hook) => {

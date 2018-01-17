@@ -7,6 +7,7 @@ import {
 
 import {
   addMessage,
+  removeMessage,
   replaceMessages,
 } from './actions';
 
@@ -27,11 +28,16 @@ export default function setupListeners(app) {
       $sort: { createdOn: -1 },
       createdOn: { $gt: yesterday },
       chat,
+      removed: false,
     },
   });
 
   chatService.on('created', (message) => {
     app.store.dispatch(addMessage(message));
+  });
+
+  chatService.on('patched', (message) => {
+    app.store.dispatch(removeMessage(message._id, message.chat));
   });
 
   app.on('state.change', async (prevState, newState) => {

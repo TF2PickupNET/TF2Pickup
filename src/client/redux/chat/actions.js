@@ -1,5 +1,6 @@
 import {
   ADD_MESSAGE,
+  REMOVE_MESSAGE,
   REPLACE_MESSAGES,
 } from './constants';
 
@@ -15,6 +16,23 @@ export function addMessage(message) {
     payload: {
       chat: message.chat,
       message,
+    },
+  };
+}
+
+/**
+ * Create a action object for removing a message.
+ *
+ * @param {String} messageId - The Id of the message.
+ * @param {String} chat - The chat to remove the message from.
+ * @returns {Object} - Returns the action object.
+ */
+export function removeMessage(messageId, chat) {
+  return {
+    type: REMOVE_MESSAGE,
+    payload: {
+      messageId,
+      chat,
     },
   };
 }

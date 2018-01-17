@@ -44,6 +44,7 @@ export default function errors() {
           ...hook,
           data: {
             ...hook.data,
+            message: JSON.stringify(hook.data.message),
             steamId: userId,
           },
         };

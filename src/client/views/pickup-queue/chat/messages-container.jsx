@@ -7,6 +7,7 @@ import {
   pipe,
   pluck,
 } from '../../../../utils/functions';
+import hasPermission from '../../../../utils/has-permission';
 
 import Message from './message';
 
@@ -19,6 +20,7 @@ class MessagesContainer extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({ container: PropTypes.string.isRequired }).isRequired,
     messages: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    canDeleteMessages: PropTypes.bool.isRequired,
   };
 
   static styles = {
@@ -54,6 +56,7 @@ class MessagesContainer extends PureComponent {
       >
         {this.props.messages.map(message => (
           <Message
+            canDeleteMessages={this.props.canDeleteMessages}
             key={message._id}
             message={message}
           />
@@ -73,6 +76,7 @@ export default pipe(
         messages: Object
           .values(messages)
           .sort((mA, mB) => new Date(mA.createdOn) - new Date(mB.createdOn)),
+        canDeleteMessages: hasPermission('chat.delete', state.user),
       };
     },
   ),

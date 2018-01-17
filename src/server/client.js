@@ -32,7 +32,7 @@ export default function client() {
       lazy: true,
       logLevel: 'silent',
       stats: { colors: true },
-      reporter({
+      reporter(options, {
         state,
         stats,
       }) {

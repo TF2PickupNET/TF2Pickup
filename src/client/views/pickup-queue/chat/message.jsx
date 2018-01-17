@@ -1,160 +1,188 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
+import { Icon } from 'materialize-react';
 
 import UserItem from '../../../components/user-item';
 import Date from '../../../components/date';
 import Link from '../../../components/link';
+import app from '../../../app';
+import { assign } from '../../../../utils/functions';
 
 /**
- * Get the props for the current element.
+ * The message component for displaying a chat message.
  *
- * @param {String} str - The element as a string.
- * @param {Object} defaultProps - The default props for an element.
- * @returns {Object} - Returns the merged props.
+ * @class
  */
-function getProps(str, defaultProps) {
-  const match = str.match(/\w+=("|{).*("|})/g);
+class Message extends PureComponent {
+  static propTypes = {
+    classes: PropTypes.shape({
+      container: PropTypes.string.isRequired,
+      deleteIcon: PropTypes.string.isRequired,
+      userItem: PropTypes.string.isRequired,
+      message: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
+      mentionUserItem: PropTypes.string.isRequired,
+    }).isRequired,
+    message: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      createdOn: PropTypes.string.isRequired,
+      user: PropTypes.shape({}).isRequired,
+      message: PropTypes.string.isRequired,
+    }).isRequired,
+    canDeleteMessages: PropTypes.bool.isRequired,
+  };
 
-  if (!match) {
-    return defaultProps;
+  static styles = {
+    container: {
+      display: 'flex',
+      boxSizing: 'border-box',
+      minHeight: 20,
+
+      '& .icon::before': {
+        fontSize: 20,
+        lineHeight: '1 !important',
+      },
+    },
+
+    deleteIcon: { cursor: 'pointer' },
+
+    date: {
+      lineHeight: '20px',
+      marginRight: 4,
+    },
+
+    userItem: {
+      lineHeight: '20px',
+      height: 20,
+    },
+
+    mentionUserItem: {
+      composes: '$userItem',
+
+      '& .icon::before': { display: 'none' },
+    },
+
+    message: {
+      marginLeft: 4,
+      lineHeight: '20px',
+      flex: 1,
+      wordBreak: 'break-word',
+    },
+  };
+
+  /**
+   * Compile the element as a string.
+   *
+   * @param {String} str - The str to compile.
+   * @param {Object} defaultProps - The default props to be merged into the props.
+   * @returns {Object} - Returns a object with the data about the component.
+   */
+  static compile(str, defaultProps) {
+    const [, name, props = '', content = null] = str.endsWith('/>')
+      ? /<(\w+)(.+)\/>/.exec(str)
+      : /^<(\w+)(.+)?>(.+)?<\/\w+>$/.exec(str);
+
+    return {
+      Component: name,
+      isNotCustomComponent: /^[a-z]/.test(name),
+      props: props
+        .split(' ')
+        .filter(prop => prop)
+        .map((prop) => {
+          const [, propName, delimiter, value] = prop.match(/(\w+)=("|{)(.*)("|})/);
+
+          return { [propName]: delimiter === '{' ? JSON.parse(value) : value };
+        })
+        .reduce((current, prop) => assign({}, current)(prop), defaultProps),
+      content,
+    };
   }
 
-  return match[0]
-    .split(' ')
-    .reduce((props, prop) => {
-      const [
-        ,
-        name,
-        delimiter,
-        value,
-      ] = prop.match(/(\w+)=("|{)(.*)("|})/);
+  /**
+   * Format the message so that custom elements are displayed correctly.
+   *
+   * @returns {JSX[]} - Returns the message as an array of JSX nodes.
+   */
+  get formattedMessage() {
+    return this.props.message.message
+      .split(/(<\w+.*?>.*?<\/\w+>|<[A-Z]\w+.*?\/>)/)
+      .map((str, index) => {
+        if (str.startsWith('<') && str.endsWith('>')) {
+          const {
+            Component,
+            isNotCustomComponent,
+            props,
+            content,
+          } = Message.compile(str.trim(), { key: index });
 
-      return {
-        ...props,
-        [name]: delimiter === '{' ? JSON.parse(value) : value,
-      };
-    }, defaultProps);
-}
+          if (isNotCustomComponent) {
+            return (
+              <Component {...props}>
+                {content}
+              </Component>
+            );
+          }
 
-const getContent = str => str.match(/<\w+.*>(.+)<\/\w+>/);
-
-/**
- * Format the message and create the necessary react elements.
- *
- * @param {String} message - The message to format.
- * @param {String} userItemClass - The className for the UserItem.
- * @returns {String[]} - Returns the new message.
- */
-function formatMessage(message, userItemClass) {
-  return message
-    .split(/(<\w+.*?>.*?<\/\w+>|<[A-Z]\w+.*?\/>)/)
-    .map((str, index) => {
-      if (str.startsWith('<') && str.endsWith('>')) {
-        const Component = str.match(/^<(\w+)/)[1];
-        const content = getContent(str);
-        const props = getProps(str, { key: index });
-
-        if (!Component) {
-          return str;
+          if (Component === 'Link') {
+            return (
+              <Link
+                primary
+                {...props}
+              >
+                {content}
+              </Link>
+            );
+          } else if (Component === 'UserItem') {
+            return (
+              <UserItem
+                {...props}
+                className={this.props.classes.mentionUserItem}
+              />
+            );
+          }
         }
 
-        if (Component === 'Link') {
-          return (
-            <Link
-              primary
-              {...props}
-            >
-              {content ? content[1] : content}
-            </Link>
-          );
-        } else if (Component === 'UserItem') {
-          return (
-            <UserItem
-              {...props}
-              className={userItemClass}
-            />
-          );
-        } else if (Component.charAt(0).toLowerCase() === Component.charAt(0)) {
-          return (
-            <Component {...props}>
-              {content ? content[1] : null}
-            </Component>
-          );
-        }
-      }
+        return str;
+      });
+  }
 
-      return str;
-    });
-}
+  /**
+   * Emit the event for deleting a chat message.
+   */
+  handleDeleteClick = () => {
+    app.io.emit('chat.delete-message', { messageId: this.props.message._id });
+  };
 
-/**
- * Render the message of a user.
- *
- * @param {Object} props - The props for the component.
- * @returns {JSX} - Returns the JSX.
- */
-function Message(props) {
-  return (
-    <span className={props.classes.container}>
-      <span className={props.classes.date}>
-        <Date
-          withoutDay
-          date={props.message.createdOn}
-        />
+  render() {
+    return (
+      <span className={this.props.classes.container}>
+        {this.props.canDeleteMessages ? (
+          <Icon
+            icon="close"
+            className={this.props.classes.deleteIcon}
+            onClick={this.handleDeleteClick}
+          />
+        ) : null}
+
+        <span className={this.props.classes.date}>
+          <Date
+            withoutDay
+            date={this.props.message.createdOn}
+          />
+        </span>
+
+        <UserItem
+          user={this.props.message.user}
+          className={this.props.classes.userItem}
+        />:
+
+        <span className={this.props.classes.message}>
+          {this.formattedMessage}
+        </span>
       </span>
-
-      <UserItem
-        user={props.message.user}
-        className={props.classes.userItem}
-      />:
-
-      <span className={props.classes.message}>
-        {formatMessage(props.message.message, props.classes.userItem)}
-      </span>
-    </span>
-  );
+    );
+  }
 }
-
-Message.propTypes = {
-  classes: PropTypes.shape({
-    container: PropTypes.string.isRequired,
-    userItem: PropTypes.string.isRequired,
-    message: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-  }).isRequired,
-  message: PropTypes.shape({
-    createdOn: PropTypes.string.isRequired,
-    user: PropTypes.shape({}).isRequired,
-    message: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
-Message.styles = {
-  container: {
-    display: 'flex',
-    boxSizing: 'border-box',
-    minHeight: 20,
-  },
-
-  date: {
-    lineHeight: '20px',
-    marginRight: 4,
-  },
-
-  userItem: {
-    lineHeight: '20px',
-    height: 20,
-
-    '& .icon::before': { lineHeight: '1 !important' },
-  },
-
-  message: {
-    marginLeft: 4,
-    lineHeight: '20px',
-    flex: 1,
-    wordBreak: 'break-word',
-  },
-};
 
 export default injectSheet(Message.styles)(Message);

@@ -16,18 +16,8 @@ export default {
     display: 'Admin',
     level: 1000,
     color: {
-      light: colors.red400,
-      dark: colors.red400,
-    },
-  },
-
-  developer: {
-    name: 'developer',
-    display: 'Developer',
-    level: 500,
-    color: {
-      light: colors.indigo600,
-      dark: colors.indigo400,
+      light: colors.red600,
+      dark: colors.red600,
     },
   },
 
@@ -36,8 +26,8 @@ export default {
     display: 'Honorary User',
     level: 250,
     color: {
-      light: colors.green700,
-      dark: colors.green700,
+      light: colors.green900,
+      dark: colors.green600,
     },
   },
 
@@ -46,8 +36,8 @@ export default {
     display: 'Donator',
     level: 100,
     color: {
-      light: colors.orange500,
-      dark: colors.orange500,
+      light: colors.orange700,
+      dark: colors.orange600,
     },
   },
 

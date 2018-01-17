@@ -9,6 +9,11 @@ import Link from '../../../components/link';
 import app from '../../../app';
 import { assign } from '../../../../utils/functions';
 
+/**
+ * The message component for displaying a chat message.
+ *
+ * @class
+ */
 class Message extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
@@ -17,6 +22,7 @@ class Message extends PureComponent {
       userItem: PropTypes.string.isRequired,
       message: PropTypes.string.isRequired,
       date: PropTypes.string.isRequired,
+      mentionUserItem: PropTypes.string.isRequired,
     }).isRequired,
     message: PropTypes.shape({
       _id: PropTypes.string.isRequired,

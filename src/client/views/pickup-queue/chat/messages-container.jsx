@@ -7,9 +7,9 @@ import {
   pipe,
   pluck,
 } from '../../../../utils/functions';
+import hasPermission from '../../../../utils/has-permission';
 
 import Message from './message';
-import hasPermission from '../../../../utils/has-permission';
 
 /**
  * The container for the messages.

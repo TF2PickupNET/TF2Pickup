@@ -1,11 +1,11 @@
+import { omit } from '../../../utils/functions';
+
 import {
   ADD_MESSAGE,
   REMOVE_MESSAGE,
   REPLACE_MESSAGES,
 } from './constants';
 import setupListeners from './setup-listeners';
-
-import { omit } from '../../../utils/functions';
 
 /**
  * The reducer for the chat state.

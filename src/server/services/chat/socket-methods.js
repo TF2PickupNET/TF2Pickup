@@ -31,10 +31,9 @@ export default function socketMethods(app, socket) {
   socket.on('chat.delete-message', async ({ messageId }) => {
     try {
       const message = await app.service('chat').get(messageId);
-      const user = await app.service('users').get(message.userId);
 
-      if (hasPermission('chat.delete', socket.feathers.user, user)) {
-        log('Deleting message from user', user.id, 'by', socket.feathers.user.id);
+      if (hasPermission('chat.delete', socket.feathers.user)) {
+        log('Deleting message from user', message.userId, 'by', socket.feathers.user.id);
 
         await app.service('chat').patch(messageId, {
           $set: {

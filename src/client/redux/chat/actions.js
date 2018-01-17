@@ -1,5 +1,6 @@
 import {
   ADD_MESSAGE,
+  REMOVE_MESSAGE,
   REPLACE_MESSAGES,
 } from './constants';
 
@@ -15,6 +16,16 @@ export function addMessage(message) {
     payload: {
       chat: message.chat,
       message,
+    },
+  };
+}
+
+export function removeMessage(messageId, chat) {
+  return {
+    type: REMOVE_MESSAGE,
+    payload: {
+      messageId,
+      chat,
     },
   };
 }

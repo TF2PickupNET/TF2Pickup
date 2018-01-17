@@ -36,9 +36,11 @@ class UserItem extends PureComponent {
       icon: PropTypes.string.isRequired,
       donator: PropTypes.string.isRequired,
       friendIcon: PropTypes.string.isRequired,
+      self: PropTypes.string.isRequired,
     }).isRequired,
     isFriend: PropTypes.bool.isRequired,
     className: PropTypes.string,
+    isSelf: PropTypes.bool.isRequired,
   };
 
   static defaultProps = { className: '' };

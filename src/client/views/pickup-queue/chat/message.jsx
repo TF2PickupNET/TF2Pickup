@@ -27,6 +27,51 @@ class Message extends PureComponent {
     canDeleteMessages: PropTypes.bool.isRequired,
   };
 
+  static styles = {
+    container: {
+      display: 'flex',
+      boxSizing: 'border-box',
+      minHeight: 20,
+
+      '& .icon::before': {
+        fontSize: 20,
+        lineHeight: '1 !important',
+      },
+    },
+
+    deleteIcon: { cursor: 'pointer' },
+
+    date: {
+      lineHeight: '20px',
+      marginRight: 4,
+    },
+
+    userItem: {
+      lineHeight: '20px',
+      height: 20,
+    },
+
+    mentionUserItem: {
+      composes: '$userItem',
+
+      '& .icon::before': { display: 'none' },
+    },
+
+    message: {
+      marginLeft: 4,
+      lineHeight: '20px',
+      flex: 1,
+      wordBreak: 'break-word',
+    },
+  };
+
+  /**
+   * Compile the element as a string.
+   *
+   * @param {String} str - The str to compile.
+   * @param {Object} defaultProps - The default props to be merged into the props.
+   * @returns {Object} - Returns a object with the data about the component.
+   */
   static compile(str, defaultProps) {
     const [, name, props = '', content = null] = str.endsWith('/>')
       ? /<(\w+)(.+)\/>/.exec(str)
@@ -48,6 +93,11 @@ class Message extends PureComponent {
     };
   }
 
+  /**
+   * Format the message so that custom elements are displayed correctly.
+   *
+   * @returns {JSX[]} - Returns the message as an array of JSX nodes.
+   */
   get formattedMessage() {
     return this.props.message.message
       .split(/(<\w+.*?>.*?<\/\w+>|<[A-Z]\w+.*?\/>)/)
@@ -59,7 +109,7 @@ class Message extends PureComponent {
             props,
             content,
           } = Message.compile(str.trim(), { key: index });
-          
+
           if (isNotCustomComponent) {
             return (
               <Component {...props}>
@@ -91,6 +141,9 @@ class Message extends PureComponent {
       });
   }
 
+  /**
+   * Emit the event for deleting a chat message.
+   */
   handleDeleteClick = () => {
     app.io.emit('chat.delete-message', { messageId: this.props.message._id });
   };
@@ -125,43 +178,5 @@ class Message extends PureComponent {
     );
   }
 }
-
-Message.styles = {
-  container: {
-    display: 'flex',
-    boxSizing: 'border-box',
-    minHeight: 20,
-
-    '& .icon::before': {
-      fontSize: 20,
-      lineHeight: '1 !important',
-    },
-  },
-
-  deleteIcon: { cursor: 'pointer' },
-
-  date: {
-    lineHeight: '20px',
-    marginRight: 4,
-  },
-
-  userItem: {
-    lineHeight: '20px',
-    height: 20,
-  },
-
-  mentionUserItem: {
-    composes: '$userItem',
-
-    '& .icon::before': { display: 'none' }
-  },
-
-  message: {
-    marginLeft: 4,
-    lineHeight: '20px',
-    flex: 1,
-    wordBreak: 'break-word',
-  },
-};
 
 export default injectSheet(Message.styles)(Message);

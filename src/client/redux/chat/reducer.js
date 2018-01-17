@@ -4,6 +4,7 @@ import {
   REPLACE_MESSAGES,
 } from './constants';
 import setupListeners from './setup-listeners';
+
 import { omit } from '../../../utils/functions';
 
 /**

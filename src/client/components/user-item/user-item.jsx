@@ -3,10 +3,7 @@ import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import {
-  Icon,
-  colors,
-} from 'materialize-react';
+import { Icon } from 'materialize-react';
 
 import {
   mapObject,
@@ -36,11 +33,9 @@ class UserItem extends PureComponent {
       icon: PropTypes.string.isRequired,
       donator: PropTypes.string.isRequired,
       friendIcon: PropTypes.string.isRequired,
-      self: PropTypes.string.isRequired,
     }).isRequired,
     isFriend: PropTypes.bool.isRequired,
     className: PropTypes.string,
-    isSelf: PropTypes.bool.isRequired,
   };
 
   static defaultProps = { className: '' };
@@ -76,8 +71,6 @@ class UserItem extends PureComponent {
       ...mapObject((role) => {
         return { color: role.color[theme.type] };
       })(roles),
-
-      self: { color: theme.type === 'light' ? colors.blue800 : colors.blue500 },
     };
   }
 
@@ -102,7 +95,6 @@ class UserItem extends PureComponent {
         className={classnames(
           this.props.classes.item,
           this.props.classes[roleInfo.name],
-          { [this.props.classes.self]: this.props.isSelf },
           this.props.className,
         )}
         onClick={this.handleClick}
@@ -131,7 +123,6 @@ export default pipe(
   injectSheet(UserItem.styles),
   connect((state, props) => {
     return {
-      isSelf: pluck('user.id')(state) === props.user.id,
       isFriend: pipe(
         pluck('user.friends', []),
         includes(props.user.id),

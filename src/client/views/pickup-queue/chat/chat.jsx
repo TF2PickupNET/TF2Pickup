@@ -62,12 +62,11 @@ Chat.styles = {
   card: {
     marginLeft: 0,
     marginRight: 0,
-    display: 'flex',
-    flexDirection: 'column',
+    display: 'grid',
+    gridTemplateRows: 'auto 1fr auto',
+    gridGap: '8px',
     padding: '8px 8px 0 8px',
   },
-
-  tabs: { marginBottom: 8 },
 };
 
 export default pipe(

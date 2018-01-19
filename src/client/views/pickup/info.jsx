@@ -8,8 +8,9 @@ import gamemodes from '@tf2-pickup/configs/gamemodes';
 import regions from '@tf2-pickup/configs/regions';
 import PropTypes from 'prop-types';
 
-import Date from '../../components/date/index';
+import Date from '../../components/date';
 import maps from '../../maps';
+import Link from '../../components/link';
 
 /**
  * The info for the pickup.
@@ -33,6 +34,7 @@ class Info extends PureComponent {
       startedOn: PropTypes.string,
       endedOn: PropTypes.string,
       map: PropTypes.string.isRequired,
+      logsTFID: PropTypes.number.isRequired,
     }).isRequired,
   };
 
@@ -165,7 +167,12 @@ class Info extends PureComponent {
         </div>
 
         <div className={this.props.classes.item}>
-          Logs TF
+          <Link
+            primary
+            href={`https://logs.tf/${this.props.pickup.logsTFID}`}
+          >
+            Logs TF
+          </Link>
         </div>
 
         <div className={this.props.classes.item}>

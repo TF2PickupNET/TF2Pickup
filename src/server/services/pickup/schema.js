@@ -58,7 +58,7 @@ export default new Schema({
   },
 
   logsTFID: {
-    type: String,
+    type: Number,
     default: null,
   },
 

@@ -52,7 +52,13 @@ OnlineUsers.styles = {
     gridTemplateRows: 'auto 1fr',
   },
 
-  list: { paddingBottom: 8 },
+  list: {
+    composes: 'scrollbar',
+
+    paddingBottom: 8,
+    overflowY: 'scroll',
+    overflowX: 'hidden',
+  },
 
   header: {
     marginBottom: 8,

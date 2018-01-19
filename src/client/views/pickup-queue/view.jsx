@@ -27,7 +27,7 @@ class View extends PureComponent {
       container: PropTypes.string.isRequired,
       chatContainer: PropTypes.string.isRequired,
     }).isRequired,
-    match: PropTypes.shape({ params: PropTypes.arrayOf(PropTypes.string) }).isRequired,
+    match: PropTypes.shape({ params: PropTypes.shape({}).isRequired }).isRequired,
   };
 
   static styles = {

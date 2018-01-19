@@ -48,10 +48,11 @@ class RCONPassword extends PureComponent {
    * @returns {String} - Returns the command.
    */
   getConnect() {
-    return [
-      `rcon_address ${this.props.ip}:${this.props.port};`,
-      `rcon_password ${this.props.rconPassword}`,
-    ].join(' ');
+    const ip = this.props.ip;
+    const port = this.props.port;
+    const rconPassword = this.props.rconPassword;
+
+    return `rcon_address ${ip}:${port}; rcon_password ${rconPassword}`;
   }
 
   /**

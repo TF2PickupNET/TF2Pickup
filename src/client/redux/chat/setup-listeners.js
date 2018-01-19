@@ -1,7 +1,6 @@
 import { subDays } from 'date-fns/esm';
 
 import {
-  arrayToObject,
   pluck,
 } from '../../../utils/functions';
 
@@ -47,13 +46,13 @@ export default function setupListeners(app) {
     if (hasReconnected) {
       const messages = await fetchMessages('global');
 
-      app.store.dispatch(replaceMessages('global', messages));
+      app.store.dispatch(replaceMessages('global', messages.reverse()));
     }
 
     if (hasReconnected || prevRegion !== nextRegion) {
       const messages = await fetchMessages(nextRegion);
 
-      app.store.dispatch(replaceMessages(nextRegion, messages));
+      app.store.dispatch(replaceMessages(nextRegion, messages.reverse()));
     }
   });
 }

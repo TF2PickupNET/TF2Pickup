@@ -108,7 +108,7 @@ export class MainToolbar extends PureComponent {
    */
   renderLoginButton() {
     return (
-      <img
+      <img // eslint-disable-line
         className={this.props.classes.steamLoginImage}
         alt="steam login"
         src={steamLoginButton}

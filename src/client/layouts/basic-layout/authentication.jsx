@@ -78,7 +78,6 @@ class Authentication extends PureComponent {
 }
 
 export default pipe(
-  injectSheet(Authentication.styles),
   connect(null, (dispatch) => {
     return {
       addNotification(...args) {
@@ -86,4 +85,5 @@ export default pipe(
       },
     };
   }),
+  injectSheet(Authentication.styles),
 )(Authentication);

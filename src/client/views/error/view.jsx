@@ -13,6 +13,12 @@ import ErrorCard from './error-card';
 
 const bgImage = randomItem([sixes, hl, bball, ultiduo]);
 
+/**
+ * The view for the error page.
+ *
+ * @param {Object} props - The props for the component.
+ * @returns {JSX} - Returns the JSX.
+ */
 function View(props) {
   return (
     <div className={props.classes.container}>
@@ -25,7 +31,7 @@ function View(props) {
   );
 }
 
-View.propTypes = { classes: PropTypes.shape({ container: PropTypes.string.isRequired }).isRequired };
+View.propTypes = { classes: PropTypes.shape({ container: PropTypes.string }).isRequired };
 
 View.styles = {
   container: {

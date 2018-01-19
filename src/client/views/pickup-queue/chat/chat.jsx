@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import {
   Card,
   Tab,
@@ -13,106 +13,66 @@ import {
   pipe,
   pluck,
 } from '../../../../utils/functions';
-import { getGamemodeFromUrl } from '../../../../utils/pickup-queue';
-
-import Input from './input';
-import MessagesContainer from './messages-container';
+import ChatComponent from '../../../components/chat';
 
 /**
- * The chat component.
+ * Renders the actual chat card.
  *
- * @class
+ * @param {Object} props - The props for the component.
+ * @returns {JSX} - Returns the JSX.
  */
-class Chat extends PureComponent {
-  static propTypes = {
-    classes: PropTypes.shape({
-      card: PropTypes.string.isRequired,
-      tabs: PropTypes.string.isRequired,
-    }).isRequired,
-    region: PropTypes.string.isRequired,
-    gamemode: PropTypes.string.isRequired,
-  };
+function Chat(props) {
+  return (
+    <Card className={props.classes.card}>
+      <Tabs
+        tab={props.chat}
+        className={props.classes.tabs}
+        onChange={props.onChatChange}
+      >
+        <Tab name="global">
+          Global
+        </Tab>
 
-  static styles = {
-    card: {
-      marginLeft: 0,
-      marginRight: 0,
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '8px 8px 0 8px',
-    },
+        <Tab name={props.region}>
+          {regions[props.region].fullName}
+        </Tab>
+      </Tabs>
 
-    tabs: { marginBottom: 8 },
-  };
-
-  state = { selectedChat: this.props.region };
-
-  /**
-   * Change the region when the user changes his region.
-   */
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.region !== this.props.region) {
-      this.setState((state) => {
-        if (state.selectedChat === this.props.region) {
-          return { selectedChat: nextProps.region };
-        }
-
-        return null;
-      });
-    }
-
-    /**
-     * Hack for updating the tabs bar when the gamemode changes and with that the width.
-     */
-    if (nextProps.gamemode !== this.props.gamemode) {
-      this.setState((state) => {
-        return { selectedChat: state.selectedChat === 'global' ? nextProps.region : 'global' };
-      }, () => {
-        this.setState((state) => {
-          return { selectedChat: state.selectedChat === 'global' ? nextProps.region : 'global' };
-        });
-      });
-    }
-  }
-
-  /**
-   * Change the selected chat when the tab changes.
-   */
-  handleTabChange = (tab) => {
-    this.setState({ selectedChat: tab });
-  };
-
-  render() {
-    return (
-      <Card className={this.props.classes.card}>
-        <Tabs
-          tab={this.state.selectedChat}
-          className={this.props.classes.tabs}
-          onChange={this.handleTabChange}
-        >
-          <Tab name="global">
-            Global
-          </Tab>
-
-          <Tab name={this.props.region}>
-            {regions[this.props.region].fullName}
-          </Tab>
-        </Tabs>
-
-        <MessagesContainer chat={this.state.selectedChat} />
-
-        <Input chat={this.state.selectedChat} />
-      </Card>
-    );
-  }
+      <ChatComponent
+        messages={props.messages}
+        onSubmit={props.onSubmit}
+      />
+    </Card>
+  );
 }
 
+Chat.propTypes = {
+  classes: PropTypes.shape({
+    card: PropTypes.string.isRequired,
+    tabs: PropTypes.string.isRequired,
+  }).isRequired,
+  messages: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  region: PropTypes.string.isRequired,
+  chat: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onChatChange: PropTypes.func.isRequired,
+};
+
+Chat.styles = {
+  card: {
+    marginLeft: 0,
+    marginRight: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '8px 8px 0 8px',
+  },
+
+  tabs: { marginBottom: 8 },
+};
+
 export default pipe(
-  connect((state) => {
-    return {
-      region: pluck('settings.region', 'eu')(state.user),
-      gamemode: getGamemodeFromUrl(state.router.location.pathname),
-    };
+  connect((state, props) => {
+    return { messages: pluck(props.chat, [])(state.chat) };
   }),
   injectSheet(Chat.styles),
 )(Chat);

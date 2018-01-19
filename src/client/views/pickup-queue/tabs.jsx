@@ -155,15 +155,18 @@ class GamemodeTabs extends PureComponent {
   }
 }
 
-export default connect(
-  (state) => {
-    return {
-      userId: pluck('user.id')(state),
-      pickups: state.pickupQueue,
-      gamemode: getGamemodeFromUrl(state.router.location.pathname),
-    };
-  },
-  (dispatch) => {
-    return { redirect: url => dispatch(push(url)) };
-  },
-)(injectSheet(GamemodeTabs.styles)(GamemodeTabs));
+export default pipe(
+  connect(
+    (state) => {
+      return {
+        userId: pluck('user.id')(state),
+        pickups: state.pickupQueue,
+        gamemode: getGamemodeFromUrl(state.router.location.pathname),
+      };
+    },
+    (dispatch) => {
+      return { redirect: url => dispatch(push(url)) };
+    },
+  ),
+  injectSheet(GamemodeTabs.styles),
+)(GamemodeTabs);

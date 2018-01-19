@@ -98,11 +98,11 @@ class BetaScreen extends PureComponent {
 }
 
 export default pipe(
-  injectSheet(BetaScreen.styles),
   connect((state) => {
     return {
       pathname: state.router.location.pathname,
       userId: pluck('user.id')(state),
     };
   }),
+  injectSheet(BetaScreen.styles),
 )(BetaScreen);

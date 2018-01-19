@@ -13,7 +13,10 @@ import {
 
 import app from '../../app';
 import announcers from '../../announcers';
-import { filter } from '../../../utils/functions';
+import {
+  filter,
+  pipe,
+} from '../../../utils/functions';
 import hasPermission from '../../../utils/has-permission';
 import playSound from '../../utils/play-sound';
 
@@ -177,8 +180,8 @@ class AnnounncerSetting extends PureComponent {
   }
 }
 
-export default connect(
-  (state) => {
+export default pipe(
+  connect((state) => {
     const { boughtAnnouncers } = state.user;
 
     return {
@@ -189,5 +192,6 @@ export default connect(
           announcer => !announcer.needsPurchase || boughtAnnouncers.includes(announcer.name),
         )(announcersAsArray),
     };
-  },
-)(injectSheet(AnnounncerSetting.styles)(AnnounncerSetting));
+  }),
+  injectSheet(AnnounncerSetting.styles),
+)(AnnounncerSetting);

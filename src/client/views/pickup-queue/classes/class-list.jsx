@@ -201,7 +201,6 @@ class ClassList extends PureComponent {
 }
 
 export default pipe(
-  injectSheet(ClassList.styles),
   connect((state, props) => {
     const players = state.pickupQueue[props.gamemode].classes[props.className];
     const userId = state.user ? state.user.id : null;
@@ -212,4 +211,5 @@ export default pipe(
       isInClass: find(player => player.id === userId)(players),
     };
   }),
+  injectSheet(ClassList.styles),
 )(ClassList);

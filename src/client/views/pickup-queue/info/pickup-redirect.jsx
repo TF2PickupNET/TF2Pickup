@@ -90,8 +90,8 @@ class PickupRedirect extends PureComponent {
 }
 
 export default pipe(
-  injectSheet(PickupRedirect.styles),
   connect(null, (dispatch) => {
     return { redirect: url => dispatch(push(url)) };
   }),
+  injectSheet(PickupRedirect.styles),
 )(PickupRedirect);

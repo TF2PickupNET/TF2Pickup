@@ -10,7 +10,10 @@ import {
 } from 'materialize-react';
 
 import { addNotification } from '../../redux/notifications/actions';
-import { pluck } from '../../../utils/functions';
+import {
+  pipe,
+  pluck,
+} from '../../../utils/functions';
 import playSound from '../../utils/play-sound';
 
 import Notifications from './notifications';
@@ -129,11 +132,14 @@ class BasicLayout extends PureComponent {
   }
 }
 
-export default connect(
-  (state) => {
-    return { userId: pluck('id')(state.user) };
-  },
-  (dispatch) => {
-    return { addNotification: (...args) => dispatch(addNotification(...args)) };
-  },
-)(injectSheet(BasicLayout.styles)(BasicLayout));
+export default pipe(
+  connect(
+    (state) => {
+      return { userId: pluck('id')(state.user) };
+    },
+    (dispatch) => {
+      return { addNotification: (...args) => dispatch(addNotification(...args)) };
+    },
+  ),
+  injectSheet(BasicLayout.styles),
+)(BasicLayout);

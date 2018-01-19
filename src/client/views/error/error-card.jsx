@@ -74,8 +74,8 @@ ErrorCard.propTypes = {
 ErrorCard.styles = { card: { maxWidth: 480 } };
 
 export default pipe(
-  injectSheet(ErrorCard.styles),
   connect((state) => {
     return { location: state.router.location };
   }),
+  injectSheet(ErrorCard.styles),
 )(ErrorCard);

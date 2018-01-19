@@ -3,11 +3,11 @@ import injectSheet from 'react-jss';
 import PropTypes from 'prop-types';
 import { Icon } from 'materialize-react';
 
-import UserItem from '../../../components/user-item';
-import Date from '../../../components/date';
-import Link from '../../../components/link';
-import app from '../../../app';
-import { assign } from '../../../../utils/functions';
+import UserItem from '../user-item/index';
+import Date from '../date/index';
+import Link from '../link';
+import app from '../../app';
+import { assign } from '../../../utils/functions';
 
 /**
  * The message component for displaying a chat message.

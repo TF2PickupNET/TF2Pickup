@@ -2,7 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import classnames from 'classnames';
-import { getNotDeclaredProps } from 'materialize-react';
+import {
+  getNotDeclaredProps,
+  Typography,
+} from 'materialize-react';
 
 /**
  * Render a link which will open safely the provided href in a new tab.
@@ -12,48 +15,37 @@ import { getNotDeclaredProps } from 'materialize-react';
  */
 function Link(props) {
   return (
-    <a
+    <Typography
+      typography="body1"
+      element="a"
       href={props.href}
       rel="noopener noreferrer"
       target="_blank"
       className={classnames(
         props.classes.link,
-        props.primary && props.classes.primary,
         props.className,
       )}
       {...getNotDeclaredProps(props, Link)}
     >
       {props.children}
-    </a>
+    </Typography>
   );
 }
 
 Link.propTypes = {
-  classes: PropTypes.shape({
-    link: PropTypes.string.isRequired,
-    primary: PropTypes.string.isRequired,
-  }).isRequired,
+  classes: PropTypes.shape({ link: PropTypes.string.isRequired }).isRequired,
   children: PropTypes.node.isRequired,
   href: PropTypes.string.isRequired,
   className: PropTypes.string,
-  primary: PropTypes.bool,
 };
 
-Link.defaultProps = {
-  className: '',
-  primary: false,
-};
+Link.defaultProps = { className: '' };
 
-Link.styles = (theme) => {
-  return {
-    link: {
-      display: 'inline',
-      textDecoration: 'none',
-      color: 'inherit',
-    },
-
-    primary: { color: theme.primaryBase },
-  };
+Link.styles = {
+  link: {
+    display: 'inline',
+    textDecoration: 'none',
+  },
 };
 
 export default injectSheet(Link.styles)(Link);

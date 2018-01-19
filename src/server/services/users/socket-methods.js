@@ -59,8 +59,8 @@ function getValidAnnouncers(user) {
     return map(announcer => announcer.name)(announcersArray);
   }
 
-  return filter(
-    announcer => !announcer.needsPurchase || user.boughtAnnouncers.includes(announcer.name),
+  return pipe(
+    filter(announcer => !announcer.needsPurchase || user.boughtAnnouncers.includes(announcer.name)),
     map(announcer => announcer.name),
   )(announcersArray);
 }

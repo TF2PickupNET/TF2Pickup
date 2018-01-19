@@ -57,7 +57,7 @@ class RCONPassword extends PureComponent {
   /**
    * Copy the rcon connect command.
    */
-  handleButtonPress = () => copy(this.getConnectUrl());
+  handleButtonPress = () => copy(this.getConnect());
 
   render() {
     return (

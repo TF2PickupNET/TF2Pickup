@@ -107,7 +107,7 @@ export default connect(
   (state) => {
     const gamemode = getGamemodeFromUrl(state.router.location.pathname);
     const pickup = state.pickupQueue[gamemode];
-    const player = getPlayer(state.user.id)(pickup.classes);
+    const player = getPlayer(state.user.id)(pickup);
 
     return {
       gamemode,

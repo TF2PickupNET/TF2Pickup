@@ -20,14 +20,15 @@ export default {
         if (tf2Hours === null) {
           log('Unable to fetch tf2 hours', hook.data.id);
 
-          return new errors.Timeout([
+          throw new errors.Timeout([
             'Something went wrong while trying to get your played hours in TF2!',
+            'Make sure that your Steam profile is public!',
             'Please try again. If the problem persists concat a developer over discord.',
           ].join(' '));
         }
 
         if (tf2Hours < config.get('auth.required_hours')) {
-          return new errors.Forbidden([
+          throw new errors.Forbidden([
             'You don\'t have the required minimum hours in TF2 to play TF2Pickup',
             `You will atleast need ${config.get('auth.required_hours')} in TF2.`,
           ].join(' '));
@@ -46,7 +47,7 @@ export default {
           if (!groupMembers.includes(hook.data.id)) {
             log('User is not in the steam group', hook.data.id);
 
-            return new errors.Forbidden(
+            throw new errors.Forbidden(
               'The site is currently in beta mode and you are not in the required Steam Group',
             );
           }

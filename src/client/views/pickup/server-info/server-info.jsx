@@ -73,6 +73,7 @@ export default class ServerInfo extends PureComponent {
         <STVConnect
           ip={this.state.server.ip}
           stvPort={this.state.server.stvPort}
+          stvPassword={this.state.server.stvPassword}
         />
 
         {this.state.server.rconPassword ? (

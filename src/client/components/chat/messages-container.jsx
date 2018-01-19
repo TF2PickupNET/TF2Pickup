@@ -3,11 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 
-import {
-  pipe,
-  pluck,
-} from '../../../../utils/functions';
-import hasPermission from '../../../../utils/has-permission';
+import { pipe } from '../../../utils/functions';
+import hasPermission from '../../../utils/has-permission';
 
 import Message from './message';
 
@@ -67,17 +64,8 @@ class MessagesContainer extends PureComponent {
 }
 
 export default pipe(
+  connect((state) => {
+    return { canDeleteMessages: hasPermission('chat.delete', state.user) };
+  }),
   injectSheet(MessagesContainer.styles),
-  connect(
-    (state, props) => {
-      const messages = pluck(props.chat, {})(state.chat);
-
-      return {
-        messages: Object
-          .values(messages)
-          .sort((mA, mB) => new Date(mA.createdOn) - new Date(mB.createdOn)),
-        canDeleteMessages: hasPermission('chat.delete', state.user),
-      };
-    },
-  ),
 )(MessagesContainer);

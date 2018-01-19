@@ -4,6 +4,11 @@ import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
 
+import {
+  pipe,
+  pluck,
+} from '../../../utils/functions';
+
 import RegionSetting from './region-setting';
 import ThemeSetting from './theme-setting';
 import AnnouncerSetting from './announncer-setting';
@@ -50,8 +55,9 @@ View.styles = {
   },
 };
 
-export default connect(
-  (state) => {
-    return { userId: state.user ? state.user.id : null };
-  },
-)(injectSheet(View.styles)(View));
+export default pipe(
+  connect((state) => {
+    return { userId: pluck('user.id')(state) };
+  }),
+  injectSheet(View.styles),
+)(View);

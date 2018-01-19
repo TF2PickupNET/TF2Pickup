@@ -7,6 +7,7 @@ import { IconButton } from 'materialize-react';
 import UserItem from '../../../components/user-item/index';
 import hasPermission from '../../../../utils/has-permission';
 import app from '../../../app';
+import { pipe } from '../../../../utils/functions';
 
 /**
  * The item for a user in the online users item.
@@ -83,13 +84,14 @@ class OnlineUserItem extends PureComponent {
   }
 }
 
-export default connect(
-  (state, props) => {
+export default pipe(
+  connect((state, props) => {
     const user = state.onlineUsers[props.id];
 
     return {
       user,
       canAlert: hasPermission('user.alert', state.user, user),
     };
-  },
-)(injectSheet(OnlineUserItem.styles)(OnlineUserItem));
+  }),
+  injectSheet(OnlineUserItem.styles),
+)(OnlineUserItem);

@@ -104,8 +104,8 @@ class NotificationRequester extends PureComponent {
 }
 
 export default pipe(
-  injectSheet(NotificationRequester.styles),
   connect((state) => {
     return { userId: pluck('user.id')(state) };
   }),
+  injectSheet(NotificationRequester.styles),
 )(NotificationRequester);

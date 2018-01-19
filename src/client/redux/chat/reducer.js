@@ -1,4 +1,4 @@
-import { omit } from '../../../utils/functions';
+import { filter } from '../../../utils/functions';
 
 import {
   ADD_MESSAGE,
@@ -19,16 +19,18 @@ function reducer(state = {}, action) {
     case ADD_MESSAGE: {
       return {
         ...state,
-        [action.payload.chat]: {
+        [action.payload.chat]: [
           ...state[action.payload.chat],
-          [action.payload.message._id]: action.payload.message,
-        },
+          action.payload.message,
+        ],
       };
     }
     case REMOVE_MESSAGE: {
       return {
         ...state,
-        [action.payload.chat]: omit(action.payload.messageId)(state[action.payload.chat]),
+        [action.payload.chat]: filter(
+          message => message._id !== action.payload.messageId,
+        )(state[action.payload.chat]),
       };
     }
     case REPLACE_MESSAGES: {

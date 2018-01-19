@@ -4,22 +4,24 @@ import PropTypes from 'prop-types';
 import randomItem from 'random-item';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import queryString from 'query-string';
 import {
   Card,
   Button,
-  Spinner,
-  Divider,
-  Typography,
-  Collapse,
 } from 'materialize-react';
 
+import ErrorCard from '../../views/error/error-card';
 import app from '../../app';
-import getErrorMessage from '../../views/error/get-error-message';
 import sixes from '../../../assets/images/background/6v6.jpg';
 import hl from '../../../assets/images/background/9v9.jpg';
 import bball from '../../../assets/images/background/bball.jpg';
 import ultiduo from '../../../assets/images/background/ultiduo.jpg';
+import { isInBetaMode } from '../../../config/client';
+import {
+  pipe,
+  pluck,
+} from '../../../utils/functions';
+
+const bgImage = randomItem([sixes, hl, bball, ultiduo]);
 
 /**
  * The screen to display when the client isn't logged in and the site is in beta mode.
@@ -30,30 +32,24 @@ class BetaScreen extends PureComponent {
   static propTypes = {
     classes: PropTypes.shape({
       container: PropTypes.string.isRequired,
-      backgroundImage: PropTypes.string.isRequired,
       card: PropTypes.string.isRequired,
       cardActions: PropTypes.string.isRequired,
-      errorContainer: PropTypes.string.isRequired,
-      errorDivider: PropTypes.string.isRequired,
-      errorText: PropTypes.string.isRequired,
     }).isRequired,
     pathname: PropTypes.string.isRequired,
-    query: PropTypes.shape({
-      code: PropTypes.string,
-      message: PropTypes.string,
-    }).isRequired,
+    children: PropTypes.node.isRequired,
+    userId: PropTypes.string,
   };
+
+  static defaultProps = { userId: null };
 
   static styles = {
     container: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      flexDirection: 'column',
       flex: 1,
-    },
-
-    backgroundImage: {
-      backgroundImage: `url(${randomItem([sixes, hl, bball, ultiduo])})`,
+      backgroundImage: `url(${bgImage})`,
       backgroundPosition: 'center center',
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
@@ -62,44 +58,16 @@ class BetaScreen extends PureComponent {
     card: { maxWidth: 480 },
 
     cardActions: { justifyContent: 'flex-end' },
-
-    errorDivider: { marginBottom: 12 },
-
-    errorText: { marginTop: 4 },
-
-    errorContainer: { marginTop: 4 },
   };
-
-  state = { showBetaPage: false };
-
-  /**
-   * Create a timeout to show the beta page after.
-   */
-  componentWillMount() {
-    this.timeout = setTimeout(() => {
-      this.setState({ showBetaPage: true });
-    }, 1000);
-  }
-
-  /**
-   * Clear the timeout when the component unmounts.
-   */
-  componentWillUnmount() {
-    clearTimeout(this.timeout);
-  }
 
   handleLoginRedirect = () => app.redirectToSteamAuth();
 
   render() {
-    const hasError = this.props.pathname === '/error';
-
-    if (this.state.showBetaPage) {
+    if (isInBetaMode && !this.props.userId) {
       return (
-        <div className={`${this.props.classes.container} ${this.props.classes.backgroundImage}`}>
+        <div className={this.props.classes.container}>
           <Helmet>
-            <title>
-              Beta Mode
-            </title>
+            <title>Beta Mode</title>
           </Helmet>
 
           <Card className={this.props.classes.card}>
@@ -116,45 +84,25 @@ class BetaScreen extends PureComponent {
                 Login with Steam
               </Button>
             </Card.Actions>
-
-            <Collapse isOpen={hasError}>
-              <Card.Content className={this.props.classes.errorContainer}>
-                <Divider className={this.props.classes.errorDivider} />
-
-                <Typography typography="title">
-                  {this.props.query.code}
-                  {getErrorMessage(Number(this.props.query.code))}
-                </Typography>
-
-                <div className={this.props.classes.errorText}>
-                  {this.props.query.message}
-                </div>
-              </Card.Content>
-            </Collapse>
           </Card>
+
+          {this.props.pathname === '/error' ? (
+            <ErrorCard />
+          ) : null}
         </div>
       );
     }
 
-    return (
-      <div className={this.props.classes.container}>
-        <Helmet>
-          <title>
-            Beta Mode
-          </title>
-        </Helmet>
-
-        <Spinner active />
-      </div>
-    );
+    return this.props.children;
   }
 }
 
-export default connect(
-  (state) => {
+export default pipe(
+  connect((state) => {
     return {
       pathname: state.router.location.pathname,
-      query: queryString.parse(state.router.location.search),
+      userId: pluck('user.id')(state),
     };
-  },
-)(injectSheet(BetaScreen.styles)(BetaScreen));
+  }),
+  injectSheet(BetaScreen.styles),
+)(BetaScreen);

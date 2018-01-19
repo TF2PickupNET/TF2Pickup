@@ -3,12 +3,12 @@ import { TextField } from 'materialize-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import app from '../../../app';
+import app from '../../app';
 import {
   filter,
   pipe,
   pluck,
-} from '../../../../utils/functions';
+} from '../../../utils/functions';
 
 /**
  * The input field for the chat.
@@ -17,7 +17,7 @@ import {
  */
 class Input extends PureComponent {
   static propTypes = {
-    chat: PropTypes.string.isRequired,
+    onSubmit: PropTypes.func.isRequired,
     userId: PropTypes.string,
   };
 
@@ -42,10 +42,7 @@ class Input extends PureComponent {
   handleKeyDown = (ev) => {
     switch (ev.keyCode) {
       case 13: {
-        app.io.emit('chat.add-message', {
-          chat: this.props.chat,
-          message: ev.target.value,
-        });
+        this.props.onSubmit(ev.target.value);
 
         this.setState({ value: '' });
         break;

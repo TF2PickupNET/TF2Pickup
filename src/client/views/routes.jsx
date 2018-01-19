@@ -109,7 +109,7 @@ function Routes(props) {
         component={Error}
       />
 
-      <Route component={composeWithMainLayout(NotFound)} />
+      <Route component={NotFound} />
     </Switch>
   );
 }

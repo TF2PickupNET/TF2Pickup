@@ -7,6 +7,8 @@ import { Progress } from 'materialize-react';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 import { connect } from 'react-redux';
 
+import { pipe } from '../../../../utils/functions';
+
 /**
  * A component which renders info about the current pickup.
  *
@@ -98,13 +100,14 @@ class ProgressBar extends PureComponent {
   }
 }
 
-export default connect(
-  (state, props) => {
+export default pipe(
+  connect((state, props) => {
     const pickup = state.pickupQueue[props.gamemode];
 
     return {
       status: pickup.status,
       readyUp: pickup.readyUp,
     };
-  },
-)(injectSheet(ProgressBar.styles)(ProgressBar));
+  }),
+  injectSheet(ProgressBar.styles),
+)(ProgressBar);

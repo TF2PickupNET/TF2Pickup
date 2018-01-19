@@ -3,13 +3,11 @@ import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import lockr from 'lockr';
-import { connect } from 'react-redux';
 import gamemodes from '@tf2-pickup/configs/gamemodes';
 import injectSheet from 'react-jss';
 import Aux from 'react-aux';
 import { breakpoints } from 'materialize-react';
 
-import { getGamemodeFromUrl } from '../../../utils/pickup-queue';
 import { pluck } from '../../../utils/functions';
 
 import Tabs from './tabs';
@@ -29,7 +27,7 @@ class View extends PureComponent {
       container: PropTypes.string.isRequired,
       chatContainer: PropTypes.string.isRequired,
     }).isRequired,
-    gamemode: PropTypes.string.isRequired,
+    match: PropTypes.shape({ params: PropTypes.arrayOf(PropTypes.string) }).isRequired,
   };
 
   static styles = {
@@ -67,24 +65,17 @@ class View extends PureComponent {
    * Set the last gamemode property in the local storage on mount.
    */
   componentWillUnmount() {
-    lockr.set('lastGamemode', this.props.gamemode);
-  }
-
-  /**
-   * Compute the current title for the gamemode.
-   *
-   * @returns {String} - Returns the title.
-   */
-  getTitle() {
-    return pluck(`${this.props.gamemode}.display`, '')(gamemodes);
+    lockr.set('lastGamemode', this.props.match.params[0]);
   }
 
   render() {
+    const gamemode = this.props.match.params[0];
+
     return (
       <Aux>
         <Helmet>
           <title>
-            {this.getTitle()}
+            {pluck(`${gamemode}.display`, '')(gamemodes)}
           </title>
         </Helmet>
 
@@ -93,7 +84,7 @@ class View extends PureComponent {
         <div
           className={classnames(
             this.props.classes.container,
-            `gamemode-${this.props.gamemode}`,
+            `gamemode-${gamemode}`,
           )}
         >
           <Info />
@@ -111,8 +102,4 @@ class View extends PureComponent {
   }
 }
 
-export default connect(
-  (state) => {
-    return { gamemode: getGamemodeFromUrl(state.router.location.pathname) };
-  },
-)(injectSheet(View.styles)(View));
+export default injectSheet(View.styles)(View);

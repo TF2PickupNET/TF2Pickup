@@ -12,7 +12,10 @@ import {
 import injectSheet from 'react-jss';
 
 import app from '../../app';
-import { capitalize } from '../../../utils/functions';
+import {
+  capitalize,
+  pipe,
+} from '../../../utils/functions';
 
 /**
  * The component for changing the theme setting.
@@ -130,8 +133,9 @@ class ThemeSetting extends PureComponent {
   }
 }
 
-export default connect(
-  (state) => {
+export default pipe(
+  connect((state) => {
     return { theme: state.user.settings.theme };
-  },
-)(injectSheet(ThemeSetting.styles)(ThemeSetting));
+  }),
+  injectSheet(ThemeSetting.styles),
+)(ThemeSetting);

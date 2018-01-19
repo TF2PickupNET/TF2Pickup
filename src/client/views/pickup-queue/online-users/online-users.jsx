@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { computeLevel } from '../../../../utils/has-permission';
+import { pipe } from '../../../../utils/functions';
 
 import OnlineUserItem from './online-user-item';
 
@@ -60,13 +61,14 @@ OnlineUsers.styles = {
   },
 };
 
-export default connect(
-  (state) => {
+export default pipe(
+  connect((state) => {
     return {
       onlineUsers: Object
         .values(state.onlineUsers)
         .sort((userA, userB) => computeLevel(userB.roles) - computeLevel(userA.roles))
         .map(user => user.id),
     };
-  },
-)(injectSheet(OnlineUsers.styles)(OnlineUsers));
+  }),
+  injectSheet(OnlineUsers.styles),
+)(OnlineUsers);

@@ -120,7 +120,6 @@ class UserItem extends PureComponent {
 }
 
 export default pipe(
-  injectSheet(UserItem.styles),
   connect((state, props) => {
     return {
       isFriend: pipe(
@@ -129,4 +128,5 @@ export default pipe(
       )(state),
     };
   }),
+  injectSheet(UserItem.styles),
 )(UserItem);

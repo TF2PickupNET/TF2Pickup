@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+  import { Schema } from 'mongoose';
 import regions from '@tf2-pickup/configs/regions';
 
 import { isInArray } from '../validators';

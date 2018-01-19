@@ -26,7 +26,6 @@ function Chat(props) {
     <Card className={props.classes.card}>
       <Tabs
         tab={props.chat}
-        className={props.classes.tabs}
         onChange={props.onChatChange}
       >
         <Tab name="global">
@@ -47,10 +46,7 @@ function Chat(props) {
 }
 
 Chat.propTypes = {
-  classes: PropTypes.shape({
-    card: PropTypes.string.isRequired,
-    tabs: PropTypes.string.isRequired,
-  }).isRequired,
+  classes: PropTypes.shape({ card: PropTypes.string.isRequired }).isRequired,
   messages: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   region: PropTypes.string.isRequired,
   chat: PropTypes.string.isRequired,

@@ -11,6 +11,7 @@ import {
   spreadArgs,
   mapObject,
   first,
+  assign,
 } from '../../../../../utils/functions';
 import { getPlayers } from '../../../../../utils/pickup-queue';
 
@@ -96,6 +97,7 @@ export default async function createPickup(props) {
     await pickupQueueService.patch(props.id, {
       $set: {
         status: 'waiting',
+        classes: mapObject(map(player => assign(player, { ready: false })))(pickupQueue.classes),
         maps: generateRandomMaps(pickupQueue.region, pickupQueue.gamemode, [
           mapName,
           lastPickupForGamemodeAndRegion[0] ? lastPickupForGamemodeAndRegion[0].map : null,

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import cookie from 'js-cookie';
 import lockr from 'lockr';
 import { connect } from 'react-redux';
 import Aux from 'react-aux';
@@ -8,12 +7,8 @@ import injectSheet from 'react-jss';
 import {
   Background,
   Button,
-  Spinner,
-  Layout,
 } from 'materialize-react';
 
-import app from '../../app';
-import { isInBetaMode } from '../../../config/client';
 import { addNotification } from '../../redux/notifications/actions';
 import { pluck } from '../../../utils/functions';
 import playSound from '../../utils/play-sound';
@@ -23,6 +18,7 @@ import Head from './head';
 import BetaScreen from './beta-screen';
 import NotificationRequester from './notification-requester';
 import Dialogs from './dialogs';
+import Authentication from './authentication';
 
 /**
  * Render a basic layout which will try login with the token from a cookie and make sure
@@ -32,16 +28,10 @@ import Dialogs from './dialogs';
  */
 class BasicLayout extends PureComponent {
   static propTypes = {
-    classes: PropTypes.shape({
-      background: PropTypes.string.isRequired,
-      loadingContainer: PropTypes.string.isRequired,
-    }).isRequired,
+    classes: PropTypes.shape({ background: PropTypes.string.isRequired }).isRequired,
     children: PropTypes.node.isRequired,
     addNotification: PropTypes.func.isRequired,
-    userId: PropTypes.string,
   };
-
-  static defaultProps = { userId: null };
 
   /**
    * The styles for the component.
@@ -72,26 +62,7 @@ class BasicLayout extends PureComponent {
           '&::-moz-scrollbar-thumb': { background: theme.dividerColor },
         },
       },
-
-      loadingContainer: { height: '100vh' },
     };
-  }
-
-  state = { hasAuthenticated: false };
-
-  /**
-   * Tries to login with the token from the cookies.
-   */
-  async componentWillMount() {
-    app.on('reauthentication-error', this.authenticate);
-
-    try {
-      await this.authenticate();
-    } catch (error) {
-      this.props.addNotification(error.message);
-    } finally {
-      this.setState({ hasAuthenticated: true });
-    }
   }
 
   /**
@@ -131,36 +102,11 @@ class BasicLayout extends PureComponent {
     }
   };
 
-  /**
-   * Authenticate with the token from the cookies.
-   */
-  authenticate = async () => {
-    const token = cookie.get('feathers-jwt');
-
-    if (token) {
-      await app.authenticate({
-        strategy: 'jwt',
-        accessToken: token,
-      });
-    }
-  };
-
   createAcceptCookiesHandler = closeSnackbar => () => {
     lockr.set('acceptsCookie', true);
 
     closeSnackbar();
   };
-
-  /**
-   * Render the content when the user tried to authenticate.
-   *
-   * @returns {JSX} - Returns the content.
-   */
-  renderContent() {
-    return isInBetaMode && !this.props.userId
-      ? <BetaScreen />
-      : this.props.children;
-  }
 
   render() {
     return (
@@ -173,15 +119,11 @@ class BasicLayout extends PureComponent {
 
         <NotificationRequester />
 
-        {this.state.hasAuthenticated ? this.renderContent() : (
-          <Layout
-            mainAlign="center"
-            crossAlign="center"
-            className={this.props.classes.loadingContainer}
-          >
-            <Spinner active />
-          </Layout>
-        )}
+        <Authentication>
+          <BetaScreen>
+            {this.props.children}
+          </BetaScreen>
+        </Authentication>
       </Background>
     );
   }

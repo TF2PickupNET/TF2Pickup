@@ -70,12 +70,8 @@ export default pipe(
   injectSheet(MessagesContainer.styles),
   connect(
     (state, props) => {
-      const messages = pluck(props.chat, {})(state.chat);
-
       return {
-        messages: Object
-          .values(messages)
-          .sort((mA, mB) => new Date(mA.createdOn) - new Date(mB.createdOn)),
+        messages: pluck(props.chat, [])(state.chat),
         canDeleteMessages: hasPermission('chat.delete', state.user),
       };
     },

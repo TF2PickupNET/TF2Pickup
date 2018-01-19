@@ -6,6 +6,7 @@ import './babel-helpers';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import whyDidYouUpdate from 'why-did-you-update';
 
 import { isDev } from '../config/client';
 
@@ -46,6 +47,10 @@ async function registerServiceWorker() {
   } catch (error) {
     console.log('Service Worker registration failed:', error);
   }
+}
+
+if (isDev) {
+  whyDidYouUpdate(React);
 }
 
 if ('serviceWorker' in navigator && !isDev) {

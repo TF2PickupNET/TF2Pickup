@@ -11,7 +11,6 @@ import {
   replaceMessages,
 } from './actions';
 
-const transformMessages = arrayToObject(pluck('_id'));
 const getRegion = pluck('user.settings.region', 'eu');
 
 /**
@@ -48,17 +47,13 @@ export default function setupListeners(app) {
     if (hasReconnected) {
       const messages = await fetchMessages('global');
 
-      app.store.dispatch(
-        replaceMessages('global', transformMessages(messages)),
-      );
+      app.store.dispatch(replaceMessages('global', messages));
     }
 
     if (hasReconnected || prevRegion !== nextRegion) {
       const messages = await fetchMessages(nextRegion);
 
-      app.store.dispatch(
-        replaceMessages(nextRegion, transformMessages(messages)),
-      );
+      app.store.dispatch(replaceMessages(nextRegion, messages));
     }
   });
 }

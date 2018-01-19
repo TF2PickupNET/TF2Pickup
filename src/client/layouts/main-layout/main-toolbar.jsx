@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import Aux from 'react-aux';
 import {
   Toolbar,
@@ -33,11 +32,9 @@ export class MainToolbar extends PureComponent {
       menuIcon: PropTypes.string.isRequired,
       spacer: PropTypes.string.isRequired,
     }).isRequired,
-    redirect: PropTypes.func.isRequired,
     openDrawer: PropTypes.func.isRequired,
     user: PropTypes.shape({
       name: PropTypes.string,
-      id: PropTypes.string,
       avatar: PropTypes.string,
     }),
   };
@@ -82,22 +79,24 @@ export class MainToolbar extends PureComponent {
    * @param {Object} props - The new props from react-helmet.
    */
   handleClientStateChange = (props) => {
-    this.setState({
-      title: props.title
+    this.setState((state) => {
+      const newTitle = props.title
         ? props.title.split('|')[0].trim()
-        : null,
+        : null;
+
+      if (state.title === newTitle) {
+        return null;
+      }
+
+      return { title: newTitle };
     });
   };
 
   /**
    * Redirect the user to the steam login page upon clicking on the login button.
    */
-  handleRedirect = () => {
-    if (this.props.user) {
-      this.props.redirect(`/profile/${this.props.user.id}`);
-    } else {
-      app.redirectToSteamAuth();
-    }
+  handleLoginRedirect = () => {
+    app.redirectToSteamAuth();
   };
 
   handlePress = () => this.props.openDrawer();
@@ -113,6 +112,7 @@ export class MainToolbar extends PureComponent {
         className={this.props.classes.steamLoginImage}
         alt="steam login"
         src={steamLoginButton}
+        onClick={this.handleLoginRedirect}
       />
     );
   }
@@ -175,11 +175,7 @@ export class MainToolbar extends PureComponent {
 
         <span className={this.props.classes.spacer} />
 
-        <span // eslint-disable-line jsx-a11y/click-events-have-key-events
-          role="presentation"
-          className={this.props.classes.rightContainer}
-          onClick={this.handleRedirect}
-        >
+        <span className={this.props.classes.rightContainer}>
           {this.props.user ? this.renderUserInfo() : this.renderLoginButton()}
         </span>
       </Layout>
@@ -193,8 +189,9 @@ export default connect(
   },
   (dispatch) => {
     return {
-      redirect: url => dispatch(push(url)),
-      openDrawer: () => dispatch({ type: OPEN_DRAWER }),
+      openDrawer() {
+        return dispatch({ type: OPEN_DRAWER });
+      },
     };
   },
 )(injectSheet(MainToolbar.styles)(MainToolbar));

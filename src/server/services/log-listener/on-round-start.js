@@ -8,7 +8,12 @@ export default {
     if (pickup.status !== 'game-is-live') {
       log('Setting pickup into game-is-live status', pickup.id);
 
-      await app.service('pickup').patch(pickup.id, { $set: { status: 'game-is-live' } });
+      await app.service('pickup').patch(pickup.id, {
+        $set: {
+          status: 'game-is-live',
+          startedOn: new Date(),
+        },
+      });
     }
   },
 };

@@ -9,6 +9,11 @@ export default {
   async handler(app, pickup) {
     log('Ending pickup because the game is over', pickup.id);
 
-    await app.service('pickup').patch(pickup.id, { $set: { status: 'game-finished' } });
+    await app.service('pickup').patch(pickup.id, {
+      $set: {
+        status: 'game-finished',
+        endedOn: new Date(),
+      },
+    });
   },
 };

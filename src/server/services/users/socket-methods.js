@@ -20,29 +20,32 @@ const announcersArray = Object.values(announcers);
  * @returns {Promise} - Returns a promise which will resolve with the valid names.
  */
 async function getValidNames(app, user) {
-  const services = Object
-    .keys(user.services)
-    .filter(service => service !== 'steam');
   const queries = await Promise.all(
     pipe(
       Object.keys,
       filter(service => service !== 'steam'),
-      map(service => app.service('users').find({ query: { name: user.services[service].name } })),
+      map(async (service) => {
+        const name = user.services[service].name;
+        const query = await app.service('users').find({ query: { name } });
+
+        return {
+          isValid: query.length === 0,
+          serviceName: service,
+          username: name,
+        };
+      }),
     )(user.services),
-  ).then(results => results.map((query, index) => {
-    return {
-      isValid: query.length === 0,
-      name: services[index],
-      username: user.services[services[index]].name,
-    };
-  }));
+  );
 
   return pipe(
     filter(service => service.isValid),
     reduce((obj, service) => {
       return {
         ...obj,
-        [service.username]: [service.name].concat(obj[service.username] || []),
+        [service.username]: [
+          ...(obj[service.username] || []),
+          service.serviceName,
+        ],
       };
     }, {}),
   )(queries);

@@ -1,12 +1,19 @@
 import React from 'react';
 import Aux from 'react-aux';
 import injectSheet from 'react-jss';
+import PropTypes from 'prop-types';
 import { Typography } from 'materialize-react';
 import { connect } from 'react-redux';
 
 import UserItem from '../../../components/user-item';
 import { pipe } from '../../../../utils/functions';
 
+/**
+ * The user info for the toolbar.
+ *
+ * @param {Object} props - The props for the component.
+ * @returns {JSX} - Returns the JSX.
+ */
 function UserInfo(props) {
   return (
     <Aux>
@@ -30,6 +37,14 @@ function UserInfo(props) {
     </Aux>
   );
 }
+
+UserInfo.propTypes = {
+  name: PropTypes.string.isRequired,
+  roles: PropTypes.arrayOf(PropTypes.string).isRequired,
+  userId: PropTypes.string.isRequired,
+  avatar: PropTypes.string.isRequired,
+  classes: PropTypes.shape({ avatar: PropTypes.string.isRequired }).isRequired,
+};
 
 UserInfo.styles = {
   avatar: {

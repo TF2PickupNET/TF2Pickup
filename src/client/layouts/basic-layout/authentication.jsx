@@ -24,6 +24,8 @@ class Authentication extends PureComponent {
   static propTypes = {
     children: PropTypes.node.isRequired,
     addNotification: PropTypes.func.isRequired,
+    loginUser: PropTypes.func.isRequired,
+    openDialog: PropTypes.func.isRequired,
     classes: PropTypes.shape({ container: PropTypes.string.isRequired }).isRequired,
   };
 

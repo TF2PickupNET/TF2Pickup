@@ -22,6 +22,7 @@ import BetaScreen from './beta-screen';
 import NotificationRequester from './notification-requester';
 import Dialogs from './dialogs';
 import Authentication from './authentication';
+import Bans from './bans';
 
 /**
  * Render a basic layout which will try login with the token from a cookie and make sure
@@ -124,7 +125,9 @@ class BasicLayout extends PureComponent {
 
         <Authentication>
           <BetaScreen>
-            {this.props.children}
+            <Bans>
+              {this.props.children}
+            </Bans>
           </BetaScreen>
         </Authentication>
       </Background>

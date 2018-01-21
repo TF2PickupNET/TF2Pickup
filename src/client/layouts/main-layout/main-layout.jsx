@@ -10,6 +10,7 @@ import { devices } from 'materialize-react/lib/styles/breakpoints';
 
 import ErrorBoundary from '../../components/error-boundary';
 import { CLOSE_DRAWER } from '../../redux/drawer-opened/constants';
+import { pipe } from '../../../utils/functions';
 
 import DrawerContent from './drawer-content';
 import MainToolbar from './main-toolbar';
@@ -93,11 +94,14 @@ class MainLayout extends PureComponent {
   }
 }
 
-export default connect(
-  (state) => {
-    return { open: state.drawerOpened };
-  },
-  (dispatch) => {
-    return { onCloseDrawer: () => dispatch({ type: CLOSE_DRAWER }) };
-  },
-)(injectSheet(MainLayout.styles)(MainLayout));
+export default pipe(
+  connect(
+    (state) => {
+      return { open: state.drawerOpened };
+    },
+    (dispatch) => {
+      return { onCloseDrawer: () => dispatch({ type: CLOSE_DRAWER }) };
+    },
+  ),
+  injectSheet(MainLayout.styles),
+)(MainLayout);

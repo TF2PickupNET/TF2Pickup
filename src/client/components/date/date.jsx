@@ -31,9 +31,13 @@ export default class Date extends PureComponent {
       PropTypes.string,
     ]).isRequired,
     withoutDay: PropTypes.bool,
+    withoutHours: PropTypes.bool,
   };
 
-  static defaultProps = { withoutDay: false };
+  static defaultProps = {
+    withoutDay: false,
+    withoutHours: false,
+  };
 
   /**
    * Get the users region.
@@ -47,11 +51,19 @@ export default class Date extends PureComponent {
   }
 
   render() {
+    const formats = [];
+
+    if (!this.props.withoutDay) {
+      formats.push(dateFormats[getRegion()]);
+    }
+
+    if (!this.props.withoutHours) {
+      formats.push(hoursFormats[getRegion()]);
+    }
+
     return format(
       this.props.date,
-      this.props.withoutDay
-        ? hoursFormats[getRegion()]
-        : `${dateFormats[getRegion()]} | ${hoursFormats[getRegion()]}`,
+      formats.join(' | '),
     );
   }
 }

@@ -17,7 +17,10 @@ import app from '../../app';
 import { Logo } from '../../icons';
 import openWindowInNewTab from '../../utils/open-window-in-new-tab';
 import { discordUrls } from '../../../config/client';
-import { pluck } from '../../../utils/functions';
+import {
+  pipe,
+  pluck,
+} from '../../../utils/functions';
 
 import ListItem from './drawer-list-item';
 
@@ -213,14 +216,17 @@ class DrawerContent extends PureComponent {
   }
 }
 
-export default connect(
-  (state) => {
-    return {
-      userId: pluck('user.id')(state),
-      lastPickupId: pluck('user.lastPickupId')(state),
-    };
-  },
-  (dispatch) => {
-    return { redirect: url => dispatch(push(url)) };
-  },
-)(injectSheet(DrawerContent.styles)(DrawerContent));
+export default pipe(
+  connect(
+    (state) => {
+      return {
+        userId: pluck('user.id')(state),
+        lastPickupId: pluck('user.lastPickupId')(state),
+      };
+    },
+    (dispatch) => {
+      return { redirect: url => dispatch(push(url)) };
+    },
+  ),
+  injectSheet(DrawerContent.styles),
+)(DrawerContent);

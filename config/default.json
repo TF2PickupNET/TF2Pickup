@@ -9,6 +9,8 @@
 
   "mongourl": "mongodb://localhost:27017/tf2pickup",
 
+  "elo-calculation": false,
+
   "auth": {
     "required_hours": 1000,
     "secret": "someamazingsecret",

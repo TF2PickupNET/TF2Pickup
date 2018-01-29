@@ -1,13 +1,21 @@
 import SteamID from 'steamid';
 import { Schema } from 'mongoose';
-import regions from '@tf2-pickup/configs/regions';
+import flatten from 'lodash.flatten';
+import {
+  regions,
+  gamemodes,
+} from '@tf2-pickup/configs';
 
-import { divs } from '../../../config/etf2l';
 import {
   url,
   steamId,
   isInArray,
 } from '../validators';
+import roles from '../../../config/roles';
+import announcers from '../../../config/announcers';
+
+import { divs as etf2lDivs } from './third-party-services/etf2l/utils';
+import { divs as ozfortressDivs } from './third-party-services/ozfortress/get-ozfortress-user-data';
 
 /**
  * Create the schema for the avatar urls.
@@ -32,7 +40,7 @@ function avatarSchema(name) {
 function etf2lDivSchema(gamemode) {
   return {
     type: String,
-    validate: isInArray(divs, {
+    validate: isInArray(etf2lDivs, {
       msg: `{VALUE} is not a valid etf2l ${gamemode} division`,
       nullIsAllowed: true,
     }),
@@ -40,9 +48,11 @@ function etf2lDivSchema(gamemode) {
   };
 }
 
-const allowedVolumes = new Array(10)
-  .fill(1)
-  .map((value, index) => (index + 1) / 10);
+const allClasses = flatten(
+  Object
+    .values(gamemodes)
+    .map(gamemode => Object.keys(gamemode.slots)),
+);
 
 export default new Schema({
   id: {
@@ -50,105 +60,14 @@ export default new Schema({
     validate: steamId({}),
     required: [true, 'SteamId on the user object is required!'],
     index: true,
+    unique: true,
   },
 
-  services: {
-    steam: {
-      tf2Hours: {
-        type: Number,
-        min: 0,
-        default: null,
-      },
-
-      isInBetaGroup: {
-        type: Boolean,
-        default: false,
-      },
-
-      avatar: {
-        small: avatarSchema('Small'),
-        medium: avatarSchema('Medium'),
-        large: avatarSchema('Large'),
-      },
-
-      vacBanned: {
-        type: Boolean,
-        default: false,
-      },
-
-      customUrl: {
-        type: String,
-        validate: {
-          validator(value) {
-            return /[\w-\d_]+/.test(value);
-          },
-          message: '{VALUE} is not a valid customUrl',
-        },
-        default: null,
-      },
-
-      isInGroup: {
-        type: Boolean,
-        default: false,
-      },
-    },
-
-    etf2l: {
-      id: Number,
-      username: String,
-      banned: {
-        type: Boolean,
-        default: false,
-      },
-      banExpiry: {
-        type: Date,
-        default: null,
-      },
-      div6v6: etf2lDivSchema('6v6'),
-      div9v9: etf2lDivSchema('9v9'),
-    },
-  },
-
-  friends: {
-    type: [String],
-    validate: {
-      validator(friends) {
-        return friends.every(friend => new SteamID(friend).isValid());
-      },
-      msg: 'friends contains a not valid Steam ID!',
-    },
-    default: [],
-  },
-
-  settings: {
-    region: {
-      type: String,
-      validate: {
-        validator(region) {
-          return Object.keys(regions).includes(region) || region === null;
-        },
-        msg: '{VALUE} is not a valid region!',
-      },
-      default: null,
-    },
-
-    volume: {
-      type: Number,
-      validate: {
-        validator(volume) {
-          return allowedVolumes.includes(volume);
-        },
-        msg: '{VALUE} is not a valid volume',
-      },
-      default: 0.7,
-    },
-
-    username: {
-      type: String,
-      default: null,
-      unique: true,
-      trim: true,
-    },
+  name: {
+    type: String,
+    default: null,
+    unique: true,
+    trim: true,
   },
 
   lastUpdate: {
@@ -171,5 +90,136 @@ export default new Schema({
     default: false,
   },
 
-  createdOn: Date,
+  createdOn: {
+    type: Date,
+    default: Date.now,
+  },
+
+  lastPickupId: {
+    type: Number,
+    default: null,
+  },
+
+  services: {
+    steam: {
+      avatar: {
+        small: avatarSchema('Small'),
+        medium: avatarSchema('Medium'),
+        large: avatarSchema('Large'),
+      },
+
+      vacBanned: {
+        type: Boolean,
+        default: false,
+      },
+
+      customUrl: {
+        type: String,
+        validate: {
+          validator(value) {
+            return /[\w-\d_]+/.test(value);
+          },
+          message: '{VALUE} is not a valid customUrl',
+        },
+        default: null,
+      },
+    },
+
+    etf2l: {
+      id: Number,
+      name: String,
+      div6v6: etf2lDivSchema('6v6'),
+      div9v9: etf2lDivSchema('9v9'),
+
+      isBanned: {
+        type: Boolean,
+        default: false,
+      },
+    },
+
+    ozfortress: {
+      id: Number,
+      name: String,
+
+      div6v6: {
+        type: String,
+        validate: isInArray(ozfortressDivs, {
+          msg: '{VALUE} is not a valid ozfortress division',
+          nullIsAllowed: true,
+        }),
+        default: null,
+      },
+    },
+  },
+
+  friends: {
+    type: [String],
+    validate: {
+      validator(friends) {
+        return friends.every(friend => new SteamID(friend).isValid());
+      },
+      msg: 'friends contains a not valid Steam ID!',
+    },
+    default: [],
+  },
+
+  settings: {
+    region: {
+      type: String,
+      validate: isInArray(Object.keys(regions), {
+        nullIsAllowed: true,
+        msg: '{VALUE} is not a valid region!',
+      }),
+      default: null,
+    },
+
+    volume: {
+      type: Number,
+      validate: {
+        validator(volume) {
+          return volume <= 100 && volume >= 0;
+        },
+        msg: '{VALUE} is not a valid volume',
+      },
+      default: 70,
+    },
+
+    theme: {
+      type: String,
+      validate: isInArray(['light', 'dark'], {}),
+      default: 'dark',
+    },
+
+    announcer: {
+      type: String,
+      validate: isInArray(Object.keys(announcers), {}),
+      default: 'default',
+    },
+  },
+
+  roles: {
+    type: [String],
+    validate: {
+      validator(userRoles) {
+        return userRoles.every(role => roles[role]);
+      },
+      msg: 'user.roles contains a not valid role',
+    },
+    default: [],
+  },
+
+  boughtAnnouncers: {
+    type: [String],
+    default: [],
+  },
+
+  elos: allClasses.reduce((obj, className) => {
+    return {
+      ...obj,
+      [className]: {
+        type: Number,
+        default: 1000,
+      },
+    };
+  }, {}),
 });

@@ -1,29 +1,25 @@
-import createSteamApi from './create-steam-api';
+import debug from 'debug';
+
+import steamApi from './steam-api';
+
+const log = debug('TF2Pickup:users:steam:vac');
 
 /**
  * Get the VAC bans for a user.
  *
  * @param {String} id - The steamId of the user.
- * @param {Object} app - The feathers app.
  * @returns {Object} - Returns the update data for the user.
  */
-export default async function getVACBans(id, app) {
-  let player = {};
-
+export default async function getVACBans(id) {
   try {
-    const result = await createSteamApi().get('ISteamUser/GetPlayerBans/v1/', { steamids: id });
+    const params = { steamids: id };
+    const result = await steamApi.get('ISteamUser/GetPlayerBans/v1/', { params });
+    const player = result.data.players[0];
 
-    player = result.data.players[0];
+    return { 'services.steam.vacBanned': player.VACBanned && player.DaysSinceLastBan < 365 };
   } catch (error) {
-    app.service('logs').create({
-      message: 'Error while updating steam vac bans',
-      environment: 'server',
-      info: error,
-      steamId: id,
-    });
+    log('Error while requesting VAC bans', id, error);
 
     return {};
   }
-
-  return { services: { steam: { vacBanned: player.VACBanned && player.DaysSinceLastBan < 365 } } };
 }

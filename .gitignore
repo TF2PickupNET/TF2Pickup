@@ -1,1 +1,10 @@
+node_modules/
+.idea/
+dist/
+.temp-icons/
 
+config/*
+
+!config/default.json
+
+logs/

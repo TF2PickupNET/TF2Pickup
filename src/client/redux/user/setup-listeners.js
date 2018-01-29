@@ -1,7 +1,4 @@
-import cookie from 'js-cookie';
-
 import {
-  loginUser,
   logoutUser,
   updateUser,
 } from './actions';
@@ -15,20 +12,13 @@ import {
 export default function setupListeners(app) {
   const users = app.service('users');
 
-  app.on('authenticated', async ({ accessToken }) => {
-    const verifiedToken = await app.passport.verifyJWT(accessToken);
-
-    cookie.set('feathers-jwt', accessToken);
-
-    app.set('userId', verifiedToken.id);
-
-    const user = await users.get(verifiedToken.id);
-
-    app.store.dispatch(loginUser(user));
-  });
-
   users.on('patched', (data) => {
-    app.store.dispatch(updateUser(data));
+    // Only update when the user is actually online
+    // This event is still emitted when we change online to false in the server
+    // when the user logs out, which results in a wrong state
+    if (data.online) {
+      app.store.dispatch(updateUser(data));
+    }
   });
 
   app.on('logout', () => {

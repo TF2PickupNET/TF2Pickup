@@ -2,12 +2,13 @@ import auth from 'feathers-authentication';
 import SteamStrategy from 'passport-steam';
 import jwt, { Verifier } from 'feathers-authentication-jwt';
 import ms from 'ms';
+import debug from 'debug';
+import config from 'config';
+import queryString from 'query-string';
 
-import createLoginListener from './create-login-listener';
-import createLogoutListener from './create-logout-listener';
 import { authUrl } from '../../../config/index';
-import getGroupMembers from '../users/third-party-services/steam/get-group-members';
-import { validateUsersAgainstSteamGroup } from '../../../config/steam';
+
+const log = debug('TF2Pickup:authentication');
 
 /**
  * A utility class which makes sure the id from the jwt get's mapped to the correct user.
@@ -30,6 +31,8 @@ class JWTVerifier extends Verifier {
 
       return done(null, user, { id: user.id });
     } catch (error) {
+      log('Error while verifying JWT', payload.id, error);
+
       return done(error, null);
     }
   }
@@ -39,72 +42,74 @@ class JWTVerifier extends Verifier {
  * Initialize the authentication service.
  */
 export default function authentication() {
+  log('Setting up authentication service');
+
   const that = this;
   const options = {
-    secret: that.get('config').SECRET,
+    secret: config.get('auth.secret'),
     cookie: {
       enabled: true,
       name: 'feathers-jwt',
     },
-    jwt: { expiresIn: '7d' },
+    jwt: {
+      expiresIn: '7d',
+      issuer: 'tf2pickup',
+      audience: config.get('server.ip'),
+    },
   };
 
   that.configure(auth(options));
   that.configure(jwt({ Verifier: JWTVerifier }));
 
+  that.service('authentication').hooks({ before: { create: auth.hooks.authenticate(['jwt']) } });
+
   that.passport.use(
     new SteamStrategy({
-      returnURL: `${that.get('config').url}${authUrl}/return`,
-      realm: that.get('config').url,
+      returnURL: `${that.get('url')}${authUrl}/return`,
+      realm: that.get('url'),
       profile: false,
     }, async (identifier, profile, done) => {
       const [, id] = identifier.match(/https?:\/\/steamcommunity\.com\/openid\/id\/(\d+)/);
       const usersService = that.service('users');
-      const query = { id };
-      const users = await usersService.find(query);
 
-      // Return the user if exactly one was found and if more than were found return an error
-      if (users.length === 1) {
-        return done(null, users[0]);
-      } else if (users.length > 1) {
-        return done(
-          new Error(`Multiple users found with the steamId ${id}! Please contact a system admin.`),
-          null,
-        );
+      try {
+        const user = await usersService.get(id);
+
+        log('Logging in user', id);
+
+        return done(null, user);
+      } catch (error) {
+        if (error.code !== 404) {
+          log('Unknown error while getting user', id, error);
+
+          return done(error, null);
+        }
       }
 
       // Create a new user when no user was found
       try {
-        if (validateUsersAgainstSteamGroup && that.get('config').env === 'prod') {
-          const groupMembers = await getGroupMembers(validateUsersAgainstSteamGroup, that);
+        log('Creating new user', id);
 
-          if (!groupMembers.includes(id)) {
-            return done(
-              new Error(
-                'The site is currently in beta mode and you are not in the required Steam Group',
-              ),
-              null,
-            );
-          }
-        }
-
-        const newUser = await usersService.create(query);
+        const newUser = await usersService.create({ id });
 
         return done(null, newUser);
       } catch (error) {
-        that.service('logs').create({
-          message: 'Error while creating new user',
-          environment: 'server',
-          info: error,
-          steamId: id,
-        });
+        log('Error while creating new user', id, error);
 
         return done(error, null);
       }
     }),
   );
 
-  that.get(authUrl, auth.express.authenticate('steam'));
+  that.get(
+    authUrl,
+    (req, res, next) => {
+      res.cookie('url', req.query.url.slice(1));
+
+      next();
+    },
+    auth.express.authenticate('steam'),
+  );
 
   that.get(
     `${authUrl}/return`,
@@ -118,9 +123,12 @@ export default function authentication() {
 
       next();
     },
-    (req, res) => res.redirect('/'),
-  );
+    (req, res) => {
+      const query = queryString.parse(req.headers.cookie);
 
-  that.on('login', createLoginListener(that));
-  that.on('logout', createLogoutListener(that));
+      res.clearCookie('url');
+
+      res.redirect(`/${query.url ? query.url : ''}`);
+    },
+  );
 }

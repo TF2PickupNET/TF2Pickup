@@ -1,32 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {
+  colors,
+  getNotDeclaredProps,
+} from 'materialize-react';
 
-import { colors } from 'materialize-react';
-
-export default function Logo({
-  circleColor,
-  pickupColor,
-  tf2Color,
-  ...props
-}) {
+function Logo(props) {
   return (
     <svg
       x="0px"
       y="0px"
       viewBox="0 0 1335.51 815.643"
-      {...props}
+      {...getNotDeclaredProps(props, Logo)}
     >
       <g>
         <g>
           <path
-            fill={circleColor}
+            fill={props.circleColor}
             d={[
               'M247.648,478.136H0c26.302,173.838,163.695,311.204,337.532,337.513V568.044C296.713,',
               '551.558,264.129,518.965,247.648,478.136z',
             ].join('')}
           />
           <path
-            fill={circleColor}
+            fill={props.circleColor}
             d={[
               'M212.391,152.237h-5.611l-3.964-3.964L152.64,98.104C72.234,160.051,15.879,251.672,0,',
               '356.597h247.648c16.48-40.824,49.064-73.428,89.884-89.909V152.237H212.391z',
@@ -36,7 +33,7 @@ export default function Logo({
 
         <g>
           <path
-            fill={pickupColor}
+            fill={props.pickupColor}
             d={[
               'M501.696,589.488c-15.155-14.121-34.154-21.183-56.996-21.183h-93.619v247.338h47.149',
               'v-93.098h46.47c22.842,0,41.841-7.069,56.996-21.196c15.146-14.121,22.727-32.768,22.',
@@ -49,12 +46,12 @@ export default function Logo({
           <rect
             x="531.913"
             y="568.305"
-            fill={pickupColor}
+            fill={props.pickupColor}
             width="47.148"
             height="247.338"
           />
           <path
-            fill={pickupColor}
+            fill={props.pickupColor}
             d={[
               'M644.442,626.722c7.681-10.7,18.654-16.057,32.898-16.057c21.713,0,35.282,11.506,40.',
               '711,34.511h47.829c-4.073-24.143-13.857-42.991-29.345-56.542c-15.491-13.551-35.334',
@@ -68,7 +65,7 @@ export default function Logo({
             ].join('')}
           />
           <polygon
-            fill={pickupColor}
+            fill={props.pickupColor}
             points={[
               '965.385,568.305 908.203,568.305 823.062,675.99 823.062,568.305 775.907,568.305 775.',
               '907,815.643 823.062,815.643 823.062,741.143 854.068,703.02 916.159,815.643 971.297,',
@@ -76,7 +73,7 @@ export default function Logo({
             ].join('')}
           />
           <path
-            fill={pickupColor}
+            fill={props.pickupColor}
             d={[
               'M1105.334,727.804c0,13.552-3.68,24.457-11.021,32.725c-7.354,8.262-17.696,12.396-31.',
               '039,12.396c-13.119,0-23.354-4.135-30.701-12.396c-7.354-8.268-11.025-19.173-11.025-',
@@ -86,7 +83,7 @@ export default function Logo({
             ].join('')}
           />
           <path
-            fill={pickupColor}
+            fill={props.pickupColor}
             d={[
               'M1312.787,589.488c-15.152-14.121-34.154-21.183-56.992-21.183h-93.623v247.338h47.',
               '152v-93.098h46.471c22.838,0,41.84-7.069,56.992-21.196c15.149-14.121,22.723-32.768,',
@@ -100,21 +97,21 @@ export default function Logo({
 
         <g>
           <polygon
-            fill={tf2Color}
+            fill={props.tf2Color}
             points={[
               '73.705,0 212.391,138.692 351.081,138.692 351.081,554.753 489.767,554.753 489.767,',
               '138.692 609.296,138.692 470.607,0',
             ].join('')}
           />
           <polygon
-            fill={tf2Color}
+            fill={props.tf2Color}
             points={[
               '969.233,277.377 767.143,277.377 767.143,138.692 969.337,138.692 830.65,0 489.767',
               ',0 628.452,138.692 628.452,554.753 767.143,554.753 767.143,416.068 868.363,416.068',
             ].join('')}
           />
           <path
-            fill={tf2Color}
+            fill={props.tf2Color}
             d={[
               'M1058.138,413.968l112.714-154.984c0,0,24.852-36.019,42.827-63.018c0.721-1.132,1.',
               '513-2.331,2.384-3.595c1.333-2.01,2.615-3.953,3.829-5.816c49.688-78.046,33.915-180.',
@@ -140,3 +137,5 @@ Logo.defaultProps = {
   pickupColor: colors.grey700,
   tf2Color: colors.blue500,
 };
+
+export default Logo;

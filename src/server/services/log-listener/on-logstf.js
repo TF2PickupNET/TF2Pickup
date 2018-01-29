@@ -1,4 +1,5 @@
 import axios from 'axios';
+import config from 'config';
 import debug from 'debug';
 
 const log = debug('TF2Pickup:log-listener:on-logs.tf');
@@ -7,12 +8,12 @@ export default {
   line: /\[TFTrue] The log is available here: (?:https|http):\/\/logs\.tf\/(\d+)/,
 
   // Data[1] - Logs.tf ID.
-  async handler(app, pickup, [, id]) {
-    log('Got Logs.tf id for pickup', pickup.id, id);
+  async handler(app, pickup, [, logsId]) {
+    log('Got Logs.tf id for pickup', pickup.id, logsId);
 
-    await app.service('pickup').patch(pickup.id, { $set: { logsTFID: parseInt(id, 10) } });
+    await app.service('pickup').patch(pickup.id, { $set: { logsTFID: parseInt(logsId, 10) } });
 
-    if (app.get('env') === 'prod') {
+    if (config.get('elo-calculation')) {
       try {
         await axios.post('localhost:9000/calculate-elo', { pickupId: pickup.id });
       } catch (error) {
@@ -20,8 +21,7 @@ export default {
 
         await app.service('discord-message').create({
           channel: 'errors',
-          message: `The request for calculating the elo after the pickup ${pickup.id}
-           returned with an error`,
+          message: `There was an error while calculating the error for pickup ${pickup.id}`,
         });
       }
     }

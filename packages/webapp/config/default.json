@@ -1,0 +1,37 @@
+{
+  "server": {
+    "port": 3000,
+    "ip": "localhost",
+    "log_listener_port": 3500
+  },
+
+  "beta": false,
+
+  "mongourl": "mongodb://localhost:27017/tf2pickup",
+
+  "elo-calculation": false,
+
+  "auth": {
+    "required_hours": 1000,
+    "secret": "someamazingsecret",
+    "steam-group": ""
+  },
+
+  "mumble": { "servers": {} },
+
+  "service": {
+    "steam": { "apikey": "25D833006F834D2FAF1A0A1F217D5606" },
+    "ozfortress": { "apikey": "" },
+    "logstf": { "apikey": "" },
+    "serveme": {
+      "apikey-eu": "",
+      "apikey-na": ""
+    },
+    "discord": {
+      "token": "",
+      "guild": {
+        "global": "101790253651599360"
+      }
+    }
+  }
+}

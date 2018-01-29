@@ -1,0 +1,5 @@
+node_modules/
+dist/
+packages/**/config/*.json
+!packages/**/config/default.json
+!package.json

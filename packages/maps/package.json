@@ -1,0 +1,19 @@
+{
+  "name": "@tf2-pickup/maps",
+  "version": "0.6.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "babel src/ -d dist/",
+    "prepublish": "yarn run build"
+  },
+  "dependencies": {
+    "@tf2-pickup/utils": "0.6.0"
+  },
+  "devDependencies": {
+    "babel-cli": "6.26.0"
+  }
+}

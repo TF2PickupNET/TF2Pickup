@@ -1,40 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import injectSheet from 'react-jss';
-import omit from 'lodash.omit';
+import classnames from 'classnames';
+import {
+  getNotDeclaredProps,
+  Typography,
+} from 'materialize-react';
 
 /**
  * Render a link which will open safely the provided href in a new tab.
  *
  * @param {Object} props - The props for the component.
- * @param {Object} props.classes - Classes provided by Jss.
- * @param {JSX} props.children - Children to render inside the link.
- * @param {String} props.href - The href for the link.
- * @param {String} props.className - Additional className to be applied to the link.
  * @returns {JSX} - Returns the jsx.
  */
-export function Link({
-  classes,
-  children,
-  href,
-  className,
-  ...props
-}) {
+function Link(props) {
   return (
-    <a
-      href={href}
+    <Typography
+      typography="body1"
+      element="a"
+      href={props.href}
       rel="noopener noreferrer"
       target="_blank"
-      className={`${classes.link} ${className}`}
-      {...omit(props, 'sheet')}
+      className={classnames(
+        props.classes.link,
+        props.className,
+      )}
+      {...getNotDeclaredProps(props, Link)}
     >
-      {children}
-    </a>
+      {props.children}
+    </Typography>
   );
 }
 
 Link.propTypes = {
-  classes: PropTypes.shape({ link: PropTypes.string }).isRequired,
+  classes: PropTypes.shape({ link: PropTypes.string.isRequired }).isRequired,
   children: PropTypes.node.isRequired,
   href: PropTypes.string.isRequired,
   className: PropTypes.string,
@@ -44,8 +43,8 @@ Link.defaultProps = { className: '' };
 
 Link.styles = {
   link: {
+    display: 'inline',
     textDecoration: 'none',
-    color: 'inherit',
   },
 };
 

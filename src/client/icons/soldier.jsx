@@ -1,23 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { colors } from 'materialize-react';
 
-export default function Soldier({
-  color,
-  size,
-  ...props
-}) {
+function Soldier(props) {
   return (
     <svg
       x="0px"
       y="0px"
-      width={`${size}px`}
-      height={`${size}px`}
+      width={`${props.size}px`}
+      height={`${props.size}px`}
       viewBox="0 0 37.1 37.1"
       {...props}
     >
       <g>
         <path
-          fill={color}
+          fill={props.color}
           d={[
             'M12.395,15.675l8.839,9.018c-0.186,0.095-0.367,0.183-0.641,0.369c-0.453,0.278-0.908,',
             '0.55-1.273,0.743c-0.094,0-0.094,0.087-0.094,0.087c-2.46,1.287-4.829,2.21-7.195,',
@@ -37,7 +34,7 @@ export default function Soldier({
           '5.288,24.875 12.211,31.786 6.928,37.119 0.004,30.217',
         ].map(point => (
           <polygon
-            fill={color}
+            fill={props.color}
             points={point}
             key={point}
           />
@@ -48,8 +45,13 @@ export default function Soldier({
 }
 
 Soldier.propTypes = {
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   size: PropTypes.number,
 };
 
-Soldier.defaultProps = { size: 48 };
+Soldier.defaultProps = {
+  color: colors.blackIcons,
+  size: 48,
+};
+
+export default Soldier;

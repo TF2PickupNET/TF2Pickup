@@ -1,22 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { colors } from 'materialize-react';
 
-export default function Pyro({
-  color,
-  size,
-  ...props
-}) {
+function Pyro(props) {
   return (
     <svg
       x="0px"
       y="0px"
-      width={`${size}px`}
-      height={`${size}px`}
+      width={`${props.size}px`}
+      height={`${props.size}px`}
       viewBox="0 0 37.1 37.1"
       {...props}
     >
       <path
-        fill={color}
+        fill={props.color}
         d={[
           'M31.549,29.536c-1.203,3.385-4.911,7.558-11.632,7.558c-14.139,0-13.303-5.607-16.455-',
           '10.06c0.789-0.092,1.993,1.298,1.993,1.298c-1.948-4.029-1.392-6.166-0.142-8.02c1.58-',
@@ -32,8 +29,13 @@ export default function Pyro({
 }
 
 Pyro.propTypes = {
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   size: PropTypes.number,
 };
 
-Pyro.defaultProps = { size: 48 };
+Pyro.defaultProps = {
+  color: colors.blackIcons,
+  size: 48,
+};
+
+export default Pyro;

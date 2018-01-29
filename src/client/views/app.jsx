@@ -1,152 +1,59 @@
-/* eslint-disable react/jsx-no-bind */
-
-import React, { PureComponent } from 'react';
-import { Switch, Route } from 'react-router-dom';
-import gamemodes from '@tf2-pickup/configs/gamemodes';
+import React from 'react';
 import { ConnectedRouter } from 'react-router-redux';
-import PropTypes from 'prop-types';
-import Helmet from 'react-helmet';
 import { Provider } from 'react-redux';
+import { JssProvider } from 'react-jss';
 
-import { titleSuffix } from '../config';
 import BasicLayout from '../layouts/basic-layout';
-import LandingPage from './landing-page';
-import RedirectToPickup from './pickup/redirect-to-pickup';
+import app from '../app';
+import jss from '../jss';
+import { isDev } from '../../config/client';
+
+import ThemeProvider from './theme-provider';
+import Routes from './routes';
+
+const MAX_RULES = 1e10;
+let ruleCounter = 0;
 
 /**
- * The main component.
+ * Generate the class name for a style rule.
  *
- * @class
+ * @param {Object} rule - The rules object.
+ * @returns {String} - Returns the rules classname.
  */
-export default class App extends PureComponent {
-  // eslint-disable-next-line react/forbid-prop-types
-  static propTypes = { app: PropTypes.object.isRequired };
+function generateClassName(rule) {
+  ruleCounter += 1;
 
-  /**
-   * Render all of the gamemode routes and their corresponding aliases.
-   *
-   * @returns {JSX} - Returns the routes for the gamemodes.
-   */
-  static renderGamemodeRoutes() {
-    return Object
-      .values(gamemodes)
-      .reduce((current, gamemode) => {
-        const routes = gamemode.aliases.map(alias => (
-          <Route
-            path={`/${alias}`}
-            key={`${gamemode.name}-${alias}`}
-            render={() => <RedirectToPickup to={`/${gamemode.name}`} />}
-          />
-        ));
-
-        routes.push((
-          <Route
-            path={`/${gamemode.name}`}
-            key={gamemode.name}
-          />
-        ));
-
-        return current.concat(routes);
-      }, []);
+  if (ruleCounter > MAX_RULES) {
+    throw new Error('The rule counter got bigger than the max rules!');
   }
 
-  state = { location: this.props.app.history.location };
-
-  /**
-   * Listen for changes in the url.
-   */
-  componentWillMount() {
-    this.props.app.history.listen(() => {
-      this.setState({ location: this.props.app.history.location });
-    });
+  if (isDev) {
+    return `${rule.key}-${ruleCounter}`;
   }
 
-  render() {
-    const { app } = this.props;
+  return `c${ruleCounter}`;
+}
 
-    return (
+/**
+ * The main app component.
+ *
+ * @returns {JSX} - Returns the app.
+ */
+export default function App() {
+  return (
+    <JssProvider
+      jss={jss}
+      generateClassName={generateClassName}
+    >
       <Provider store={app.store}>
         <ConnectedRouter history={app.history}>
-          <BasicLayout>
-            <Switch location={this.state.location}>
-              <Route
-                strict
-                exact
-                path="/"
-                component={LandingPage}
-              />
-
-              {App.renderGamemodeRoutes()}
-
-              <Route
-                exact
-                path="/about"
-              />
-
-              <Route
-                exact
-                path="/help"
-              />
-
-              <Route
-                exact
-                path="/rules"
-              />
-
-              <Route
-                exact
-                path="/join-slot/:gamemode/:class"
-              />
-
-              <Route
-                exact
-                path="/profile"
-              />
-
-              <Route
-                exact
-                path="/profile/:steamId"
-              />
-
-              <Route
-                exact
-                path="/settings"
-              />
-
-              <Helmet
-                titleTemplate={`%s ${titleSuffix}`}
-                link={[{
-                  rel: 'stylesheet',
-                  href: 'https://fonts.googleapis.com/css?family=Roboto+Mono:400,700',
-                }, {
-                  rel: 'stylesheet',
-                  href: 'https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,500,500italic,700,700italic',
-                }]}
-
-                meta={[{ charset: 'utf-8' }, {
-                  name: 'twitter:card',
-                  content: 'summary',
-                }, {
-                  name: 'twitter:site',
-                  content: '@TF2Pickup',
-                }, {
-                  name: 'twitter:title',
-                  content: 'TF2Pickup.net | Web-based Pickup system',
-                }, {
-                  name: 'twitter:description',
-                  content: [
-                    'A web-based pickup system, where players can easily play',
-                    'competitive Team Fortress 2 in a variety of formats',
-                  ].join(' '),
-                }, {
-                  name: 'twitter:image',
-                  content: 'summary',
-                }]}
-              />
-            </Switch>
-          </BasicLayout>
+          <ThemeProvider>
+            <BasicLayout>
+              <Routes />
+            </BasicLayout>
+          </ThemeProvider>
         </ConnectedRouter>
       </Provider>
-    );
-  }
+    </JssProvider>
+  );
 }

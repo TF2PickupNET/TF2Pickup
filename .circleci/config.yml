@@ -1,0 +1,28 @@
+version: 2
+
+jobs:
+  test-node8:
+    working_directory: ~/materialize-react
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - run:
+          name: Install Packages
+          command: yarn install
+      - run:
+          name: Lint
+          command: yarn run lint
+      - run:
+          name: Builds succesfully
+          command: yarn run build
+      - run:
+          name: Start server
+          command: yarn run start-prod
+
+workflows:
+  version: 2
+
+  test:
+    jobs:
+      - test-node8

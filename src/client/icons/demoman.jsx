@@ -1,22 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { colors } from 'materialize-react';
 
-export default function Demoman({
-  color,
-  size,
-  ...props
-}) {
+function Demoman(props) {
   return (
     <svg
       x="0px"
       y="0px"
-      width={`${size}px`}
-      height={`${size}px`}
+      width={`${props.size}px`}
+      height={`${props.size}px`}
       viewBox="0 0 37.1 37.1"
-      {...props}
     >
       <path
-        fill={color}
+        fill={props.color}
         d={[
           'M0.004,10.25c0,0,6.761-1.389,7.971-0.139c1.566,1.533,1.12,5.657-2.554,6.027C3.095,',
           '16.139,0.004,10.25,0.004,10.25z M8.827,27.545c-1.347,1.346-6.314-0.326-6.314-0.',
@@ -61,8 +57,13 @@ export default function Demoman({
 }
 
 Demoman.propTypes = {
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   size: PropTypes.number,
 };
 
-Demoman.defaultProps = { size: 48 };
+Demoman.defaultProps = {
+  color: colors.blackIcons,
+  size: 48,
+};
+
+export default Demoman;

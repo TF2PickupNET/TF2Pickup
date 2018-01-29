@@ -3,26 +3,49 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import hooks from 'feathers-hooks';
-import rest from 'feathers-rest';
 import socketio from 'feathers-socketio';
 import handler from 'feathers-errors/handler';
+import debug from 'debug';
+import config from 'config';
+
+import { pluck } from '../utils/functions';
+
+import setupDebug from './setup-debug';
 import services from './services';
 import globalHooks from './global-hooks';
 import client from './client';
 
+const log = debug('TF2Pickup');
+
 /**
  * Setup the feathers app and configure all of the parts.
  *
- * @param {Object} config - The config with the env keys.
- * @returns {JSX} - Returns the app.
+ * @param {String} url - URL for the app.
+ * @param {String} env - The environment the server is started in.
+ * @returns {Object} - Returns the app.
  */
-export default function setupApp(config) {
-  const app = feathers();
+export default async function setupApp(url, env) {
+  if (env === 'prod' && !process.env.CIRCLECI) {
+    await setupDebug();
+  }
 
-  app.set('config', config);
+  log('Creating Feathers app');
+
+  const app = feathers();
+  const mongourl = config.get('mongourl');
+
+  app.set('env', env);
+  app.set('url', url);
 
   mongoose.Promise = global.Promise;
-  mongoose.connect(config.MONGO_URL);
+
+  try {
+    await mongoose.connect(mongourl);
+  } catch (error) { // eslint-disable-line no-unused-vars
+    if (!process.env.CIRCLECI) {
+      throw new Error(`Can't connect to MongoDB server with url: ${mongourl}`);
+    }
+  }
 
   app
     .options('*', cors())
@@ -32,11 +55,16 @@ export default function setupApp(config) {
 
   app
     .configure(hooks())
-    .configure(rest())
     .configure(socketio({
       path: '/ws/',
       wsEngine: 'uws',
     }));
+
+  app.use((req, res, next) => {
+    req.feathers = {}; // eslint-disable-line no-param-reassign
+
+    next();
+  });
 
   app
     .hooks(globalHooks)
@@ -44,14 +72,16 @@ export default function setupApp(config) {
     .configure(client);
 
   app.use(handler({
-    html(error, req, res) {
-      app.service('logs').create({
-        message: 'Something went wrong on the server!',
+    async html(error, req, res) {
+      log('An error occurred!', error.message);
+
+      const { _id } = await app.service('errors').create({
+        message: error.message,
         info: error,
-        environment: 'server',
+        steamId: pluck('feathers.user.id')(req),
       });
 
-      res.send(`Something went wrong :(', ${JSON.stringify(error.message)}`);
+      res.redirect(`/error?message=${error.message}&code=${error.code}&id=${_id}`);
     },
   }));
 

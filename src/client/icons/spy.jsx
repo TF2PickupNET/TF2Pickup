@@ -1,22 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { colors } from 'materialize-react';
 
-export default function Spy({
-  color,
-  size,
-  ...props
-}) {
+function Spy(props) {
   return (
     <svg
       x="0px"
       y="0px"
-      width={`${size}px`}
-      height={`${size}px`}
+      width={`${props.size}px`}
+      height={`${props.size}px`}
       viewBox="0 0 37.1 37.1"
       {...props}
     >
       <path
-        fill={color}
+        fill={props.color}
         d={[
           'M7.858,32.251l1.53,1.019H9.156l-1.673-0.834c-1.577-0.788-3.798-3.988-4.356-5.706c-',
           '0.51-1.807,1.578-3.337,2.087-4.313c0.509-0.972-1.251-4.682-1.948-5.885c-0.604-1.209,',
@@ -55,8 +52,13 @@ export default function Spy({
 }
 
 Spy.propTypes = {
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   size: PropTypes.number,
 };
 
-Spy.defaultProps = { size: 48 };
+Spy.defaultProps = {
+  color: colors.blackIcons,
+  size: 48,
+};
+
+export default Spy;

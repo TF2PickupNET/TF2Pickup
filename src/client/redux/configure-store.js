@@ -3,7 +3,6 @@ import { createStore, applyMiddleware } from 'redux';
 import { createBrowserHistory } from 'history';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { isDev } from '../config';
 import reducers from './reducers';
 
 /**
@@ -12,10 +11,20 @@ import reducers from './reducers';
 export default function configureStore() {
   const that = this;
   const history = createBrowserHistory();
-  const middleware = isDev
-    ? composeWithDevTools(applyMiddleware(routerMiddleware(history)))
-    : applyMiddleware(routerMiddleware(history));
 
-  that.store = createStore(reducers(that), middleware);
+  that.store = createStore(
+    reducers(that),
+    composeWithDevTools(applyMiddleware(routerMiddleware(history))),
+  );
   that.history = history;
+
+  let prevState = {};
+
+  that.store.subscribe(() => {
+    const newState = that.store.getState();
+
+    that.emit('state.change', prevState, newState);
+
+    prevState = newState;
+  });
 }

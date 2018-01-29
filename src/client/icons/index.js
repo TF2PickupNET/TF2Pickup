@@ -1,3 +1,5 @@
+import Soldier from './soldier';
+
 export Logo from './logo.jsx';
 
 // Classes
@@ -10,3 +12,6 @@ export Engineer from './engineer.jsx';
 export Medic from './medic.jsx';
 export Sniper from './sniper.jsx';
 export Spy from './spy.jsx';
+
+export const Roamer = Soldier;
+export const Pocket = Soldier;

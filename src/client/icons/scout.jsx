@@ -1,22 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { colors } from 'materialize-react';
 
-export default function Scout({
-  color,
-  size,
-  ...props
-}) {
+function Scout(props) {
   return (
     <svg
       x="0px"
       y="0px"
-      width={`${size}px`}
-      height={`${size}px`}
+      width={`${props.size}px`}
+      height={`${props.size}px`}
       viewBox="0 0 37.1 37.1"
       {...props}
     >
       <path
-        fill={color}
+        fill={props.color}
         d={[
           'M0.918,37.003c-3.236-0.882,3.144-2.875,3.235-3.061c0.14-0.232,2.175-4.823,2.546-5.',
           '751c0,0,2.172,1.16,5.963,2.271C12.338,31.485,7.115,37.93,0.918,37.003z M13.632,29.352c-',
@@ -43,8 +40,13 @@ export default function Scout({
 }
 
 Scout.propTypes = {
-  color: PropTypes.string.isRequired,
+  color: PropTypes.string,
   size: PropTypes.number,
 };
 
-Scout.defaultProps = { size: 48 };
+Scout.defaultProps = {
+  color: colors.blackIcons,
+  size: 48,
+};
+
+export default Scout;

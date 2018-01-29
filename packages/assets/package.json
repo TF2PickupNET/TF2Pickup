@@ -1,0 +1,11 @@
+{
+  "name": "@tf2-pickup/assets",
+  "version": "0.6.0",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@tf2-pickup/config": "0.6.0"
+  }
+}

@@ -2,7 +2,7 @@ version: 2
 
 jobs:
   test-node8:
-    working_directory: ~/materialize-react
+    working_directory: ~/tf2pickup
     docker:
       - image: circleci/node:8
     steps:
@@ -11,14 +11,17 @@ jobs:
           name: Install Packages
           command: yarn install
       - run:
+          name: Bootstrap Packages
+          command: yarn run bootstrap
+      - run:
           name: Lint
           command: yarn run lint
       - run:
-          name: Builds succesfully
-          command: yarn run build
+          name: Test
+          command: yarn run test
       - run:
-          name: Start server
-          command: yarn run start-prod
+          name: Build packages
+          command: yarn run build
 
 workflows:
   version: 2

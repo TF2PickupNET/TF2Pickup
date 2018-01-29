@@ -1,0 +1,17 @@
+{
+  "name": "@tf2-pickup/tf2configs",
+  "version": "0.6.0",
+  "description": "Server configs used by TF2Pickup.net",
+  "license": "MIT",
+  "scripts": {
+    "build": "babel-node build.js"
+  },
+  "dependencies": {
+    "@tf2-pickup/config": "0.6.0",
+    "fs-extra": "^5.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "6.26.0",
+    "date-fns": "1.29.0"
+  }
+}

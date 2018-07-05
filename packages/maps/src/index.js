@@ -1,6 +1,13 @@
-/* eslint-disable camelcase */
+// @flow
 
-export default {
+// eslint-disable-next-line filenames/match-exported
+type Map = {|
+  configType: 'koth' | '5cp' | 'stopwatch' | null,
+  display: string,
+  isStockMap: boolean,
+|};
+
+const maps = {
   koth_product_rc8: {
     configType: 'koth',
     display: 'KOTH Product RC8',
@@ -133,3 +140,7 @@ export default {
     isStockMap: false,
   },
 };
+
+export type { Map };
+
+export default maps;

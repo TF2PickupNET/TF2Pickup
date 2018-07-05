@@ -1,0 +1,40 @@
+{
+  "name": "@tf2pickup/server",
+  "private": true,
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "babel-node --config-file ../../babel.config.js src/index.js",
+    "prepare": "node -r ../../scripts/register.js ../../scripts/prepare.js"
+  },
+  "dependencies": {
+    "@babel/core": "^7.0.0-beta.51",
+    "@babel/node": "^7.0.0-beta.51",
+    "@feathersjs/authentication": "2.1.6",
+    "@feathersjs/authentication-jwt": "2.0.1",
+    "@feathersjs/authentication-oauth2": "1.1.0",
+    "@feathersjs/errors": "3.3.0",
+    "@feathersjs/express": "1.2.3",
+    "@feathersjs/feathers": "3.1.6",
+    "@feathersjs/socketio": "3.2.2",
+    "@tf2pickup/config": "0.6.0",
+    "@tf2pickup/types": "0.6.0",
+    "@tf2pickup/utils": "0.6.0",
+    "axios": "0.18.0",
+    "config": "1.30.0",
+    "debug": "3.1.0",
+    "deepmerge": "2.1.1",
+    "feathers-hooks-common": "4.12.1",
+    "feathers-mongoose": "6.1.2",
+    "is-url": "1.2.4",
+    "mongoose": "5.2.1",
+    "ms": "2.1.1",
+    "passport-steam": "1.0.10",
+    "passport-twitch": "1.0.3",
+    "query-string": "6.1.0",
+    "steam-community": "0.2.2",
+    "steamcommunity": "3.36.2",
+    "steamid": "1.1.0",
+    "uws": "10.148.0"
+  }
+}

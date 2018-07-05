@@ -1,4 +1,19 @@
-export default {
+// @flow
+
+import classes from './classes';
+
+type Gamemode = {|
+  name: string,
+  display: string,
+  maxPlayers: number,
+  readyUpTime: number,
+  slots: { [key: $Keys<typeof classes>]: number },
+  aliases: $ReadOnlyArray<string>,
+  rating: boolean,
+  displayDiv: boolean,
+|};
+
+const gamemodes = {
   '6v6': {
     name: '6v6',
     display: '6v6',
@@ -65,3 +80,7 @@ export default {
     displayDiv: false,
   },
 };
+
+export type { Gamemode };
+
+export default gamemodes;

@@ -1,3 +1,11 @@
+// @flow
+
+import maps from '@tf2pickup/maps';
+
+type MapPool = {
+  [key: string]: $ReadOnlyArray<$Keys<typeof maps>>,
+};
+
 const ultiduoMaps = [
   'koth_ultiduo_r_b7',
   'ultiduo_badlands_b1',
@@ -14,76 +22,14 @@ const bballMaps = [
   'ctf_pro_bball',
 ];
 
-export default {
-  eu: {
-    '6v6': [
-      'koth_product_rc8',
-      'cp_process_final',
-      'cp_prolands_b2c',
-      'cp_gullywash_final1',
-      'cp_snakewater_final1',
-      'cp_sunshine',
-      'cp_reckoner_rc2',
-    ],
+const mapPool: MapPool = {
+  'eu-6v6': [],
 
-    '9v9': [
-      'pl_upward',
-      'pl_borneo',
-      'cp_steel',
-      'cp_gullywash_final1',
-      'koth_product_rc8',
-      'pl_badwater',
-    ],
+  'eu-9v9': [],
 
-    bball: bballMaps,
-    ultiduo: ultiduoMaps,
-  },
+  'eu-bball': ultiduoMaps,
 
-  na: {
-    '6v6': [
-      'koth_product_rc8',
-      'cp_process_final',
-      'cp_prolands_b2c',
-      'cp_gullywash_final1',
-      'cp_snakewater_final1',
-      'cp_sunshine',
-      'cp_reckoner_rc2',
-    ],
-
-    '9v9': [
-      'pl_upward',
-      'pl_borneo',
-      'cp_steel',
-      'cp_gullywash_final1',
-      'koth_product_rc8',
-      'pl_badwater',
-    ],
-
-    bball: bballMaps,
-    ultiduo: ultiduoMaps,
-  },
-
-  oc: {
-    '6v6': [
-      'koth_product_rc8',
-      'cp_process_final',
-      'cp_prolands_b2c',
-      'cp_gullywash_final1',
-      'cp_snakewater_final1',
-      'cp_sunshine',
-      'cp_reckoner_rc2',
-    ],
-
-    '9v9': [
-      'pl_upward',
-      'pl_borneo',
-      'cp_steel',
-      'cp_gullywash_final1',
-      'koth_product_rc8',
-      'pl_badwater',
-    ],
-
-    bball: bballMaps,
-    ultiduo: ultiduoMaps,
-  },
+  'eu-ultiduo': bballMaps,
 };
+
+export default mapPool;

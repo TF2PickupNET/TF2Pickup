@@ -1,11 +1,17 @@
-import { mapObject } from '@tf2-pickup/utils';
+// @flow
 
-import maps from './';
+import { mapValues } from '@tf2pickup/utils';
 
-export default mapObject((value, key) => {
+import maps, { type Map as MapType } from '.';
+
+type Map = MapType & { image: string };
+
+export type { Map };
+
+export default mapValues((key, value) => {
   return {
     ...value,
-    // eslint-disable-next-line
-    image: require(`../images/${key}.jpg`),
+    // $FlowFixMe: Flow doesn't allow computed requires
+    image: require(`../images/${key}.jpg`), // eslint-disable-line import/no-dynamic-require
   };
 })(maps);

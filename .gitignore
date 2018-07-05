@@ -1,5 +1,7 @@
 node_modules/
-dist/
+lib/
 packages/**/config/*.json
 !packages/**/config/default.json
 !package.json
+yarn-error.log
+lerna-debug.log

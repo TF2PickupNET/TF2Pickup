@@ -1,4 +1,12 @@
-export default {
+// @flow
+
+type Announcer = {|
+  name: string,
+  display: string,
+  needsPurchase: boolean,
+|};
+
+const announcers = {
   default: {
     name: 'default',
     display: 'TF2 Announcer (default)',
@@ -53,3 +61,7 @@ export default {
     needsPurchase: true,
   },
 };
+
+export type { Announcer };
+
+export default announcers;

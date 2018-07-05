@@ -1,17 +1,16 @@
 {
-  "name": "@tf2-pickup/tf2configs",
+  "name": "@tf2pickup/tf2configs",
   "version": "0.6.0",
   "description": "Server configs used by TF2Pickup.net",
   "license": "MIT",
+  "private": true,
   "scripts": {
-    "build": "babel-node build.js"
+    "build": "node -r ../../scripts/register.js ../../scripts/build-configs.js"
   },
   "dependencies": {
-    "@tf2-pickup/config": "0.6.0",
-    "fs-extra": "^5.0.0"
-  },
-  "devDependencies": {
-    "babel-cli": "6.26.0",
+    "@babel/node": "7.0.0-beta.49",
+    "@babel/core": "7.0.0-beta.49",
+    "@tf2pickup/config": "0.6.0",
     "date-fns": "1.29.0"
   }
 }

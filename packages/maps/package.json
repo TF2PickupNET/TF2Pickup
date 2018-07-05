@@ -1,19 +1,13 @@
 {
-  "name": "@tf2-pickup/maps",
+  "name": "@tf2pickup/maps",
   "version": "0.6.0",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "scripts": {
-    "build": "babel src/ -d dist/",
-    "prepublish": "yarn run build"
+    "prepare": "node -r ../../scripts/register.js ../../scripts/prepare.js"
   },
   "dependencies": {
-    "@tf2-pickup/utils": "0.6.0"
-  },
-  "devDependencies": {
-    "babel-cli": "6.26.0"
+    "@tf2pickup/utils": "^0.6.0"
   }
 }

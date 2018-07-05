@@ -1,2 +1,0 @@
-export const DISCONNECTED = 'DISCONNECTED';
-export const CONNECTED = 'CONNECTED';

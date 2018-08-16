@@ -8,7 +8,7 @@ import config from 'config';
 
 import {
   setUrlCookie,
-  redirectOnSuccess,
+  redirectToUrlCookie,
   createJWT,
 } from './middlewares';
 
@@ -76,6 +76,6 @@ export default function steamAuth(app: App) {
       '/auth/steam/callback',
       auth.express.authenticate('steam'),
       createJWT,
-      redirectOnSuccess,
+      redirectToUrlCookie,
     );
 }

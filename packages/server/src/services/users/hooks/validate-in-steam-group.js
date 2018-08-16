@@ -5,7 +5,6 @@ import {
   Forbidden,
 } from '@feathersjs/errors';
 import config from 'config';
-import { type App } from '@feathersjs/express';
 import { type CreateBeforeHookContext } from '@feathersjs/feathers';
 import SteamCommunity from 'steamcommunity';
 import { promisify } from 'util';
@@ -30,7 +29,7 @@ The website is currently in beta mode and you are not in the required Steam Grou
 You will need to be a member of the Steam Group ${steamGroupName} to login into TF2Pickup.
 `;
 
-export default async function validateInSteamGroup(hook: CreateBeforeHookContext<App, User>) {
+export default async function validateInSteamGroup(hook: CreateBeforeHookContext<User>) {
   if (!config.get('beta') || !steamGroupName) {
     return;
   }

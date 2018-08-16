@@ -1,7 +1,7 @@
 // @flow
 
 import React, { type Node } from 'react';
-import injectSheet, { type StaticClasses } from 'react-jss';
+import injectSheet from 'react-jss';
 import {
   Card,
   Row,
@@ -9,7 +9,8 @@ import {
   Button,
 } from 'antd';
 import { connect } from 'react-redux';
-import { API_ENDPOINT } from '../../config';
+
+import { redirectToSteamAuth } from '../../utils/auth';
 
 type Props = {
   userId: string,
@@ -21,9 +22,7 @@ type Props = {
 const styles = { container: { minHeight: '100vh' } };
 
 class IsAuthenticated extends React.PureComponent<Props> {
-  handleClick = () => {
-    window.location = `${API_ENDPOINT}/auth/steam?url=${window.location.href}`;
-  };
+  handleClick = () => redirectToSteamAuth();
 
   render() {
     if (this.props.userId || !this.props.beta) {
@@ -49,11 +48,9 @@ class IsAuthenticated extends React.PureComponent<Props> {
   }
 }
 
-export default injectSheet(styles)(
-  connect((state) => {
-    return {
-      user: state.user ? state.user.id : null,
-      beta: state.config.beta,
-    };
-  })(IsAuthenticated),
-);
+export default injectSheet(styles)(connect((state) => {
+  return {
+    user: state.user ? state.user.id : null,
+    beta: state.config.beta,
+  };
+})(IsAuthenticated));

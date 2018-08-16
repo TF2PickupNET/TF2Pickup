@@ -22,5 +22,13 @@ module.exports = {
       'import/no-unresolved': 'off',
       'import/extensions': 'off',
     },
+  }, {
+    files: [
+      'webpack.*.config.js',
+    ],
+    rules: {
+      'import/unambiguous': 'off',
+      'import/no-commonjs': 'off',
+    },
   }],
 };

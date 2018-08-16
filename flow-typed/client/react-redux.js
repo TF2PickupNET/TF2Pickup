@@ -7,7 +7,6 @@ import {
 import {
   type Node,
   type ComponentType,
-  type ElementProps,
   type ElementConfig,
 } from 'react';
 
@@ -17,71 +16,55 @@ declare module 'react-redux' {
     children: Node,
   };
 
-  declare interface Options<State, Props, StateProps, OwnProps> {
-    pure?: boolean,
-    storeKey?: string,
-    areStatesEqual?: (next: State, prev: State) => boolean,
-    areOwnPropsEqual?: (next: OwnProps, prev: OwnProps) => boolean,
-    areStatePropsEqual?: (next: StateProps, prev: StateProps) => boolean,
-    areMergedPropsEqual?: (next: Props, prev: Props) => boolean,
-  }
-
-  declare type Connect<Props> = ComponentType<$Diff<Props, { dispatch: Dispatch<> }>>;
-
   declare export class Provider extends React$Component<ProviderProps> {}
 
-  declare export function connect<Comp: ComponentType<{}>>(): (comp: Comp) => Connect<ElementConfig<Comp>>;
+  declare export class Connect<
+    Comp,
+    StateProps = {},
+    DispatchProps = {},
+    CombinedProps = { dispatch: Dispatch<> } & StateProps & DispatchProps,
+  > extends React$Component<$Diff<ElementConfig<Comp>, CombinedProps>> {}
+
+  declare type MapStateToProps<State, OwnProps, StateProps> = (
+    state: State,
+    props: OwnProps,
+  ) => StateProps;
+  declare type MapDispatchToProps<OwnProps, DispatchProps> = (
+    state: Dispatch<>,
+    props: OwnProps,
+  ) => DispatchProps;
 
   declare export function connect<
     Props,
-    Comp: ComponentType<Props>,
+    Comp: ComponentType<Props>
+    >(): (comp: Comp) => Class<Connect<Comp>>;
+
+  declare export function connect<
     State,
+    Props,
     StateProps,
-    OwnProps: $Diff<ElementProps<Comp>, StateProps>,
-    >(
-    mapStateToProps: (state: State, ownProps: $Diff<Props, StateProps>) => StateProps,
-  ): (comp: Comp) => Connect<$Diff<Props, StateProps>>;
+    Comp: ComponentType<Props>
+  >(
+    mapStateToProps: MapStateToProps<State, Props, StateProps>
+  ): (comp: Comp) => Class<Connect<Comp, StateProps>>;
 
   declare export function connect<
     Props,
-    Comp: ComponentType<Props>,
-    State,
-    StateProps,
     DispatchProps,
-    OwnProps: $Diff<ElementProps<Comp>, StateProps & DispatchProps>,
+    Comp: ComponentType<Props>
     >(
-    mapStateToProps: null | (state: State, ownProps: OwnProps) => StateProps,
-    mapDispatchToProps: (dispatch: Dispatch<>, ownProps: OwnProps) => DispatchProps,
-  ): (comp: Comp) => Connect<OwnProps>;
+      mapStateToProps: null,
+      mapDispatchToProps: MapDispatchToProps<Props, DispatchProps>,
+  ): (comp: Comp) => Class<Connect<Comp, {}, DispatchProps>>;
 
   declare export function connect<
-    Props,
-    Comp: ComponentType<Props>,
     State,
-    StateProps,
-    DispatchProps,
-    OwnProps: $Diff<ElementProps<Comp>, StateProps & DispatchProps>,
-    >(
-    mapStateToProps: null | (state: State, ownProps: OwnProps) => StateProps,
-    mapDispatchToProps: null | (dispatch: Dispatch<>, ownProps: OwnProps) => DispatchProps,
-    mergeProps: (stateProps: StateProps, dispatchProps: DispatchProps, ownProps: OwnProps) => Props,
-  ): (comp: Comp) => Connect<OwnProps>;
-
-  declare export function connect<
     Props,
-    Comp: ComponentType<Props>,
-    State,
-    StateProps,
     DispatchProps,
-    OwnProps: $Diff<ElementProps<Comp>, StateProps & DispatchProps>,
+    StateProps,
+    Comp: ComponentType<Props>
     >(
-    mapStateToProps: null | (state: State, ownProps: OwnProps) => StateProps,
-    mapDispatchToProps: null | (dispatch: Dispatch<>, ownProps: OwnProps) => DispatchProps,
-    mergeProps: null | (
-      stateProps: StateProps,
-      dispatchProps: DispatchProps,
-      ownProps: OwnProps,
-    ) => Props,
-    options: Options<State, Props, StateProps, OwnProps>,
-  ): (comp: Comp) => Connect<OwnProps>;
+    mapStateToProps: MapStateToProps<State, Props, StateProps>,
+    mapDispatchToProps: MapDispatchToProps<Props, DispatchProps>,
+  ): (comp: Comp) => Class<Connect<Comp, StateProps, DispatchProps>>;
 }

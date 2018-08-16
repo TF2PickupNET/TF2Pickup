@@ -5,6 +5,7 @@ import {
   type Service,
 } from '@feathersjs/feathers';
 import { Socket } from 'net';
+import { type FeathersError } from '@feathersjs/errors';
 
 import { type User } from '../../packages/types/src/user';
 
@@ -124,6 +125,14 @@ declare module '@feathersjs/express' {
     urlencoded(options: {}): ExpressMiddleware,
     rest(): (app: ExpressApp) => void,
     notFound(options: { verbose: boolean }): ExpressMiddleware,
-    errorHandler(): ExpressMiddleware,
+    errorHandler(options: {
+      html: (
+        error: FeathersError,
+        req: ExpressRequest,
+        res: ExpressResponse,
+        next: ExpressNextFuntion,
+      ) => void,
+      logger: false | () => void,
+    }): ExpressMiddleware,
   };
 }

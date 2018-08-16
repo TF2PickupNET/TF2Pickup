@@ -21,5 +21,7 @@ export default function users(app: App) {
   app
     .configure(setupEvents)
     .service('users')
-    .hooks(hooks);
+    .hooks(hooks)
+    // Publish the events only to the user that owns the document
+    .publish(() => app.channel('authenticated'));
 }

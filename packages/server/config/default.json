@@ -29,6 +29,10 @@
       "guild": {
         "global": "101790253651599360"
       }
+    },
+    "twitch": {
+      "clientId": "riyaz5yjzuqqn3z8p9iitsrwcj1ij8",
+      "clientSecret": "yixb8h7hxmzadk1anyb03t989wq59u"
     }
   }
 }

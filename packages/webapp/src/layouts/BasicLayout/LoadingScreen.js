@@ -13,11 +13,15 @@ import {
 import {
   type Config,
   type User,
+  type UserSettings,
+  type UserProfile,
 } from '@tf2pickup/types';
 
 import app from '../../app';
 import { setConfig } from '../../store/config/actions';
 import { loginUser } from '../../store/user/actions';
+import { setSettings } from '../../store/settings/actions';
+import { setProfile } from '../../store/profile/actions';
 
 type Props = {
   classes: {
@@ -27,6 +31,8 @@ type Props = {
   children: Node,
   setConfig(config: Config): void,
   loginUser(user: User): void,
+  setSettings(settings: UserSettings): void,
+  setProfile(profile: UserProfile): void,
 };
 type State = {
   isLoading: boolean,
@@ -49,11 +55,11 @@ class LoadingScreen extends React.PureComponent<Props, State> {
     error: null,
   };
 
-  currentStep = 0;
-
-  async componentDidMount() {
+  componentDidMount() {
     this.steps[0]();
   }
+
+  currentStep = 0;
 
   loadConfiguration = async () => {
     try {
@@ -108,9 +114,7 @@ class LoadingScreen extends React.PureComponent<Props, State> {
 
       this.setState({ loadingPercentage: 60 });
     } catch (error) {
-      message.warn(`Couldn\'t fetch user! ${error.message}`);
-
-      this.setState({ loadingPercentage: 100 });
+      message.warn(`Couldn't fetch user! ${error.message}`);
     }
   };
 
@@ -120,12 +124,13 @@ class LoadingScreen extends React.PureComponent<Props, State> {
     this.setState({ loadingText: 'Fetching settings' });
 
     try {
-      // TODO: Dispatch the settings to redux
       const settings = await app.service('user-settings').get(userId);
+
+      this.props.setSettings(settings);
 
       this.setState({ loadingPercentage: 80 });
     } catch (error) {
-      this.setState({ error: `Couldn\'t fetch settings! ${error.message}` });
+      this.setState({ error: `Couldn't fetch settings! ${error.message}` });
     }
   };
 
@@ -135,12 +140,13 @@ class LoadingScreen extends React.PureComponent<Props, State> {
     this.setState({ loadingText: 'Fetching profile' });
 
     try {
-      // TODO: Dispatch the profile to redux
       const profile = await app.service('user-profile').get(userId);
+
+      this.props.setProfile(profile);
 
       this.setState({ loadingPercentage: 100 });
     } catch (error) {
-      this.setState({ error: `Couldn\'t fetch profile! ${error.message}` });
+      this.setState({ error: `Couldn't fetch profile! ${error.message}` });
     }
   };
 
@@ -156,7 +162,7 @@ class LoadingScreen extends React.PureComponent<Props, State> {
     if (this.state.loadingPercentage === 100) {
       setTimeout(() => {
         this.setState({ isLoading: false });
-      }, 400);
+      }, 350);
     } else {
       this.currentStep += 1;
 
@@ -205,6 +211,12 @@ function mapDispatchToProps(dispatch) {
     },
     loginUser(user) {
       return dispatch(loginUser(user));
+    },
+    setSettings(settings) {
+      return dispatch(setSettings(settings));
+    },
+    setProfile(profile) {
+      return dispatch(setProfile(profile));
     },
   };
 }

@@ -8,13 +8,11 @@ import ms from 'ms';
 
 import { options } from '.';
 
-export function redirectOnSuccess(req: ExpressRequest, res: ExpressResponse, next: () => void) {
-  console.log(req.cookies);
+const REDIRECT_URL_HEADER = 'Location';
 
-  if (req.cookies && req.cookies.url) {
-    res.clearCookie('url');
-
-    res.redirect(req.cookies.url);
+export function redirectToUrlCookie(req: ExpressRequest, res: ExpressResponse, next: () => void) {
+  if (req.get(REDIRECT_URL_HEADER)) {
+    res.redirect(req.get(REDIRECT_URL_HEADER));
   }
 
   next();
@@ -22,10 +20,8 @@ export function redirectOnSuccess(req: ExpressRequest, res: ExpressResponse, nex
 
 export function setUrlCookie(req: ExpressRequest, res: ExpressResponse, next: () => void) {
   // Set the current url as a cookie so we can redirect to the exact url afterwards
-  console.log(req.query);
-
   if (req.query.url) {
-    res.cookie('url', req.query.url.slice(1));
+    res.set(REDIRECT_URL_HEADER, req.query.url);
   }
 
   next();

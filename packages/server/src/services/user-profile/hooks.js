@@ -4,7 +4,6 @@ import {
   type GetBeforeHookContext,
   type CreateBeforeHookContext,
 } from '@feathersjs/feathers';
-import { type App } from '@feathersjs/express';
 import hooks from 'feathers-hooks-common';
 import { Forbidden } from '@feathersjs/errors';
 import { type UserProfile } from '@tf2pickup/types';
@@ -13,7 +12,9 @@ import getUserData from './get-user-data';
 
 export default {
   before: {
-    get(hook: GetBeforeHookContext<App, UserProfile>) {
+    find: hooks.disallow(),
+    remove: hooks.disallow(),
+    get(hook: GetBeforeHookContext<UserProfile>) {
       if (!hook.params.provider) {
         return hook;
       }
@@ -27,8 +28,7 @@ export default {
 
       throw new Forbidden();
     },
-    find: hooks.disallow(),
-    async create(hook: CreateBeforeHookContext<App, UserProfile>) {
+    async create(hook: CreateBeforeHookContext<UserProfile>) {
       const data = await getUserData(hook.data);
 
       return {

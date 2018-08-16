@@ -5,7 +5,6 @@ import {
   Forbidden,
 } from '@feathersjs/errors';
 import config from 'config';
-import { type App } from '@feathersjs/express';
 import { type CreateBeforeHookContext } from '@feathersjs/feathers';
 import debug from 'debug';
 import { type User } from '@tf2pickup/types';
@@ -29,7 +28,7 @@ You don't have the required minimum hours in TF2 to play TF2Pickup.
 You need atleast ${requiredHours} hours in TF2.
 `;
 
-export default async function validateHours(hook: CreateBeforeHookContext<App, User>) {
+export default async function validateHours(hook: CreateBeforeHookContext<User>) {
   if (requiredHours <= 0) {
     return;
   }
@@ -43,7 +42,7 @@ export default async function validateHours(hook: CreateBeforeHookContext<App, U
         include_played_free_games: 1, // eslint-disable-line camelcase
       },
     });
-    const game = result.data.response.games.find(({ appId }) => appId === tf2AppId);
+    const game = result.data.response.games.find(({ appid }) => appid === tf2AppId);
 
     hours = game ? Math.floor(game.playtime_forever / 60) : 0;
   } catch (error) {

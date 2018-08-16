@@ -11,7 +11,7 @@ export default function BasicLayout() {
     <IsConnected>
       <LoadingScreen>
         <IsAuthenticated>
-          Hello
+          Hello World
         </IsAuthenticated>
       </LoadingScreen>
     </IsConnected>

@@ -1,7 +1,6 @@
 // @flow strict-local
 
 import {
-  type ComponentType,
   type Node,
   type ElementType,
 } from 'react';
@@ -44,8 +43,8 @@ declare module 'antd' {
     width?: number,
   }> {}
 
-  declare type MessageFunc = (content: string |  Node, onClose?: () => void) => Promise<void>
-    | (content: string |  Node, duration: number, onClose?: () => void) => Promise<void>;
+  declare type MessageFunc = (content: string | Node, onClose?: () => void) => Promise<void>
+    | (content: string | Node, duration: number, onClose?: () => void) => Promise<void>;
 
   declare export class message {
     static success: MessageFunc,
@@ -92,7 +91,7 @@ declare module 'antd' {
   }> {}
 
   declare export class Card extends React$Component<{
-    actions?: ElementType[],
+    actions?: $ReadOnlyArray<ElementType>,
     activeTabKey?: string,
     bodyStyle?: {},
     bordered?: boolean,

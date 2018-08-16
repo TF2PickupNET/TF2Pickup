@@ -4,7 +4,6 @@ import hooks from 'feathers-hooks-common';
 import auth from '@feathersjs/authentication';
 import {
   type BeforeHookContext,
-  type App,
   type ErrorHookContext,
 } from '@feathersjs/feathers';
 import { isString } from '@tf2pickup/utils';
@@ -14,18 +13,18 @@ const log = debug('TF2Pickup:hooks');
 
 export default {
   before: {
-    get(hook: BeforeHookContext<App, {}>) {
+    get(hook: BeforeHookContext<{}>) {
       return isString(hook.params.accessToken) ? auth.hooks.authenticate(['jwt'])(hook) : hook;
     },
 
-    find(hook: BeforeHookContext<App, {}>) {
+    find(hook: BeforeHookContext<{}>) {
       return isString(hook.params.accessToken) ? auth.hooks.authenticate(['jwt'])(hook) : hook;
     },
 
     update: hooks.disallow(),
     patch: hooks.disallow('external'),
 
-    remove(hook: BeforeHookContext<App, {}>) {
+    remove(hook: BeforeHookContext<{}>) {
       if (hook.path === 'authentication') {
         return hook;
       }
@@ -33,7 +32,7 @@ export default {
       return hooks.disallow('external')(hook);
     },
 
-    create(hook: BeforeHookContext<App, {}>) {
+    create(hook: BeforeHookContext<{}>) {
       if (hook.path === 'authentication') {
         return hook;
       }
@@ -42,7 +41,7 @@ export default {
     },
   },
 
-  error(hook: ErrorHookContext<App, {}>) {
+  error(hook: ErrorHookContext<{}>) {
     if (hook.error.code === 404) {
       return hook;
     }

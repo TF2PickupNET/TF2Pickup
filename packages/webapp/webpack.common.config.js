@@ -8,11 +8,11 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const babelConfig = require('../../babel.config');
 
 module.exports = {
-  entry: { app: path.resolve(__dirname, 'src/index.js') },
+  entry: { app: path.resolve(__dirname, 'src/ErrorPage.js') },
 
   output: {
     publicPath: '/',
-    path: path.resolve(__dirname, 'build/'),
+    path: path.resolve(__dirname, 'lib/'),
     filename: '[name].[hash].js',
   },
 

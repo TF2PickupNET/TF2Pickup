@@ -21,5 +21,10 @@ export default function userProfile(app: App) {
   app
     .configure(setupEvents)
     .service('user-profile')
-    .hooks(hooks);
+    .hooks(hooks)
+    // Publish the events only to the user that owns the document
+    .publish(
+      'patched',
+      data => app.channel('authenticated').filter(connection => connection.user._id === data.id)
+    );
 }

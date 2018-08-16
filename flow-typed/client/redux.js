@@ -49,4 +49,8 @@ declare module 'redux' {
     preloadedState: State,
     enhancer?: Enhancer<State>,
   ): Store<State>;
+
+  declare export function compose<R>(
+    ...fns: $ReadOnlyArray<(...args: $ReadOnlyArray<mixed>) => R>
+  ): (arg: R) => R;
 }

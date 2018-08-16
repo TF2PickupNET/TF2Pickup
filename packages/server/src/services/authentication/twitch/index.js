@@ -1,41 +1,46 @@
 // @flow
 
 import auth from '@feathersjs/authentication';
+import { NotAuthenticated } from '@feathersjs/errors';
 import oauth2 from '@feathersjs/authentication-oauth2';
-import { Strategy } from 'passport-twitch';
 import { type App } from '@feathersjs/express';
 import config from 'config';
 
 import {
-  redirectOnSuccess,
   setUrlCookie,
-} from './middlewares';
+  redirectToUrlCookie,
+} from '../middlewares';
 
-export default function twitchAuth(app: App) {
+import TwitchStrategy from './TwitchStrategy';
+import TwitchVerifier from './TwitchVerifier';
+
+export default function twitch(app: App) {
   app.configure(oauth2({
-    Strategy,
+    Strategy: TwitchStrategy,
     name: 'twitch',
+    callbackURL: `${config.get('server.url')}/auth/twitch/callback`,
     clientID: config.get('services.twitch.clientId'),
     clientSecret: config.get('services.twitch.clientSecret'),
-    scope: ['public_profile'],
-    handler(req, res, next) {
-      console.log(req);
-      next();
-    }
+    passReqToCallback: true,
+    Verifier: TwitchVerifier,
   }));
 
   app
     .use(
       '/auth/twitch',
-      setUrlCookie,
       (req, res, next) => {
-        console.log(req);
+        if (!req.user) {
+          throw new NotAuthenticated();
+        }
+
+        next();
       },
+      setUrlCookie,
       auth.express.authenticate('twitch'),
     )
     .use(
       '/auth/twitch/callback',
       auth.express.authenticate('twitch'),
-      redirectOnSuccess,
+      redirectToUrlCookie,
     );
 }

@@ -5,15 +5,20 @@ import express from '@feathersjs/express';
 import socketio from '@feathersjs/socketio';
 import mongoose from 'mongoose';
 import config from 'config';
+import debug from 'debug';
 
 import hooks from './hooks';
 import services from './services';
+import channels from './channels';
+import render from './ErrorPage/render';
 
 mongoose.Promise = global.Promise;
 
+const log = debug('TF2Pickup:create-app');
 const mongoUrl = config.get('server.mongourl');
 
 export default async function createApp() {
+  log('Creating Feathers App');
   await mongoose.connect(mongoUrl, { useNewUrlParser: true });
 
   const app = express(feathers());
@@ -29,10 +34,16 @@ export default async function createApp() {
       path: '/ws/',
       wsEngine: 'uws',
     }))
-    .configure(services);
+    .configure(services)
+    .configure(channels);
 
   app.use(express.notFound({ verbose: true }));
-  app.use(express.errorHandler());
+  app.use(express.errorHandler({
+    html(error, req, res) {
+      res.send(render(error));
+    },
+    logger: false,
+  }));
 
   return app;
 }

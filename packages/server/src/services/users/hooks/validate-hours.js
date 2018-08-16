@@ -33,6 +33,7 @@ export default async function validateHours(hook: CreateBeforeHookContext<User>)
     return;
   }
 
+  // eslint-disable-next-line fp/no-let
   let hours = 0;
 
   try {

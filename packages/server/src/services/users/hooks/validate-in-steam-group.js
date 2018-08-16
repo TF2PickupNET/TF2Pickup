@@ -34,6 +34,7 @@ export default async function validateInSteamGroup(hook: CreateBeforeHookContext
     return;
   }
 
+  // eslint-disable-next-line fp/no-let
   let isInGroup = false;
 
   try {

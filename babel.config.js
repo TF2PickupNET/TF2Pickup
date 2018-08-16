@@ -1,6 +1,5 @@
 // @flow strict-local
 
-// eslint-disable-next-line import/unambiguous, import/no-commonjs
 module.exports = {
   presets: [
     '@babel/preset-flow',
@@ -10,7 +9,7 @@ module.exports = {
         chrome: 65,
         firefox: 59,
       },
-      loose: false,
+      loose: true,
       useBuiltIns: 'usage',
     }],
     '@babel/preset-react',

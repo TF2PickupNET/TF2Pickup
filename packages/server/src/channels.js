@@ -12,6 +12,8 @@ function channels(app: App) {
       app.channel('anonymous').leave(connection);
 
       app.channel('authenticated').join(connection);
+
+      app.channel(`region:${connection.user.region}`);
     }
   });
 

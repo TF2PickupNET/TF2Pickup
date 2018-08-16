@@ -8,10 +8,12 @@ import { type UserSettings } from '@tf2pickup/types';
 export default {
   before: {
     get(hook: GetBeforeHookContext<UserSettings>) {
+      // For server side request provider is undefined
       if (!hook.params.provider) {
         return hook;
       }
 
+      // When we have a user, we explicitly override the id passed by the requests
       if (hook.params.user) {
         return {
           ...hook,

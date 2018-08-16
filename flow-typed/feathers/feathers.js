@@ -9,7 +9,9 @@ declare module '@feathersjs/feathers' {
   declare export type Method = 'find' | 'get' | 'create' | 'update' | 'patch' | 'remove';
   declare export type HookType = 'before' | 'after' | 'error';
 
-  declare interface Connection {}
+  declare export interface Connection {
+    user: User,
+  }
 
   declare export interface Params {
     query: {},

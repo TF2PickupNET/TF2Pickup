@@ -5,7 +5,7 @@ import {
   type ExpressMiddleware,
   type ExpressRequest,
 } from '@feathersjs/express';
-import type Strategy from 'passport-oauth2';
+import Strategy from 'passport-oauth2';
 import { type FeathersError } from '@feathersjs/errors';
 
 declare module '@feathersjs/authentication-oauth2' {

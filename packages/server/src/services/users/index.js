@@ -6,7 +6,7 @@ import debug from 'debug';
 
 import Model from './Model';
 import hooks from './hooks';
-import setupEvents from './setup-events';
+import events from './events';
 
 const log = debug('TF2Pickup:users');
 
@@ -19,9 +19,7 @@ export default function users(app: App) {
   }));
 
   app
-    .configure(setupEvents)
+    .configure(events)
     .service('users')
-    .hooks(hooks)
-    // Publish the events only to the user that owns the document
-    .publish(() => app.channel('authenticated'));
+    .hooks(hooks);
 }

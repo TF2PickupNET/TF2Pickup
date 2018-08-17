@@ -1,6 +1,14 @@
 // @flow
 
 declare module 'passport-oauth2' {
+  declare export type Verify = (
+    req: ExpressRequest,
+    accessToken: string,
+    refreshToken: string,
+    profile: {},
+    done: (error: Error | null, user?: {}) => void,
+  ) => void;
+
   declare export default class OAuth2Strategy {
     _oauth2: {
       get(path: string, param: string): {},
@@ -8,13 +16,7 @@ declare module 'passport-oauth2' {
       setAuthMethod(type: string): void,
     },
 
-    constructor(options: {}, verify: (
-      req: ExpressRequest,
-      accessToken: string,
-      refreshToken: string,
-      profile: {},
-      done: (error: FeathersError | null, user?: {}) => void,
-    ) => void): this,
+    constructor(options: {}, verify: Verify): this,
 
   }
 }

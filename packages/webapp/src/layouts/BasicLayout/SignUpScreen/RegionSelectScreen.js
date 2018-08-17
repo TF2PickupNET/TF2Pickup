@@ -12,7 +12,7 @@ import app from '../../../app';
 
 type State = {
   isProcessing: boolean,
-  region: null,
+  region: string | null,
 };
 
 const { Group } = Radio;
@@ -21,6 +21,17 @@ export default class RegionSelectScreen extends React.PureComponent<{}, State> {
   static NAME = 'region-select';
 
   static TITLE = 'Select a region';
+
+  static renderRadios(): Node {
+    return Object.keys(regions).map(region => (
+      <Radio
+        key={region}
+        value={region}
+      >
+        {regions[region].fullName}
+      </Radio>
+    ));
+  }
 
   state = {
     isProcessing: false,
@@ -39,17 +50,9 @@ export default class RegionSelectScreen extends React.PureComponent<{}, State> {
     });
   };
 
-  handleRadioChange = (ev) => {
+  handleRadioChange = (ev: SyntheticInputEvent<HTMLInputElement>) => {
     this.setState({ region: ev.target.value });
   };
-
-  renderRadios() {
-    return Object.values(regions).map(region => (
-      <Radio value={region.name}>
-        {region.fullName}
-      </Radio>
-    ));
-  }
 
   render() {
     return (
@@ -58,7 +61,7 @@ export default class RegionSelectScreen extends React.PureComponent<{}, State> {
           value={this.state.region}
           onChange={this.handleRadioChange}
         >
-          {this.renderRadios()}
+          {RegionSelectScreen.renderRadios()}
         </Group>
 
         <Row

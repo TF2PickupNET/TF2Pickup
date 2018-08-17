@@ -55,25 +55,33 @@ class LoadingScreen extends React.PureComponent<Props, State> {
     error: null,
   };
 
+  currentStep = 0;
+
+  steps = [
+    this.loadConfiguration,
+    this.authenticate,
+    this.fetchUser,
+    this.fetchSettings,
+    this.fetchProfile,
+  ];
+
   componentDidMount() {
     this.steps[0]();
   }
 
-  currentStep = 0;
-
-  loadConfiguration = async () => {
+  async loadConfiguration() {
     try {
       const config = await app.service('configuration').get(null);
 
       this.props.setConfig(config);
 
-      this.setState({ loadingPercentage: 30 });
+      return { loadingPercentage: 30 };
     } catch (error) {
-      this.setState({ error: `Couldn't load config file. ${error.message}` });
+      return { error: `Couldn't load config file. ${error.message}` };
     }
-  };
+  }
 
-  authenticate = async () => {
+  async authenticate() {
     const token = cookie.get('feathers-jwt');
 
     this.setState({ loadingText: 'Authenticating' });
@@ -100,9 +108,9 @@ class LoadingScreen extends React.PureComponent<Props, State> {
 
       this.setState({ loadingPercentage: 100 });
     }
-  };
+  }
 
-  fetchUser = async () => {
+  async fetchUser() {
     const userId = app.get('userId');
 
     this.setState({ loadingText: 'Fetching user' });
@@ -116,9 +124,9 @@ class LoadingScreen extends React.PureComponent<Props, State> {
     } catch (error) {
       message.warn(`Couldn't fetch user! ${error.message}`);
     }
-  };
+  }
 
-  fetchSettings = async () => {
+  async fetchSettings() {
     const userId = app.get('userId');
 
     this.setState({ loadingText: 'Fetching settings' });
@@ -132,9 +140,9 @@ class LoadingScreen extends React.PureComponent<Props, State> {
     } catch (error) {
       this.setState({ error: `Couldn't fetch settings! ${error.message}` });
     }
-  };
+  }
 
-  fetchProfile = async () => {
+  async fetchProfile() {
     const userId = app.get('userId');
 
     this.setState({ loadingText: 'Fetching profile' });
@@ -148,21 +156,14 @@ class LoadingScreen extends React.PureComponent<Props, State> {
     } catch (error) {
       this.setState({ error: `Couldn't fetch profile! ${error.message}` });
     }
-  };
-
-  steps = [
-    this.loadConfiguration,
-    this.authenticate,
-    this.fetchUser,
-    this.fetchSettings,
-    this.fetchProfile,
-  ];
+  }
 
   handleTransitionEnd = () => {
+    // When we finished loading, we don't want to disappear right away
     if (this.state.loadingPercentage === 100) {
       setTimeout(() => {
         this.setState({ isLoading: false });
-      }, 350);
+      }, 150);
     } else {
       this.currentStep += 1;
 
@@ -206,18 +207,10 @@ class LoadingScreen extends React.PureComponent<Props, State> {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setConfig(config) {
-      return dispatch(setConfig(config));
-    },
-    loginUser(user) {
-      return dispatch(loginUser(user));
-    },
-    setSettings(settings) {
-      return dispatch(setSettings(settings));
-    },
-    setProfile(profile) {
-      return dispatch(setProfile(profile));
-    },
+    setConfig: config => dispatch(setConfig(config)),
+    loginUser: user => dispatch(loginUser(user)),
+    setSettings: settings => dispatch(setSettings(settings)),
+    setProfile: profile => dispatch(setProfile(profile)),
   };
 }
 

@@ -5,7 +5,10 @@ import socketio from '@feathersjs/socketio-client';
 import io from 'socket.io-client';
 import auth from '@feathersjs/authentication-client';
 
-import { API_ENDPOINT, SOCKET_TIMEOUT } from './config';
+import {
+  API_ENDPOINT,
+  SOCKET_TIMEOUT,
+} from './config';
 
 const socket = io(API_ENDPOINT, {
   path: '/ws/',

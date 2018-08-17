@@ -15,6 +15,8 @@ declare module 'antd' {
     xxl?: number,
   };
 
+  declare type Sizes = 'large' | 'default' | 'small';
+
   declare export class Row extends React$Component<{
     align?: 'top' | 'middle' | 'bottom',
     gutter?: Gutter,
@@ -70,7 +72,7 @@ declare module 'antd' {
     icon?: string,
     loading?: boolean | { delay: number },
     shape?: 'circle',
-    size?: 'small' | 'large',
+    size?: Sizes,
     target?: string,
     type?: 'primary' | 'ghost' | 'dashed' | 'danger',
     onClick: (ev: HTMLElement) => void,
@@ -131,6 +133,32 @@ declare module 'antd' {
     progressDot?: boolean | () => Node,
     children: Node,
   }> {
-    static Step: Step,
+    static Step: Class<Step>,
+  }
+
+  declare class RadioGroup extends React$Component<{
+    defaultValue?: string,
+    disabled?: boolean,
+    name?: string,
+    size?: Sizes,
+    value: string,
+    onChange: (ev: SyntheticEvent<HTMLInputElement>) => void,
+    buttonStyle?: 'outline' | 'solid',
+    options?: $ReadOnlyArray<string> | $ReadOnlyArray<{
+      label: string,
+      value: string,
+      disabled?: boolean,
+    }>,
+  }> {}
+
+  declare export class Radio extends React$Component<{
+    autoFocus?: boolean,
+    checked?: boolean,
+    defaultChecked?: boolean,
+    disabled?: boolean,
+    value: string,
+    children: Node,
+  }> {
+    static Group: Class<RadioGroup>,
   }
 }

@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
 import {
   Row,
@@ -95,4 +96,10 @@ class SignUpScreen extends React.PureComponent<Props, State> {
   }
 }
 
-export default injectSheet(styles)(SignUpScreen);
+const mapStateToProps = (state) => {
+  return { user: state.user };
+};
+
+export default injectSheet(styles)(
+  connect(mapStateToProps)(SignUpScreen)
+);

@@ -11,8 +11,10 @@ import { options } from '.';
 const REDIRECT_URL_HEADER = 'Location';
 
 export function redirectToUrlCookie(req: ExpressRequest, res: ExpressResponse, next: () => void) {
-  if (req.get(REDIRECT_URL_HEADER)) {
-    res.redirect(req.get(REDIRECT_URL_HEADER));
+  const redirectUrl = req.get(REDIRECT_URL_HEADER);
+
+  if (typeof redirectUrl === 'string') {
+    res.redirect(redirectUrl);
   }
 
   next();

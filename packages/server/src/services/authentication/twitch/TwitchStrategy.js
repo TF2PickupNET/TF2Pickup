@@ -1,12 +1,12 @@
 // @flow
 
-import OAuth2Strategy from 'passport-oauth2';
+import OAuth2Strategy, { type Verify } from 'passport-oauth2';
 import { promisify } from 'util';
 
 export default class TwitchStrategy extends OAuth2Strategy {
   name = 'twitch';
 
-  constructor(options: {} = {}, verify) {
+  constructor(options: {}, verify: Verify) {
     super({
       authorizationURL: 'https://id.twitch.tv/oauth2/authorize',
       tokenURL: 'https://id.twitch.tv/oauth2/token',

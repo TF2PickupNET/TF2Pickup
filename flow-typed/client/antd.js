@@ -112,4 +112,25 @@ declare module 'antd' {
     static Meta: CardMeta,
     static Grid: CardGrid,
   }
+
+  declare type StepsStatus = 'wait' | 'process' | 'finish' | 'error';
+
+  declare class Step extends React$Component<{
+    description?: Node,
+    icon?: Node,
+    status?: StepsStatus,
+    title: Node,
+  }> {}
+
+  declare export class Steps extends React$Component<{
+    current: number,
+    direction?: 'horizontal' | 'vertical',
+    labelPlacement?: 'horizontal' | 'vertical',
+    size?: 'default' | 'small',
+    status?: StepsStatus,
+    progressDot?: boolean | () => Node,
+    children: Node,
+  }> {
+    static Step: Step,
+  }
 }

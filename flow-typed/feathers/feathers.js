@@ -2,7 +2,7 @@
 
 import { type FeathersError } from '@featherjs/errors';
 
-import { type User } from '../../packages/types/src/user';
+import { type User } from '../../src/types/user';
 
 declare module '@feathersjs/feathers' {
   declare export type SKIP = Symbol;

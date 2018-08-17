@@ -3,7 +3,7 @@
 import { type App } from '@feathersjs/feathers';
 import { type ExpressRequest } from '@feathersjs/express';
 
-import { type User } from '../../packages/types/src/user';
+import { type User } from '../../src/types/user';
 
 declare module '@feathersjs/authentication-jwt' {
   declare export type Payload = { id: string };

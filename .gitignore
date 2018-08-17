@@ -1,7 +1,5 @@
 node_modules/
 lib/
-packages/**/config/*.json
-!packages/**/config/default.json
-!package.json
+/config/*.json
+!config/default.json
 yarn-error.log
-lerna-debug.log

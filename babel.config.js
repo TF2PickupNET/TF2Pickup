@@ -18,7 +18,6 @@ module.exports = {
   plugins: [
     ['@babel/plugin-proposal-object-rest-spread', { useBuiltIns: true }],
     '@babel/plugin-proposal-class-properties',
-    '@babel/plugin-proposal-export-namespace-from',
     '@babel/plugin-proposal-export-default-from',
   ],
 

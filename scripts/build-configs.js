@@ -10,7 +10,7 @@ import serial from 'promise-serial';
 import {
   regions,
   gamemodes,
-} from '../packages/config/src';
+} from '../src/config';
 
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);

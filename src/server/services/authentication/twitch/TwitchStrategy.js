@@ -6,7 +6,7 @@ import { promisify } from 'util';
 export default class TwitchStrategy extends OAuth2Strategy {
   name = 'twitch';
 
-  constructor(options: {}, verify: Verify) {
+  constructor(options: $Exact<{}>, verify: Verify) {
     super({
       authorizationURL: 'https://id.twitch.tv/oauth2/authorize',
       tokenURL: 'https://id.twitch.tv/oauth2/token',

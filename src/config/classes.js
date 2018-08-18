@@ -5,7 +5,19 @@ type ClassInfo = {|
   aliases: $ReadOnlyArray<string>,
 |};
 
-const classes = {
+type Classes = 'scout'
+  | 'soldier'
+  | 'pyro'
+  | 'pocket'
+  | 'roamer'
+  | 'demoman'
+  | 'heavy'
+  | 'engineer'
+  | 'medic'
+  | 'sniper'
+  | 'spy';
+
+const classes: { [key: Classes]: ClassInfo } = {
   scout: {
     name: 'scout',
     aliases: [],
@@ -62,6 +74,9 @@ const classes = {
   },
 };
 
-export type { ClassInfo };
+export type {
+  ClassInfo,
+  Classes,
+};
 
 export default classes;

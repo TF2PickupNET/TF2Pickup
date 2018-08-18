@@ -7,6 +7,7 @@ import authentication from './authentication';
 import userProfiles from './user-profile';
 import userSettings from './user-settings';
 import configuration from './configuration';
+import tf2Configs from './tf2-configs';
 
 export default function services(app: App) {
   app
@@ -14,5 +15,6 @@ export default function services(app: App) {
     .configure(userProfiles)
     .configure(userSettings)
     .configure(configuration)
+    .configure(tf2Configs)
     .configure(authentication);
 }

@@ -141,8 +141,8 @@ declare module 'antd' {
     disabled?: boolean,
     name?: string,
     size?: Sizes,
-    value: string,
-    onChange: (ev: SyntheticEvent<HTMLInputElement>) => void,
+    value: string | null,
+    onChange: (ev: SyntheticInputEvent<HTMLInputElement>) => void,
     buttonStyle?: 'outline' | 'solid',
     options?: $ReadOnlyArray<string> | $ReadOnlyArray<{
       label: string,

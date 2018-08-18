@@ -5,8 +5,9 @@ type Role = {|
   display: string,
   level: number,
 |};
+type Roles = 'headAdmin' | 'admin' | 'honoraryUser' | 'donator' | 'user';
 
-const roles = {
+const roles: { [key: Roles]: Role } = {
   headAdmin: {
     name: 'headAdmin',
     display: 'Head Admin',
@@ -38,6 +39,9 @@ const roles = {
   },
 };
 
-export type { Role };
+export type {
+  Role,
+  Roles,
+};
 
 export default roles;

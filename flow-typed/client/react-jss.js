@@ -5,10 +5,10 @@ import {
   type ElementConfig,
 } from 'react';
 
-import Jss from '../../packages/webapp/node_modules/jss/src/Jss';
-import SheetsRegistry from '../../packages/webapp/node_modules/jss/src/SheetsRegistry';
-import Sheet from '../../packages/webapp/node_modules/jss/src/StyleSheet';
-import { type generateClassName } from '../../packages/webapp/node_modules/jss/src/types/jss';
+import Jss from '../../node_modules/jss/src/Jss';
+import SheetsRegistry from '../../node_modules/jss/src/SheetsRegistry';
+import Sheet from '../../node_modules/jss/src/StyleSheet';
+import { type generateClassName } from '../../node_modules/jss/src/types/jss';
 
 declare module 'react-jss' {
   declare type Options = { index?: number };

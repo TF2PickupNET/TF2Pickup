@@ -1,6 +1,6 @@
 // @flow strict-local
 
-import { type App } from '@feathers/feathers';
+import { type App } from '@feathersjs/feathers';
 import { type Socket } from 'socket.io-client';
 
 declare module 'socket.io-client' {

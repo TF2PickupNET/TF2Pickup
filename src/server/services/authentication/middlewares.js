@@ -11,12 +11,11 @@ import { options } from '.';
 const REDIRECT_URL_COOKIE = 'REDIRECT-URL';
 
 export function redirectToUrlCookie(req: ExpressRequest, res: ExpressResponse, next: () => void) {
-  console.log(req.cookies, res);
-  // const redirectUrl = req.cookie(REDIRECT_URL_COOKIE);
+  if (req.cookies[REDIRECT_URL_COOKIE]) {
+    res.redirect(req.cookies[REDIRECT_URL_COOKIE]);
 
-  //if (typeof redirectUrl === 'string') {
-  //res.redirect(redirectUrl);
-  //}
+    return;
+  }
 
   next();
 }

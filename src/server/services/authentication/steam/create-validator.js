@@ -1,18 +1,13 @@
 // @flow
 
-import auth from '@feathersjs/authentication';
-import SteamStrategy from 'passport-steam';
 import debug from 'debug';
 import { type App } from '@feathersjs/express';
-import config from 'config';
 
-import {
-  setUrlCookie,
-  redirectToUrlCookie,
-  createJWT,
-} from './middlewares';
+import { type User } from '../../../../types';
 
-const log = debug('TF2Pickup:auth:steam');
+type Done = (error: Error | null, user: User | null) => void;
+
+const log = debug('TF2Pickup:auth:steam:validator');
 
 /**
  * Get a user by an id. Returns null when no user was found.
@@ -39,12 +34,11 @@ async function getUser(users, id) {
   return null;
 }
 
-function createUserValidator(app) {
-  return async (identifier, profile, done) => {
+export default function createValidator(app: App) {
+  return async (identifier: string, profile: {}, done: Done) => {
     const match = identifier.match(/https?:\/\/steamcommunity\.com\/openid\/id\/(\d+)/);
     const id = match ? match[1] : null;
     const users = app.service('users');
-
     const user = await getUser(users, match);
 
     // We found a user or an error occurred other than 404
@@ -63,19 +57,3 @@ function createUserValidator(app) {
   };
 }
 
-export default function steamAuth(app: App) {
-  app.passport.use(new SteamStrategy({
-    returnURL: `${config.get('server.url')}/auth/steam/callback`,
-    realm: config.get('server.url'),
-    profile: false,
-  }, createUserValidator(app)));
-
-  app
-    .use('/auth/steam', setUrlCookie, auth.express.authenticate('steam'))
-    .use(
-      '/auth/steam/callback',
-      auth.express.authenticate('steam'),
-      createJWT,
-      redirectToUrlCookie,
-    );
-}

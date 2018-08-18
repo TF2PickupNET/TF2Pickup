@@ -7,7 +7,7 @@ import debug from 'debug';
 import config from 'config';
 
 import JWTVerifier from './JWTVerifier';
-import steamAuth from './steam-auth';
+import steam from './steam';
 import twitch from './twitch';
 
 const log = debug('TF2Pickup:authentication');
@@ -32,7 +32,7 @@ export default function authentication(app: App) {
   app
     .configure(auth(options))
     .configure(jwt({ Verifier: JWTVerifier }))
-    .configure(steamAuth)
+    .configure(steam)
     .configure(twitch)
     .service('authentication')
     .hooks({ before: { create: auth.hooks.authenticate(['jwt']) } });

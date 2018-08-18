@@ -11,7 +11,7 @@
   "elo-calculation": false,
 
   "auth": {
-    "required-hours": 1000,
+    "required-hours": 0,
     "secret": "someamazingsecret",
     "steam-group": ""
   },

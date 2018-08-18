@@ -1,4 +1,3 @@
-// eslint-disable-line max-lines
 // @flow strict-local
 
 declare module 'mongoose' {

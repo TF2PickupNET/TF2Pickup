@@ -1,6 +1,6 @@
 // @flow strict-local
 
-import { type FeathersError } from '@featherjs/errors';
+import { type FeathersError } from '@feathersjs/errors';
 
 import { type User } from '../../src/types/user';
 

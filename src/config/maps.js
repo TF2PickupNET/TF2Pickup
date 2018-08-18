@@ -1,7 +1,9 @@
 // @flow
 
+import { type MapTypes } from './map-types';
+
 type Map = {|
-  configType: 'koth' | '5cp' | 'stopwatch' | null,
+  configType: MapTypes,
   display: string,
   isStockMap: boolean,
 |};

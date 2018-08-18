@@ -1,8 +1,8 @@
 // @flow
 
 import test from 'ava';
-import maps from 'packages/maps/lib/index';
 
+import maps from './maps';
 import gamemodes from './gamemodes';
 import regions from './regions';
 import mapPool from './map-pool';

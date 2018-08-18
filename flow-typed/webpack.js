@@ -53,3 +53,15 @@ declare module 'sw-precache-webpack-plugin' {
 
   declare module.exports: ServiceWorkerPlugin;
 }
+
+declare module 'webpack-bundle-analyzer' {
+  declare type Options = {
+    analyzerMode: 'static',
+    generateStatsFile: boolean,
+    openAnalyzer: boolean,
+  };
+
+  declare function BundleAnalyzerPlugin(options: Options): {};
+
+  declare module.exports: {BundleAnalyzerPlugin: BundleAnalyzerPlugin};
+}

@@ -6,8 +6,9 @@ type Region = {|
   voiceServer: 'mumble' | 'discord',
   service: 'etf2l' | 'ozfortress',
 |};
+type Regions = 'eu';
 
-const regions = {
+const regions: { [key: Regions]: Region } = {
   eu: {
     name: 'eu',
     fullName: 'Europe',
@@ -16,6 +17,9 @@ const regions = {
   },
 };
 
-export type { Region };
+export type {
+  Region,
+  Regions,
+};
 
 export default regions;

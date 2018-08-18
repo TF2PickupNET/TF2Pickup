@@ -1,19 +1,22 @@
 // @flow
 
-import classes from './classes';
+import { type Classes } from './classes';
+import { type MapTypes } from './map-types';
 
 type Gamemode = {|
   name: string,
   display: string,
   maxPlayers: number,
   readyUpTime: number,
-  slots: { [key: $Keys<typeof classes>]: number },
+  slots: { [key: Classes]: number },
   aliases: $ReadOnlyArray<string>,
   rating: boolean,
   displayDiv: boolean,
+  mapTypes: $ReadOnlyArray<MapTypes>,
 |};
+type Gamemodes = '6v6' | '9v9' | 'bball' |'ultiduo';
 
-const gamemodes = {
+const gamemodes: { [key: Gamemodes]: Gamemode } = {
   '6v6': {
     name: '6v6',
     display: '6v6',
@@ -29,6 +32,7 @@ const gamemodes = {
     aliases: [],
     rating: true,
     displayDiv: true,
+    mapTypes: ['koth', '5cp'],
   },
 
   '9v9': {
@@ -53,6 +57,7 @@ const gamemodes = {
     ],
     rating: true,
     displayDiv: true,
+    mapTypes: ['koth', 'stopwatch'],
   },
 
   bball: {
@@ -64,6 +69,7 @@ const gamemodes = {
     aliases: ['bb'],
     rating: false,
     displayDiv: false,
+    mapTypes: [null],
   },
 
   ultiduo: {
@@ -78,9 +84,13 @@ const gamemodes = {
     aliases: ['ud'],
     rating: false,
     displayDiv: false,
+    mapTypes: [null],
   },
 };
 
-export type { Gamemode };
+export type {
+  Gamemode,
+  Gamemodes,
+};
 
 export default gamemodes;

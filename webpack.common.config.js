@@ -5,7 +5,7 @@ const HTMLWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
-const babelConfig = require('./babel.config');
+const babelConfig = require('./babel.client.config');
 
 const rules = [{
   test: /\.jsx?$/,
@@ -57,7 +57,7 @@ module.exports = {
 
   output: {
     publicPath: '/',
-    path: path.resolve(__dirname, 'lib/'),
+    path: path.resolve(__dirname, 'dist/webapp'),
     filename: '[name].[hash].js',
   },
 

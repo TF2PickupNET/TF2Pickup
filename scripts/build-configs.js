@@ -5,15 +5,18 @@ import fs from 'fs';
 import shell from 'shelljs';
 import format from 'date-fns/format';
 import { promisify } from 'util';
-import serial from 'promise-serial';
 
+import pkg from '../package.json';
 import {
   regions,
   gamemodes,
+  mapTypes,
 } from '../src/config';
+import readFile from '../src/utils/read-file';
 
 const writeFile = promisify(fs.writeFile);
-const readFile = promisify(fs.readFile);
+const src = path.join(__dirname, '../src/tf2configs');
+const dist = path.join(__dirname, '../dist/tf2configs');
 
 /**
  * A function which returns an array of string to append to the configuration file if it hasn't been
@@ -23,20 +26,14 @@ const readFile = promisify(fs.readFile);
  * @returns {String[]} - Returns an array of strings.
  */
 function appendTextToFile(file) {
-  const [regionName, gamemodeName, configName] = file.name.split('_');
-
-  if (regions[regionName] || gamemodes[gamemodeName]) {
-    return [];
-  }
-
-  const region = regions[regionName].fullName;
-  const gamemode = gamemodes[gamemodeName].display;
-  const config = ['6v6', '9v9'].includes(gamemodeName) ? ` ${configName.toUpperCase()}` : '';
+  const [region, gamemode, config = null] = file.name.split('_');
+  const configDisplay = config === null ? '' : ` ${mapTypes[config].display}`;
 
   return [
-    `say * TF2Pickup.net ${gamemode}${config} Config Loaded.`,
+    `say * TF2Pickup.net ${gamemodes[gamemode].display}${configDisplay} Config Loaded.`,
+    `say * TF2Pickup Version: ${pkg.version}`,
     `say * Version Date: ${format(new Date(), 'DD.MM.YYYY')}`,
-    `say * Region: ${region}`,
+    `say * Region: ${regions[region].fullName}`,
     'say * Please check that the settings are correct for this game mode!',
     'say * You must follow the rules, ignoring them will result in a ban!',
     'say * If there is a problem, do not hesitate to contact anyone from the TF2Pickup.net team.',
@@ -53,46 +50,55 @@ function appendTextToFile(file) {
  */
 async function compileFile(filePath, root = false) {
   const fileData = path.parse(filePath);
-  const content = await readFile(filePath, 'utf-8');
-
-  return content
-    .split('\n')
-    .map((line) => {
+  const content = await readFile(filePath);
+  const lines = content.split('\n');
+  const processedLines = await Promise.all(
+    lines.map((line) => {
       if (/^exec\s.+$/.test(line)) {
         return compileFile(`${fileData.dir}/${line.split(' ')[1]}.cfg`);
       }
 
       return line;
     })
-    .concat(root ? [
+  );
+
+  return [
+    ...processedLines,
+    ...root ? [
       'mp_tournament_restart',
       '',
-    ] : [])
-    .concat(root ? appendTextToFile(fileData) : [])
-    .join('\n');
+    ] : [],
+    ...root ? appendTextToFile(fileData) : [],
+  ].join('\n');
 }
 
-shell.rm('-rf', 'lib/');
+shell.mkdir('dist/tf2configs');
 
-shell.mkdir('lib/');
+const files = shell
+  .find('./src/tf2configs')
+  .map(file => path.parse(file).base)
+  .filter((file) => {
+    if (!file.endsWith('.cfg')) {
+      return false;
+    }
 
-(async () => {
-  await serial(
-    shell
-      .find('./src/')
-      .map(file => path.parse(file).base)
-      .filter((file) => {
-        if (/^(oc|eu|na)_(bball|ultiduo)\.cfg$/.test(file)) {
-          return true;
-        }
+    const [region, gamemode, mapType = null] = file.replace('.cfg', '').split('_');
 
-        return /^(oc|eu|na)_(6v6|9v9)_(5cp|koth|stopwatch)\.cfg$/.test(file);
-      })
-      .map(async (filePath) => {
-        const compiledFile = await compileFile(`./src/${filePath}`, true);
+    return file.endsWith('.cfg')
+      && regions[region]
+      && gamemodes[gamemode]
+      && gamemodes[gamemode].mapTypes.includes(mapType);
+  });
 
-        return writeFile(`lib/tf2pickup_${filePath}`, compiledFile, 'utf-8');
-      })
-  );
-})();
+async function buildConfigs() {
+  // eslint-disable-next-line fp/no-loops
+  for (const file of files) {
+    // eslint-disable-next-line no-await-in-loop
+    const compiledFile = await compileFile(path.join(src, file), true);
 
+    // eslint-disable-next-line no-await-in-loop
+    await writeFile(path.join(dist, file), compiledFile, 'utf-8');
+  }
+}
+
+buildConfigs();

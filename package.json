@@ -4,12 +4,13 @@
     "lint": "eslint . --ext js,jsx",
     "flow": "check-flow --color=always",
     "test": "NODE_ENV=\"TEST\" ava",
-    "dev:server": "babel-node src/server",
-    "dev:webapp": "webpack --config webpack.dev.config.js",
-    "build": "yarn build:configs && yarn build:webapp && yarn build:server",
-    "build:configs": "",
-    "build:webapp": "",
-    "build:server": ""
+    "dev:server": "babel-node src/server --config-file ./babel.server.config.js",
+    "dev:webapp": "webpack-serve --config webpack.dev.config.js",
+    "prebuild": "rimraf dist/",
+    "build": "yarn build:server && yarn build:configs && yarn build:server",
+    "build:configs": "babel-node scripts/build-configs.js --config-file ./babel.server.config.js",
+    "build:webapp": "webpack --config webpack.prod.config.js",
+    "build:server": "babel src/ -d dist/ --config-file ./babel.server.config.js"
   },
   "dependencies": {
     "@feathersjs/authentication": "2.1.7",
@@ -63,6 +64,7 @@
     "@babel/preset-react": "7.0.0-rc.1",
     "ava": "1.0.0-beta.5.1",
     "babel-loader": "8.0.0-beta.3",
+    "babel-plugin-import": "1.8.0",
     "check-flow": "1.0.2",
     "connect-history-api-fallback": "1.5.0",
     "css-loader": "1.0.0",

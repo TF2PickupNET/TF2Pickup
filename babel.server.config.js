@@ -4,11 +4,7 @@ module.exports = {
   presets: [
     '@babel/preset-flow',
     ['@babel/preset-env', {
-      targets: {
-        node: 'current',
-        chrome: 65,
-        firefox: 59,
-      },
+      targets: { node: 'current' },
       loose: true,
       useBuiltIns: 'usage',
     }],
@@ -21,5 +17,9 @@ module.exports = {
     '@babel/plugin-proposal-export-default-from',
   ],
 
-  ignore: ['*.test.js'],
+  ignore: [
+    '*.test.js',
+    'src/webapp/*',
+    'src/webapp/**/*',
+  ],
 };

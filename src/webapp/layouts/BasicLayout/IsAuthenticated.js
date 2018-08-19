@@ -50,7 +50,7 @@ class IsAuthenticated extends React.PureComponent<Props> {
 
 export default injectSheet(styles)(connect((state) => {
   return {
-    user: state.user ? state.user.id : null,
+    userId: state.user ? state.user.id : null,
     beta: state.config.beta,
   };
 })(IsAuthenticated));

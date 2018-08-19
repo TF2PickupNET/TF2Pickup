@@ -1,5 +1,1 @@
-module.exports = {
-  extends: ['henribeck/server'],
-
-  rules: { 'promise/prefer-await-to-callbacks': 'off' },
-};
+module.exports = { extends: ['henribeck/server'] };

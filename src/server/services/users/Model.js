@@ -26,7 +26,9 @@ export default mongoose.model('User', new mongoose.Schema({
 
   region: {
     type: String,
-    default: null,
+    default: Object.keys(regions).length === 1
+      ? Object.keys(regions)[0]
+      : null,
     validate: oneOf(Object.keys(regions), { nullIsAllowed: true }),
   },
 

@@ -7,6 +7,7 @@ import onLogin from './on-login';
 import onLogout from './on-logout';
 import onChangeRegion from './on-change-region';
 import onAcceptRules from './on-accept-rules';
+import onSetName from './on-set-name';
 
 const log = debug('TF2Pickup:users:events');
 
@@ -21,5 +22,7 @@ export default function events(app: App) {
     socket.on('users:change-region', onChangeRegion(app, socket));
 
     socket.on('users:accept-rules', onAcceptRules(app, socket));
+
+    socket.on('users:set-name', onSetName(app, socket));
   });
 }

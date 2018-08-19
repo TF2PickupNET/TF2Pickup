@@ -7,14 +7,13 @@ import {
 } from 'antd';
 
 import app from '../../../app';
+import MarkdownView from '../../../components/MarkdownView';
 
 type State = { isProcessing: boolean };
 
+const RULES_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/RULES.md';
+
 export default class AcceptRulesScreen extends React.PureComponent<{}, State> {
-  static NAME = 'accept-rules';
-
-  static TITLE = 'Accept the rules';
-
   state = { isProcessing: false };
 
   handleAcceptClick = () => {
@@ -28,9 +27,7 @@ export default class AcceptRulesScreen extends React.PureComponent<{}, State> {
   render() {
     return (
       <React.Fragment>
-        <div>
-          Rules
-        </div>
+        <MarkdownView url={RULES_URL} />
 
         <Row
           type="flex"

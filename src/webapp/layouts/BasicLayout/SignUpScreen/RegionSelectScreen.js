@@ -5,6 +5,7 @@ import {
   Row,
   Button,
   Radio,
+  message,
 } from 'antd';
 
 import { regions } from '../../../../config';
@@ -18,10 +19,6 @@ type State = {
 const { Group } = Radio;
 
 export default class RegionSelectScreen extends React.PureComponent<{}, State> {
-  static NAME = 'region-select';
-
-  static TITLE = 'Select a region';
-
   static renderRadios(): Node {
     return Object.keys(regions).map(region => (
       <Radio
@@ -41,7 +38,11 @@ export default class RegionSelectScreen extends React.PureComponent<{}, State> {
   handleClick = () => {
     this.setState({ isProcessing: true });
 
-    app.io.emit('users:change-region', { region: this.state.region }, () => {
+    app.io.emit('users:change-region', { region: this.state.region }, (err) => {
+      if (err) {
+        message.error(`Couldn't set the region: ${err.message}`);
+      }
+
       this.setState({ isProcessing: false });
     });
   };

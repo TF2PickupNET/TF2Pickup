@@ -2,6 +2,7 @@
 
 import {
   type Node,
+  type Element,
   type ElementType,
 } from 'react';
 
@@ -161,4 +162,13 @@ declare module 'antd' {
   }> {
     static Group: Class<RadioGroup>,
   }
+
+  declare export class Spin extends React$Component<{
+    delay?: number,
+    indicator?: Element<ElementType>,
+    size?: Sizes,
+    spinning?: boolean,
+    tip?: string,
+    wrapperClassName?: string,
+  }> {}
 }

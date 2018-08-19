@@ -38,10 +38,6 @@ export default class RegionSelectScreen extends React.PureComponent<{}, State> {
     region: null,
   };
 
-  componentDidMount() {
-    // TODO: Add some feature to automatically detect the users region
-  }
-
   handleClick = () => {
     this.setState({ isProcessing: true });
 

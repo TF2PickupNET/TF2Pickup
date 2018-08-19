@@ -21,10 +21,16 @@ export default function onChangeRegion(app: App, connection: Connection) {
     try {
       await app.service('users').patch(connection.user.id, { region });
 
+      // Get every connection for the user
+      const connections = app
+        .channel(`region:${oldRegion}`)
+        .filter(({ user }) => user.id === connection.user.id);
+
       // Leave the old region channel and join the new one
-      // TODO: Remove every connection the user has and join it to the new channel
-      app.channels(`region:${oldRegion}`).leave(connection);
-      app.channels(`region:${region}`).join(connection);
+      connections.connections.forEach((conn) => {
+        app.channels(`region:${oldRegion}`).leave(conn);
+        app.channels(`region:${region}`).join(conn);
+      });
 
       return cb(null);
     } catch (error) {

@@ -4,4 +4,9 @@ module.exports = {
     'henribeck/flow',
     'henribeck/react',
   ],
+
+  overrides: [{
+    files: ['src/config/maps.js'],
+    rules: { camelcase: 'off' },
+  }],
 };

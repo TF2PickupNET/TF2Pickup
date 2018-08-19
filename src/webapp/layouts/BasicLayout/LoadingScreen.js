@@ -67,7 +67,7 @@ class LoadingScreen extends React.PureComponent<Props, State> {
       case 1: return this.authenticate();
       case 2: return this.fetchUser();
       case 3: return this.fetchSettings();
-      // case 4: return this.fetchProfile();
+      case 4: return this.fetchProfile();
       default: return null;
     }
   }

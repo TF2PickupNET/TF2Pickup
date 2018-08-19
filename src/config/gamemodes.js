@@ -14,7 +14,7 @@ type Gamemode = {|
   displayDiv: boolean,
   mapTypes: $ReadOnlyArray<MapTypes>,
 |};
-type Gamemodes = '6v6' | '9v9' | 'bball' |'ultiduo';
+type Gamemodes = '6v6' | '9v9' | 'bball' | 'ultiduo';
 
 const gamemodes: { [key: Gamemodes]: Gamemode } = {
   '6v6': {

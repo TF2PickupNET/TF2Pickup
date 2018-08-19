@@ -45,7 +45,7 @@ class MarkdownView extends React.PureComponent<Props, State> {
     }
 
     return (
-      <Spin />
+      <Spin delay={150} />
     );
   }
 }

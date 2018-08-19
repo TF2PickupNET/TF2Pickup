@@ -6,16 +6,19 @@ import IsConnected from './IsConnected';
 import IsAuthenticated from './IsAuthenticated';
 import LoadingScreen from './LoadingScreen';
 import SignUpScreen from './SignUpScreen';
+import VersionValidator from './VersionValidator';
 
 export default function BasicLayout() {
   return (
     <IsConnected>
       <LoadingScreen>
-        <IsAuthenticated>
-          <SignUpScreen>
-            Hello World
-          </SignUpScreen>
-        </IsAuthenticated>
+        <VersionValidator>
+          <IsAuthenticated>
+            <SignUpScreen>
+              Hello World
+            </SignUpScreen>
+          </IsAuthenticated>
+        </VersionValidator>
       </LoadingScreen>
     </IsConnected>
   );

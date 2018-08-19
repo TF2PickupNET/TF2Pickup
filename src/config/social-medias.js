@@ -15,7 +15,7 @@ const socialMedias = {
     icon: 'discord',
 
     urls: {
-      invite: 'https://discord.gg/gftcZK4',
+      invite: 'https://discord.gg/nPZmBFt',
       help: 'https://discordapp.com/channels/101790253651599360/101807927752409088',
       suggestions: 'https://discordapp.com/channels/101790253651599360/141602413952892928',
     },

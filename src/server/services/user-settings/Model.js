@@ -13,7 +13,6 @@ export default mongoose.model('UserSettings', new mongoose.Schema({
     type: String,
     validate: steamId({}),
     required: [true, 'The userId is required'],
-    index: true,
     unique: true,
   },
 

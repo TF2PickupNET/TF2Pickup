@@ -25,6 +25,6 @@ export default function userProfile(app: App) {
     // Publish the events only to the user that owns the document
     .publish(
       'patched',
-      data => app.channel('authenticated').filter(connection => connection.user._id === data.id)
+      data => app.channel('authenticated').filter(connection => connection.user.id === data.id)
     );
 }

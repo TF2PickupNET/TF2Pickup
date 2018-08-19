@@ -4,6 +4,7 @@ import React from 'react';
 import {
   Row,
   Button,
+  message,
 } from 'antd';
 
 import app from '../../../app';
@@ -19,7 +20,11 @@ export default class AcceptRulesScreen extends React.PureComponent<{}, State> {
   handleAcceptClick = () => {
     this.setState({ isProcessing: true });
 
-    app.io.emit('users:accept-rules', {}, () => {
+    app.io.emit('users:accept-rules', {}, (err) => {
+      if (err) {
+        message.error(`Couldn't accept the rules: ${err.message}`);
+      }
+
       this.setState({ isProcessing: false });
     });
   };

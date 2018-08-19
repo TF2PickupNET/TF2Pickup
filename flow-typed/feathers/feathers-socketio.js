@@ -1,12 +1,19 @@
 // @flow strict-local
 
-import { type App } from '@feathersjs/feathers';
+import {
+  type App,
+  type Connection,
+} from '@feathersjs/feathers';
 
 declare module '@feathersjs/socketio' {
   declare type Options = {|
     wsEngine: string,
     path: string,
   |};
+
+  declare export interface SocketConnection {
+    feathers: Connection,
+  }
 
   declare interface IO {
     on(eventname: string, cb: (data: ?{}) => void): IO,

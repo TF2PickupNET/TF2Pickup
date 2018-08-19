@@ -38,6 +38,9 @@ export default function createValidator(app: App) {
   return async (identifier: string, profile: {}, done: Done) => {
     const match = identifier.match(/https?:\/\/steamcommunity\.com\/openid\/id\/(\d+)/);
     const id = match ? match[1] : null;
+
+    log('New steam login with id', id);
+
     const users = app.service('users');
     const user = await getUser(users, match);
 

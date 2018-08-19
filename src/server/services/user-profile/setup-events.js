@@ -15,9 +15,11 @@ export default function setupEvents(app: App) {
       const profile = await app.service('user-profile').get(userId);
       const updatedData = await getUserData(profile);
 
-      await app.service('user-profiles').patch(userId, { ...updatedData });
+      await app.service('user-profile').patch(userId, { ...updatedData });
     } catch (error) {
-      log('Error in login callback', error);
+      if (error.code !== 404) {
+        log('Error in login callback', error);
+      }
     }
   });
 }

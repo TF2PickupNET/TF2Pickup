@@ -20,6 +20,7 @@ type Props = {
   children: Node,
   classes: {
     container: string,
+    header: string,
     contentContainer: string,
   },
 };
@@ -41,10 +42,17 @@ const steps = [{
 const styles = {
   container: { height: '100vh' },
 
+  header: {
+    textAlign: 'center',
+    marginBottom: 15,
+  },
+
   contentContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    paddingTop: 20,
+    display: 'grid',
+    gridTemplateColumns: 'auto',
+    gridTemplateRows: '1fr auto',
+    gridGap: '16px',
     height: '600px',
   },
 };
@@ -98,6 +106,10 @@ class SignUpScreen extends React.PureComponent<Props> {
           md={16}
           lg={12}
         >
+          <h2 className={this.props.classes.header}>
+            Please fill out some information before you can start playing
+          </h2>
+
           {SignUpScreen.renderSteps(currentStep)}
 
           <div className={this.props.classes.contentContainer}>

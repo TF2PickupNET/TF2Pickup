@@ -4,8 +4,8 @@ import { type App } from '@feathersjs/express';
 import service from 'feathers-mongoose';
 import debug from 'debug';
 
-import Model from '../users/Model';
-import hooks from '../users/hooks';
+import Model from './Model';
+import hooks from './hooks';
 
 const log = debug('TF2Pickup:user-settings');
 
@@ -23,6 +23,6 @@ export default function userSettings(app: App) {
     // Publish the events only to the user that owns the document
     .publish(
       'patched',
-      data => app.channel('authenticated').filter(connection => connection.user._id === data.id)
+      data => app.channel('authenticated').filter(connection => connection.user.id === data.id)
     );
 }

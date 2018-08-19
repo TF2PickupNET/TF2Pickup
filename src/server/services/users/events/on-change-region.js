@@ -2,29 +2,31 @@
 
 import { NotAuthenticated } from '@feathersjs/errors';
 import { type App } from '@feathersjs/express';
-import { type Connection } from '@feathersjs/feathers';
+import { type SocketConnection } from '@feathersjs/socketio';
 import debug from 'debug';
 
 type Data = { region: string };
 
 const log = debug('TF2Pickup:users:events:on-change-region');
 
-export default function onChangeRegion(app: App, connection: Connection) {
+export default function onChangeRegion(app: App, connection: SocketConnection) {
   return async ({ region }: Data, cb: (error: null | Error) => void) => {
+    const user = connection.feathers.user;
+
     // Make sure a user is authenticated
-    if (!connection.user) {
+    if (!user) {
       return cb(new NotAuthenticated());
     }
 
-    const oldRegion = connection.user.region;
+    const oldRegion = user.region;
 
     try {
-      await app.service('users').patch(connection.user.id, { region });
+      await app.service('users').patch(user.id, { region });
 
       // Get every connection for the user
       const connections = app
         .channel(`region:${oldRegion}`)
-        .filter(({ user }) => user.id === connection.user.id);
+        .filter(conn => conn.user.id === user.id);
 
       // Leave the old region channel and join the new one
       connections.connections.forEach((conn) => {
@@ -34,7 +36,7 @@ export default function onChangeRegion(app: App, connection: Connection) {
 
       return cb(null);
     } catch (error) {
-      log('Error while changing region', connection.user.id, error);
+      log('Error while changing region', user.id, error);
 
       return cb(error);
     }

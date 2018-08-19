@@ -2,12 +2,11 @@
 
 import React from 'react';
 import injectSheet from 'react-jss';
-import {
-  Row,
-  Spin,
-} from 'antd';
+import { Spin } from 'antd';
 import Markdown from 'react-markdown';
 import axios from 'axios';
+
+import { isString } from '../../../utils';
 
 type Props = {
   url: string,
@@ -36,17 +35,17 @@ class MarkdownView extends React.PureComponent<Props, State> {
   }
 
   render() {
+    if (isString(this.state.content)) {
+      return (
+        <Markdown
+          source={this.state.content}
+          className={`${this.props.classes.container} ${this.props.className}`}
+        />
+      );
+    }
+
     return (
-      <Row
-        type="flex"
-        justify="center"
-        align="middle"
-        className={`${this.props.classes.container} ${this.props.className}`}
-      >
-        {typeof this.state.content === 'string'
-          ? <Markdown source={this.state.content} />
-          : <Spin />}
-      </Row>
+      <Spin />
     );
   }
 }

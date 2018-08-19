@@ -15,7 +15,7 @@ export default async function getOzfortressData(
   user: UserProfile,
   oneDaySinceLastUpdate: boolean,
 ) {
-  if (!oneDaySinceLastUpdate) {
+  if (!oneDaySinceLastUpdate || apikey.length === 0) {
     return {};
   }
 

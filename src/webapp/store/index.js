@@ -15,6 +15,8 @@ import config from './config/reducer';
 import settings from './settings/reducer';
 import profile from './profile/reducer';
 
+type ExtractState = <R>(() => R) => R;
+
 const reducer = combineReducers({
   user,
   config,
@@ -27,5 +29,7 @@ const store = createStore(
   reducer,
   composeWithDevTools(middlewares),
 );
+
+export type Store = $Call<ExtractState, reducer>;
 
 export default store;

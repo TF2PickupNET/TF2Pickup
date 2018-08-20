@@ -11,6 +11,7 @@ module.exports = merge(common, {
   devtool: 'inline-source-map',
 
   serve: {
+    port: 8080,
     content: [__dirname],
 
     add(app) {

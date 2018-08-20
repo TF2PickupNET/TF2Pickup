@@ -13,6 +13,8 @@ type Data = { name: string };
 const log = debug('TF2Pickup:users:events:on-set-name');
 
 export default function onSetName(app: App, connection: SocketConnection) {
+  const users = app.service('users');
+
   return async ({ name }: Data, cb: (error: null | Error) => void) => {
     const user = connection.feathers.user;
 
@@ -25,12 +27,23 @@ export default function onSetName(app: App, connection: SocketConnection) {
       return cb(new BadRequest('You already have a name'));
     }
 
+    const [existingUser] = await users.find({
+      query: {
+        name,
+        $limit: 1,
+      },
+    });
+
+    if (existingUser) {
+      return cb(new BadRequest('This name is already taken'));
+    }
+
     try {
-      await app.service('users').patch(user.id, { name });
+      await users.patch(user.id, { name });
 
       return cb(null);
     } catch (error) {
-      log('Error while changing region', user.id, error);
+      log('Error while setting user name', user.id, error);
 
       return cb(error);
     }

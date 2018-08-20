@@ -87,14 +87,22 @@ const styles = {
 };
 
 class SignUpScreen extends React.PureComponent<Props, State> {
-  state = {
-    isFinished: false,
-    didJoinDiscord: false,
-  };
+  constructor(props) {
+    super(props);
+
+    const didAlreadyComplete = props.user.hasAcceptedTheRules !== null
+      && props.user.region !== null
+      && props.user.name !== null;
+
+    this.state = {
+      isFinished: didAlreadyComplete,
+      didJoinDiscord: didAlreadyComplete,
+    };
+  }
 
   getCurrentStep() {
     if (!this.props.user.hasAcceptedTheRules) {
-      return steps[3];
+      return steps[0];
     } else if (this.props.user.region === null) {
       return steps[1];
     } else if (this.props.user.name === null) {

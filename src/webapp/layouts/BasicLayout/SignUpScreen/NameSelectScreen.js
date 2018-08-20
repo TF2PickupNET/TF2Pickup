@@ -72,7 +72,7 @@ class NameSelectScreen extends React.PureComponent<Props, State> {
         return (
           <Radio
             key={service}
-            value={service}
+            value={this.props.profiles[service].name}
           >
             {this.props.profiles[service].name} ({region})
           </Radio>
@@ -99,7 +99,7 @@ class NameSelectScreen extends React.PureComponent<Props, State> {
             loading={this.state.isProcessing}
             onClick={this.handleClick}
           >
-            Select Region
+            Select Name
           </Button>
         </Row>
       </React.Fragment>

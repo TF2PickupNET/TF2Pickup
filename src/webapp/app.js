@@ -5,6 +5,9 @@ import socketio from '@feathersjs/socketio-client';
 import io from 'socket.io-client';
 import auth from '@feathersjs/authentication-client';
 
+import store from './store';
+import { updateUser } from './store/user/actions';
+
 const API_ENDPOINT = window.location.hostname === 'localhost'
   ? 'http://localhost:3000'
   : 'https://api.tf2pickup.net';
@@ -22,6 +25,16 @@ const app = feathers();
 app
   .configure(socketio(socket, { timeout: SOCKET_TIMEOUT }))
   .configure(auth({ storage: window.localStorage }));
+
+const users = app.service('users');
+
+users.on('patched', (data) => {
+  const user = store.getState().user;
+
+  if (user && data.id === user.id) {
+    store.dispatch(updateUser(data));
+  }
+});
 
 export { API_ENDPOINT };
 

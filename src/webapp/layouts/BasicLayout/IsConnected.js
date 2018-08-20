@@ -96,9 +96,9 @@ class IsConnected extends React.PureComponent<Props, State> {
         className={this.props.classes.container}
       >
         {this.state.isFirstConnect ? (
-          <div>
+          <h2>
             Connecting...
-          </div>
+          </h2>
         ) : this.renderCard()}
       </Row>
     );

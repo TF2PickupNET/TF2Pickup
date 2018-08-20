@@ -43,6 +43,12 @@ class NameSelectScreen extends React.PureComponent<Props, State> {
     name: null,
   };
 
+  isMounted = true;
+
+  componentWillUnmount() {
+    this.isMounted = false;
+  }
+
   handleClick = () => {
     this.setState({ isProcessing: true });
 
@@ -51,7 +57,9 @@ class NameSelectScreen extends React.PureComponent<Props, State> {
         message.error(`Couldn't set the name: ${err.message}`);
       }
 
-      this.setState({ isProcessing: false });
+      if (this.isMounted) {
+        this.setState({ isProcessing: false });
+      }
     });
   };
 

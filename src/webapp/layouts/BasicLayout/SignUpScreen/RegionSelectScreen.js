@@ -35,6 +35,12 @@ export default class RegionSelectScreen extends React.PureComponent<{}, State> {
     region: null,
   };
 
+  isMounted = true;
+
+  componentWillUnmount() {
+    this.isMounted = false;
+  }
+
   handleClick = () => {
     this.setState({ isProcessing: true });
 
@@ -43,7 +49,9 @@ export default class RegionSelectScreen extends React.PureComponent<{}, State> {
         message.error(`Couldn't set the region: ${err.message}`);
       }
 
-      this.setState({ isProcessing: false });
+      if (this.isMounted) {
+        this.setState({ isProcessing: false });
+      }
     });
   };
 

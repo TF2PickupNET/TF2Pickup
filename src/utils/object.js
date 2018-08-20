@@ -1,5 +1,12 @@
 // @flow
 
+import { flatten } from './array';
+import isPlainObject from 'is-plain-object';
+
+function isObject(obj: mixed): %checks {
+  return typeof obj === 'object' && !Array.isArray(obj) && obj !== null;
+}
+
 /**
  * Map over an object and return the new key value combination.
  *
@@ -64,18 +71,39 @@ function filterObject<K: string, V>(fn: (key: K, value: V) => boolean) {
     }, {});
 }
 
-/**
- * Omit certain keys from an object.
- *
- * @param {...String} keys - The keys to omit from the function.
- * @returns {}
- */
 function omit(...keys: $ReadOnlyArray<string>) {
   return filterObject(key => !keys.includes(key));
 }
 
 function pick(...keys: $ReadOnlyArray<string>) {
   return filterObject(key => keys.includes(key));
+}
+
+function getObjEntries(obj, previousPath = '') {
+  const entries = Object
+    .entries(obj)
+    .map(([key, value]) => {
+      const path = previousPath.length === 0 ? key : `${previousPath}.${key}`;
+
+      return isPlainObject(value) ? getObjEntries(value, path) : {
+        key: path,
+        value,
+      };
+    });
+
+  return flatten(entries);
+}
+
+function flattenObject(obj: {}) {
+  return getObjEntries(obj).reduce((newObj, {
+    key,
+    value,
+  }) => {
+    return {
+      ...newObj,
+      [key]: value,
+    };
+  }, {});
 }
 
 export {
@@ -85,4 +113,5 @@ export {
   filterObject,
   omit,
   pick,
+  flattenObject,
 };

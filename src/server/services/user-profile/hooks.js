@@ -15,20 +15,6 @@ export default {
   before: {
     find: hooks.disallow(),
     remove: hooks.disallow(),
-    get(hook: GetBeforeHookContext<UserProfile>) {
-      if (!hook.params.provider) {
-        return hook;
-      }
-
-      if (hook.params.user) {
-        return {
-          ...hook,
-          id: hook.params.user.id,
-        };
-      }
-
-      throw new Forbidden();
-    },
     async create(hook: CreateBeforeHookContext<UserProfile>) {
       const data = await getUserData(hook.data);
 

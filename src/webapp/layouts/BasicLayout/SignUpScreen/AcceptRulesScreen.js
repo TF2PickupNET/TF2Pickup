@@ -17,6 +17,12 @@ const RULES_URL = 'https://raw.githubusercontent.com/TF2PickupNET/Info/master/RU
 export default class AcceptRulesScreen extends React.PureComponent<{}, State> {
   state = { isProcessing: false };
 
+  isMounted = true;
+
+  componentWillUnmount() {
+    this.isMounted = false;
+  }
+
   handleAcceptClick = () => {
     this.setState({ isProcessing: true });
 
@@ -25,7 +31,9 @@ export default class AcceptRulesScreen extends React.PureComponent<{}, State> {
         message.error(`Couldn't accept the rules: ${err.message}`);
       }
 
-      this.setState({ isProcessing: false });
+      if (this.isMounted) {
+        this.setState({ isProcessing: false });
+      }
     });
   };
 

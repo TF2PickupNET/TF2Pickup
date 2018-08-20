@@ -31,6 +31,7 @@
     "deepmerge": "2.1.1",
     "feathers-hooks-common": "4.16.2",
     "feathers-mongoose": "6.1.4",
+    "is-plain-object": "2.0.4",
     "is-url": "1.2.4",
     "js-cookie": "2.2.0",
     "mongoose": "5.2.9",

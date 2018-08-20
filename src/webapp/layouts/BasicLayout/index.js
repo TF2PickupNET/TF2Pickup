@@ -8,14 +8,14 @@ import LoadingScreen from './LoadingScreen';
 import SignUpScreen from './SignUpScreen';
 import VersionValidator from './VersionValidator';
 
-export default function BasicLayout() {
+export default function BasicLayout(props) {
   return (
     <IsConnected>
       <LoadingScreen>
         <VersionValidator>
           <IsAuthenticated>
             <SignUpScreen>
-              Hello World
+              {props.children}
             </SignUpScreen>
           </IsAuthenticated>
         </VersionValidator>

@@ -17,6 +17,7 @@ declare module 'antd' {
   };
 
   declare type Sizes = 'large' | 'default' | 'small';
+  declare type Theme = 'light' | 'dark';
 
   declare export class Row extends React$Component<{
     align?: 'top' | 'middle' | 'bottom',
@@ -171,4 +172,27 @@ declare module 'antd' {
     tip?: string,
     wrapperClassName?: string,
   }> {}
+
+  declare class Sider extends React$Component<{
+    className?: string,
+    collapsed?: boolean,
+    collapsedWidth?: number,
+    collapsible?: boolean,
+    defaultCollapsed?: boolean,
+    reverseArrow?: boolean,
+    theme?: Theme,
+    trigger?: Element<ElementType>,
+    width?: number,
+    onCollapse?: (collapsed: boolean) => void,
+  }> {}
+
+  declare export class Layout extends React$Component<{
+    className?: string,
+    hasSider?: boolean,
+  }> {
+    static Sider: Class<Sider>,
+    static Header: Class<Layout>,
+    static Footer: Class<Layout>,
+    static Content: Class<Layout>,
+  }
 }

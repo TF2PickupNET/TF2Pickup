@@ -9,11 +9,16 @@ import { Provider } from 'react-redux';
 import store from './store';
 import BasicLayout from './layouts/BasicLayout';
 import registerServiceWorker from './register-service-worker';
+import MainLayout from './layouts/MainLayout';
 
 function App() {
   return (
     <Provider store={store}>
-      <BasicLayout />
+      <BasicLayout>
+        <MainLayout>
+          Test
+        </MainLayout>
+      </BasicLayout>
     </Provider>
   );
 }

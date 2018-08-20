@@ -14,7 +14,7 @@ export function setProfile(profile: UserProfile) {
   };
 }
 
-export function updateSettings(profile: UserProfile) {
+export function updateProfile(profile: UserProfile) {
   return {
     type: UPDATE_PROFILE,
     payload: { profile },

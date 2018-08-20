@@ -2,7 +2,6 @@
 
 import {
   createStore,
-  combineReducers,
   applyMiddleware,
 } from 'redux';
 import thunk from 'redux-thunk';
@@ -10,26 +9,18 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import app from '../app';
 
-import user from './user/reducer';
-import config from './config/reducer';
-import settings from './settings/reducer';
-import profile from './profile/reducer';
+import reducers from './reducers';
 
 type ExtractState = <R>(() => R) => R;
+type Store = $Call<ExtractState, reducers>;
 
-const reducer = combineReducers({
-  user,
-  config,
-  settings,
-  profile,
-});
 const middlewares = applyMiddleware(thunk.withExtraArgument(app));
 
 const store = createStore(
-  reducer,
+  reducers,
   composeWithDevTools(middlewares),
 );
 
-export type Store = $Call<ExtractState, reducer>;
+export type { Store };
 
 export default store;

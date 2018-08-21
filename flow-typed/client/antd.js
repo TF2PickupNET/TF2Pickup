@@ -291,7 +291,7 @@ declare module 'antd' {
     key: string,
     message: Node,
     placement?: NotificationPlacements,
-    onClose: () => void,
+    onClose?: () => void,
   };
 
   declare export class notification {

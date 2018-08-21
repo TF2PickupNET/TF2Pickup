@@ -2,7 +2,10 @@
 
 import mongoose from 'mongoose';
 
-import { regions } from '../../../config';
+import {
+  regions,
+  roles,
+} from '../../../config';
 import {
   steamId,
   oneOf,
@@ -53,5 +56,11 @@ export default mongoose.model('User', new mongoose.Schema({
   lastPickup: {
     type: Number,
     default: null,
+  },
+
+  roles: {
+    type: [String],
+    default: [],
+    validate: oneOf(Object.keys(roles), {}),
   },
 }));

@@ -1,6 +1,7 @@
 // @flow
 
 import { regions } from '../config';
+import { type Roles } from '../config/roles';
 
 export interface User {
   id: string,
@@ -11,4 +12,5 @@ export interface User {
   hasAcceptedTheRules: boolean,
   createdOn: Date,
   lastPickup: number | null,
+  roles: $ReadOnlyArray<Roles>,
 }

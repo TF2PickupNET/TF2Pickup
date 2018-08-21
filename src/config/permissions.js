@@ -1,33 +1,46 @@
 // @flow
 
+import { type User } from '../types';
+
 import roles from './roles';
 
-export default {
-  user: {
-    'change-role': { level: roles.headAdmin.level },
+type PermissionUser = User & { level: number };
+type PermissionFunc = (currentUser: PermissionUser, targetUser: PermissionUser | null) => boolean;
+type Permission = $ReadOnlyArray<PermissionFunc>;
 
-    alert: { level: roles.admin.level },
-  },
+function minLevel(level): PermissionFunc {
+  return currentUser => currentUser.level >= level;
+}
 
-  chat: {
-    delete: { level: roles.admin.level },
+function hasHigherOrEqualLevel(): PermissionFunc {
+  return (currentUser, targetUser) => targetUser !== null && currentUser.level >= targetUser.level;
+}
 
-    'use-global-mention': { level: roles.admin.level },
-  },
+const changeUsersRole: Permission = [
+  minLevel(roles.headAdmin.level),
+  hasHigherOrEqualLevel(),
+];
+const alertUser: Permission = [minLevel(roles.admin.level)];
+const deleteChatMessage: Permission = [minLevel(roles.admin.level)];
+const useGlobalMention: Permission = [minLevel(roles.admin.level)];
+const kickPlayerFromQueue: Permission = [minLevel(roles.admin.level)];
+const endPickup: Permission = [minLevel(roles.admin.level)];
+const reserveServer: Permission = [minLevel(roles.admin.level)];
+const configureServer: Permission = [minLevel(roles.admin.level)];
+const seeRCON: Permission = [minLevel(roles.admin.level)];
+const useAllAnnouncers: Permission = [minLevel(roles.honoraryUser.level)];
 
-  pickup: {
-    kick: { level: roles.admin.level },
-
-    end: { level: roles.admin.level },
-
-    'reserve-server': { level: roles.admin.level },
-  },
-
-  server: {
-    configure: { level: roles.admin.level },
-
-    'see-rcon': { level: roles.admin.level },
-  },
-
-  announcers: { 'use-without-buying': { level: roles.honoraryUser.level } },
+const permissions = {
+  'user.change-role': changeUsersRole,
+  'user.user': alertUser,
+  'chat.delete-message': deleteChatMessage,
+  'chat.use-global-mention': useGlobalMention,
+  'queue.kick-player': kickPlayerFromQueue,
+  'pickup.end': endPickup,
+  'server.reserve': reserveServer,
+  'server.configure': configureServer,
+  'server.see-rcon': seeRCON,
+  'announcers.use-all': useAllAnnouncers,
 };
+
+export default permissions;

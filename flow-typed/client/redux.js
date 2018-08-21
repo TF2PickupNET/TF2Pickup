@@ -24,12 +24,11 @@ declare module 'redux' {
     nextReducer(reducer: Reducer<State>): void,
   }
 
-  // declare export function combineReducers(reducers: {}): Reducer<{}>;
-
   declare export type CombinedReducer<S, A> = (state: $Shape<S> & {} | void, action: A) => S;
 
-  declare export function combineReducers<O: {}, A>(reducers: O): CombinedReducer<$ObjMap<O, <S>(r: Reducer<S>) => S>, A>;
-
+  declare export function combineReducers<O: {}, A>(
+    reducers: O
+  ): CombinedReducer<$ObjMap<O, <S>(r: Reducer<S>) => S>, A>;
 
   declare export function bindActionCreators<Args: $ReadOnlyArray<mixed>>(
     action: (...args: Args) => Action<>,

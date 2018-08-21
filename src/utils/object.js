@@ -1,11 +1,8 @@
 // @flow
 
-import { flatten } from './array';
 import isPlainObject from 'is-plain-object';
 
-function isObject(obj: mixed): %checks {
-  return typeof obj === 'object' && !Array.isArray(obj) && obj !== null;
-}
+import { flatten } from './array';
 
 /**
  * Map over an object and return the new key value combination.

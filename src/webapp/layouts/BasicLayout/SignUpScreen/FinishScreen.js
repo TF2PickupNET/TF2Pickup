@@ -5,11 +5,17 @@ import {
   Row,
   Button,
 } from 'antd';
+import injectSheet from 'react-jss';
 
 type State = { isProcessing: boolean };
-type Props = { nextStep: () => void };
+type Props = {
+  nextStep: () => void,
+  classes: { text: string },
+};
 
-export default class FinishScreen extends React.PureComponent<Props, State> {
+const styles = { text: { textAlign: 'center' } };
+
+class FinishScreen extends React.PureComponent<Props, State> {
   handleFinishClick = () => {
     this.props.nextStep();
   };
@@ -17,7 +23,7 @@ export default class FinishScreen extends React.PureComponent<Props, State> {
   render() {
     return (
       <React.Fragment>
-        <p>
+        <p className={this.props.classes.text}>
           Congrats you are finished.
           Have fun playing.
         </p>
@@ -28,10 +34,12 @@ export default class FinishScreen extends React.PureComponent<Props, State> {
           align="middle"
         >
           <Button onClick={this.handleFinishClick}>
-            Let's go
+            Let&apos;s go
           </Button>
         </Row>
       </React.Fragment>
     );
   }
 }
+
+export default injectSheet(styles)(FinishScreen);

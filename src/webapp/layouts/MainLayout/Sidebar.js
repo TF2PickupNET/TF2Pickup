@@ -21,6 +21,7 @@ type Props = {
   lastPickup: null | number,
   userId: string,
   location: Location,
+  logout: () => void,
   classes: { menu: string },
 };
 
@@ -42,8 +43,6 @@ class Sidebar extends React.PureComponent<Props> {
   }
 
   handleItemClick = (options) => {
-    console.log(options);
-
     if (options.key === 'logout') {
       app.logout();
 

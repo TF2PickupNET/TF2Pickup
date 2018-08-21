@@ -6,6 +6,7 @@ import {
   Row,
   Button,
 } from 'antd';
+
 import { socialMedias } from '../../../../config';
 
 type State = { isProcessing: boolean };
@@ -27,6 +28,29 @@ class JoinDiscordScreen extends React.PureComponent<Props, State> {
     this.props.nextStep();
   };
 
+  renderButtons() {
+    return (
+      <Row
+        type="flex"
+        justify="center"
+      >
+        <Button
+          className={this.props.classes.button}
+          onClick={this.handleSkipClick}
+        >
+          Skip
+        </Button>
+
+        <Button
+          className={this.props.classes.button}
+          onClick={this.handleJoinClick}
+        >
+          Join Discord
+        </Button>
+      </Row>
+    );
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -34,7 +58,6 @@ class JoinDiscordScreen extends React.PureComponent<Props, State> {
           Join our Discord for a better TF2Pickup experience.
           <br />
           You will receive important notifications about:
-
           <ul>
             <li>Server Maintenance</li>
             <li>Special Events</li>
@@ -43,24 +66,7 @@ class JoinDiscordScreen extends React.PureComponent<Props, State> {
           </ul>
         </div>
 
-        <Row
-          type="flex"
-          justify="center"
-        >
-          <Button
-            className={this.props.classes.button}
-            onClick={this.handleSkipClick}
-          >
-            Skip
-          </Button>
-
-          <Button
-            className={this.props.classes.button}
-            onClick={this.handleJoinClick}
-          >
-            Join Discord
-          </Button>
-        </Row>
+        {this.renderButtons()}
       </React.Fragment>
     );
   }

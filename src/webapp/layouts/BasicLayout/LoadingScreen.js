@@ -9,6 +9,7 @@ import {
   Progress,
   message,
 } from 'antd';
+import Helmet from 'react-helmet';
 
 import {
   type Config,
@@ -166,6 +167,10 @@ class LoadingScreen extends React.PureComponent<Props, State> {
         align="middle"
         className={this.props.classes.container}
       >
+        <Helmet>
+          <title>Loading...</title>
+        </Helmet>
+
         <Col
           xs={20}
           md={12}

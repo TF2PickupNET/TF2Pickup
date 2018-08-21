@@ -8,6 +8,7 @@ import {
   Col,
   Steps,
 } from 'antd';
+import Helmet from 'react-helmet';
 
 import { type User } from '../../../../types';
 
@@ -156,14 +157,35 @@ class SignUpScreen extends React.PureComponent<Props, State> {
     );
   }
 
+  renderStepper(currentStep) {
+    const { Component } = currentStep;
+
+    return (
+      <Col
+        md={20}
+        lg={16}
+      >
+        <h2 className={this.props.classes.header}>
+          Please fill out some information before you can start playing
+        </h2>
+
+        <div className={this.props.classes.stepperContainer}>
+          {this.renderSteps(currentStep)}
+
+          <div className={this.props.classes.contentContainer}>
+            <Component nextStep={this.nextStep} />
+          </div>
+        </div>
+      </Col>
+    );
+  }
+
   render() {
     const currentStep = this.getCurrentStep();
 
     if (currentStep === null) {
       return this.props.children;
     }
-
-    const { Component } = currentStep;
 
     return (
       <Row
@@ -172,22 +194,11 @@ class SignUpScreen extends React.PureComponent<Props, State> {
         align="middle"
         className={this.props.classes.container}
       >
-        <Col
-          md={20}
-          lg={16}
-        >
-          <h2 className={this.props.classes.header}>
-            Please fill out some information before you can start playing
-          </h2>
+        <Helmet>
+          <title>Sign Up</title>
+        </Helmet>
 
-          <div className={this.props.classes.stepperContainer}>
-            {this.renderSteps(currentStep)}
-
-            <div className={this.props.classes.contentContainer}>
-              <Component nextStep={this.nextStep} />
-            </div>
-          </div>
-        </Col>
+        {this.renderStepper(currentStep)}
       </Row>
     );
   }

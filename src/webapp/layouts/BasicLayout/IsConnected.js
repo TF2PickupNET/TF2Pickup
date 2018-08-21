@@ -8,6 +8,7 @@ import {
   message,
 } from 'antd';
 import injectSheet from 'react-jss';
+import Helmet from 'react-helmet';
 
 import app from '../../app';
 
@@ -95,6 +96,10 @@ class IsConnected extends React.PureComponent<Props, State> {
         align="middle"
         className={this.props.classes.container}
       >
+        <Helmet>
+          <title>Connecting...</title>
+        </Helmet>
+
         {this.state.isFirstConnect ? (
           <h2>
             Connecting...

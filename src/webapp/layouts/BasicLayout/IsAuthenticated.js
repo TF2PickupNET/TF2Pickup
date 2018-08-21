@@ -9,6 +9,7 @@ import {
   Button,
 } from 'antd';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 
 import { redirectToSteamAuth } from '../../utils/auth';
 
@@ -36,6 +37,10 @@ class IsAuthenticated extends React.PureComponent<Props> {
         align="middle"
         className={this.props.classes.container}
       >
+        <Helmet>
+          <title>Not Authenticated</title>
+        </Helmet>
+
         <Col>
           <Card title="You need to login">
             <Button onClick={this.handleClick}>

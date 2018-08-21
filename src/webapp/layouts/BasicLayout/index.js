@@ -2,6 +2,7 @@
 
 import React, { type Node } from 'react';
 import { Layout } from 'antd';
+import Helmet from 'react-helmet';
 
 import IsConnected from './IsConnected';
 import IsAuthenticated from './IsAuthenticated';
@@ -19,6 +20,8 @@ export default function BasicLayout(props: Props) {
       <CookieNotification />
 
       <NotificationRequester />
+
+      <Helmet titleTemplate="%s | TF2Pickup" />
 
       <IsConnected>
         <LoadingScreen>

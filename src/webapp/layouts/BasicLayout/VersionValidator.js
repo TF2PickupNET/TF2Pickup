@@ -9,6 +9,7 @@ import {
   Button,
 } from 'antd';
 import { connect } from 'react-redux';
+import Helmet from 'react-helmet';
 
 // $FlowFixMe: Flow can't type json files
 import pkg from '../../../../package.json';
@@ -36,6 +37,10 @@ class IsAuthenticated extends React.PureComponent<Props> {
         align="middle"
         className={this.props.classes.container}
       >
+        <Helmet>
+          <title>Invalid Version</title>
+        </Helmet>
+
         <Col>
           <Card title="Please refresh the page">
             It seems that your version is out of sync with the version of the server.

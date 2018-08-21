@@ -3,6 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
+import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import {
   Menu,
@@ -11,6 +12,7 @@ import {
 } from 'antd';
 
 import { type Store } from '../../store';
+import { isString } from '../../../utils';
 
 import { SIDEBAR_WIDTH } from './Sidebar';
 
@@ -25,6 +27,7 @@ type Props = {
   name: string,
   avatar: string,
 };
+type State = { title: string | null };
 
 const { Header } = Layout;
 
@@ -57,7 +60,15 @@ const styles = {
   avatar: { marginLeft: 16 },
 };
 
-class Toolbar extends React.PureComponent<Props> {
+class Toolbar extends React.PureComponent<Props, State> {
+  state = { title: null };
+
+  handleStateChange = (state: { title?: string }) => {
+    if (isString(state.title)) {
+      this.setState({ title: state.title });
+    }
+  };
+
   renderRightMenu() {
     return (
       <Menu
@@ -84,6 +95,8 @@ class Toolbar extends React.PureComponent<Props> {
   render() {
     return (
       <Header className={this.props.classes.header}>
+        <Helmet onChangeClientState={this.handleStateChange} />
+
         <Menu
           theme="dark"
           mode="horizontal"
@@ -95,7 +108,7 @@ class Toolbar extends React.PureComponent<Props> {
           </Menu.Item>
 
           <Menu.Item className={this.props.classes.menuItem}>
-            6v6
+            {this.state.title}
           </Menu.Item>
         </Menu>
 

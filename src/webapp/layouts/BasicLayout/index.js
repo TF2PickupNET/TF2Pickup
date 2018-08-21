@@ -8,12 +8,15 @@ import IsAuthenticated from './IsAuthenticated';
 import LoadingScreen from './LoadingScreen';
 import SignUpScreen from './SignUpScreen';
 import VersionValidator from './VersionValidator';
+import CookieNotification from './CookieNotification';
 
 type Props = { children: Node };
 
 export default function BasicLayout(props: Props) {
   return (
     <Layout>
+      <CookieNotification />
+
       <IsConnected>
         <LoadingScreen>
           <VersionValidator>

@@ -48,23 +48,26 @@ declare module 'antd' {
     width?: number,
   }> {}
 
-  declare type MessageFunc = (content: string | Node, onClose?: () => void) => Promise<void>
-    | (content: string | Node, duration: number, onClose?: () => void) => Promise<void>;
-
   declare export class message {
-    static success: MessageFunc,
-    static error: MessageFunc,
-    static info: MessageFunc,
-    static warning: MessageFunc,
-    static warn: MessageFunc,
-    static loading: MessageFunc,
+    static success(content: Node, onClose?: () => void): Promise<void>,
+    static success(content: Node, duration: number, onClose?: () => void): Promise<void>,
+    static error(content: Node, onClose?: () => void): Promise<void>,
+    static error(content: Node, duration: number, onClose?: () => void): Promise<void>,
+    static info(content: Node, onClose?: () => void): Promise<void>,
+    static info(content: Node, duration: number, onClose?: () => void): Promise<void>,
+    static warning(content: Node, onClose?: () => void): Promise<void>,
+    static warning(content: Node, duration: number, onClose?: () => void): Promise<void>,
+    static warn(content: Node, onClose?: () => void): Promise<void>,
+    static warn(content: Node, duration: number, onClose?: () => void): Promise<void>,
+    static loading(content: Node, onClose?: () => void): Promise<void>,
+    static loading(content: Node, duration: number, onClose?: () => void): Promise<void>,
+    static destroy(): void,
     static config(options: {
       duration?: number,
       getContainer?: () => HTMLElement,
       maxCount?: number,
       top?: number,
     }): void,
-    static destroy(): void,
   }
 
   declare export class Button extends React$Component<{
@@ -262,5 +265,50 @@ declare module 'antd' {
     static Item: Class<MenuItem>,
     static ItemGroup: Class<MenuItemGroup>,
     static Divider: Class<Divider>,
+  }
+
+  declare export class Alert extends React$Component<{
+    afterClose?: () => void,
+    banner?: boolean,
+    closable?: boolean,
+    closeText?: Node,
+    description?: Node,
+    iconType?: string,
+    message: Node,
+    showIcon?: boolean,
+    type?: 'success' | 'info' | 'warning' | 'error',
+    onClose?: () => void,
+  }> {}
+
+  declare type NotificationPlacements = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
+
+  declare type NotificationOptions = {
+    btn?: Node,
+    className?: string,
+    description?: Node,
+    duration?: number | null,
+    icon?: Node,
+    key: string,
+    message: Node,
+    placement?: NotificationPlacements,
+    onClose: () => void,
+  };
+
+  declare export class notification {
+    static success(options: NotificationOptions): void,
+    static error(options: NotificationOptions): void,
+    static info(options: NotificationOptions): void,
+    static warning(options: NotificationOptions): void,
+    static warn(options: NotificationOptions): void,
+    static open(options: NotificationOptions): void,
+    static close(key: string): void,
+    static destroy(): void,
+    static config({
+      bottom?: number,
+      duration?: number | null,
+      getContainer?: () => HTMLElement,
+      placement?: NotificationPlacements,
+      top?: number,
+    }): void,
   }
 }

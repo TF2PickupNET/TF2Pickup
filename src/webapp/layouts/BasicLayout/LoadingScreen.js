@@ -3,7 +3,6 @@
 import React, { type Node } from 'react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
-import cookie from 'js-cookie';
 import {
   Row,
   Col,
@@ -85,29 +84,14 @@ class LoadingScreen extends React.PureComponent<Props, State> {
   }
 
   async authenticate() {
-    const token = cookie.get('feathers-jwt');
-
     this.setState({ loadingText: 'Authenticating' });
 
-    if (token) {
-      try {
-        const { accessToken } = await app.authenticate({
-          strategy: 'jwt',
-          accessToken: token,
-        });
-        const verifiedToken = await app.passport.verifyJWT(accessToken);
+    try {
+      await app.authenticate();
 
-        cookie.set('feathers-jwt', accessToken);
-        app.set('userId', verifiedToken.id);
-
-        this.setState({ loadingPercentage: 45 });
-      } catch (error) {
-        message.warn(`Couldn't authenticate. ${error.message}`);
-
-        this.setState({ loadingPercentage: 100 });
-      }
-    } else {
-      message.warn('Couldn\'t authenticate');
+      this.setState({ loadingPercentage: 45 });
+    } catch (error) {
+      message.warn(`Couldn't authenticate. ${error.message}`);
 
       this.setState({ loadingPercentage: 100 });
     }
@@ -166,7 +150,7 @@ class LoadingScreen extends React.PureComponent<Props, State> {
     if (this.state.loadingPercentage === 100) {
       setTimeout(() => {
         this.setState({ isLoading: false });
-      }, 150);
+      }, 80);
     } else {
       this.currentStep += 1;
 

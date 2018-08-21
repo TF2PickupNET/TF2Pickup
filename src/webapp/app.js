@@ -26,6 +26,16 @@ app
   .configure(auth({ storage: window.localStorage }))
   .configure(events());
 
+app.on('logout', () => {
+  app.set('userId', null);
+});
+
+app.on('authenticated', async ({ accessToken }) => {
+  const verifiedToken = await app.passport.verifyJWT(accessToken);
+
+  app.set('userId', verifiedToken.id);
+});
+
 export { API_ENDPOINT };
 
 export default app;

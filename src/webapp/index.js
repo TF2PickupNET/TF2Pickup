@@ -11,6 +11,7 @@ import store from './store';
 import BasicLayout from './layouts/BasicLayout';
 import registerServiceWorker from './register-service-worker';
 import MainLayout from './layouts/MainLayout';
+import Views from './views';
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
       <BrowserRouter>
         <BasicLayout>
           <MainLayout>
-            Test
+            <Views />
           </MainLayout>
         </BasicLayout>
       </BrowserRouter>

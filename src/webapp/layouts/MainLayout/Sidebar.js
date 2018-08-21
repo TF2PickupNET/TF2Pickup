@@ -1,44 +1,133 @@
 // @flow
 
 import React from 'react';
-import { Menu, Icon, Layout } from 'antd';
+import injectSheet from 'react-jss';
+import { connect } from 'react-redux';
+import {
+  Link,
+  withRouter,
+  type Location,
+} from 'react-router-dom';
+import {
+  Menu,
+  Layout,
+} from 'antd';
+
+import { gamemodes } from '../../../config';
+import app from '../../app';
+import { logoutUser } from '../../store/user/actions';
+
+type Props = {
+  lastPickup: null | number,
+  userId: string,
+  location: Location,
+  classes: { menu: string },
+};
 
 const SIDEBAR_WIDTH = 256;
-const { SubMenu } = Menu;
 const { Sider } = Layout;
 
-export { SIDEBAR_WIDTH };
+const gamemodeKeys = Object.keys(gamemodes);
+const styles = { menu: { height: '100%' } };
 
-export default class Sidebar extends React.PureComponent<{}> {
+class Sidebar extends React.PureComponent<Props> {
+  static renderGamemodeItems(): Node {
+    return gamemodeKeys.map(name => (
+      <Menu.Item key={`/${name}`}>
+        <Link to={`/${name}`}>
+          {gamemodes[name].display}
+        </Link>
+      </Menu.Item>
+    ));
+  }
+
+  handleItemClick = (options) => {
+    console.log(options);
+
+    if (options.key === 'logout') {
+      app.logout();
+
+      this.props.logout();
+    }
+  };
+
+  renderUserItems() {
+    return [
+      <Menu.Item key="/settings">
+        <Link to="/settings">
+          Settings
+        </Link>
+      </Menu.Item>,
+
+      <Menu.Item key={`/profile/${this.props.userId}`}>
+        <Link to="/profile">
+          Profile
+        </Link>
+      </Menu.Item>,
+
+      <Menu.Item key="logout">
+        Logout
+      </Menu.Item>,
+    ];
+  }
+
+  renderLastPickupItem() {
+    if (this.props.lastPickup === null) {
+      return null;
+    }
+
+    const path = `/pickup/${this.props.lastPickup}`;
+
+    return (
+      <Menu.Item key={path}>
+        <Link to={path}>
+          Last Pickup
+        </Link>
+      </Menu.Item>
+    );
+  }
+
   render() {
     return (
       <Sider width={SIDEBAR_WIDTH}>
         <Menu
           mode="inline"
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
-          style={{ height: '100%', borderRight: 0 }}
+          selectedKeys={[this.props.location.pathname]}
+          className={this.props.classes.menu}
+          onClick={this.handleItemClick}
+
         >
-          <SubMenu key="sub1" title={<span><Icon type="user" />subnav 1</span>}>
-            <Menu.Item key="1">option1</Menu.Item>
-            <Menu.Item key="2">option2</Menu.Item>
-            <Menu.Item key="3">option3</Menu.Item>
-            <Menu.Item key="4">option4</Menu.Item>
-          </SubMenu>
-          <SubMenu key="sub2" title={<span><Icon type="laptop" />subnav 2</span>}>
-            <Menu.Item key="5">option5</Menu.Item>
-            <Menu.Item key="6">option6</Menu.Item>
-            <Menu.Item key="7">option7</Menu.Item>
-            <Menu.Item key="8">option8</Menu.Item>
-          </SubMenu>
-          <SubMenu key="sub3" title={<span><Icon type="notification" />subnav 3</span>}>
-            <Menu.Item key="9">option9</Menu.Item>
-            <Menu.Item key="10">option10</Menu.Item>
-            <Menu.Item key="11">option11</Menu.Item>
-            <Menu.Item key="12">option12</Menu.Item>
-          </SubMenu>
+          <Menu.ItemGroup title="Pickups">
+            {Sidebar.renderGamemodeItems()}
+          </Menu.ItemGroup>
+
+          <Menu.Divider />
+
+          {this.renderLastPickupItem()}
+
+          <Menu.Divider />
+
+          {this.renderUserItems()}
         </Menu>
       </Sider>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    lastPickup: state.user.lastPickup,
+    userId: state.user.id,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return { logout: () => dispatch(logoutUser()) };
+};
+
+export { SIDEBAR_WIDTH };
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(
+    injectSheet(styles)(Sidebar),
+  ),
+);

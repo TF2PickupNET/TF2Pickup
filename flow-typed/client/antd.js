@@ -4,6 +4,7 @@ import {
   type Node,
   type Element,
   type ElementType,
+  type ChildrenArray,
 } from 'react';
 
 declare module 'antd' {
@@ -194,5 +195,72 @@ declare module 'antd' {
     static Header: Class<Layout>,
     static Footer: Class<Layout>,
     static Content: Class<Layout>,
+  }
+
+  declare export class Avatar extends React$Component<{
+    icon?: string,
+    shape?: 'circle' | 'square',
+    size?: Sizes | number,
+    src?: string,
+    alt?: string,
+    onError?: () => boolean,
+  }> {}
+
+  declare export class Divider extends React$Component<{
+    className?: string,
+    dashed?: boolean,
+    orientation?: 'left' | 'right' | 'center',
+    type?: 'horizontal' | 'vertical',
+    children?: Node,
+  }> {}
+
+  declare class MenuItem extends React$Component<{
+    className?: string,
+    disabled?: boolean,
+    children: Node,
+  }> {}
+
+  declare class MenuItemGroup extends React$Component<{
+    className?: string,
+    title: string,
+    children: ChildrenArray<Element<MenuItem | MenuItemGroup | Divider>>,
+  }> {}
+
+  declare export class Menu extends React$Component<{
+    className?: string,
+    defaultOpenKeys?: $ReadOnlyArray<string>,
+    defaultSelectedKeys?: $ReadOnlyArray<string>,
+    forceSubMenuRender?: boolean,
+    inlineCollapsed?: boolean,
+    inlineIndent?: number,
+    mode?: 'vertical' | 'vertical-right' | 'horizontal' | 'inline',
+    multiple?: boolean,
+    openKeys?: $ReadOnlyArray<string>,
+    selectable?: boolean,
+    selectedKeys?: $ReadOnlyArray<string>,
+    subMenuCloseDelay?: number,
+    subMenuOpenDelay?: number,
+    theme?: Theme,
+    onClick?: ({
+      item: Node,
+      key: string,
+      keyPath: string,
+    }) => void,
+    onDeselect?: ({
+      item: Node,
+      key: string,
+      selectedKeys: $ReadOnlyArray<string>,
+    }) => void,
+    onOpenChange?: (openKeys: $ReadOnlyArray<string>) => void,
+    onSelect?: ({
+      item: Node,
+      key: string,
+      selectedKeys: $ReadOnlyArray<string>,
+    }) => void,
+    children: ChildrenArray<Element<MenuItem | MenuItemGroup | Divider>>,
+  }> {
+    static Item: Class<MenuItem>,
+    static ItemGroup: Class<MenuItemGroup>,
+    static Divider: Class<Divider>,
   }
 }

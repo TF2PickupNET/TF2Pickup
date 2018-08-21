@@ -8,7 +8,10 @@ import Sidebar from './Sidebar';
 import MainContent from './MainContent';
 import Toolbar from './Toolbar';
 
-type Props = { children: Node };
+type Props = {
+  children: Node,
+  classes: { container: string },
+};
 
 const styles = { container: { height: '100vh' } };
 

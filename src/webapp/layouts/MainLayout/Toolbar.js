@@ -3,6 +3,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
+import { Link } from 'react-router-dom';
 import {
   Menu,
   Layout,
@@ -13,22 +14,41 @@ import { type Store } from '../../store';
 
 import { SIDEBAR_WIDTH } from './Sidebar';
 
+type Props = {
+  classes: {
+    header: string,
+    menu: string,
+    menuItem: string,
+    logo: string,
+    avatar: string,
+  },
+  name: string,
+  avatar: string,
+};
+
 const { Header } = Layout;
 
 const styles = {
-  header: { padding: 0 },
+  header: {
+    padding: 0,
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
 
   menu: {
-    lineHeight: '64px',
     padding: 0,
+    lineHeight: '64px',
+    height: 64,
+    display: 'inline',
   },
 
   menuItem: {
-    padding: '0 16px',
+    padding: '0 32px',
     fontSize: '1.5em',
   },
 
   logo: {
+    composes: '$menuItem',
     width: SIDEBAR_WIDTH,
     textAlign: 'center',
     fontSize: '1.8em',
@@ -37,18 +57,27 @@ const styles = {
   avatar: { marginLeft: 16 },
 };
 
-class Toolbar extends React.PureComponent<{}> {
+class Toolbar extends React.PureComponent<Props> {
   renderRightMenu() {
     return (
-      <Menu.Item className={this.props.classes.menuItem}>
-        {this.props.name}
+      <Menu
+        theme="dark"
+        mode="horizontal"
+        selectable={false}
+        className={this.props.classes.menu}
+      >
+        <Menu.Item className={this.props.classes.menuItem}>
+          <Link to="/profile">
+            {this.props.name}
 
-        <Avatar
-          size="large"
-          src={this.props.avatar}
-          className={this.props.classes.avatar}
-        />
-      </Menu.Item>
+            <Avatar
+              size="large"
+              src={this.props.avatar}
+              className={this.props.classes.avatar}
+            />
+          </Link>
+        </Menu.Item>
+      </Menu>
     );
   }
 
@@ -61,16 +90,16 @@ class Toolbar extends React.PureComponent<{}> {
           selectable={false}
           className={this.props.classes.menu}
         >
-          <Menu.Item className={`${this.props.classes.menuItem} ${this.props.classes.logo}`}>
+          <Menu.Item className={this.props.classes.logo}>
             TF2Pickup
           </Menu.Item>
 
           <Menu.Item className={this.props.classes.menuItem}>
             6v6
           </Menu.Item>
-
-          {this.renderRightMenu()}
         </Menu>
+
+        {this.renderRightMenu()}
       </Header>
     );
   }

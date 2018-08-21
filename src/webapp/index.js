@@ -5,6 +5,7 @@ import 'antd/dist/antd.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
 import store from './store';
 import BasicLayout from './layouts/BasicLayout';
@@ -14,11 +15,13 @@ import MainLayout from './layouts/MainLayout';
 function App() {
   return (
     <Provider store={store}>
-      <BasicLayout>
-        <MainLayout>
-          Test
-        </MainLayout>
-      </BasicLayout>
+      <BrowserRouter>
+        <BasicLayout>
+          <MainLayout>
+            Test
+          </MainLayout>
+        </BasicLayout>
+      </BrowserRouter>
     </Provider>
   );
 }

@@ -158,7 +158,7 @@ declare module '@feathersjs/feathers' {
   }
 
   declare export interface ServiceDefinition<Document> {
-    setup(app: App, path: string): void,
+    setup(app: ServerApp, path: string): void,
     find(params: Params): Promise<$ReadOnlyArray<Document>>,
     get(id: string, params: Params): Promise<Document>,
     create(data: Document, params: Params): Promise<Document>,

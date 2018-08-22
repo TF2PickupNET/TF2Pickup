@@ -8,10 +8,11 @@ import config from 'config';
 // $FlowFixMe: Weirdly this is untyped
 import pkg from '../../../../package.json';
 import { type Config } from '../../../types';
+import DefaultService from '../DefaultService';
 
 const log = debug('TF2Pickup:configuration');
 
-class ConfigurationService implements ServiceDefinition<Config> {
+class ConfigurationService extends DefaultService implements ServiceDefinition<Config> {
   config: Config = {
     beta: config.get('beta'),
     version: pkg.version,

@@ -1,6 +1,6 @@
 // @flow
 
-import { type App } from '@feathersjs/feathers';
+import { type App } from '@feathersjs/express';
 
 function channels(app: App) {
   app.on('connection', (connection) => {

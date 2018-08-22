@@ -9,7 +9,7 @@ declare module 'redux' {
   declare export type Reducer<State> = (
     state: State | void,
     // $FlowFixMe: Weirdly flow throws an error here
-    action: Action<string, null>,
+    action: Action<>,
   ) => State;
 
   declare export type Dispatch<T, P> = (action: Action<>) => void;

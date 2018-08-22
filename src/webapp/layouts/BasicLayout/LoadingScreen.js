@@ -74,7 +74,7 @@ class LoadingScreen extends React.PureComponent<Props, State> {
 
   async loadConfiguration() {
     try {
-      const config = await app.service('configuration').get(null);
+      const config = await app.service('configuration').get('config');
 
       this.props.setConfig(config);
 
@@ -101,6 +101,14 @@ class LoadingScreen extends React.PureComponent<Props, State> {
   async fetchUser() {
     const userId = app.get('userId');
 
+    if (userId === null) {
+      message.warn('Couldn\'t authenticate.');
+
+      this.setState({ loadingPercentage: 100 });
+
+      return;
+    }
+
     this.setState({ loadingText: 'Fetching user' });
 
     try {
@@ -117,6 +125,14 @@ class LoadingScreen extends React.PureComponent<Props, State> {
   async fetchSettings() {
     const userId = app.get('userId');
 
+    if (userId === null) {
+      message.warn('Couldn\'t authenticate.');
+
+      this.setState({ loadingPercentage: 100 });
+
+      return;
+    }
+
     this.setState({ loadingText: 'Fetching settings' });
 
     try {
@@ -132,6 +148,14 @@ class LoadingScreen extends React.PureComponent<Props, State> {
 
   async fetchProfile() {
     const userId = app.get('userId');
+
+    if (userId === null) {
+      message.warn('Couldn\'t authenticate.');
+
+      this.setState({ loadingPercentage: 100 });
+
+      return;
+    }
 
     this.setState({ loadingText: 'Fetching profile' });
 

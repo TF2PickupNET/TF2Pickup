@@ -63,8 +63,8 @@ const styles = {
 class Toolbar extends React.PureComponent<Props, State> {
   state = { title: null };
 
-  handleStateChange = (state: { title?: string }) => {
-    if (isString(state.title)) {
+  handleStateChange = (state?: { title?: string }) => {
+    if (state && isString(state.title)) {
       this.setState({ title: state.title });
     }
   };

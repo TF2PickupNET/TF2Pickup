@@ -1,6 +1,7 @@
 // @flow strict-local
 
 import { type FeathersError } from '@feathersjs/errors';
+import { type Socket } from 'socket.io-client';
 
 import { type User } from '../../src/types/user';
 
@@ -133,12 +134,17 @@ declare module '@feathersjs/feathers' {
   }
 
   declare export interface Service<Document> {
-    get(id: string, params: Params): Promise<Document>,
-    find(params: Params): Promise<$ReadOnlyArray<Document>>,
-    create(data: Document, params: Params): Promise<Document>,
-    update(id: string, data: Document, params: Params): Promise<Document>,
-    patch(id: string, data: Document, params: Params): Promise<Document>,
-    remove(id: string, params: Params): Promise<{}>,
+    get(id: string): Promise<Document>,
+    find(query: {
+      query: {
+        $limit?: number,
+        $skip?: number,
+      },
+    }): Promise<$ReadOnlyArray<Document>>,
+    create(data: Document): Promise<Document>,
+    update(id: string, data: Document): Promise<Document>,
+    patch(id: string, data: Document): Promise<Document>,
+    remove(id: string): Promise<Document>,
 
     hooks(hooks: Hooks<App>): Service<Document>,
     publish(publisher: (data: {}) => $ReadOnlyArray<Connection>): Service<Document>,
@@ -146,29 +152,58 @@ declare module '@feathersjs/feathers' {
       eventname: string,
       publisher: (data: {}) => $ReadOnlyArray<Connection>,
     ): Service<Document>,
-    on(eventname: string, cb: (data: mixed) => void): Service<Document>,
+    on(eventname: string, cb: (data: Document) => void): Service<Document>,
     emit(eventname: string, data?: mixed): Service<Document>,
     removeListener(eventname: string, listeners: ?mixed): Service<Document>,
   }
 
+  declare export interface ServiceDefinition<Document> {
+    setup(app: App, path: string): void,
+    find(params: Params): Promise<$ReadOnlyArray<Document>>,
+    get(id: string, params: Params): Promise<Document>,
+    create(data: Document, params: Params): Promise<Document>,
+    update(id: string, data: $Shape<Document>, params: Params): Promise<Document>,
+    patch(id: string, data: $Shape<Document>, params: Params): Promise<Document>,
+    remove(id: string, params: Params): Promise<Document>,
+  }
+
   declare export interface App {
-    channels: $ReadOnlyArray<Channel>,
-    use<Document>(path: string, service: Service<App, Document>): App,
-    service<Document>(path: string): Service<App, Document>,
-    hooks(hooks: Hooks<App>): App,
+    service<Document>(path: string): Service<Document>,
     configure(cb: (app: App) => void): App,
-    channel(name: string): Channel,
-    listen(port: number): App,
     set(name: string, value: mixed): App,
     get(name: string): mixed,
-    on('connection', fn: (connection: Connection) => void): App,
-    on(eventname: string, cb: (data: {}, params: Params) => void): App,
+    on(eventname: string, cb: (data: {}) => void | Promise<void>): App,
     emit(eventname: string, data: ?mixed): App,
     removeListener(eventname: string, listeners: ?mixed): App,
   }
 
+  declare export interface ServerApp extends App {
+    channels: $ReadOnlyArray<Channel>,
+    use<Document>(path: string, service: ServiceDefinition<Document>): App,
+    hooks(hooks: Hooks<App>): App,
+    channel(name: string): Channel,
+    listen(port: number): App,
+    on('connection', fn: (connection: Connection) => void | Promise<void>): App,
+    on(eventname: string, cb: (data: {}) => void | Promise<void>): App,
+  }
+
+  declare export interface ClientApp extends App {
+    get('userId'): null | string,
+    set('userId', val: null | string): App,
+    set(name: string, value: mixed): App,
+    get(name: string): mixed,
+    authenticate(): Promise<void>,
+    on('authenticated', fn: (payload: { accessToken: string }) => void | Promise<void>): App,
+    on(eventname: string, cb: (data: {}) => void | Promise<void>): App,
+    logout(): Promise<void>,
+    passport: {
+      verifyJWT(token: string): { id: string },
+    },
+    io: Socket,
+  }
+
   declare export default {
-    (): App,
+    <A>(): A,
     SKIP: SKIP,
   };
 }

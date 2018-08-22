@@ -1,6 +1,6 @@
 // @flow
 
-import feathers from '@feathersjs/feathers';
+import feathers, { type ClientApp } from '@feathersjs/feathers';
 import socketio from '@feathersjs/socketio-client';
 import io from 'socket.io-client';
 import auth from '@feathersjs/authentication-client';
@@ -19,7 +19,7 @@ const socket = io(API_ENDPOINT, {
   reconnectionDelayMax: 60 * 1000,
   timeout: SOCKET_TIMEOUT,
 });
-const app = feathers();
+const app: ClientApp = feathers();
 
 app
   .configure(socketio(socket, { timeout: SOCKET_TIMEOUT }))
@@ -30,8 +30,8 @@ app.on('logout', () => {
   app.set('userId', null);
 });
 
-app.on('authenticated', async ({ accessToken }) => {
-  const verifiedToken = await app.passport.verifyJWT(accessToken);
+app.on('authenticated', async (payload: { accessToken: string }) => {
+  const verifiedToken = await app.passport.verifyJWT(payload.accessToken);
 
   app.set('userId', verifiedToken.id);
 });

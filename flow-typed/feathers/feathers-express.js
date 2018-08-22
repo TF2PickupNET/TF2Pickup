@@ -1,8 +1,8 @@
 // @flow strict-local
 
 import {
-  type App,
-  type Service,
+  type ServerApp,
+  type ServiceDefinition,
 } from '@feathersjs/feathers';
 import { Socket } from 'net';
 import { type FeathersError } from '@feathersjs/errors';
@@ -43,7 +43,6 @@ declare module '@feathersjs/express' {
     header(field: string): string | void,
     is(type: string): boolean,
     param(name: string, defaultValue?: string): string | void,
-
   }
 
   declare type ExpressCookieOptions = {
@@ -102,25 +101,24 @@ declare module '@feathersjs/express' {
 
   }
 
-  declare type ExpressNextFuntion = (err?: ?Error | 'route') => mixed;
+  declare type ExpressNextFunction = (err?: ?Error | 'route') => mixed;
 
   declare export type ExpressMiddleware = (
     req: ExpressRequest,
     res: ExpressResponse,
-    next: ExpressNextFuntion
-  ) => void
-    | Promise<void>;
+    next: ExpressNextFunction,
+  ) => void | Promise<void>;
 
-  declare class ExpressApp extends App {
-    use(middleware: ExpressMiddleware): this,
-    use(path: string, middleware: ExpressMiddleware): this,
-    use<Doc>(path: string, service: Service<this, Doc>): this,
+  declare interface ExpressApp extends ServerApp {
+    use(middleware: ExpressMiddleware): ExpressApp,
+    use(path: string, middleware: ExpressMiddleware): ExpressApp,
+    use<Doc>(path: string, service: ServiceDefinition<Doc>): ExpressApp,
   }
 
   declare export type App = ExpressApp;
 
   declare export default {
-    (app: App): ExpressApp,
+    (app: ServerApp): ExpressApp,
     json(): ExpressMiddleware,
     urlencoded(options: {}): ExpressMiddleware,
     rest(): (app: ExpressApp) => void,
@@ -130,7 +128,7 @@ declare module '@feathersjs/express' {
         error: FeathersError,
         req: ExpressRequest,
         res: ExpressResponse,
-        next: ExpressNextFuntion,
+        next: ExpressNextFunction,
       ) => void,
       logger: false | () => void,
     }): ExpressMiddleware,

@@ -6,10 +6,10 @@ import hooks from 'feathers-hooks-common';
 import SteamCommunity from 'steamcommunity';
 import { promisify } from 'util';
 
-import { type User } from '../../../types';
+import { type User } from '../../../../types';
 
-import validateInSteamGroup from './hooks/validate-in-steam-group';
-import validateHours from './hooks/validate-hours';
+import validateInSteamGroup from './validate-in-steam-group';
+import validateHours from './validate-hours';
 
 const log = debug('TF2Pickup:users:hooks');
 const community = new SteamCommunity();

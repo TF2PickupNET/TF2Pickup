@@ -22,10 +22,11 @@ export default mongoose.model('UserSettings', new mongoose.Schema({
     default: 'default',
   },
 
-  theme: {
-    type: String,
-    validate: oneOf(['light', 'dark'], { nullIsAllowed: true }),
-    default: null,
+  volume: {
+    type: Number,
+    default: 70,
+    min: 0,
+    max: 100,
   },
 }));
 

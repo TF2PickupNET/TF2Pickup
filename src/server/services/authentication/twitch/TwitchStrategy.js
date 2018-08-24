@@ -17,7 +17,6 @@ export default class TwitchStrategy extends OAuth2Strategy {
     this._oauth2.useAuthorizationHeaderforGET(true);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   authorizationParams() {
     // eslint-disable-next-line camelcase
     return { force_verify: true };

@@ -10,34 +10,34 @@ declare module '@feathersjs/feathers' {
   declare export type Method = 'find' | 'get' | 'create' | 'update' | 'patch' | 'remove';
   declare export type HookType = 'before' | 'after' | 'error';
 
-  declare export interface Connection {
+  declare export type Connection = {
     user: User,
-  }
+  };
 
-  declare export interface Params {
-    query: {},
+  declare export type Params<Query: {} = Object> = {
+    query: Query,
     provider: 'rest' | 'socketio' | 'primus' | void,
     user?: User,
     accessToken?: string,
     authenticated: boolean,
     connection: Connection,
-  }
+  };
 
-  declare export interface CommonHookContext<Doc> {
+  declare export type CommonHookContext<Doc> = {
     +app: App,
-    +service: Service<App, Doc>,
+    +service: Service<Doc>,
     +path: string,
     +method: Method,
     +type: HookType,
-    params: Params,
+    params: Params<>,
     statusCode: number,
-  }
+  };
 
-  declare export interface ErrorHookContext<Doc> extends CommonHookContext<Doc> {
+  declare export type ErrorHookContext<Doc> = CommonHookContext<Doc> & {
     +type: 'error',
     error: FeathersError<number, string>,
     result: void,
-  }
+  };
 
   declare export type BeforeHookContext<Doc> = CommonHookContext<Doc> & {
     +type: 'before',
@@ -159,12 +159,12 @@ declare module '@feathersjs/feathers' {
 
   declare export interface ServiceDefinition<Document> {
     setup(app: ServerApp, path: string): void,
-    find(params: Params): Promise<$ReadOnlyArray<Document>>,
-    get(id: string, params: Params): Promise<Document>,
-    create(data: Document, params: Params): Promise<Document>,
-    update(id: string, data: $Shape<Document>, params: Params): Promise<Document>,
-    patch(id: string, data: $Shape<Document>, params: Params): Promise<Document>,
-    remove(id: string, params: Params): Promise<Document>,
+    find(params: Params<>): Promise<$ReadOnlyArray<Document>>,
+    get(id: string, params: Params<>): Promise<Document>,
+    create(data: Document, params: Params<>): Promise<Document>,
+    update(id: string, data: $Shape<Document>, params: Params<>): Promise<Document>,
+    patch(id: string, data: $Shape<Document>, params: Params<>): Promise<Document>,
+    remove(id: string, params: Params<>): Promise<Document>,
   }
 
   declare export interface App {

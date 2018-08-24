@@ -5,6 +5,8 @@ module.exports = {
     'henribeck/react',
   ],
 
+  rules: { 'class-methods-use-this': 'off' },
+
   overrides: [{
     files: ['src/config/maps.js'],
     rules: { camelcase: 'off' },

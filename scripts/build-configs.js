@@ -28,7 +28,6 @@ function getInfoForFile(file: string) {
   }
 
   return {
-    // $FlowFixMe: Flow has issues....
     region: regions[region],
     gamemode: gamemodes[gamemode],
     mapType: mapTypes[mapType],

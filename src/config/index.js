@@ -9,4 +9,4 @@ export { default as permissions } from './permissions';
 export { default as regions } from './regions';
 export { default as roles } from './roles';
 export { default as socialMedias } from './social-medias';
-export { default as mapTypes } from './map-types';
+export { default as mapTypes } from './config-types';

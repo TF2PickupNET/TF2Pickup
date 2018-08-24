@@ -12,11 +12,10 @@ import {
 import { regions } from '../../../../config';
 import app from '../../../app';
 import { type UserProfile } from '../../../../types';
-import { type Regions } from '../../../../config/regions';
 
 type Props = {
   profiles: UserProfile,
-  region: Regions | null,
+  region: $Keys<typeof regions> | null,
 };
 type State = {
   isProcessing: boolean,

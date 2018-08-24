@@ -1,9 +1,9 @@
 // @flow
 
-import { type MapTypes } from './map-types';
+import configTypes from './config-types';
 
 type Map = {|
-  configType: MapTypes,
+  configType: $Keys<typeof configTypes> | null,
   display: string,
   isStockMap: boolean,
 |};

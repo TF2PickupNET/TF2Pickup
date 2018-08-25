@@ -11,6 +11,8 @@ import {
   oneOf,
 } from '../../utils/validators';
 
+const roleNames = Object.keys(roles);
+
 export default mongoose.model('User', new mongoose.Schema({
   id: {
     type: String,
@@ -61,6 +63,8 @@ export default mongoose.model('User', new mongoose.Schema({
   roles: {
     type: [String],
     default: [],
-    validate: oneOf(Object.keys(roles), {}),
+    validate: [
+      value => value.every(role => roleNames.includes(role)),
+    ],
   },
 }));

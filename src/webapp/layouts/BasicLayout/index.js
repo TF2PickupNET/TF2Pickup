@@ -11,29 +11,40 @@ import SignUpScreen from './SignUpScreen';
 import VersionValidator from './VersionValidator';
 import CookieNotification from './CookieNotification';
 import NotificationRequester from './NotificationRequester';
+import BrowserValidator from './BrowserValidator';
 
 type Props = { children: Node };
 
-export default function BasicLayout(props: Props) {
-  return (
-    <Layout>
-      <CookieNotification />
-
-      <NotificationRequester />
-
-      <Helmet titleTemplate="%s | TF2Pickup" />
-
+export default class BasicLayout extends React.PureComponent<Props> {
+  renderPage() {
+    return (
       <IsConnected>
-        <LoadingScreen>
-          <VersionValidator>
-            <IsAuthenticated>
-              <SignUpScreen>
-                {props.children}
-              </SignUpScreen>
-            </IsAuthenticated>
-          </VersionValidator>
-        </LoadingScreen>
+        <BrowserValidator>
+          <LoadingScreen>
+            <VersionValidator>
+              <IsAuthenticated>
+                <SignUpScreen>
+                  {this.props.children}
+                </SignUpScreen>
+              </IsAuthenticated>
+            </VersionValidator>
+          </LoadingScreen>
+        </BrowserValidator>
       </IsConnected>
-    </Layout>
-  );
+    );
+  }
+
+  render() {
+    return (
+      <Layout>
+        <CookieNotification />
+
+        <NotificationRequester />
+
+        <Helmet titleTemplate="%s | TF2Pickup" />
+
+        {this.renderPage()}
+      </Layout>
+    );
+  }
 }

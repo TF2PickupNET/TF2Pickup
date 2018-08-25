@@ -31,7 +31,7 @@ class BrowserValidator extends React.PureComponent<Props, State> {
 
   isDesktop = is.desktop();
 
-  isValidBrowser = is.chrome(65) || is.firefox(59);
+  isValidBrowser = is.chrome('>=65') || is.firefox('>=59');
 
   state = { ignoreWarning: localStorage.getItem(BrowserValidator.STORAGE_KEY) === 'true' };
 
@@ -82,8 +82,8 @@ class BrowserValidator extends React.PureComponent<Props, State> {
         <br />
         <br />
 
-        Please note that when you report any bug or something is broken
-        and you aren&amp;t using a desktop and supported browser,
+        Please note that when you report any bug or something is broken<br />
+        and you aren&amp;t using a desktop and supported browser,<br />
         we will not fix your bug.
 
         <br />

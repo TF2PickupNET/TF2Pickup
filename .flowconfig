@@ -12,10 +12,5 @@ emoji=true
 experimental.const_params=true
 module.use_strict=true
 include_warnings=true
-module.name_mapper='^@tf2pickup\/utils$' -> '<PROJECT_ROOT>/packages/utils/src/ErrorPage.js'
-module.name_mapper='^@tf2pickup\/config$' -> '<PROJECT_ROOT>/packages/config/src/ErrorPage.js'
-module.name_mapper='^@tf2pickup\/maps$' -> '<PROJECT_ROOT>/packages/maps/src/ErrorPage.js'
-module.name_mapper='^@tf2pickup\/assets' -> '<PROJECT_ROOT>/packages/assets/'
-module.name_mapper='^@tf2pickup\/tf2configs' -> '<PROJECT_ROOT>/packages/tf2configs/'
 
 [strict]

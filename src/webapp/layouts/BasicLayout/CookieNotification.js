@@ -8,7 +8,7 @@ import {
 
 type State = { acceptedCookies: boolean };
 
-export default class CookieNotification extends React.PureComponent<{}, State> {
+export default class CookieNotification extends React.Component<{}, State> {
   static KEY = 'ACCEPT-COOKIES';
 
   timeout = null;
@@ -42,6 +42,10 @@ export default class CookieNotification extends React.PureComponent<{}, State> {
         ),
       });
     }, 2000);
+  }
+
+  shouldComponentUpdate() {
+    return false;
   }
 
   componentWillUnmount() {

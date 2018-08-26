@@ -12,6 +12,7 @@ import VersionValidator from './VersionValidator';
 import CookieNotification from './CookieNotification';
 import NotificationRequester from './NotificationRequester';
 import BrowserValidator from './BrowserValidator';
+import SoundFix from './SoundFix';
 
 type Props = { children: Node };
 
@@ -37,6 +38,8 @@ export default class BasicLayout extends React.PureComponent<Props> {
   render() {
     return (
       <Layout>
+        <SoundFix/>
+
         <CookieNotification />
 
         <NotificationRequester />

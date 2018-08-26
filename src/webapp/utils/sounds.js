@@ -70,5 +70,6 @@ const announcerSounds: AnnouncerSounds = Object
 export type { PickupSounds };
 export {
   normalSounds,
+  defaultPickupSounds,
   announcerSounds,
 };

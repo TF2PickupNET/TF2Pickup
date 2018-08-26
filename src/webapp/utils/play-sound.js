@@ -8,7 +8,7 @@ import { isNumber } from '../../utils/number';
 import {
   normalSounds,
   announcerSounds,
-  type PickupSounds,
+  defaultPickupSounds,
 } from './sounds';
 
 type Sound = {
@@ -19,7 +19,7 @@ type Options = {
   volume?: number,
   announcer?: $Keys<typeof announcers>,
 };
-type Sounds = $Keys<typeof normalSounds> | $Keys<PickupSounds>;
+type Sounds = $Keys<typeof normalSounds> | $Keys<typeof defaultPickupSounds>;
 
 class Queue {
   items: $ReadOnlyArray<Sound> = [];

@@ -8,7 +8,7 @@ import {
 
 type State = { acceptedCookies: boolean };
 
-export default class NotificationRequester extends React.PureComponent<{}, State> {
+export default class NotificationRequester extends React.Component<{}, State> {
   static KEY = 'REQUEST-NOTIFICATION-ACCESS';
 
   static DESCRIPTION = (
@@ -39,6 +39,10 @@ export default class NotificationRequester extends React.PureComponent<{}, State
         btn: this.renderButtons(),
       });
     }, 5000);
+  }
+
+  shouldComponentUpdate() {
+    return false;
   }
 
   componentWillUnmount() {

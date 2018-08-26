@@ -311,4 +311,27 @@ declare module 'antd' {
       top?: number,
     }): void,
   }
+
+  declare export class Slider extends React$Component<{
+    autoFocus?: boolean,
+    defaultValue?: number | [number, number],
+    disabled?: boolean,
+    dots?: boolean,
+    included?: boolean,
+    max?: number,
+    min?: number,
+    range?: boolean,
+    step?: number | null,
+    tipFormatter?: (value: number) => Node | null,
+    value: number | [number, number],
+    vertical?: boolean,
+    onAfterChange?: (value: number) => void,
+    onChange: (value: number) => void,
+    marks?: { number: Node } | {
+      number: {
+        style: {},
+        label: Node,
+      },
+    },
+  }> {}
 }

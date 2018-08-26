@@ -10,6 +10,7 @@ import { gamemodes } from '../../config';
 
 import ProfileRedirect from './ProfileRedirect';
 import IndexRedirect from './IndexRedirect';
+import Settings from './Settings';
 
 export default class Views extends React.PureComponent<{}> {
   static renderGamemodeRoutes(): Node {
@@ -65,6 +66,7 @@ export default class Views extends React.PureComponent<{}> {
           exact
           strict
           path="/settings"
+          component={Settings}
         />
 
         {Views.renderProfileRoutes()}

@@ -42,6 +42,12 @@ class RegionSetting extends React.PureComponent<Props, State> {
   }
 
   handleSave = () => {
+    console.log('test');
+
+    if (this.state.region === this.props.region) {
+      return;
+    }
+
     app.io.emit('user:change-region', { region: this.state.region }, (err) => {
       if (err) {
         message.error(`Couldn't change your region. ${err.message}`);

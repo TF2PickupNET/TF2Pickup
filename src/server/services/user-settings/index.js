@@ -6,6 +6,7 @@ import debug from 'debug';
 
 import Model from './Model';
 import hooks from './hooks';
+import events from './events';
 
 const log = debug('TF2Pickup:user-settings');
 
@@ -18,6 +19,7 @@ export default function userSettings(app: App) {
   }));
 
   app
+    .configure(events)
     .service('user-settings')
     .hooks(hooks)
     // Publish the events only to the user that owns the document

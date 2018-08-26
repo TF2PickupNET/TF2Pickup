@@ -1,5 +1,7 @@
 // @flow
 
+import icon from '../../../assets/images/'
+
 type Options = {
   body?: string,
   tag?: string,

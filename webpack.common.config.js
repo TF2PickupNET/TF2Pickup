@@ -21,7 +21,7 @@ const rules = [{
     options: { minimize: true },
   }],
 }, {
-  test: /\.(png|jpg|gif|mp3)$/,
+  test: /\.(png|jpg|gif|mp3|ico)$/,
   use: 'file-loader',
 }, {
   test: /\.woff(2)?(\?v=\d\.\d\.\d)?$/,
@@ -56,12 +56,6 @@ const optimization = {
 
 module.exports = {
   entry: { app: path.resolve(__dirname, 'src/webapp/index.js') },
-
-  output: {
-    publicPath: '/',
-    path: path.resolve(__dirname, 'dist/webapp'),
-    filename: '[name].[contenthash].js',
-  },
 
   module: { rules },
 

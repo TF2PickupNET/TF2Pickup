@@ -4,6 +4,8 @@ import React, { type Node } from 'react';
 import { Layout } from 'antd';
 import Helmet from 'react-helmet';
 
+import favicon from '../../../../assets/images/favicon.ico';
+
 import IsConnected from './IsConnected';
 import IsAuthenticated from './IsAuthenticated';
 import LoadingScreen from './LoadingScreen';
@@ -44,7 +46,14 @@ export default class BasicLayout extends React.PureComponent<Props> {
 
         <NotificationRequester />
 
-        <Helmet titleTemplate="%s | TF2Pickup" />
+        <Helmet titleTemplate="%s | TF2Pickup">
+
+          <link
+            rel="shortcut icon"
+            href={favicon}
+            type="image/x-icon"
+          />
+        </Helmet>
 
         {this.renderPage()}
       </Layout>

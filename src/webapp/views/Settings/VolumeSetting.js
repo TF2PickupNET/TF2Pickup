@@ -36,7 +36,15 @@ class VolumeSetting extends React.PureComponent<Props, State> {
   }
 
   handleSave = () => {
+    console.log('test');
+
+    if (this.state.volume === this.props.volume) {
+      return;
+    }
+
     app.io.emit('user-settings:change-volume', { volume: this.state.volume }, (err) => {
+      console.log(err);
+
       if (err) {
         message.error(`Couldn't change your volume. ${err.message}`);
       } else {

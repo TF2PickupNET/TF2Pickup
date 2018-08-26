@@ -65,7 +65,11 @@ class Toolbar extends React.PureComponent<Props, State> {
 
   handleStateChange = (state?: { title?: string }) => {
     if (state && isString(state.title)) {
-      this.setState({ title: state.title });
+      const [, pageName] = state.title.match(/^(.+) \| TF2Pickup$/);
+
+      if (pageName) {
+        this.setState({ title: pageName });
+      }
     }
   };
 

@@ -13,6 +13,22 @@ module.exports = merge(common, {
   serve: {
     port: 8080,
     content: [__dirname],
+    devMiddleware: {
+      stats: {
+        all: false,
+        assets: true,
+        builtAt: true,
+        excludeAssets: /\.(mp3|jpg|png)/,
+        colors: true,
+        errors: true,
+        errorDetails: true,
+        hash: true,
+        moduleTrace: true,
+        timings: true,
+        version: true,
+        warnings: true,
+      },
+    },
 
     add(app) {
       app.use(convert(history()));

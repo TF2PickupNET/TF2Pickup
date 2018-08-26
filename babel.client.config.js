@@ -18,6 +18,7 @@ module.exports = {
     ['@babel/plugin-proposal-object-rest-spread', { useBuiltIns: true }],
     '@babel/plugin-proposal-class-properties',
     '@babel/plugin-proposal-export-default-from',
+    'macros',
     ['import', {
       libraryName: 'antd',
       style: 'css',

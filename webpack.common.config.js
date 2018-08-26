@@ -21,7 +21,7 @@ const rules = [{
     options: { minimize: true },
   }],
 }, {
-  test: /\.(png|jpg|gif)$/,
+  test: /\.(png|jpg|gif|mp3)$/,
   use: 'file-loader',
 }, {
   test: /\.woff(2)?(\?v=\d\.\d\.\d)?$/,
@@ -31,11 +31,13 @@ const rules = [{
   loader: 'file-loader',
 }];
 const optimization = {
+  noEmitOnErrors: true,
   splitChunks: {
     cacheGroups: {
       // Cache the node_modules
       vendors: {
         chunks: 'all',
+        test: /node_modules/,
         name: 'vendors',
       },
 
@@ -58,7 +60,7 @@ module.exports = {
   output: {
     publicPath: '/',
     path: path.resolve(__dirname, 'dist/webapp'),
-    filename: '[name].[hash].js',
+    filename: '[name].[contenthash].js',
   },
 
   module: { rules },

@@ -56,7 +56,7 @@ const optimization = {
 
 module.exports = {
   entry: { app: path.resolve(__dirname, 'src/webapp/index.js') },
-
+  output: { publicPath: '/' },
   module: { rules },
 
   optimization,

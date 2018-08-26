@@ -11,6 +11,7 @@ import { gamemodes } from '../../config';
 import ProfileRedirect from './ProfileRedirect';
 import IndexRedirect from './IndexRedirect';
 import Settings from './Settings';
+import Profile from './Profile';
 
 export default class Views extends React.PureComponent<{}> {
   static renderGamemodeRoutes(): Node {
@@ -38,14 +39,8 @@ export default class Views extends React.PureComponent<{}> {
         key="profile-by-id"
         exact
         strict
-        path="/profile/:userId(\\d+)"
-      />,
-
-      <Route
-        key="profile-by-name"
-        exact
-        strict
-        path="/profile/:username"
+        path="/profile/:userId"
+        component={Profile}
       />,
     ];
   }

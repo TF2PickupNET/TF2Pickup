@@ -8,20 +8,20 @@ export default class SoundFix extends React.Component {
   playedSound = false;
 
   componentDidMount() {
-    document.addEventListener('visibilitychange', this.handleVisibilityChange);
+    document.addEventListener('click', this.handleClick);
   }
 
   shouldComponentUpdate() {
     return false;
   }
 
-  handleVisibilityChange = () => {
+  handleClick = () => {
     if (document.visibilityState === 'visible' && !this.playedSound) {
       playSound('sound-fix', { volume: 1 });
 
       this.playedSound = true;
 
-      document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+      document.removeEventListener('click', this.handleClick);
     }
   };
 

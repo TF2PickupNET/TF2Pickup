@@ -9,7 +9,6 @@ const common = require('./webpack.common.config');
 module.exports = merge(common, {
   mode: 'production',
   output: {
-    publicPath: '/',
     path: path.resolve(__dirname, 'dist/webapp'),
     filename: '[name].[chunkhash].js',
   },

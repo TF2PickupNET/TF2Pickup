@@ -22,7 +22,7 @@ type Props = {
 
 const styles = { container: { minHeight: '100vh' } };
 
-class IsAuthenticated extends React.PureComponent<Props> {
+class VersionValidator extends React.PureComponent<Props> {
   handleClick = () => window.location.reload(true);
 
   render() {
@@ -61,4 +61,4 @@ class IsAuthenticated extends React.PureComponent<Props> {
 
 export default injectSheet(styles)(connect((state) => {
   return { version: state.config.version };
-})(IsAuthenticated));
+})(VersionValidator));

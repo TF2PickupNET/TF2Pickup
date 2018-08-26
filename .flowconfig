@@ -12,5 +12,6 @@ emoji=true
 experimental.const_params=true
 module.use_strict=true
 include_warnings=true
+module.file_ext=.mp3
 
 [strict]

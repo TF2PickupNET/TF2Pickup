@@ -7,7 +7,7 @@ import { flattenObject } from '../../../utils/object';
 
 import getUserData from './get-user-data';
 
-const log = debug('TF2Pickup:user-profile:events');
+const log = debug('TF2Pickup:userId-user-profiles:events');
 
 export default function setupEvents(app: App) {
   app.on('login', async (payload, { connection }) => {

@@ -13,7 +13,7 @@ export default function onAcceptRules(app: App, connection: SocketConnection) {
   return async (data: {}, cb: (Error | null) => void) => {
     const user = connection.feathers.user;
 
-    // Make sure a user is authenticated
+    // Make sure a userId is authenticated
     if (!user) {
       return cb(new NotAuthenticated('You aren\'t authenticated!'));
     }

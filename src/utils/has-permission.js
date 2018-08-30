@@ -4,7 +4,7 @@ import {
   permissions,
   roles,
 } from '../config';
-import { type User } from '../types';
+import { type User } from '../types/user';
 
 function computeLevel(user: User) {
   const highestRole = user.roles.reduce(

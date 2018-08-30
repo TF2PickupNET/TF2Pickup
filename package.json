@@ -51,6 +51,8 @@
     "redux": "4.0.0",
     "redux-devtools-extension": "2.13.5",
     "redux-thunk": "2.3.0",
+    "reselect": "3.0.1",
+    "sleep-promise": "8.0.1",
     "socket.io-client": "2.1.1",
     "steam-community": "0.2.2",
     "steamcommunity": "3.37.1",

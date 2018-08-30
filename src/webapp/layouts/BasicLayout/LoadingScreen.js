@@ -3,6 +3,7 @@
 import React, { type Node } from 'react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
+import sleep from 'sleep-promise';
 import {
   Row,
   Col,
@@ -11,34 +12,29 @@ import {
 } from 'antd';
 import Helmet from 'react-helmet';
 
-import {
-  type Config,
-  type User,
-  type UserSettings,
-  type UserProfile,
-} from '../../../types';
 import app from '../../app';
-import { setConfig } from '../../store/config/actions';
-import { loginUser } from '../../store/user/actions';
-import { setSettings } from '../../store/settings/actions';
-import { setProfile } from '../../store/profile/actions';
+import { fetchConfig } from '../../store/config/actions';
+import { fetchSettings } from '../../store/settings/actions';
+import { fetchProfile } from '../../store/user-profiles/actions';
+import { type UserId } from '../../../types/user';
+import { fetchUser } from '../../store/users/actions';
 
 type Props = {
   classes: {
     container: string,
     text: string,
   },
+  userId: UserId,
   children: Node,
-  setConfig(config: Config): void,
-  loginUser(user: User): void,
-  setSettings(settings: UserSettings): void,
-  setProfile(profile: UserProfile): void,
+  fetchProfile: (userId: string) => void,
+  fetchUser: (userId: string) => void,
+  fetchSettings: () => void,
+  fetchConfig: () => void,
 };
 type State = {
   isLoading: boolean,
   loadingPercentage: number,
   loadingText: string,
-  error: string | null,
 };
 
 const styles = {
@@ -52,7 +48,6 @@ class LoadingScreen extends React.PureComponent<Props, State> {
     isLoading: true,
     loadingPercentage: 10,
     loadingText: 'Loading configuration',
-    error: null,
   };
 
   currentStep = 0;
@@ -73,15 +68,11 @@ class LoadingScreen extends React.PureComponent<Props, State> {
   }
 
   async loadConfiguration() {
-    try {
-      const config = await app.service('configuration').get('config');
+    this.props.fetchConfig();
 
-      this.props.setConfig(config);
+    await sleep(50);
 
-      this.setState({ loadingPercentage: 30 });
-    } catch (error) {
-      this.setState({ error: `Couldn't load config. ${error.message}` });
-    }
+    this.setState({ loadingPercentage: 30 });
   }
 
   async authenticate() {
@@ -99,9 +90,7 @@ class LoadingScreen extends React.PureComponent<Props, State> {
   }
 
   async fetchUser() {
-    const userId = app.get('userId');
-
-    if (userId === null) {
+    if (this.props.userId === null) {
       message.warn('Couldn\'t authenticate.');
 
       this.setState({ loadingPercentage: 100 });
@@ -111,43 +100,25 @@ class LoadingScreen extends React.PureComponent<Props, State> {
 
     this.setState({ loadingText: 'Fetching user' });
 
-    try {
-      const user = await app.service('users').get(userId);
+    this.props.fetchUser(this.props.userId);
 
-      this.props.loginUser(user);
+    await sleep(50);
 
-      this.setState({ loadingPercentage: 60 });
-    } catch (error) {
-      message.warn(`Couldn't fetch user! ${error.message}`);
-    }
+    this.setState({ loadingPercentage: 60 });
   }
 
   async fetchSettings() {
-    const userId = app.get('userId');
-
-    if (userId === null) {
-      message.warn('Couldn\'t authenticate.');
-
-      this.setState({ loadingPercentage: 100 });
-
-      return;
-    }
-
     this.setState({ loadingText: 'Fetching settings' });
 
-    try {
-      const settings = await app.service('user-settings').get(userId);
+    this.props.fetchSettings();
 
-      this.props.setSettings(settings);
+    await sleep(50);
 
-      this.setState({ loadingPercentage: 80 });
-    } catch (error) {
-      this.setState({ error: `Couldn't fetch settings! ${error.message}` });
-    }
+    this.setState({ loadingPercentage: 80 });
   }
 
   async fetchProfile() {
-    const userId = app.get('userId');
+    const userId = this.props.userId;
 
     if (userId === null) {
       message.warn('Couldn\'t authenticate.');
@@ -157,17 +128,13 @@ class LoadingScreen extends React.PureComponent<Props, State> {
       return;
     }
 
-    this.setState({ loadingText: 'Fetching profile' });
+    this.setState({ loadingText: 'Fetching user-profiles' });
 
-    try {
-      const profile = await app.service('user-profile').get(userId);
+    this.props.fetchProfile(userId);
 
-      this.props.setProfile(profile);
+    await sleep(50);
 
-      this.setState({ loadingPercentage: 100 });
-    } catch (error) {
-      this.setState({ error: `Couldn't fetch profile! ${error.message}` });
-    }
+    this.setState({ loadingPercentage: 100 });
   }
 
   handleTransitionEnd = () => {
@@ -175,7 +142,7 @@ class LoadingScreen extends React.PureComponent<Props, State> {
     if (this.state.loadingPercentage === 100) {
       setTimeout(() => {
         this.setState({ isLoading: false });
-      }, 80);
+      }, 50);
     } else {
       this.currentStep += 1;
 
@@ -202,12 +169,12 @@ class LoadingScreen extends React.PureComponent<Props, State> {
         >
           <Progress
             percent={this.state.loadingPercentage}
-            status={this.state.error === null ? 'active' : 'exception'}
+            status="active"
             onTransitionEnd={this.handleTransitionEnd}
           />
 
           <p className={this.props.classes.text}>
-            {this.state.error === null ? this.state.loadingText : this.state.error}
+            {this.state.loadingText}
           </p>
         </Col>
       </Row>
@@ -221,10 +188,10 @@ class LoadingScreen extends React.PureComponent<Props, State> {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setConfig: config => dispatch(setConfig(config)),
-    loginUser: user => dispatch(loginUser(user)),
-    setSettings: settings => dispatch(setSettings(settings)),
-    setProfile: profile => dispatch(setProfile(profile)),
+    fetchUser: userId => dispatch(fetchUser(userId)),
+    fetchConfig: () => dispatch(fetchConfig()),
+    fetchSettings: () => dispatch(fetchSettings()),
+    fetchProfile: userId => dispatch(fetchProfile(userId)),
   };
 }
 

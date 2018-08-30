@@ -3,6 +3,7 @@
 import React from 'react';
 import injectSheet from 'react-jss';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import {
   Link,
   withRouter,
@@ -14,8 +15,8 @@ import {
 } from 'antd';
 
 import { gamemodes } from '../../../config';
-import app from '../../app';
-import { logoutUser } from '../../store/user/actions';
+import { logoutUser } from '../../store/user-id/actions';
+import { type State } from '../../store';
 
 type Props = {
   lastPickup: null | number,
@@ -44,8 +45,6 @@ class Sidebar extends React.PureComponent<Props> {
 
   handleItemClick = (options) => {
     if (options.key === 'logout') {
-      app.logout();
-
       this.props.logout();
     }
   };
@@ -113,7 +112,7 @@ class Sidebar extends React.PureComponent<Props> {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State) => {
   return {
     lastPickup: state.user.lastPickup,
     userId: state.user.id,
@@ -125,8 +124,8 @@ const mapDispatchToProps = (dispatch) => {
 
 export { SIDEBAR_WIDTH };
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(
-    injectSheet(styles)(Sidebar),
-  ),
-);
+export default compose(
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps),
+  injectSheet(styles),
+)(Sidebar);

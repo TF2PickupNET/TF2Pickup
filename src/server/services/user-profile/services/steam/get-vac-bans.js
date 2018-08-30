@@ -3,10 +3,10 @@
 import debug from 'debug';
 import addDays from 'date-fns/add_days';
 
-import { type UserProfile } from '../../../../../types';
+import { type UserProfile } from '../../../../../types/user-profile';
 import steamApi from '../../../steam-api';
 
-const log = debug('TF2Pickup:user-profile:steam:vac');
+const log = debug('TF2Pickup:userId-user-profiles:steam:vac');
 
 export default async function getVACBans(user: UserProfile) {
   try {

@@ -1,12 +1,12 @@
 // @flow
 
-import { type Action } from 'redux';
-
-import { type User } from '../../../types';
+import { type User } from '../../../types/user';
 
 type State = { [key: string]: User };
-type Actions = Action<'USERS/UPDATE', { user: User }>
-  | Action<'USERS/ADD', { user: User }>;
+type Actions = {
+  type: 'USERS/UPDATE' | 'USERS/ADD',
+  payload: { user: User },
+};
 
 const UPDATE_USER = 'USERS/UPDATE';
 const ADD_USER = 'USERS/ADD';

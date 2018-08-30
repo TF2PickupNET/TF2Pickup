@@ -1,6 +1,6 @@
 // @flow
 
-import { type User } from '../types';
+import { type User } from '../types/user';
 
 import roles from './roles';
 

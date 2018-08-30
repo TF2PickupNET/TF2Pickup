@@ -48,7 +48,7 @@ class RegionSetting extends React.PureComponent<Props, State> {
       return;
     }
 
-    app.io.emit('user:change-region', { region: this.state.region }, (err) => {
+    app.io.emit('users:change-region', { region: this.state.region }, (err) => {
       if (err) {
         message.error(`Couldn't change your region. ${err.message}`);
       } else {

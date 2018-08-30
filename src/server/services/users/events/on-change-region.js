@@ -13,7 +13,7 @@ export default function onChangeRegion(app: App, connection: SocketConnection) {
   return async ({ region }: Data, cb: (error: null | Error) => void) => {
     const user = connection.feathers.user;
 
-    // Make sure a user is authenticated
+    // Make sure a userId is authenticated
     if (!user) {
       return cb(new NotAuthenticated());
     }
@@ -23,7 +23,7 @@ export default function onChangeRegion(app: App, connection: SocketConnection) {
     try {
       await app.service('users').patch(user.id, { region });
 
-      // Get every connection for the user
+      // Get every connection for the userId
       const connections = app
         .channel(`region:${oldRegion}`)
         .filter(conn => conn.user.id === user.id);

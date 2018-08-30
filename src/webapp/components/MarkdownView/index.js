@@ -2,7 +2,10 @@
 
 import React from 'react';
 import injectSheet from 'react-jss';
-import { Spin } from 'antd';
+import {
+  Spin,
+  message,
+} from 'antd';
 import Markdown from 'react-markdown';
 import axios from 'axios';
 
@@ -31,6 +34,18 @@ class MarkdownView extends React.PureComponent<Props, State> {
 
       // eslint-disable-next-line react/no-did-mount-set-state
       this.setState({ content: data });
+    }
+  }
+
+  async fetchContent() {
+    try {
+      const { data } = await axios.get(this.props.url);
+
+      cache.set(this.props.url, data);
+
+      this.setState({ content: data });
+    } catch (error) {
+      message.error(`Couldn't load markdown content: ${error.mesasge}`);
     }
   }
 

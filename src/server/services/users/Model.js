@@ -17,7 +17,7 @@ export default mongoose.model('User', new mongoose.Schema({
   id: {
     type: String,
     validate: steamId({}),
-    required: [true, 'SteamId on the user object is required!'],
+    required: [true, 'SteamId on the userId object is required!'],
     unique: true,
   },
 

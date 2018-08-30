@@ -2,10 +2,10 @@
 
 import { type Action } from 'redux';
 
-import { type UserSettings } from '../../../types';
+import { type UserSettings } from '../../../types/user-settings';
 
 export type State = null | UserSettings;
-export type Actions = Action<'SETTINGS/SET', { settings: State }>
+export type Actions = Action<'SETTINGS/SET', { settings: UserSettings }>
   | Action<'SETTINGS/UPDATE', { settings: UserSettings }>;
 
 export const SET_SETTINGS = 'SETTINGS/SET';

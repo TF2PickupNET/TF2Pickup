@@ -2,14 +2,16 @@
 
 import { combineReducers } from 'redux';
 
-import user from './user/reducer';
+import userId from './user-id/reducer';
 import config from './config/reducer';
 import settings from './settings/reducer';
-import profile from './profile/reducer';
+import userProfiles from './user-profiles/reducer';
+import users from './users/reducer';
 
 export default combineReducers({
-  user,
+  users,
+  userId,
   config,
   settings,
-  profile,
+  userProfiles,
 });

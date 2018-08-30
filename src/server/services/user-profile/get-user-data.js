@@ -4,7 +4,7 @@ import subDays from 'date-fns/sub_days';
 import isBefore from 'date-fns/is_before';
 import deepMerge from 'deepmerge';
 
-import { type UserProfile } from '../../../types';
+import { type UserProfile } from '../../../types/user-profile';
 
 import getSteamData from './services/steam/get-steam-data';
 import getSteamFriends from './services/steam/get-steam-friends';

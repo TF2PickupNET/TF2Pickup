@@ -5,8 +5,10 @@ import {
   roles,
 } from '../config';
 
-export interface User {
-  id: string,
+type UserId = string;
+
+interface User {
+  id: UserId,
   name: string | null,
   online: boolean,
   region: $Keys<typeof regions> | null,
@@ -16,3 +18,8 @@ export interface User {
   lastPickup: number | null,
   roles: $ReadOnlyArray<$Keys<typeof roles>>,
 }
+
+export type {
+  UserId,
+  User,
+};

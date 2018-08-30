@@ -1,6 +1,6 @@
 // @flow
 
-import { type App } from '@feathersjs/express';
+import { type ServerApp } from '@feathersjs/feathers';
 import debug from 'debug';
 
 import onLogin from './on-login';
@@ -11,12 +11,12 @@ import onSetName from './on-set-name';
 
 const log = debug('TF2Pickup:users:events');
 
-export default function events(app: App) {
+export default function events(app: ServerApp) {
   log('Setting up events for the users service');
 
-  app.on('login', (payload, { connection }) => onLogin(app, connection));
+  app.on('login', onLogin(app));
 
-  app.on('logout', (payload, { connection }) => onLogout(app, connection));
+  app.on('logout', onLogout(app));
 
   app.on('socket-connection', (socket) => {
     socket.on('users:change-region', onChangeRegion(app, socket));

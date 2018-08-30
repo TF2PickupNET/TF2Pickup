@@ -12,7 +12,7 @@ import app from '../app';
 import reducers from './reducers';
 
 type ExtractState = <R>(() => R) => R;
-type Store = $Call<ExtractState, reducers>;
+type State = $Call<ExtractState, reducers>;
 
 const middlewares = applyMiddleware(thunk.withExtraArgument(app));
 
@@ -21,6 +21,6 @@ const store = createStore(
   composeWithDevTools(middlewares),
 );
 
-export type { Store };
+export type { State };
 
 export default store;

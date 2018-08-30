@@ -17,6 +17,5 @@ declare module 'passport-oauth2' {
     },
 
     constructor(options: {}, verify: Verify): this,
-
   }
 }

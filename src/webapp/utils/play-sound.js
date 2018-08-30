@@ -70,7 +70,6 @@ class Queue {
         this.next();
       }, duration);
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error('Error while trying to play audio', error);
 
       this.next();
@@ -133,7 +132,6 @@ export default function playSound(
   const url = getUrl(sound, announcer);
 
   if (url === null) {
-    // eslint-disable-next-line no-console
     console.log(`Couldn't get sound url for: ${sound} ${announcer}`);
 
     return;

@@ -1,10 +1,12 @@
 // @flow
 
-export type ETF2LDivisions = 'Open' | 'Low' | 'Mid' | 'High' | 'Prem' | 'N/A';
-export type OZFortressDivisions = 'Open' | 'Intermediate' | 'Premier' | 'N/A';
+import { type UserId } from './user';
 
-export type UserProfile = {|
-  id: string,
+type ETF2LDivisions = 'Open' | 'Low' | 'Mid' | 'High' | 'Prem' | 'N/A';
+type OZFortressDivisions = 'Open' | 'Intermediate' | 'Premier' | 'N/A';
+
+interface UserProfile {
+  id: UserId,
   lastUpdate: Date,
   steam: {
     id: string,
@@ -38,4 +40,10 @@ export type UserProfile = {|
     isBanned: boolean,
     bannedUntil: Date | null,
   },
-|};
+}
+
+export type {
+  UserProfile,
+  ETF2LDivisions,
+  OZFortressDivisions,
+};

@@ -45,7 +45,6 @@ function getPickupSoundForAnnouncer(announcer) {
       const path = announcerSoundFiles[`${PICKUP_SOUNDS_PATH}/${announcer}/${soundName}.mp3`];
 
       if (!path) {
-        // eslint-disable-next-line no-console
         console.error(`Missing pickup sound for ${announcer} ${soundName}`);
 
         return sounds;

@@ -40,7 +40,7 @@ export default class BasicLayout extends React.PureComponent<Props> {
   render() {
     return (
       <Layout>
-        <SoundFix/>
+        <SoundFix />
 
         <CookieNotification />
 

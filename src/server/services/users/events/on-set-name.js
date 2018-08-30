@@ -18,7 +18,7 @@ export default function onSetName(app: App, connection: SocketConnection) {
   return async ({ name }: Data, cb: (error: null | Error) => void) => {
     const user = connection.feathers.user;
 
-    // Make sure a user is authenticated
+    // Make sure a userId is authenticated
     if (!user) {
       return cb(new NotAuthenticated());
     }
@@ -43,7 +43,7 @@ export default function onSetName(app: App, connection: SocketConnection) {
 
       return cb(null);
     } catch (error) {
-      log('Error while setting user name', user.id, error);
+      log('Error while setting userId name', user.id, error);
 
       return cb(error);
     }

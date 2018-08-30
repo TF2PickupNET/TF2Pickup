@@ -1,18 +1,18 @@
 // @flow
 
-import { type App } from '@feathersjs/feathers';
+import { type ClientApp } from '@feathersjs/feathers';
 
-import userEvents from './user/events';
+import userIdEvents from './user-id/events';
 import settingsEvents from './settings/events';
-import profileEvents from './profile/events';
+import profileEvents from './user-profiles/events';
 import usersEvents from './users/events';
 
 export default function events() {
-  return (app: App) => {
+  return (app: ClientApp) => {
     app
-      .configure(userEvents)
-      .configure(settingsEvents)
-      .configure(profileEvents)
-      .configure(usersEvents);
+      .configure(userIdEvents())
+      .configure(settingsEvents())
+      .configure(profileEvents())
+      .configure(usersEvents());
   };
 }

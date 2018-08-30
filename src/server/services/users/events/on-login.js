@@ -6,8 +6,8 @@ import debug from 'debug';
 
 const log = debug('TF2Pickup:users:events:on-login');
 
-export default function onLogin(app: App, connection: Connection) {
-  return async () => {
+export default function onLogin(app: App) {
+  return async (payload: {}, { connection }: { connection: Connection }) => {
     try {
       await app.service('users').patch(connection.user.id, { online: true });
     } catch (error) {

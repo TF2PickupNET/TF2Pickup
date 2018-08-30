@@ -8,12 +8,12 @@ import Model from './Model';
 import hooks from './hooks';
 import setupEvents from './setup-events';
 
-const log = debug('TF2Pickup:user-profile');
+const log = debug('TF2Pickup:userId-user-profiles');
 
 export default function userProfile(app: App) {
-  log('Setting up user-profile service');
+  log('Setting up userId-user-profiles service');
 
-  app.use('/user-profile', service({
+  app.use('/userId-user-profiles', service({
     Model,
     id: 'id',
   }));
@@ -22,7 +22,7 @@ export default function userProfile(app: App) {
     .configure(setupEvents)
     .service('user-profile')
     .hooks(hooks)
-    // Publish the events only to the user that owns the document
+    // Publish the events only to the userId that owns the document
     .publish(
       'patched',
       data => app.channel('authenticated').filter(connection => connection.user.id === data.id)

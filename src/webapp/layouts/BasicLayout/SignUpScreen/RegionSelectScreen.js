@@ -42,9 +42,15 @@ export default class RegionSelectScreen extends React.PureComponent<{}, State> {
   }
 
   handleClick = () => {
+    const { region } = this.state;
+
+    if (region === null) {
+      return;
+    }
+
     this.setState({ isProcessing: true });
 
-    app.io.emit('users:change-region', { region: this.state.region }, (err) => {
+    app.io.emit('users:change-region', { region }, (err) => {
       if (err) {
         message.error(`Couldn't set the region: ${err.message}`);
       }

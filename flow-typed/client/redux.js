@@ -1,18 +1,22 @@
 // @flow strict-local
 
 declare module 'redux' {
-  declare export interface Action<Type: string = string, Payload: {} | null = null> {
+  declare export interface Action<Type: string = string, Payload: {} = {}> {
     type: Type,
     payload: Payload,
   }
 
-  declare export type Reducer<State> = (
-    state: State | void,
-    // $FlowFixMe: Weirdly flow throws an error here
-    action: Action<>,
-  ) => State;
+  declare export type Dispatch = (action: Action<> | AsyncAction<{}, Action<>>) => void;
 
-  declare export type Dispatch<T, P> = (action: Action<>) => void;
+  declare export type AsyncAction<State, Actions> = (
+    dispatch: (action: Actions) => void,
+    getState: () => State,
+  ) => Promise<void>;
+
+  declare export type Reducer<State, Actions> = (
+    state: State | void,
+    action: Actions,
+  ) => State;
 
   declare export interface Enhancer<State> {
     (options: {
@@ -25,14 +29,14 @@ declare module 'redux' {
     getState(): State,
     dispatch<T, A>(action: Action<T, A>): void,
     subscribe(listener: () => void): () => void,
-    nextReducer(reducer: Reducer<State>): void,
+    nextReducer(reducer: Reducer<State, Action<>>): void,
   }
 
   declare export type CombinedReducer<S, A> = (state: $Shape<S> & {} | void, action: A) => S;
 
-  declare export function combineReducers<O: {}, A>(
+  declare export function combineReducers<O: {}, CA>(
     reducers: O
-  ): CombinedReducer<$ObjMap<O, <S>(r: Reducer<S>) => S>, A>;
+  ): CombinedReducer<$ObjMap<O, <S, A>(r: Reducer<S, A>) => S>, CA>;
 
   declare export function bindActionCreators<Args: $ReadOnlyArray<mixed>>(
     action: (...args: Args) => Action<>,
@@ -40,7 +44,7 @@ declare module 'redux' {
   ): (...args: Args) => Action<>;
 
   declare export function bindActionCreators<K>(
-    actions: { [key: K]: (...args: $ReadOnlyArray<mixed>) => Action<string, {}> },
+    actions: { [key: K]: (...args: $ReadOnlyArray<mixed>) => Action<> },
     dispatch: Dispatch<string, {}>,
   ): { [key: K]: (...args: $ReadOnlyArray<mixed>) => void };
 
@@ -49,16 +53,30 @@ declare module 'redux' {
   ): Enhancer<State>;
 
   declare export function createStore<State>(
-    reducer: Reducer<State>,
+    reducer: Reducer<State, Action<>>,
     enhancer?: Enhancer<State>,
   ): Store<State>;
   declare export function createStore<State>(
-    reducer: Reducer<State>,
+    reducer: Reducer<State, Action<>>,
     preloadedState: State,
     enhancer?: Enhancer<State>,
   ): Store<State>;
 
-  declare export function compose<R>(
-    ...fns: $ReadOnlyArray<(...args: $ReadOnlyArray<mixed>) => R>
-  ): (arg: R) => R;
+  declare export function compose<A, B, C>(
+    fn1: (arg: A) => B,
+    fn2: (arg: B) => C,
+  ): (arg: A) => C;
+
+  declare export function compose<A, B, C, D>(
+    fn1: (arg: A) => B,
+    fn2: (arg: B) => C,
+    fn3: (arg: C) => D,
+  ): (arg: A) => D;
+
+  declare export function compose<A, B, C, D, E>(
+    fn1: (arg: A) => B,
+    fn2: (arg: B) => C,
+    fn3: (arg: C) => D,
+    fn4: (arg: D) => E,
+  ): (arg: A) => E;
 }

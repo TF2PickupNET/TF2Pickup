@@ -1,21 +1,23 @@
 // @flow
 
-import { type App } from '@feathersjs/feathers';
+import { type ClientApp } from '@feathersjs/feathers';
 
 import store from '..';
 
 import { updateSettings } from './actions';
 
-export function events(app: App) {
-  const users = app.service('user-settings');
+export function events() {
+  return (app: ClientApp) => {
+    const users = app.service('user-settings');
 
-  users.on('patched', (data) => {
-    const user = store.getState().user;
+    users.on('patched', (settings) => {
+      const userId = store.getState().userId;
 
-    if (user && data.id === user.id) {
-      store.dispatch(updateSettings(data));
-    }
-  });
+      if (settings.id === userId) {
+        store.dispatch(updateSettings(settings));
+      }
+    });
+  };
 }
 
 export default events;

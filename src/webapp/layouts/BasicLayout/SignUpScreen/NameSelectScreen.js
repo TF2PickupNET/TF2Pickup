@@ -11,7 +11,7 @@ import {
 
 import { regions } from '../../../../config';
 import app from '../../../app';
-import { type UserProfile } from '../../../../types';
+import { type UserProfile } from '../../../../types/user-profile';
 
 type Props = {
   profiles: UserProfile,
@@ -29,6 +29,7 @@ class NameSelectScreen extends React.PureComponent<Props, State> {
     if (nextProps.region !== null && state.name === null) {
       const service = regions[nextProps.region].service;
 
+      // $FlowFixMe
       if (nextProps.profiles[service]) {
         return { name: nextProps.profiles[service].name };
       }
@@ -49,9 +50,15 @@ class NameSelectScreen extends React.PureComponent<Props, State> {
   }
 
   handleClick = () => {
+    const { name } = this.state;
+
+    if (name === null) {
+      return;
+    }
+
     this.setState({ isProcessing: true });
 
-    app.io.emit('users:set-name', { name: this.state.name }, (err) => {
+    app.io.emit('users:set-name', { name }, (err) => {
       if (err) {
         message.error(`Couldn't set the name: ${err.message}`);
       }
@@ -72,6 +79,7 @@ class NameSelectScreen extends React.PureComponent<Props, State> {
       .map((region) => {
         const service = regions[region].service;
 
+        // $FlowFixMe
         if (!this.props.profiles[service]) {
           return null;
         }

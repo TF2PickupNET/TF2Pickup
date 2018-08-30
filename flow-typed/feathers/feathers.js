@@ -1,9 +1,16 @@
 // @flow strict-local
 
 import { type FeathersError } from '@feathersjs/errors';
-import { type Socket } from 'socket.io-client';
 
 import { type User } from '../../src/types/user';
+import { type Config } from '../../src/types/configuration';
+import { type UserProfile } from '../../src/types/user-profile';
+import { type UserSettings } from '../../src/types/user-settings';
+
+import {
+  type ClientSocket,
+  type ServerSocket,
+} from './socket-events';
 
 declare module '@feathersjs/feathers' {
   declare export type SKIP = Symbol;
@@ -149,11 +156,13 @@ declare module '@feathersjs/feathers' {
     hooks(hooks: Hooks<App>): Service<Document>,
     publish(publisher: (data: {}) => $ReadOnlyArray<Connection>): Service<Document>,
     publish(
-      eventname: string,
-      publisher: (data: {}) => $ReadOnlyArray<Connection>,
+      eventname: 'created' | 'patched' | 'remove',
+      publisher: (data: Document) => $ReadOnlyArray<Connection>,
     ): Service<Document>,
-    on(eventname: string, cb: (data: Document) => void): Service<Document>,
-    emit(eventname: string, data?: mixed): Service<Document>,
+    on(
+      eventname: 'created' | 'patched' | 'remove',
+      cb: (data: Document) => void,
+    ): Service<Document>,
     removeListener(eventname: string, listeners: ?mixed): Service<Document>,
   }
 
@@ -167,39 +176,48 @@ declare module '@feathersjs/feathers' {
     remove(id: string, params: Params<>): Promise<Document>,
   }
 
-  declare export interface App {
-    service<Document>(path: string): Service<Document>,
+  declare interface App {
+    service(path: 'configuration'): Service<Config>,
+    service(path: 'user-profile'): Service<UserProfile>,
+    service(path: 'user-settings'): Service<UserSettings>,
+    service(path: 'users'): Service<User>,
     configure(cb: (app: App) => void): App,
     set(name: string, value: mixed): App,
     get(name: string): mixed,
-    on(eventname: string, cb: (data: {}) => void | Promise<void>): App,
-    emit(eventname: string, data: ?mixed): App,
     removeListener(eventname: string, listeners: ?mixed): App,
   }
 
   declare export interface ServerApp extends App {
+    configure(cb: (app: ServerApp) => void): ServerApp,
     channels: $ReadOnlyArray<Channel>,
-    use<Document>(path: string, service: ServiceDefinition<Document>): App,
-    hooks(hooks: Hooks<App>): App,
+    use<Document>(path: string, service: ServiceDefinition<Document>): ServerApp,
+    hooks(hooks: Hooks<App>): ServerApp,
     channel(name: string): Channel,
-    listen(port: number): App,
-    on('connection', fn: (connection: Connection) => void | Promise<void>): App,
-    on(eventname: string, cb: (data: {}) => void | Promise<void>): App,
+    listen(port: number): ServerApp,
+    on('connection', fn: (connection: Connection) => void | Promise<void>): ServerApp,
+    on('socket-connection', cb: (socket: ServerSocket) => void): ServerApp,
+    on(
+      'login',
+      cb: (payload: {}, info: { connection: Connection }) => Promise<void>,
+    ): ServerApp,
+    on(
+      'logout',
+      cb: (payload: {}, info: { connection: Connection }) => Promise<void>,
+    ): ServerApp,
   }
 
   declare export interface ClientApp extends App {
-    get('userId'): null | string,
-    set('userId', val: null | string): App,
-    set(name: string, value: mixed): App,
+    configure(cb: (app: ClientApp) => void): ClientApp,
+    set(name: string, value: mixed): ClientApp,
     get(name: string): mixed,
     authenticate(): Promise<void>,
-    on('authenticated', fn: (payload: { accessToken: string }) => void | Promise<void>): App,
-    on(eventname: string, cb: (data: {}) => void | Promise<void>): App,
+    on('authenticated', fn: (payload: { accessToken: string }) => void | Promise<void>): ClientApp,
+    on('logout', fn: () => void): ClientApp,
     logout(): Promise<void>,
     passport: {
-      verifyJWT(token: string): { id: string },
+      verifyJWT(token: string): Promise<{ id: string }>,
     },
-    io: Socket,
+    io: ClientSocket,
   }
 
   declare export default {

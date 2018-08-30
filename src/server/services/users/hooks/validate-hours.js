@@ -8,7 +8,7 @@ import config from 'config';
 import { type CreateBeforeHookContext } from '@feathersjs/feathers';
 import debug from 'debug';
 
-import { type User } from '../../../../types';
+import { type User } from '../../../../types/user';
 import steamApi from '../../steam-api';
 
 const log = debug('TF2Pickup:users:fetch-tf2-hours');
@@ -48,7 +48,7 @@ export default async function validateHours(hook: CreateBeforeHookContext<User>)
 
     hours = game ? Math.floor(game.playtime_forever / 60) : 0;
   } catch (error) {
-    log('Error while getting tf2 hours for user', error);
+    log('Error while getting tf2 hours for userId', error);
 
     throw new GeneralError(generalErrorMessage);
   }

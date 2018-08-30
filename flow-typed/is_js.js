@@ -5,6 +5,7 @@ declare module 'is_js' {
     desktop(): boolean,
     chrome(version?: number | string): boolean,
     firefox(version?: number | string): boolean,
+    url(url: string): boolean,
   }
 
   declare export default IS;

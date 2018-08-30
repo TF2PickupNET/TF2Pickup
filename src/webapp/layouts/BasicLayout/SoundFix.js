@@ -4,7 +4,7 @@ import React from 'react';
 
 import playSound from '../../utils/play-sound';
 
-export default class SoundFix extends React.Component {
+export default class SoundFix extends React.Component<{}> {
   playedSound = false;
 
   componentDidMount() {

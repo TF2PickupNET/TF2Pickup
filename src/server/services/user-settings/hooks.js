@@ -4,7 +4,7 @@ import { type GetBeforeHookContext } from '@feathersjs/feathers';
 import hooks from 'feathers-hooks-common';
 import { Forbidden } from '@feathersjs/errors';
 
-import { type UserSettings } from '../../../types';
+import { type UserSettings } from '../../../types/user-settings';
 
 export default {
   before: {
@@ -14,7 +14,7 @@ export default {
         return hook;
       }
 
-      // When we have a user, we explicitly override the id passed by the requests
+      // When we have a userId, we explicitly override the id passed by the requests
       if (hook.params.user) {
         return {
           ...hook,

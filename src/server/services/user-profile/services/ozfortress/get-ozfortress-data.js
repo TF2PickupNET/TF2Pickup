@@ -4,11 +4,11 @@ import axios from 'axios';
 import debug from 'debug';
 import config from 'config';
 
-import { type UserProfile } from '../../../../../types';
+import { type UserProfile } from '../../../../../types/user-profile';
 
 import { findHighestDiv } from './utils';
 
-const log = debug('TF2Pickup:user-profile:ozfortress:data');
+const log = debug('TF2Pickup:userId-user-profiles:ozfortress:data');
 const apikey = config.get('services.ozfortress.apikey');
 
 export default async function getOzfortressData(

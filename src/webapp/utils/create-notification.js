@@ -1,6 +1,6 @@
 // @flow
 
-import icon from '../../../assets/images/'
+import defaultIcon from '../../../assets/images/favicon.ico';
 
 type Options = {
   body?: string,
@@ -13,7 +13,7 @@ const Notification = window.Notification;
 export default function createNotification(title: string, {
   body,
   tag,
-  icon = '',
+  icon = defaultIcon,
 }: Options = {}) {
   if (Notification.permission === 'granted') {
     // If it's okay let's create a notification

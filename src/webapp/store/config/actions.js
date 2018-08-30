@@ -1,12 +1,23 @@
 // @flow
 
-import { type Config } from '../../../types';
+import { type AsyncAction } from 'redux';
 
-import { SET_CONFIG } from './types';
+import app from '../../app';
 
-export function setConfig(config: Config) {
-  return {
-    type: SET_CONFIG,
-    payload: { config },
+import { type State } from '..';
+
+import {
+  SET_CONFIG,
+  type Actions,
+} from './types';
+
+export function fetchConfig(): AsyncAction<State, Actions> {
+  return async (dispatch) => {
+    const config = await app.service('configuration').get('config');
+
+    dispatch({
+      type: SET_CONFIG,
+      payload: { config },
+    });
   };
 }

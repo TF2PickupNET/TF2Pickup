@@ -7,9 +7,7 @@ import {
   type Actions,
 } from './types';
 
-const defaultState = [];
-
-export default function reducer(state: State = defaultState, action: Actions) {
+export default function reducer(state: State = {}, action: Actions) {
   switch (action.type) {
     case ADD_USER: {
       if (state[action.payload.user.id]) {

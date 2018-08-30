@@ -1,5 +1,7 @@
 // @flow strict-local
 
+import { type FeathersError } from '@feathersjs/errors';
+
 declare module 'debug' {
   declare function log(message: string, data: {
     userId: string | null,

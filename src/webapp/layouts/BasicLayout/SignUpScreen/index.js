@@ -10,7 +10,8 @@ import {
 } from 'antd';
 import Helmet from 'react-helmet';
 
-import { type User } from '../../../../types';
+import { type User } from '../../../../types/user';
+import { getCurrentUser } from '../../../store/user-id/selectors';
 
 import AcceptRulesScreen from './AcceptRulesScreen';
 import RegionSelectScreen from './RegionSelectScreen';
@@ -205,7 +206,7 @@ class SignUpScreen extends React.PureComponent<Props, State> {
 }
 
 const mapStateToProps = (state) => {
-  return { user: state.user };
+  return { user: getCurrentUser(state) };
 };
 
 export default injectSheet(styles)(

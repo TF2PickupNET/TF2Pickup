@@ -1,6 +1,6 @@
 // @flow
 
-import isUrl from 'is-url';
+import is from 'is_js';
 
 type Options = {
   msg?: string,
@@ -12,7 +12,7 @@ export default function url({
   nullIsAllowed = false,
 }: Options) {
   return [
-    (value: string) => isUrl(value) || (nullIsAllowed && value === null),
+    (value: string) => is.url(value) || (nullIsAllowed && value === null),
     msg,
   ];
 }

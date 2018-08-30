@@ -11,7 +11,7 @@ import {
   Avatar,
 } from 'antd';
 
-import { type Store } from '../../store';
+import { type State } from '../../store';
 import { isString } from '../../../utils';
 
 import { SIDEBAR_WIDTH } from './Sidebar';
@@ -27,7 +27,7 @@ type Props = {
   name: string,
   avatar: string,
 };
-type State = { title: string | null };
+type LocalState = { title: string | null };
 
 const { Header } = Layout;
 
@@ -60,14 +60,16 @@ const styles = {
   avatar: { marginLeft: 16 },
 };
 
-class Toolbar extends React.PureComponent<Props, State> {
+class Toolbar extends React.PureComponent<Props, LocalState> {
   state = { title: null };
 
   handleStateChange = (state?: { title?: string }) => {
     if (state && isString(state.title)) {
-      const [, pageName] = state.title.match(/^(.+) \| TF2Pickup$/);
+      const match = state.title.match(/^(.+) \| TF2Pickup$/);
 
-      if (pageName) {
+      if (match && match.length >= 2) {
+        const pageName = match[1];
+
         this.setState({ title: pageName });
       }
     }
@@ -122,7 +124,7 @@ class Toolbar extends React.PureComponent<Props, State> {
   }
 }
 
-export default connect((state: Store) => {
+export default connect((state: State) => {
   return {
     name: state.user.name,
     avatar: state.profile.steam.avatar.large,

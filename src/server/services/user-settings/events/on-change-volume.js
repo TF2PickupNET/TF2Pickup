@@ -1,8 +1,8 @@
 // @flow
 
 import { NotAuthenticated } from '@feathersjs/errors';
-import { type App } from '@feathersjs/express';
 import { type SocketConnection } from '@feathersjs/socketio';
+import { type App } from '@feathersjs/express';
 import debug from 'debug';
 
 type Data = { volume: number };
@@ -15,7 +15,7 @@ export default function onChangeVolume(app: App, connection: SocketConnection) {
   return async ({ volume }: Data, cb: (Error | null) => void) => {
     const user = connection.feathers.user;
 
-    // Make sure a user is authenticated
+    // Make sure a userId is authenticated
     if (!user) {
       return cb(new NotAuthenticated('You aren\'t authenticated!'));
     }

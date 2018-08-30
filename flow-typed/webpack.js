@@ -65,3 +65,9 @@ declare module 'webpack-bundle-analyzer' {
 
   declare module.exports: {BundleAnalyzerPlugin: BundleAnalyzerPlugin};
 }
+
+declare module 'webpack-serve-waitpage' {
+  declare function middleware(options: {}): () => void;
+
+  declare module.exports: middleware;
+}

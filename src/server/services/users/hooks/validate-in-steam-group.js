@@ -10,7 +10,7 @@ import SteamCommunity from 'steamcommunity';
 import { promisify } from 'util';
 import debug from 'debug';
 
-import { type User } from '../../../../types';
+import { type User } from '../../../../types/user';
 
 const community = new SteamCommunity();
 const log = debug('TF2Pickup:users:is-in-steam-group');

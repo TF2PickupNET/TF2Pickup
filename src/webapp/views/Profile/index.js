@@ -5,71 +5,42 @@ import {
   Row,
   Col,
   Spin,
-  message,
 } from 'antd';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import { createSelector } from 'reselect';
 
+import { fetchUser } from '../../store/users/actions';
+import { fetchProfile } from '../../store/user-profiles/actions';
+import { makeGetUserById } from '../../store/users/selectors';
+import { type State } from '../../store';
 import {
-  type User,
-  type UserProfile,
-} from '../../../types';
-import app from '../../app';
-import getUserFromState from '../../utils/get-user-from-state';
-import { addUser } from '../../store/users/actions';
-
-import { Provider } from './context';
+  getCurrentUser,
+  makeIsCurrentUser,
+} from '../../store/user-id/selectors';
+import { makeGetProfileById } from '../../store/user-profiles/selectors';
+import { type User } from '../../../types/user';
 
 type Props = {
-  user: User | null,
-  isLoggedInUser: boolean,
-  addUser: (user: User) => null,
+  hasLoadedUser: boolean,
+  hasLoadedProfile: boolean,
+  name: string,
+  isCurrentUser: boolean,
+  fetchUser: (userId: string) => void,
+  fetchProfile: (userId: string) => void,
   match: { params: { userId: string } },
 };
-type State = {
-  profile: UserProfile | null,
-  error: Error | null,
-};
 
-class Profile extends React.PureComponent<Props, State> {
-  state = {
-    profile: null,
-    error: null,
-  };
-
+class Profile extends React.PureComponent<Props> {
   componentDidMount() {
     const { userId } = this.props.match.params;
 
-    if (this.props.user === null) {
-      this.fetchUser(userId);
-    } else {
-      this.fetchProfile(userId);
+    if (!this.props.hasLoadedUser) {
+      this.props.fetchUser(userId);
     }
-  }
 
-  async fetchUser(userId) {
-    try {
-      const user = await app.service('users').get(userId);
-
-      this.props.addUser(user);
-
-      this.fetchProfile(userId);
-    } catch (error) {
-      message.error(`Couldn't load user: ${error.message}`);
-
-      this.setState({ error });
-    }
-  }
-
-  async fetchProfile(userId) {
-    try {
-      const profile = await app.service('user-profile').get(userId);
-
-      this.setState({ profile });
-    } catch (error) {
-      message.error(`Couldn't load profile for user: ${error.message}`);
-
-      this.setState({ error });
+    if (!this.props.hasLoadedProfile) {
+      this.props.fetchProfile(userId);
     }
   }
 
@@ -86,45 +57,58 @@ class Profile extends React.PureComponent<Props, State> {
       </Row>
     );
   }
-  
+
   render() {
-    if (this.props.user === null || this.state.profile === null) {
+    if (!this.props.hasLoadedUser || !this.props.hasLoadedProfile) {
       return this.renderLoadingScreen();
     }
 
-    if (this.state.error !== null) {
-      return (
-        <div>
-          Hey
-        </div>
-      );
-    }
-
     return (
-      <Provider value={this.state.profile}>
+      <React.Fragment>
         <Helmet>
           <title>
-            {this.props.isLoggedInUser
+            {this.props.isCurrentUser
               ? 'Your Profile'
-              : `Profile of ${this.props.user.name}`
-            }
+              : `Profile of ${this.props.name}`}
           </title>
         </Helmet>
-      </Provider>
+      </React.Fragment>
     );
   }
 }
 
-export default connect(
-  (state, props) => {
-    const user = getUserFromState(state, props.match.params.userId);
+const getCurrentUsersName = createSelector(
+  getCurrentUser(),
+  (user: User) => user.name,
+);
 
+const makeMapState = () => {
+  const hasLoadedUser = createSelector(
+    makeGetUserById(),
+    user => user !== null,
+  );
+  const hasLoadedProfile = createSelector(
+    makeGetProfileById(),
+    profile => profile !== null,
+  );
+  const isCurrentUser = makeIsCurrentUser();
+
+  return (state: State, props: Props): $Shape<Props> => {
     return {
-      user,
-      isLoggedInUser: user ? user.id === state.user.id : false,
+      hasLoadedUser: hasLoadedUser(state, props.match.params.userId),
+      hasLoadedProfile: hasLoadedProfile(state, props.match.params.userId),
+      isCurrentUser: isCurrentUser(state, props.match.params.userId),
+      name: getCurrentUsersName(state),
     };
-  },
+  };
+};
+
+export default connect(
+  makeMapState,
   (dispatch) => {
-    return { addUser: user => dispatch(addUser(user)) };
+    return {
+      fetchUser: userId => dispatch(fetchUser(userId)),
+      fetchProfile: userId => dispatch(fetchProfile(userId)),
+    };
   },
 )(Profile);

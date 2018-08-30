@@ -3,28 +3,28 @@
 import debug from 'debug';
 import { type App } from '@feathersjs/express';
 
-import { type User } from '../../../../types';
+import { type User } from '../../../../types/user';
 
 type Done = (error: Error | null, user: User | null) => void;
 
 const log = debug('TF2Pickup:auth:steam:validator');
 
 /**
- * Get a user by an id. Returns null when no user was found.
+ * Get a userId by an id. Returns null when no userId was found.
  * Otherwise returns an array of arguments for the done function.
- * It ignores 404 errors because the user might not yet exist.
+ * It ignores 404 errors because the userId might not yet exist.
  */
 async function getUser(users, id) {
   if (id !== null) {
     try {
-      // Try finding a already created user first
+      // Try finding a already created userId first
       const user = await users.get(id);
 
       return [null, user];
     } catch (error) {
-      // Ignore error code 404 which means no user was found, so we need to create one
+      // Ignore error code 404 which means no userId was found, so we need to create one
       if (error.code !== 404) {
-        log('Unknown error while getting user', id, error);
+        log('Unknown error while getting userId', id, error);
 
         return [error, null];
       }
@@ -44,12 +44,12 @@ export default function createValidator(app: App) {
     const users = app.service('users');
     const user = await getUser(users, match);
 
-    // We found a user or an error occurred other than 404
+    // We found a userId or an error occurred other than 404
     if (user !== null) {
       return done(...user);
     }
 
-    // Create a new user when no user was found
+    // Create a new userId when no userId was found
     try {
       const newUser = await users.create({ id });
 

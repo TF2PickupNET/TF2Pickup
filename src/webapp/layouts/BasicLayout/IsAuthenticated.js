@@ -10,14 +10,13 @@ import {
 } from 'antd';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import { compose } from 'redux';
 
 import { type State } from '../../store';
 import { redirectToSteamAuth } from '../../utils/auth';
 import { getCurrentUserId } from '../../store/user-id/selectors';
 
 type Props = {
-  userId: string,
+  userId: string | null,
   beta: boolean,
   children: Node,
   classes: { container: string },
@@ -29,7 +28,7 @@ class IsAuthenticated extends React.PureComponent<Props> {
   handleClick = () => redirectToSteamAuth();
 
   render() {
-    if (this.props.userId || !this.props.beta) {
+    if (this.props.userId === null || !this.props.beta) {
       return this.props.children;
     }
 
@@ -56,9 +55,10 @@ class IsAuthenticated extends React.PureComponent<Props> {
   }
 }
 
-export default compose(
-  injectSheet(styles),
-  connect((state: State) => {
-    return { userId: getCurrentUserId(state) };
-  }),
-)(IsAuthenticated);
+const mapStateToProps = (state: State): $Shape<Props> => {
+  return { userId: getCurrentUserId(state) };
+};
+
+export default injectSheet(styles)(
+  connect(mapStateToProps)(IsAuthenticated)
+);

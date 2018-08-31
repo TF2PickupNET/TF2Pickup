@@ -3,20 +3,18 @@
 import {
   createStore,
   applyMiddleware,
+  type Store,
 } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import app from '../app';
 
-import reducers from './reducers';
-
-type ExtractState = <R>(() => R) => R;
-type State = $Call<ExtractState, reducers>;
+import reducers, { type State } from './reducers';
 
 const middlewares = applyMiddleware(thunk.withExtraArgument(app));
 
-const store = createStore(
+const store: Store<State> = createStore(
   reducers,
   composeWithDevTools(middlewares),
 );

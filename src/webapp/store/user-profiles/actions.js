@@ -1,9 +1,9 @@
 // @flow
 
-import { type AsyncAction } from 'redux';
+import { type ClientApp } from '@feathersjs/feathers';
+import { type Dispatch } from 'redux';
 
 import { type UserProfile } from '../../../types/user-profile';
-import app from '../../app';
 
 import { type State } from '..';
 
@@ -13,9 +13,19 @@ import {
   type Actions,
 } from './types';
 
-export function fetchProfile(userId: string): AsyncAction<State, Actions> {
-  return async (dispatch) => {
+export function fetchProfile(userId: string) {
+  return async (
+    dispatch: Dispatch<Actions>,
+    getState: () => State,
+    app: ClientApp,
+  ) => {
     try {
+      const profiles = getState().userProfiles;
+
+      if (profiles[userId]) {
+        return;
+      }
+
       const profile = await app.service('user-profile').get(userId);
 
       dispatch({

@@ -2,7 +2,10 @@
 
 import React, { type Node } from 'react';
 import injectSheet from 'react-jss';
-import { connect } from 'react-redux';
+import {
+  connect,
+  type MapDispatchToProps,
+} from 'react-redux';
 import sleep from 'sleep-promise';
 import {
   Row,
@@ -186,14 +189,14 @@ class LoadingScreen extends React.PureComponent<Props, State> {
   }
 }
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps: MapDispatchToProps<Props> = (dispatch) => {
   return {
     fetchUser: userId => dispatch(fetchUser(userId)),
     fetchConfig: () => dispatch(fetchConfig()),
     fetchSettings: () => dispatch(fetchSettings()),
     fetchProfile: userId => dispatch(fetchProfile(userId)),
   };
-}
+};
 
 export default injectSheet(styles)(
   connect(null, mapDispatchToProps)(LoadingScreen)

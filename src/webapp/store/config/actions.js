@@ -1,8 +1,7 @@
 // @flow
 
-import { type AsyncAction } from 'redux';
-
-import app from '../../app';
+import { type Dispatch } from 'redux';
+import { type ClientApp } from '@feathersjs/feathers';
 
 import { type State } from '..';
 
@@ -11,8 +10,12 @@ import {
   type Actions,
 } from './types';
 
-export function fetchConfig(): AsyncAction<State, Actions> {
-  return async (dispatch) => {
+export function fetchConfig() {
+  return async (
+    dispatch: Dispatch<Actions>,
+    getState: () => State,
+    app: ClientApp,
+  ) => {
     const config = await app.service('configuration').get('config');
 
     dispatch({

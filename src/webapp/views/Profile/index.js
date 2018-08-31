@@ -6,25 +6,28 @@ import {
   Col,
   Spin,
 } from 'antd';
-import { connect } from 'react-redux';
+import {
+  connect,
+  type MapStateToProps,
+  type MapDispatchToProps,
+} from 'react-redux';
 import Helmet from 'react-helmet';
 import { createSelector } from 'reselect';
 
 import { fetchUser } from '../../store/users/actions';
 import { fetchProfile } from '../../store/user-profiles/actions';
-import { makeGetUserById } from '../../store/users/selectors';
-import { type State } from '../../store';
 import {
-  getCurrentUser,
-  makeIsCurrentUser,
-} from '../../store/user-id/selectors';
+  makeGetUserById,
+  makeGetUserName,
+} from '../../store/users/selectors';
+import { makeIsCurrentUser } from '../../store/user-id/selectors';
 import { makeGetProfileById } from '../../store/user-profiles/selectors';
-import { type User } from '../../../types/user';
+import { type State } from '../../store';
 
 type Props = {
   hasLoadedUser: boolean,
   hasLoadedProfile: boolean,
-  name: string,
+  name: string | null,
   isCurrentUser: boolean,
   fetchUser: (userId: string) => void,
   fetchProfile: (userId: string) => void,
@@ -63,26 +66,21 @@ class Profile extends React.PureComponent<Props> {
       return this.renderLoadingScreen();
     }
 
+    const title = this.props.isCurrentUser
+      ? 'Your Profile'
+      : `Profile of ${this.props.name === null ? 'Unknown' : this.props.name}`;
+
     return (
       <React.Fragment>
         <Helmet>
-          <title>
-            {this.props.isCurrentUser
-              ? 'Your Profile'
-              : `Profile of ${this.props.name}`}
-          </title>
+          <title>{title}</title>
         </Helmet>
       </React.Fragment>
     );
   }
 }
 
-const getCurrentUsersName = createSelector(
-  getCurrentUser(),
-  (user: User) => user.name,
-);
-
-const makeMapState = () => {
+const makeMapState = (): MapStateToProps<State, Props> => {
   const hasLoadedUser = createSelector(
     makeGetUserById(),
     user => user !== null,
@@ -92,23 +90,22 @@ const makeMapState = () => {
     profile => profile !== null,
   );
   const isCurrentUser = makeIsCurrentUser();
+  const getUserName = makeGetUserName();
 
-  return (state: State, props: Props): $Shape<Props> => {
+  return (state, props) => {
     return {
       hasLoadedUser: hasLoadedUser(state, props.match.params.userId),
       hasLoadedProfile: hasLoadedProfile(state, props.match.params.userId),
       isCurrentUser: isCurrentUser(state, props.match.params.userId),
-      name: getCurrentUsersName(state),
+      name: getUserName(state, props.match.params.userId),
     };
   };
 };
+const mapDispatchToProps: MapDispatchToProps<Props> = (dispatch) => {
+  return {
+    fetchUser: userId => dispatch(fetchUser(userId)),
+    fetchProfile: userId => dispatch(fetchProfile(userId)),
+  };
+};
 
-export default connect(
-  makeMapState,
-  (dispatch) => {
-    return {
-      fetchUser: userId => dispatch(fetchUser(userId)),
-      fetchProfile: userId => dispatch(fetchProfile(userId)),
-    };
-  },
-)(Profile);
+export default connect(makeMapState, mapDispatchToProps)(Profile);

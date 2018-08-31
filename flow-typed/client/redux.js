@@ -1,17 +1,16 @@
 // @flow strict-local
 
+import { type AsyncAction } from 'redux-thunk';
+
 declare module 'redux' {
   declare export interface Action<Type: string = string, Payload: {} = {}> {
     type: Type,
     payload: Payload,
   }
 
-  declare export type Dispatch = (action: Action<> | AsyncAction<{}, Action<>>) => void;
+  declare export type Dispatch<A = Action<>> = (action: A) => void;
 
-  declare export type AsyncAction<State, Actions> = (
-    dispatch: (action: Actions) => void,
-    getState: () => State,
-  ) => Promise<void>;
+  declare export type DispatchAsync<A = Action<>> = (action: AsyncAction<{}, A>) => void;
 
   declare export type Reducer<State, Actions> = (
     state: State | void,
@@ -25,7 +24,7 @@ declare module 'redux' {
     }): (next: (action: Action<>) => Action<>) => (action: Action<>) => Action<>,
   }
 
-  declare export interface Store<State: {}> {
+  declare export interface Store<State> {
     getState(): State,
     dispatch<T, A>(action: Action<T, A>): void,
     subscribe(listener: () => void): () => void,

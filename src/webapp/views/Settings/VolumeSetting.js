@@ -11,6 +11,8 @@ import injectSheet from 'react-jss';
 
 import app from '../../app';
 import playSound from '../../utils/play-sound';
+import { getVolume } from '../../store/settings/selectors';
+import { type State } from '../../store';
 
 type Props = {
   volume: number,
@@ -20,11 +22,11 @@ type Props = {
   addUpdatedField: (name: string) => void,
   removeUpdatedField: (name: string) => void,
 };
-type State = { volume: number };
+type LocalState = { volume: number };
 
 const styles = { slider: { marginTop: 50 } };
 
-class VolumeSetting extends React.PureComponent<Props, State> {
+class VolumeSetting extends React.PureComponent<Props, LocalState> {
   static FIELD_NAME = 'volume';
 
   state = { volume: this.props.volume };
@@ -36,8 +38,6 @@ class VolumeSetting extends React.PureComponent<Props, State> {
   }
 
   handleSave = () => {
-    console.log('test');
-
     if (this.state.volume === this.props.volume) {
       return;
     }
@@ -53,7 +53,7 @@ class VolumeSetting extends React.PureComponent<Props, State> {
     });
   };
 
-  handleChange = (value) => {
+  handleChange = (value: number) => {
     if (value === this.props.volume) {
       this.props.removeUpdatedField(VolumeSetting.FIELD_NAME);
     } else {
@@ -92,6 +92,10 @@ class VolumeSetting extends React.PureComponent<Props, State> {
   }
 }
 
-export default connect((state) => {
-  return { volume: state.settings.volume };
-})(injectSheet(styles)(VolumeSetting));
+const mapStateToProps = (state: State): $Shape<Props> => {
+  return { volume: getVolume(state) };
+};
+
+export default injectSheet(styles)(
+  connect(mapStateToProps)(VolumeSetting)
+);

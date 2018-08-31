@@ -4,14 +4,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-type Props = { userId: string };
+import { getCurrentUserId } from '../../store/user-id/selectors';
+import { type State } from '../../store';
+
+type Props = { userId: string | null };
 
 function ProfileRedirect(props: Props) {
   return (
-    <Redirect to={`/profile/${props.userId}`} />
+    <Redirect to={props.userId === null ? '/' : `/profile/${props.userId}`} />
   );
 }
 
-export default connect((state) => {
-  return { userId: state.user.id };
-})(ProfileRedirect);
+const mapStateToProps = (state: State): $Shape<Props> => {
+  return { userId: getCurrentUserId(state) };
+};
+
+export default connect(mapStateToProps)(ProfileRedirect);

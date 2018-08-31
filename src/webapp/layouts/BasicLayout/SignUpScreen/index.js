@@ -12,6 +12,7 @@ import Helmet from 'react-helmet';
 
 import { type User } from '../../../../types/user';
 import { getCurrentUser } from '../../../store/user-id/selectors';
+import { type State } from '../../../store';
 
 import AcceptRulesScreen from './AcceptRulesScreen';
 import RegionSelectScreen from './RegionSelectScreen';
@@ -20,7 +21,7 @@ import JoinDiscordScreen from './JoinDiscordScreen';
 import FinishScreen from './FinishScreen';
 
 type Props = {
-  user: User,
+  user: User | null,
   children: Node,
   classes: {
     container: string,
@@ -30,7 +31,7 @@ type Props = {
     stepper: string,
   },
 };
-type State = {
+type LocalState = {
   isFinished: boolean,
   didJoinDiscord: boolean,
 };
@@ -88,11 +89,12 @@ const styles = {
   },
 };
 
-class SignUpScreen extends React.PureComponent<Props, State> {
-  constructor(props) {
+class SignUpScreen extends React.PureComponent<Props, LocalState> {
+  constructor(props: Props) {
     super(props);
 
-    const didAlreadyComplete = props.user.hasAcceptedTheRules !== null
+    const didAlreadyComplete = props.user !== null
+      && props.user.hasAcceptedTheRules !== null
       && props.user.region !== null
       && props.user.name !== null;
 
@@ -103,6 +105,10 @@ class SignUpScreen extends React.PureComponent<Props, State> {
   }
 
   getCurrentStep() {
+    if (this.props.user === null) {
+      return null;
+    }
+
     if (!this.props.user.hasAcceptedTheRules) {
       return steps[0];
     } else if (this.props.user.region === null) {
@@ -205,7 +211,7 @@ class SignUpScreen extends React.PureComponent<Props, State> {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State): $Shape<Props> => {
   return { user: getCurrentUser(state) };
 };
 

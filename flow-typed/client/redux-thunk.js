@@ -1,14 +1,11 @@
 // @flow strict-local
 
-import {
-  type Enhancer,
-  type Dispatch,
-} from 'redux';
+import { type Enhancer } from 'redux';
 
 declare module 'redux-thunk' {
-  declare export interface Thunk<State> {
-    (dispatch: Dispatch<>, getState: () => State): void,
-    (dispatch: Dispatch<>, getState: () => State, arg: mixed): void,
+  declare export interface AsyncAction<State, Actions, Arg = null> {
+    (dispatch: (action: Actions) => void, getState: () => State): void | Promise<void>,
+    (dispatch: (action: Actions) => void, getState: () => State, arg: Arg): void | Promise<void>,
   }
 
   declare export default {

@@ -7,6 +7,7 @@ import {
   type Actions,
 } from './types';
 
+// $FlowFixMe: We require a logged in user
 export default function reducer(state: State = null, action: Actions) {
   switch (action.type) {
     case LOGIN_USER: return action.payload.userId;

@@ -1,12 +1,12 @@
 // @flow
 
-import { type AsyncAction } from 'redux';
+import { type Dispatch } from 'redux';
+import { type ClientApp } from '@feathersjs/feathers';
 
 import {
   type User,
   type UserId,
 } from '../../../types/user';
-import app from '../../app';
 
 import { type State } from '..';
 
@@ -16,11 +16,15 @@ import {
   type Actions,
 } from './types';
 
-export function fetchUser(userId: UserId): AsyncAction<State, Actions> {
-  return async (dispatch, getState) => {
-    const state = getState();
+export function fetchUser(userId: UserId) {
+  return async (
+    dispatch: Dispatch<Actions>,
+    getState: () => State,
+    app: ClientApp,
+  ) => {
+    const users = getState().users;
 
-    if (state.users[userId]) {
+    if (users[userId]) {
       return;
     }
 

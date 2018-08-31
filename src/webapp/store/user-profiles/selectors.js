@@ -9,6 +9,7 @@ const getProfiles = (state: State) => state.userProfiles;
 export function makeGetProfileById() {
   return createSelector(
     getProfiles,
-    (profiles, userId) => profiles[userId],
+    (state, userId) => userId,
+    (profiles, userId) => (userId === null ? null : profiles[userId] || null),
   );
 }

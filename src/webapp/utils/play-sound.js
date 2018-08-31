@@ -4,6 +4,7 @@ import store from '../store';
 import { announcers } from '../../config';
 import { isString } from '../../utils';
 import { isNumber } from '../../utils/number';
+import { getSettings } from '../store/settings/selectors';
 
 import {
   normalSounds,
@@ -127,7 +128,7 @@ export default function playSound(
   sound: Sounds,
   options: Options = {},
 ) {
-  const settings = store.getState().settings;
+  const settings = getSettings(store.getState());
   const announcer = getAnnouncer(options.announcer, settings);
   const url = getUrl(sound, announcer);
 

@@ -25,14 +25,14 @@ declare module 'react-redux' {
     CombinedProps = { dispatch: Dispatch<> } & StateProps & DispatchProps,
   > extends React$Component<$Diff<ElementConfig<Comp>, CombinedProps>> {}
 
-  declare type MapStateToProps<State, OwnProps, StateProps> = (
+  declare export type MapStateToProps<State, Props> = <StateProps: $Shape<Props>>(
     state: State,
-    props: OwnProps,
-  ) => StateProps;
-  declare type MapDispatchToProps<OwnProps, DispatchProps> = (
-    state: Dispatch<>,
-    props: OwnProps,
-  ) => DispatchProps;
+    props: Props,
+  ) => $Shape<Props>;
+
+  declare export interface MapDispatchToProps<Props> {
+    (state: Dispatch<>, props: Props): $Shape<Props>,
+  }
 
   declare export function connect<
     Props,
@@ -42,29 +42,49 @@ declare module 'react-redux' {
   declare export function connect<
     State,
     Props,
-    StateProps,
+    StateProps: $Shape<Props>,
     Comp: ComponentType<Props>
-  >(
-    mapStateToProps: MapStateToProps<State, Props, StateProps>
+    >(
+      mapStateToProps: () => (state: State, props: Props) => StateProps,
+  ): (comp: Comp) => Class<Connect<Comp, StateProps>>;
+
+  declare export function connect<
+    State,
+    Props,
+    StateProps: $Shape<Props>,
+    Comp: ComponentType<Props>
+    >(
+      mapStateToProps: (state: State, props: Props) => StateProps,
   ): (comp: Comp) => Class<Connect<Comp, StateProps>>;
 
   declare export function connect<
     Props,
-    DispatchProps,
+    DispatchProps: $Shape<Props>,
     Comp: ComponentType<Props>
     >(
       mapStateToProps: null,
-      mapDispatchToProps: MapDispatchToProps<Props, DispatchProps>,
+      mapDispatchToProps: (state: Dispatch<>, props: Props) => DispatchProps,
   ): (comp: Comp) => Class<Connect<Comp, {}, DispatchProps>>;
 
   declare export function connect<
     State,
     Props,
-    DispatchProps,
-    StateProps,
+    DispatchProps: $Shape<Props>,
+    StateProps: $Shape<Props>,
     Comp: ComponentType<Props>
     >(
-    mapStateToProps: MapStateToProps<State, Props, StateProps>,
-    mapDispatchToProps: MapDispatchToProps<Props, DispatchProps>,
+      mapStateToProps: (state: State, props: Props) => StateProps,
+      mapDispatchToProps: (state: Dispatch<>, props: Props) => DispatchProps,
+  ): (comp: Comp) => Class<Connect<Comp, StateProps, DispatchProps>>;
+
+  declare export function connect<
+    State,
+    Props,
+    DispatchProps: $Shape<Props>,
+    StateProps: $Shape<Props>,
+    Comp: ComponentType<Props>
+    >(
+      mapStateToProps: () => (state: State, props: Props) => StateProps,
+      mapDispatchToProps: (state: Dispatch<>, props: Props) => DispatchProps,
   ): (comp: Comp) => Class<Connect<Comp, StateProps, DispatchProps>>;
 }

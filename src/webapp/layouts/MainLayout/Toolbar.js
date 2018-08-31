@@ -1,10 +1,13 @@
 // @flow
 
 import React from 'react';
-import { connect } from 'react-redux';
+import {
+  connect, type MapStateToProps,
+} from 'react-redux';
 import injectSheet from 'react-jss';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
+import { createSelector } from 'reselect';
 import {
   Menu,
   Layout,
@@ -13,6 +16,9 @@ import {
 
 import { type State } from '../../store';
 import { isString } from '../../../utils';
+import { makeGetUserName } from '../../store/users/selectors';
+import { makeGetProfileById } from '../../store/user-profiles/selectors';
+import { getCurrentUserId } from '../../store/user-id/selectors';
 
 import { SIDEBAR_WIDTH } from './Sidebar';
 
@@ -24,8 +30,8 @@ type Props = {
     logo: string,
     avatar: string,
   },
-  name: string,
-  avatar: string,
+  name: string | null,
+  avatar: string | null,
 };
 type LocalState = { title: string | null };
 
@@ -76,6 +82,10 @@ class Toolbar extends React.PureComponent<Props, LocalState> {
   };
 
   renderRightMenu() {
+    if (this.props.name === null || this.props.avatar === null) {
+      return null;
+    }
+
     return (
       <Menu
         theme="dark"
@@ -124,9 +134,23 @@ class Toolbar extends React.PureComponent<Props, LocalState> {
   }
 }
 
-export default connect((state: State) => {
-  return {
-    name: state.user.name,
-    avatar: state.profile.steam.avatar.large,
+const makeMapStateToProps = (): MapStateToProps<State, Props> => {
+  const getName = makeGetUserName();
+  const getAvatar = createSelector(
+    makeGetProfileById(),
+    profile => (profile === null ? null : profile.steam.avatar.large),
+  );
+
+  return (state) => {
+    const userId = getCurrentUserId(state);
+
+    return {
+      name: getName(state, userId),
+      avatar: getAvatar(state, userId),
+    };
   };
-})(injectSheet(styles)(Toolbar));
+};
+
+export default injectSheet(styles)(
+  connect(makeMapStateToProps)(Toolbar)
+);

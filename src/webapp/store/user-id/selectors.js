@@ -11,7 +11,7 @@ export const getCurrentUserId = (state: State) => state.userId;
 export const getCurrentUser = createSelector(
   getUsers,
   getCurrentUserId,
-  (users, userId) => users[userId],
+  (users, userId) => (userId === null ? null : users[userId]),
 );
 
 export function makeIsCurrentUser() {

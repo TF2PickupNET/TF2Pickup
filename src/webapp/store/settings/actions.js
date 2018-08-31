@@ -1,9 +1,9 @@
 // @flow
 
-import { type AsyncAction } from 'redux';
+import { type Dispatch } from 'redux';
+import { type ClientApp } from '@feathersjs/feathers';
 
 import { type UserSettings } from '../../../types/user-settings';
-import app from '../../app';
 
 import { type State } from '..';
 
@@ -13,8 +13,12 @@ import {
   type Actions,
 } from './types';
 
-export function fetchSettings(): AsyncAction<State, Actions> {
-  return async (dispatch, getState) => {
+export function fetchSettings() {
+  return async (
+    dispatch: Dispatch<Actions>,
+    getState: () => State,
+    app: ClientApp
+  ) => {
     const userId = getState().userId;
 
     if (userId === null) {

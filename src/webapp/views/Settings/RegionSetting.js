@@ -5,21 +5,27 @@ import {
   Radio,
   message,
 } from 'antd';
-import { connect } from 'react-redux';
+import {
+  connect,
+  type MapStateToProps,
+} from 'react-redux';
 import injectSheet from 'react-jss';
 
 import { regions } from '../../../config';
 import app from '../../app';
+import { makeGetRegion } from '../../store/users/selectors';
+import { getCurrentUserId } from '../../store/user-id/selectors';
+import { type State } from '../../store';
 
 type Props = {
-  region: $Keys<typeof regions>,
+  region: $Keys<typeof regions> | null,
   className: string,
   registerSaveHandler: (func: () => void) => void,
   addUpdatedField: (name: string) => void,
   removeUpdatedField: (name: string) => void,
   classes: { radio: string },
 };
-type State = { region: string };
+type LocalState = { region: string | null };
 
 const { Group } = Radio;
 const styles = {
@@ -30,7 +36,7 @@ const styles = {
   },
 };
 
-class RegionSetting extends React.PureComponent<Props, State> {
+class RegionSetting extends React.PureComponent<Props, LocalState> {
   static FIELD_NAME = 'region';
 
   state = { region: this.props.region };
@@ -42,9 +48,7 @@ class RegionSetting extends React.PureComponent<Props, State> {
   }
 
   handleSave = () => {
-    console.log('test');
-
-    if (this.state.region === this.props.region) {
+    if (this.state.region === this.props.region || this.state.region === null) {
       return;
     }
 
@@ -101,6 +105,14 @@ class RegionSetting extends React.PureComponent<Props, State> {
   }
 }
 
-export default connect((state) => {
-  return { region: state.user.region };
-})(injectSheet(styles)(RegionSetting));
+const makeMapStateToProps = (): MapStateToProps<State, Props> => {
+  const getRegion = makeGetRegion();
+
+  return (state) => {
+    return { region: getRegion(state, getCurrentUserId(state)) };
+  };
+};
+
+export default connect(makeMapStateToProps)(
+  injectSheet(styles)(RegionSetting),
+);

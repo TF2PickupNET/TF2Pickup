@@ -13,9 +13,10 @@ import Helmet from 'react-helmet';
 
 // $FlowFixMe: Flow can't type json files
 import pkg from '../../../../package.json';
+import { type State } from '../../store';
 
 type Props = {
-  version: string,
+  version: string | null,
   children: Node,
   classes: { container: string },
 };
@@ -59,6 +60,10 @@ class VersionValidator extends React.PureComponent<Props> {
   }
 }
 
-export default injectSheet(styles)(connect((state) => {
-  return { version: state.config.version };
-})(VersionValidator));
+const mapStateToProps = (state: State): $Shape<Props> => {
+  return { version: state.config ? state.config.version : null };
+};
+
+export default injectSheet(styles)(
+  connect(mapStateToProps)(VersionValidator),
+);

@@ -1,7 +1,11 @@
 // @flow
 
 import React from 'react';
-import { connect } from 'react-redux';
+import {
+  connect,
+  type MapStateToProps,
+} from 'react-redux';
+import { createSelector } from 'reselect';
 import {
   Row,
   Button,
@@ -11,27 +15,35 @@ import {
 
 import { regions } from '../../../../config';
 import app from '../../../app';
-import { type UserProfile } from '../../../../types/user-profile';
+import { makeGetProfileById } from '../../../store/user-profiles/selectors';
+import { getCurrentUserId } from '../../../store/user-id/selectors';
+import { makeGetRegion } from '../../../store/users/selectors';
+import { type State } from '../../../store';
 
+type NameData = {
+  service: string,
+  region: $Keys<typeof regions>,
+  display: string,
+  name: string,
+};
 type Props = {
-  profiles: UserProfile,
+  names: $ReadOnlyArray<NameData>,
   region: $Keys<typeof regions> | null,
 };
-type State = {
+type LocalState = {
   isProcessing: boolean,
   name: string | null,
 };
 
 const { Group } = Radio;
 
-class NameSelectScreen extends React.PureComponent<Props, State> {
-  static getDerivedStateFromProps(nextProps: Props, state: State): $Shape<State> {
+class NameSelectScreen extends React.PureComponent<Props, LocalState> {
+  static getDerivedStateFromProps(nextProps: Props, state: LocalState): $Shape<LocalState> {
     if (nextProps.region !== null && state.name === null) {
-      const service = regions[nextProps.region].service;
+      const name = nextProps.names.find(({ region }) => region === nextProps.region);
 
-      // $FlowFixMe
-      if (nextProps.profiles[service]) {
-        return { name: nextProps.profiles[service].name };
+      if (name) {
+        return { name: name.name };
       }
     }
 
@@ -74,25 +86,14 @@ class NameSelectScreen extends React.PureComponent<Props, State> {
   };
 
   renderRadios(): Node {
-    return Object
-      .keys(regions)
-      .map((region) => {
-        const service = regions[region].service;
-
-        // $FlowFixMe
-        if (!this.props.profiles[service]) {
-          return null;
-        }
-
-        return (
-          <Radio
-            key={service}
-            value={this.props.profiles[service].name}
-          >
-            {this.props.profiles[service].name} ({region})
-          </Radio>
-        );
-      });
+    return this.props.names.map(name => (
+      <Radio
+        key={name.service}
+        value={name.name}
+      >
+        {name.name} ({name.display})
+      </Radio>
+    ));
   }
 
   render() {
@@ -122,9 +123,39 @@ class NameSelectScreen extends React.PureComponent<Props, State> {
   }
 }
 
-export default connect((state) => {
-  return {
-    profiles: state.profile,
-    region: state.user.region,
+const makeMapStateToProps = (): MapStateToProps<State, Props> => {
+  const getRegion = makeGetRegion();
+  const getNames = createSelector(
+    makeGetProfileById(),
+    profile => Object
+      .keys(regions)
+      .filter((name) => {
+        const service = regions[name].service;
+
+        // $FlowFixMe: For some reason flow throws an error here
+        return Boolean(profile[service]);
+      })
+      .map((name) => {
+        const service = regions[name].service;
+
+        return {
+          service,
+          region: name,
+          display: regions[name].fullName,
+          // $FlowFixMe: For some reason flow throws an error here
+          name: profile[service],
+        };
+      }),
+  );
+
+  return (state) => {
+    const userId = getCurrentUserId(state);
+
+    return {
+      names: getNames(state, userId),
+      region: getRegion(state, userId),
+    };
   };
-})(NameSelectScreen);
+};
+
+export default connect(makeMapStateToProps)(NameSelectScreen);

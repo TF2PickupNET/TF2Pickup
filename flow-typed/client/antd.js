@@ -8,34 +8,38 @@ import {
 } from 'react';
 
 declare module 'antd' {
-  declare type Gutter = number | {
+  declare type Gutter = number | {|
     xs?: number,
     sm?: number,
     md?: number,
     lg?: number,
     xl?: number,
     xxl?: number,
-  };
+  |};
 
   declare type Sizes = 'large' | 'default' | 'small';
   declare type Theme = 'light' | 'dark';
 
-  declare export class Row extends React$Component<{
+  declare export class Row extends React$Component<{|
     align?: 'top' | 'middle' | 'bottom',
     gutter?: Gutter,
     justify?: 'start' | 'end' | 'center' | 'space-around' | 'space-between',
     type?: 'flex',
-  }> {}
+    children: Node,
+    className?: string,
+  |}> {}
 
-  declare export class Col extends React$Component<{
+  declare export class Col extends React$Component<{|
     offset?: number,
     order?: number,
     pull?: number,
     push?: number,
     span?: number,
-  } & Gutter> {}
+    children: Node,
+    ...Gutter,
+  |}> {}
 
-  declare export class Progress extends React$Component<{
+  declare export class Progress extends React$Component<{|
     format?: (percent: number, successPercentage: number) => string,
     gapDegree?: number,
     gapPosition?: 'top' | 'bottom' | 'left' | 'right',
@@ -46,7 +50,8 @@ declare module 'antd' {
     successPercent?: number,
     type?: 'line' | 'circle' | 'dashboard',
     width?: number,
-  }> {}
+    onTransitionEnd: () => void,
+  |}> {}
 
   declare export class message {
     static success(content: Node, onClose?: () => void): Promise<void>,
@@ -70,7 +75,7 @@ declare module 'antd' {
     }): void,
   }
 
-  declare export class Button extends React$Component<{
+  declare export class Button extends React$Component<{|
     disabled?: boolean,
     ghost?: boolean,
     href?: string,
@@ -83,22 +88,23 @@ declare module 'antd' {
     type?: 'primary' | 'ghost' | 'dashed' | 'danger',
     onClick: (ev: HTMLElement) => void,
     children: Node,
-  }> {}
+    className?: string,
+  |}> {}
 
-  declare export class CardGrid extends React$Component<{
+  declare export class CardGrid extends React$Component<{|
     className?: string,
     style?: {},
-  }> {}
+  |}> {}
 
-  declare export class CardMeta extends React$Component<{
+  declare export class CardMeta extends React$Component<{|
     avatar?: Node,
     className?: string,
     description?: string,
     style?: {},
     title?: Node,
-  }> {}
+  |}> {}
 
-  declare export class Card extends React$Component<{
+  declare export class Card extends React$Component<{|
     actions?: $ReadOnlyArray<ElementType>,
     activeTabKey?: string,
     bodyStyle?: {},
@@ -107,6 +113,7 @@ declare module 'antd' {
     defaultActiveTabKey?: string,
     extra?: string | Node,
     loading?: boolean,
+    className?: string,
     hoverable?: boolean,
     tabList?: $ReadOnlyArray<{
       key: string,
@@ -116,21 +123,21 @@ declare module 'antd' {
     onTabChange?: (tab: string) => void,
     title: string | Node,
     children: Node,
-  }> {
+  |}> {
     static Meta: CardMeta,
     static Grid: CardGrid,
   }
 
   declare type StepsStatus = 'wait' | 'process' | 'finish' | 'error';
 
-  declare class Step extends React$Component<{
+  declare class Step extends React$Component<{|
     description?: Node,
     icon?: Node,
     status?: StepsStatus,
     title: Node,
-  }> {}
+  |}> {}
 
-  declare export class Steps extends React$Component<{
+  declare export class Steps extends React$Component<{|
     current: number,
     direction?: 'horizontal' | 'vertical',
     labelPlacement?: 'horizontal' | 'vertical',
@@ -138,16 +145,18 @@ declare module 'antd' {
     status?: StepsStatus,
     progressDot?: boolean | () => Node,
     children: Node,
-  }> {
+    className?: string,
+  |}> {
     static Step: Class<Step>,
   }
 
-  declare class RadioGroup extends React$Component<{
+  declare class RadioGroup extends React$Component<{|
     defaultValue?: string,
     disabled?: boolean,
     name?: string,
     size?: Sizes,
     value: string | null,
+    children: Node,
     onChange: (ev: SyntheticInputEvent<HTMLInputElement>) => void,
     buttonStyle?: 'outline' | 'solid',
     options?: $ReadOnlyArray<string> | $ReadOnlyArray<{
@@ -155,29 +164,30 @@ declare module 'antd' {
       value: string,
       disabled?: boolean,
     }>,
-  }> {}
+  |}> {}
 
-  declare export class Radio extends React$Component<{
+  declare export class Radio extends React$Component<{|
     autoFocus?: boolean,
     checked?: boolean,
     defaultChecked?: boolean,
     disabled?: boolean,
     value: string,
     children: Node,
-  }> {
+    className?: string,
+  |}> {
     static Group: Class<RadioGroup>,
   }
 
-  declare export class Spin extends React$Component<{
+  declare export class Spin extends React$Component<{|
     delay?: number,
     indicator?: Element<ElementType>,
     size?: Sizes,
     spinning?: boolean,
     tip?: string,
     wrapperClassName?: string,
-  }> {}
+  |}> {}
 
-  declare class Sider extends React$Component<{
+  declare class Sider extends React$Component<{|
     className?: string,
     collapsed?: boolean,
     collapsedWidth?: number,
@@ -187,49 +197,52 @@ declare module 'antd' {
     theme?: Theme,
     trigger?: Element<ElementType>,
     width?: number,
+    children: Node,
     onCollapse?: (collapsed: boolean) => void,
-  }> {}
+  |}> {}
 
-  declare export class Layout extends React$Component<{
+  declare export class Layout extends React$Component<{|
     className?: string,
     hasSider?: boolean,
-  }> {
+    children: Node,
+  |}> {
     static Sider: Class<Sider>,
     static Header: Class<Layout>,
     static Footer: Class<Layout>,
     static Content: Class<Layout>,
   }
 
-  declare export class Avatar extends React$Component<{
+  declare export class Avatar extends React$Component<{|
     icon?: string,
     shape?: 'circle' | 'square',
     size?: Sizes | number,
     src?: string,
     alt?: string,
     onError?: () => boolean,
-  }> {}
+    className?: string,
+  |}> {}
 
-  declare export class Divider extends React$Component<{
+  declare export class Divider extends React$Component<{|
     className?: string,
     dashed?: boolean,
     orientation?: 'left' | 'right' | 'center',
     type?: 'horizontal' | 'vertical',
     children?: Node,
-  }> {}
+  |}> {}
 
-  declare class MenuItem extends React$Component<{
+  declare class MenuItem extends React$Component<{|
     className?: string,
     disabled?: boolean,
     children: Node,
-  }> {}
+  |}> {}
 
-  declare class MenuItemGroup extends React$Component<{
+  declare class MenuItemGroup extends React$Component<{|
     className?: string,
     title: string,
     children: ChildrenArray<Element<MenuItem | MenuItemGroup | Divider>>,
-  }> {}
+  |}> {}
 
-  declare export class Menu extends React$Component<{
+  declare export class Menu extends React$Component<{|
     className?: string,
     defaultOpenKeys?: $ReadOnlyArray<string>,
     defaultSelectedKeys?: $ReadOnlyArray<string>,
@@ -261,13 +274,13 @@ declare module 'antd' {
       selectedKeys: $ReadOnlyArray<string>,
     }) => void,
     children: ChildrenArray<Element<MenuItem | MenuItemGroup | Divider>>,
-  }> {
+  |}> {
     static Item: Class<MenuItem>,
     static ItemGroup: Class<MenuItemGroup>,
     static Divider: Class<Divider>,
   }
 
-  declare export class Alert extends React$Component<{
+  declare export class Alert extends React$Component<{|
     afterClose?: () => void,
     banner?: boolean,
     closable?: boolean,
@@ -278,11 +291,11 @@ declare module 'antd' {
     showIcon?: boolean,
     type?: 'success' | 'info' | 'warning' | 'error',
     onClose?: () => void,
-  }> {}
+  |}> {}
 
   declare type NotificationPlacements = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
 
-  declare type NotificationOptions = {
+  declare type NotificationOptions = {|
     btn?: Node,
     className?: string,
     description?: Node,
@@ -292,7 +305,7 @@ declare module 'antd' {
     message: Node,
     placement?: NotificationPlacements,
     onClose?: () => void,
-  };
+  |};
 
   declare export class notification {
     static success(options: NotificationOptions): void,
@@ -312,9 +325,10 @@ declare module 'antd' {
     }): void,
   }
 
-  declare export class Slider extends React$Component<{
+  declare export class Slider extends React$Component<{|
     autoFocus?: boolean,
     defaultValue?: number | [number, number],
+    className?: string,
     disabled?: boolean,
     dots?: boolean,
     included?: boolean,
@@ -333,20 +347,69 @@ declare module 'antd' {
         label: Node,
       },
     },
-  }> {}
+  |}> {}
 
-  declare export class Icon extends React$Component<{
+  declare export class Icon extends React$Component<{|
     spin?: boolean,
     className?: string,
     type: string,
-  }> {}
+  |}> {}
 
-  declare export class Tag extends React$Component<{
+  declare export class Tag extends React$Component<{|
     afterClose?: () => void,
     closable?: boolean,
     color?: string,
     children: Node,
     onClose?: () => void,
     visible?: boolean,
-  }> {}
+    className?: string,
+    onClick?: () => void,
+  |}> {}
+
+  declare class SelectOption extends React$Component<{|
+    disabled?: false,
+    title?: string,
+    value: string,
+    children: Node,
+  |}> {}
+
+  declare export class Select extends React$Component<{|
+    allowClear?: boolean,
+    autoFocus?: boolean,
+    defaultActiveFirstOption?: boolean,
+    defaultValue?: string | $ReadOnlyArray<string>,
+    disabled?: boolean,
+    dropdownClassName?: string,
+    dropdownMatchSelectWidth?: boolean,
+    filterOption?: boolean | (value: string, option: string) => boolean,
+    firstActiveValue?: string | $ReadOnlyArray<string>,
+    getPopupContainer?: () => HTMLElement,
+    labelInValue?: boolean,
+    maxTagCount?: number,
+    maxTagPlaceholder?: Node,
+    mode?: 'default' | 'multiple' | 'tags',
+    notFoundContent?: Node,
+    optionFilterProp?: string,
+    optionLabelProp?: string,
+    placeholder?: Node,
+    showArrow?: boolean,
+    children: Node,
+    showSearch?: boolean,
+    size?: Sizes,
+    tokenSeparators?: $ReadOnlyArray<string>,
+    value?: string | $ReadOnlyArray<string>,
+    onBlur?: () => void,
+    onChange?: (value: string) => void,
+    onDeselect?: (value: string) => void,
+    onFocus?: () => void,
+    onInputKeyDown?: () => void,
+    onMouseEnter?: () => void,
+    onMouseLeave?: () => void,
+    onPopupScroll?: () => void,
+    onSearch?: (input: string) => void,
+    onSelect?: (value: string) => void,
+    className?: string,
+  |}> {
+    static Option: Class<SelectOption>,
+  }
 }

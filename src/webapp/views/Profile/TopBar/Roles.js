@@ -25,7 +25,11 @@ type Props = {
   roles: $ReadOnlyArray<$Keys<typeof roles>>,
   canEditRoles: boolean,
   userId: string,
-  classes: { rolesContainer: string },
+  classes: {
+    rolesContainer: string,
+    addRoleTag: string,
+    rolesSelect: string,
+  },
 };
 type LocalState = { isSelectVisible: boolean };
 
@@ -37,6 +41,13 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+  },
+
+  rolesSelect: { width: 120 },
+
+  addRoleTag: {
+    background: '#fff',
+    borderStyle: 'dashed',
   },
 };
 
@@ -93,7 +104,7 @@ class Roles extends React.PureComponent<Props, LocalState> {
       <Select
         autoFocus
         size="small"
-        style={{ width: 120 }}
+        className={this.props.classes.rolesSelect}
         onChange={this.handleRolesChange}
         onBlur={this.handleSelectBlur}
       >
@@ -124,10 +135,7 @@ class Roles extends React.PureComponent<Props, LocalState> {
 
     return this.state.isSelectVisible ? this.renderRoleSelect(rolesToAdd) : (
       <Tag
-        style={{
-          background: '#fff',
-          borderStyle: 'dashed',
-        }}
+        className={this.props.classes.addRoleTag}
         onClick={this.handleAddRoleClick}
       >
         <Icon type="plus" /> Add Role

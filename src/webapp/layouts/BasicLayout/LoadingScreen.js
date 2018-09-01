@@ -94,7 +94,9 @@ class LoadingScreen extends React.PureComponent<Props, LocalState> {
   }
 
   async fetchUser() {
-    if (this.props.userId === null) {
+    const { userId } = this.props;
+
+    if (userId === null) {
       message.warn('Couldn\'t authenticate.');
 
       this.setState({ loadingPercentage: 100 });
@@ -104,7 +106,7 @@ class LoadingScreen extends React.PureComponent<Props, LocalState> {
 
     this.setState({ loadingText: 'Fetching user' });
 
-    this.props.fetchUser(this.props.userId);
+    this.props.fetchUser(userId);
 
     await sleep(50);
 

@@ -5,10 +5,14 @@ import {
   notification,
   Button,
 } from 'antd';
+import injectSheet from 'react-jss';
 
 type State = { acceptedCookies: boolean };
+type Props = { classes: { acceptButton: string } };
 
-export default class NotificationRequester extends React.Component<{}, State> {
+const styles = { acceptButton: { marginLeft: 16 } };
+
+class NotificationRequester extends React.Component<Props, State> {
   static KEY = 'REQUEST-NOTIFICATION-ACCESS';
 
   static DESCRIPTION = (
@@ -74,7 +78,7 @@ export default class NotificationRequester extends React.Component<{}, State> {
         <Button
           type="primary"
           size="small"
-          style={{ marginLeft: '16px' }}
+          className={this.props.classes.acceptButton}
           onClick={this.handleAcceptClick}
         >
           Yes go ahead
@@ -87,3 +91,5 @@ export default class NotificationRequester extends React.Component<{}, State> {
     return null;
   }
 }
+
+export default injectSheet(styles)(NotificationRequester);

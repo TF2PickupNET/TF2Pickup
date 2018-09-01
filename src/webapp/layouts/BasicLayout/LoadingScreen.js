@@ -19,22 +19,23 @@ import app from '../../app';
 import { fetchConfig } from '../../store/config/actions';
 import { fetchSettings } from '../../store/settings/actions';
 import { fetchProfile } from '../../store/user-profiles/actions';
-import { type UserId } from '../../../types/user';
 import { fetchUser } from '../../store/users/actions';
+import { type State } from '../../store';
+import { getCurrentUserId } from '../../store/user-id/selectors';
 
 type Props = {
   classes: {
     container: string,
     text: string,
   },
-  userId: UserId,
+  userId: string | null,
   children: Node,
   fetchProfile: (userId: string) => void,
   fetchUser: (userId: string) => void,
   fetchSettings: () => void,
   fetchConfig: () => void,
 };
-type State = {
+type LocalState = {
   isLoading: boolean,
   loadingPercentage: number,
   loadingText: string,
@@ -46,7 +47,7 @@ const styles = {
   text: { textAlign: 'center' },
 };
 
-class LoadingScreen extends React.PureComponent<Props, State> {
+class LoadingScreen extends React.PureComponent<Props, LocalState> {
   state = {
     isLoading: true,
     loadingPercentage: 10,
@@ -189,6 +190,10 @@ class LoadingScreen extends React.PureComponent<Props, State> {
   }
 }
 
+const mapStateToProps = (state: State): $Shape<Props> => {
+  return { userId: getCurrentUserId(state) };
+};
+
 const mapDispatchToProps: MapDispatchToProps<Props> = (dispatch) => {
   return {
     fetchUser: userId => dispatch(fetchUser(userId)),
@@ -199,5 +204,5 @@ const mapDispatchToProps: MapDispatchToProps<Props> = (dispatch) => {
 };
 
 export default injectSheet(styles)(
-  connect(null, mapDispatchToProps)(LoadingScreen)
+  connect(mapStateToProps, mapDispatchToProps)(LoadingScreen)
 );

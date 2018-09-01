@@ -334,4 +334,19 @@ declare module 'antd' {
       },
     },
   }> {}
+
+  declare export class Icon extends React$Component<{
+    spin?: boolean,
+    className?: string,
+    type: string,
+  }> {}
+
+  declare export class Tag extends React$Component<{
+    afterClose?: () => void,
+    closable?: boolean,
+    color?: string,
+    children: Node,
+    onClose?: () => void,
+    visible?: boolean,
+  }> {}
 }

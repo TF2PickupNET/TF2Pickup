@@ -8,12 +8,12 @@ import Model from './Model';
 import hooks from './hooks';
 import events from './events';
 
-const log = debug('TF2Pickup:userId-settings');
+const log = debug('TF2Pickup:user-settings');
 
 export default function userSettings(app: App) {
-  log('Setting up userId-settings service');
+  log('Setting up user-settings service');
 
-  app.use('/userId-settings', service({
+  app.use('/user-settings', service({
     Model,
     id: 'id',
   }));

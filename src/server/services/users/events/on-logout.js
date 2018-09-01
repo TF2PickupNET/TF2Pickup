@@ -10,7 +10,7 @@ export default function onLogout(app: App) {
   return async (payload: {}, { connection }: { connection: Connection }) => {
     // Check if the userId is still authenticated on any other socket
     const isStillConnected = app
-      .channels('authenticated')
+      .channel('authenticated')
       .filter(({ user }) => user.id === connection.user.id)
       .length > 0;
 

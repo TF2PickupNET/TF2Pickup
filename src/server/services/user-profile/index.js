@@ -8,12 +8,12 @@ import Model from './Model';
 import hooks from './hooks';
 import setupEvents from './setup-events';
 
-const log = debug('TF2Pickup:userId-user-profiles');
+const log = debug('TF2Pickup:user-profile');
 
 export default function userProfile(app: App) {
-  log('Setting up userId-user-profiles service');
+  log('Setting up user-profile service');
 
-  app.use('/userId-user-profiles', service({
+  app.use('/user-profile', service({
     Model,
     id: 'id',
   }));

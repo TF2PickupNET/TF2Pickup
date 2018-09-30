@@ -5,6 +5,7 @@ import { type App } from '@feathersjs/express';
 import onLeave from './on-leave';
 import onJoin from './on-join';
 import onReadyUp from './on-ready-up';
+import onSelectMap from './on-select-map';
 
 export default function events(app: App) {
   app.on('socket-connection', (socket) => {
@@ -14,6 +15,6 @@ export default function events(app: App) {
 
     socket.on('pickup-queue:ready-up', onReadyUp(app, socket));
 
-    socket.on('pickup-queue:select-map', onAddRole(app, socket));
+    socket.on('pickup-queue:select-map', onSelectMap(app, socket));
   });
 }

@@ -23,6 +23,8 @@ function testMapPool(t, region: $Keys<typeof regions>, gamemode: $Keys<typeof ga
       t.fail(`Missing map data for ${mapName}`);
     }
   });
+
+  t.pass();
 }
 
 Object

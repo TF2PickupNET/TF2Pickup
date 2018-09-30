@@ -17,19 +17,24 @@ async function startServer() {
     const server = app.listen(port);
 
     server.on('listening', () => {
-      log('Server started on port', port);
+      log(`Server started on port ${port}`);
 
       app.emit('listening');
     });
   } catch (error) {
-    log('Failed to create app', error);
+    log('Failed to create app', { error });
 
     process.exit(1); // eslint-disable-line unicorn/no-process-exit
   }
 }
 
 process.on('unhandledRejection', (reason, promise) => {
-  log('Unhandled promise rejection', promise, reason);
+  log('Unhandled promise rejection', {
+    data: {
+      reason,
+      promise,
+    },
+  });
 });
 
 startServer();

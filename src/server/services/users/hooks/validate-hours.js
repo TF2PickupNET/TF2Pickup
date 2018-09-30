@@ -29,7 +29,7 @@ You need atleast ${requiredHours} hours in TF2.
 `;
 
 export default async function validateHours(hook: CreateBeforeHookContext<User>) {
-  if (requiredHours <= 0) {
+  if (requiredHours === null) {
     return;
   }
 
@@ -48,12 +48,23 @@ export default async function validateHours(hook: CreateBeforeHookContext<User>)
 
     hours = game ? Math.floor(game.playtime_forever / 60) : 0;
   } catch (error) {
-    log('Error while getting tf2 hours for userId', error);
+    log('Error while getting tf2 hours for userId', {
+      error,
+      userId: hook.data.id,
+    });
 
     throw new GeneralError(generalErrorMessage);
   }
 
   if (hours < requiredHours) {
+    log('User doesn\'t have enough hours', {
+      userId: hook.data.id,
+      data: {
+        hours,
+        requiredHours,
+      },
+    });
+
     throw new Forbidden(notEnoughHoursMessage);
   }
 }

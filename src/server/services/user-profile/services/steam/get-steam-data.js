@@ -29,7 +29,10 @@ export default async function getSteamData(user: UserProfile, oneDaySinceLastUpd
       },
     };
   } catch (error) {
-    log('Error while requesting steam data', user.id, error);
+    log('Error while requesting steam data', {
+      userId: user.id,
+      error,
+    });
 
     return {};
   }

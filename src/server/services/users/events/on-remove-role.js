@@ -39,9 +39,18 @@ export default function onRemoveRole(app: App, connection: SocketConnection) {
 
       await users.patch(data.userId, { $set: { roles: filteredRoles } });
 
+      log('Successfully removed a role from a user', {
+        userId: currentUser.id,
+        data,
+      });
+
       return cb(null);
     } catch (error) {
-      log('Error while adding a role to a user', data.userId, error);
+      log('Error while removing a role from a user', {
+        userId: currentUser.id,
+        error,
+        data,
+      });
 
       return cb(error);
     }

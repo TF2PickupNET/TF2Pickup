@@ -23,7 +23,10 @@ export default async function getSteamFriends(user: UserProfile, oneDaySinceLast
 
     return { friends: friends.map(friend => friend.steamid) };
   } catch (error) {
-    log('Error while requesting steam friends', user.id, error);
+    log('Error while requesting steam friends', {
+      userId: user.id,
+      error,
+    });
 
     return {};
   }

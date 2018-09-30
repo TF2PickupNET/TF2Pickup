@@ -10,7 +10,7 @@ type Data = { region: string };
 const log = debug('TF2Pickup:users:events:on-change-region');
 
 export default function onChangeRegion(app: App, connection: SocketConnection) {
-  return async ({ region }: Data, cb: (error: null | Error) => void) => {
+  return async (data: Data, cb: (error: null | Error) => void) => {
     const user = connection.feathers.user;
 
     // Make sure a userId is authenticated
@@ -21,7 +21,7 @@ export default function onChangeRegion(app: App, connection: SocketConnection) {
     const oldRegion = user.region;
 
     try {
-      await app.service('users').patch(user.id, { region });
+      await app.service('users').patch(user.id, { region: data.region });
 
       // Get every connection for the userId
       const connections = app
@@ -31,12 +31,21 @@ export default function onChangeRegion(app: App, connection: SocketConnection) {
       // Leave the old region channel and join the new one
       connections.connections.forEach((conn) => {
         app.channels(`region:${oldRegion}`).leave(conn);
-        app.channels(`region:${region}`).join(conn);
+        app.channels(`region:${data.region}`).join(conn);
+      });
+
+      log('Successfully changed the region', {
+        userId: user.id,
+        data,
       });
 
       return cb(null);
     } catch (error) {
-      log('Error while changing region', user.id, error);
+      log('Error while changing region', {
+        userId: user.id,
+        error,
+        data,
+      });
 
       return cb(error);
     }

@@ -1,6 +1,7 @@
 // @flow
 
 import mongoose from 'mongoose';
+import SteamID from 'steamid';
 
 import {
   oneOf,
@@ -40,7 +41,9 @@ export default mongoose.model('UserProfile', new mongoose.Schema({
     },
     friends: {
       type: [String],
-      validate: [],
+      validate: [
+        (friends) => friends.every(id => new SteamID(id).isValid()),
+      ],
     },
     isBanned: Boolean,
     bannedUntil: Date,

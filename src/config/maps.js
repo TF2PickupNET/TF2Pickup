@@ -8,7 +8,7 @@ type Map = {|
   isStockMap: boolean,
 |};
 
-const maps: { [key: string]: Map } = {
+const maps = {
   koth_product_rc8: {
     configType: 'koth',
     display: 'KOTH Product RC8',

@@ -3,7 +3,6 @@
 import { type ServiceDefinition } from '@feathersjs/feathers';
 import { type App } from '@feathersjs/express';
 import debug from 'debug';
-import config from 'config';
 
 // $FlowFixMe: Weirdly this is untyped
 import pkg from '../../../../package.json';
@@ -13,10 +12,7 @@ import DefaultService from '../DefaultService';
 const log = debug('TF2Pickup:configuration');
 
 class ConfigurationService extends DefaultService implements ServiceDefinition<Config> {
-  config: Config = {
-    beta: config.get('beta'),
-    version: pkg.version,
-  };
+  config: Config = { version: pkg.version };
 
   get() {
     return Promise.resolve(this.config);

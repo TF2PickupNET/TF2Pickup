@@ -17,7 +17,6 @@ import { getCurrentUserId } from '../../store/user-id/selectors';
 
 type Props = {
   userId: string | null,
-  beta: boolean,
   children: Node,
   classes: { container: string },
 };
@@ -28,30 +27,30 @@ class IsAuthenticated extends React.PureComponent<Props> {
   handleClick = () => redirectToSteamAuth();
 
   render() {
-    if (this.props.userId === null || !this.props.beta) {
-      return this.props.children;
+    if (this.props.userId === null) {
+      return (
+        <Row
+          type="flex"
+          justify="center"
+          align="middle"
+          className={this.props.classes.container}
+        >
+          <Helmet>
+            <title>Not Authenticated</title>
+          </Helmet>
+
+          <Col>
+            <Card title="You need to login">
+              <Button onClick={this.handleClick}>
+                Login with Steam
+              </Button>
+            </Card>
+          </Col>
+        </Row>
+      );
     }
 
-    return (
-      <Row
-        type="flex"
-        justify="center"
-        align="middle"
-        className={this.props.classes.container}
-      >
-        <Helmet>
-          <title>Not Authenticated</title>
-        </Helmet>
-
-        <Col>
-          <Card title="You need to login">
-            <Button onClick={this.handleClick}>
-              Login with Steam
-            </Button>
-          </Card>
-        </Col>
-      </Row>
-    );
+    return this.props.children;
   }
 }
 

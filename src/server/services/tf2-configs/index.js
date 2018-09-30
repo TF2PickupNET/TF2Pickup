@@ -39,7 +39,7 @@ class TF2ConfigsService extends DefaultService implements ServiceDefinition<TF2C
     gamemode,
     configType,
   }) {
-    if (!regions[region]) {
+    if (!isString(region) || !regions[region]) {
       return new BadRequest(`Invalid region: ${region}`);
     }
 

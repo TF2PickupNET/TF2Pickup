@@ -21,9 +21,14 @@ export default function onAcceptRules(app: App, connection: SocketConnection) {
     try {
       await users.patch(user.id, { hasAcceptedTheRules: true });
 
+      log('User accepted the rules', { userId: user.id });
+
       return cb(null);
     } catch (error) {
-      log('Error while accepting the rules', user.id, error);
+      log('Error while accepting the rules', {
+        userId: user.id,
+        error,
+      });
 
       return cb(error);
     }

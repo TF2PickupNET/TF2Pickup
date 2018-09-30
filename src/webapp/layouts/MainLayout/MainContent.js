@@ -14,6 +14,9 @@ const styles = {
     padding: 24,
     overflowY: 'scroll',
     overflowX: 'hidden',
+    margin: '0 auto',
+    maxWidth: '1024px',
+    width: '100%',
   },
 };
 

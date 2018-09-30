@@ -28,7 +28,9 @@ export default {
 
   after: {
     create: [
-      (hook: CreateAfterHookContext<User>) => log('Created a new userId', hook.result.id),
+      (hook: CreateAfterHookContext<User>) => {
+        log('Created a new userId', { userId: hook.result.id });
+      },
       // Create the rest of the documents for a userId.
       async (hook: CreateAfterHookContext<User>) => {
         await hook.app.service('user-settings').create({ id: hook.result.id });

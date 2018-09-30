@@ -21,7 +21,10 @@ export default async function getVACBans(user: UserProfile) {
       },
     };
   } catch (error) {
-    log('Error while requesting VAC bans', user.id, error);
+    log('Error while requesting VAC bans', {
+      userId: user.id,
+      error,
+    });
 
     return {};
   }

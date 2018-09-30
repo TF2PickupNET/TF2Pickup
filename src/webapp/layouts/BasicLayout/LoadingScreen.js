@@ -83,7 +83,10 @@ class LoadingScreen extends React.PureComponent<Props, LocalState> {
     this.setState({ loadingText: 'Authenticating' });
 
     try {
-      await app.authenticate();
+      await app.authenticate({
+        strategy: 'jwt',
+        accessToken: window.localStorage.getItem('feathers-jwt')
+      });
 
       this.setState({ loadingPercentage: 45 });
     } catch (error) {

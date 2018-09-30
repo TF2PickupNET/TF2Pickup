@@ -1,29 +1,44 @@
 // @flow
 
 import React from 'react';
+import { Card } from 'antd';
+import injectSheet from 'react-jss';
 
 import Roles from './Roles';
 import Name from './Name';
+import UserAvatar from './Avatar';
 
-type Props = { userId: string };
+type Props = {
+  userId: string,
+  classes: { topBar: string },
+};
 
 const styles = {
   topBar: {
-    display: 'grid',
-    gridTemplateRows: '256px',
-    gridTemplateColumns: '256px 1fr',
-    width: '100%',
+    '& > .ant-card-body': {
+      padding: 0,
+      display: 'flex',
+      width: '100%',
+    },
+  },
+
+  infoContainer: {
+    padding: '8px 16px',
   },
 };
 
-export default function TopBar(props: Props) {
+function TopBar(props: Props) {
   return (
-    <div>
-      <div>
+    <Card className={props.classes.topBar}>
+      <UserAvatar userId={props.userId} />
+
+      <div className={props.classes.infoContainer}>
         <Name userId={props.userId} />
 
         <Roles userId={props.userId} />
       </div>
-    </div>
+    </Card>
   );
 }
+
+export default injectSheet(styles)(TopBar);

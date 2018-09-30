@@ -6,14 +6,12 @@
     "log_listener_port": 3500
   },
 
-  "beta": true,
-
   "elo-calculation": false,
 
   "auth": {
-    "required-hours": 0,
+    "required-hours": null,
     "secret": "someamazingsecret",
-    "steam-group": ""
+    "steam-group": null
   },
 
   "services": {
@@ -31,8 +29,8 @@
       }
     },
     "twitch": {
-      "clientId": "riyaz5yjzuqqn3z8p9iitsrwcj1ij8",
-      "clientSecret": "yixb8h7hxmzadk1anyb03t989wq59u"
+      "clientId": "",
+      "clientSecret": ""
     }
   }
 }

@@ -49,7 +49,7 @@ export default {
 
     log(
       `Error in '${hook.path}' service method ${hook.method.toUpperCase()}`,
-      hook.error.message,
+      { error: hook.error },
     );
 
     return hook;

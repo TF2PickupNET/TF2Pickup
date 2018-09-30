@@ -15,7 +15,7 @@ export default async function getOzfortressData(
   user: UserProfile,
   oneDaySinceLastUpdate: boolean,
 ) {
-  if (!oneDaySinceLastUpdate || apikey.length === 0) {
+  if (!oneDaySinceLastUpdate || apikey === null) {
     return {};
   }
 
@@ -38,7 +38,10 @@ export default async function getOzfortressData(
       return {};
     }
 
-    log('Error while requesting data from ozfortress', user.id, error);
+    log('Error while requesting data from ozfortress', {
+      userId: user.id,
+      error,
+    });
 
     return {};
   }

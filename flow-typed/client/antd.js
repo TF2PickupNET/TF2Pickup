@@ -121,7 +121,7 @@ declare module 'antd' {
     }>,
     type?: 'inner',
     onTabChange?: (tab: string) => void,
-    title: string | Node,
+    title?: string | Node,
     children: Node,
   |}> {
     static Meta: CardMeta,

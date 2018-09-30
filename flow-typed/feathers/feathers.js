@@ -11,6 +11,7 @@ import {
   type ClientSocket,
   type ServerSocket,
 } from './socket-events';
+import type { PickupQueue } from '../../src/types/pickup-queue';
 
 declare module '@feathersjs/feathers' {
   declare export type SKIP = Symbol;
@@ -181,6 +182,7 @@ declare module '@feathersjs/feathers' {
     service(path: 'user-profile'): Service<UserProfile>,
     service(path: 'user-settings'): Service<UserSettings>,
     service(path: 'users'): Service<User>,
+    service(path: 'pickup-queue'): Service<PickupQueue>,
     configure(cb: (app: App) => void): App,
     set(name: string, value: mixed): App,
     get(name: string): mixed,
@@ -211,6 +213,7 @@ declare module '@feathersjs/feathers' {
     set(name: string, value: mixed): ClientApp,
     get(name: string): mixed,
     authenticate(): Promise<void>,
+    authenticate(options: { strategy: string }): Promise<void>,
     on('authenticated', fn: (payload: { accessToken: string }) => void | Promise<void>): ClientApp,
     on('logout', fn: () => void): ClientApp,
     logout(): Promise<void>,

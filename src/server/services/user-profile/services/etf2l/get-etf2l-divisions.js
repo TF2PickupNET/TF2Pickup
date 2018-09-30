@@ -53,7 +53,11 @@ export default async function getETF2LDivisions(id: string, etf2lId: string) {
       div9v9: filteredMatches.reduce(findHighestDiv('9v9'), 'N/A'),
     };
   } catch (error) {
-    log('Error while updating ETF2L Divisions', id, error);
+    log('Error while updating ETF2L Divisions', {
+      userId: id,
+      error,
+      data: { etf2lId },
+    });
 
     return {};
   }

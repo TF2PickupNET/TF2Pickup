@@ -35,7 +35,10 @@ export default async function getETF2LData(user: UserProfile, oneDaySinceLastUpd
       },
     };
   } catch (error) {
-    log('Error while requesting ETF2L player data', user.id, error);
+    log('Error while requesting ETF2L player data', {
+      userId: user.id,
+      error,
+    });
 
     return {};
   }

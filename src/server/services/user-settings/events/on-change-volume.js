@@ -12,7 +12,7 @@ const log = debug('TF2Pickup:users:events:on-change-region');
 export default function onChangeVolume(app: App, connection: SocketConnection) {
   const userSettings = app.service('user-settings');
 
-  return async ({ volume }: Data, cb: (Error | null) => void) => {
+  return async (data: Data, cb: (Error | null) => void) => {
     const user = connection.feathers.user;
 
     // Make sure a userId is authenticated
@@ -21,11 +21,15 @@ export default function onChangeVolume(app: App, connection: SocketConnection) {
     }
 
     try {
-      await userSettings.patch(user.id, { volume });
+      await userSettings.patch(user.id, { volume: data.volume });
 
       return cb(null);
     } catch (error) {
-      log('Error while accepting the rules', user.id, error);
+      log('Error while changing the volume', {
+        userId: user.id,
+        error,
+        data,
+      });
 
       return cb(error);
     }

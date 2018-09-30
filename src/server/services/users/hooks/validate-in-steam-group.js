@@ -31,7 +31,7 @@ You will need to be a member of the Steam Group ${steamGroupName} to login into 
 `;
 
 export default async function validateInSteamGroup(hook: CreateBeforeHookContext<User>) {
-  if (!config.get('beta') || !steamGroupName) {
+  if (steamGroupName === null) {
     return;
   }
 
@@ -45,12 +45,21 @@ export default async function validateInSteamGroup(hook: CreateBeforeHookContext
 
     isInGroup = members.some(member => member.getSteamID64() === hook.data.id);
   } catch (error) {
-    log('Error while getting group members', error);
+    log('Error while getting group members', {
+      error,
+      userId: hook.data.id,
+      data: { steamGroup: steamGroupName },
+    });
 
     throw new GeneralError(generalErrorMessage);
   }
 
   if (!isInGroup) {
+    log('User is not in the required steam group', {
+      userId: hook.data.id,
+      data: { steamGroup: steamGroupName },
+    });
+
     throw new Forbidden(notInGroupMessage);
   }
 }

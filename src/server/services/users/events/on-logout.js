@@ -24,8 +24,13 @@ export default function onLogout(app: App) {
         online: false,
         lastOnline: Date.now(),
       });
+
+      log('Successfully logged out user', { userId: connection.user.id });
     } catch (error) {
-      log('Error in logout callback', error);
+      log('Error in logout callback', {
+        userId: connection.user.id,
+        error,
+      });
     }
   };
 }

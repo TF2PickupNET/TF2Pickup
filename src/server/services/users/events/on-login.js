@@ -10,8 +10,10 @@ export default function onLogin(app: App) {
   return async (payload: {}, { connection }: { connection: Connection }) => {
     try {
       await app.service('users').patch(connection.user.id, { online: true });
+
+      log('User successfully logged in', { userId: connection.user.id });
     } catch (error) {
-      log('Error in login callback', error);
+      log('Error in login callback', { error });
     }
   };
 }

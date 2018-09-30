@@ -23,7 +23,9 @@ import {
 import { makeIsCurrentUser } from '../../store/user-id/selectors';
 import { makeGetProfileById } from '../../store/user-profiles/selectors';
 import { type State } from '../../store';
+
 import TopBar from './TopBar';
+import Links from './Links';
 
 type Props = {
   hasLoadedUser: boolean,
@@ -71,13 +73,19 @@ class Profile extends React.PureComponent<Props> {
       ? 'Your Profile'
       : `Profile of ${this.props.name === null ? 'Unknown' : this.props.name}`;
 
+    const { userId } = this.props.match.params;
+
     return (
       <React.Fragment>
         <Helmet>
           <title>{title}</title>
         </Helmet>
 
-        <TopBar userId={this.props.match.params.userId} />
+        <TopBar userId={userId} />
+
+        <div style={{ marginTop: 16 }}>
+          <Links userId={userId} />
+        </div>
       </React.Fragment>
     );
   }

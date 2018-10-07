@@ -412,4 +412,27 @@ declare module 'antd' {
   |}> {
     static Option: Class<SelectOption>,
   }
+
+  declare class ListItem extends React$Component<{
+    children: Node,
+  }> {}
+
+  declare export class List<T> extends React$Component<{
+    bordered?: boolean,
+    footer?: Node,
+    grid?: {
+      gutter: number,
+      column: number,
+    },
+    header?: Node,
+    itemLayout?: 'horizontal' | 'vertical',
+    loading?: boolean,
+    loadMore?: Node,
+    locale?: { emptyText?: string },
+    split?: boolean,
+    dataSource: $ReadOnlyArray<T>,
+    renderItem: (item: T) => Node,
+  }> {
+    static Item: Class<ListItem>,
+  }
 }

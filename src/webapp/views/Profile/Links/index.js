@@ -18,9 +18,7 @@ type Link = {
   display: string,
   name: string,
 };
-type Props = {
-  links: $ReadOnlyArray<Link | null>,
-};
+type Props = { links: $ReadOnlyArray<Link | null> };
 
 const styles = {
   sidebar: { width: 160 },
@@ -31,24 +29,42 @@ const styles = {
   },
 };
 
-function Links(props: Props) {
-  return (
-    <List
-      bordered
-      header="Links"
-      style={{
-        backgroundColor: '#ffffff',
-        width: 160,
-      }}
-      dataSource={props.links.filter(link => link !== null)}
-      renderItem={Link}
-    />
-  );
+class Links extends React.PureComponent<Props> {
+  renderItem(item) {
+    if (item === null) {
+      return null;
+    }
+
+    return (
+      <List.Item>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href={item.url}
+        >
+          {item.display}
+        </a>
+      </List.Item>
+    );
+  }
+
+  render() {
+    return (
+      <List
+        bordered
+        header="Links"
+        style={{
+          backgroundColor: '#ffffff',
+          width: 160,
+        }}
+        dataSource={this.props.links}
+        renderItem={this.renderItem}
+      />
+    );
+  }
 }
 
 function getLinkForService(name: $Keys<UserProfile>, profile: UserProfile): Link | null {
-  console.log(name);
-
   switch (name) {
     case 'steam': return {
       url: `https://steamcommunity.com/profiles/${profile.steam.id}`,
@@ -84,7 +100,7 @@ const makeMapStateToProps = (): MapStateToProps<State, Props & { userId: string 
 
       return Object
         .keys(profile)
-        .filter(service => profile[service].id)
+        .filter(service => profile[service] && profile[service].id)
         .map(service => getLinkForService(service, profile));
     },
   );

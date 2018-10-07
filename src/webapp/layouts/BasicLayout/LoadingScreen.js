@@ -137,7 +137,7 @@ class LoadingScreen extends React.PureComponent<Props, LocalState> {
       return;
     }
 
-    this.setState({ loadingText: 'Fetching user-profiles' });
+    this.setState({ loadingText: 'Fetching user profile' });
 
     this.props.fetchProfile(userId);
 

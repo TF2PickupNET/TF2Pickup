@@ -22,6 +22,7 @@ function Name(props: Props) {
     <UserItem
       className={props.classes.name}
       userId={props.userId}
+      color={null}
     />
   );
 }

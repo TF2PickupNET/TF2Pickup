@@ -7,10 +7,14 @@ import injectSheet from 'react-jss';
 import Roles from './Roles';
 import Name from './Name';
 import UserAvatar from './Avatar';
+import Region from './Region';
 
 type Props = {
   userId: string,
-  classes: { topBar: string },
+  classes: {
+    topBar: string,
+    infoContainer: string,
+  },
 };
 
 const styles = {
@@ -22,9 +26,7 @@ const styles = {
     },
   },
 
-  infoContainer: {
-    padding: '8px 16px',
-  },
+  infoContainer: { padding: '8px 16px' },
 };
 
 function TopBar(props: Props) {
@@ -36,6 +38,8 @@ function TopBar(props: Props) {
         <Name userId={props.userId} />
 
         <Roles userId={props.userId} />
+
+        <Region userId={props.userId} />
       </div>
     </Card>
   );

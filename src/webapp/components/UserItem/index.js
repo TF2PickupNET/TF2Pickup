@@ -8,13 +8,15 @@ import {
   type MapStateToProps,
 } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { createSelector } from 'reselect';
 
 import { type State } from '../../store';
-import { makeGetUserName } from '../../store/users/selectors';
-import { getCurrentUserId } from '../../store/user-id/selectors';
-import { makeGetProfileById } from '../../store/user-profiles/selectors';
+import {
+  makeGetHighestRole,
+  makeGetUserName,
+} from '../../store/users/selectors';
+import { makeIsFriend } from '../../store/user-profiles/selectors';
 import { fetchUser } from '../../store/users/actions';
+import { roles } from '../../../config';
 
 type Props = {
   name: string | null,
@@ -73,19 +75,17 @@ class UserItem extends React.PureComponent<Props> {
 }
 
 const makeMapStateToProps = (): MapStateToProps<State, Props> => {
-  const getFriends = createSelector(
-    makeGetProfileById(),
-    profile => (profile === null ? [] : profile.steam.friends),
-  );
   const getName = makeGetUserName();
-  const isFriend = (friends, userId) => friends.includes(userId);
+  const isFriend = makeIsFriend();
+  const getHighestRole = makeGetHighestRole();
 
   return (state, props) => {
-    const friends = getFriends(state, getCurrentUserId(state));
+    const role = getHighestRole(state, props.userId);
 
     return {
       name: getName(state, props.userId),
-      isFriend: isFriend(friends, props.userId),
+      color: role === null ? null : roles[role].color,
+      isFriend: isFriend(state, props.userId),
     };
   };
 };

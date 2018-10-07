@@ -2,7 +2,7 @@
 
 import { mapPool } from '../../../../config';
 
-export function getRandomItems(array: $ReadOnlyArray<string>, amount) {
+export function getRandomItems(array: $ReadOnlyArray<string>, amount: number) {
   if (array.length === amount) {
     return array;
   }
@@ -19,10 +19,12 @@ export function getRandomItems(array: $ReadOnlyArray<string>, amount) {
   ];
 }
 
-export default function generateRandomMaps(pickupQueue, lastPickup) {
-  const maps = mapPool[pickupQueue.id];
-  const filteredMaps = maps.filter(map => map !== lastPickup.map);
+export default function generateRandomMaps(pickupId: string, lastPickup: { map: string } | null) {
+  const maps = mapPool[pickupId];
 
-  return getRandomItems(filteredMaps, 3);
+  return getRandomItems(
+    lastPickup === null ? maps : maps.filter(map => map !== lastPickup.map),
+    3,
+  );
 }
 

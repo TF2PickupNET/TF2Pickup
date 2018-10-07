@@ -45,4 +45,9 @@ export default mongoose.model('PickupQueue', new mongoose.Schema({
   },
 
   readyUpEnd: { type: Date },
+
+  players: {
+    type: [mongoose.Types.ObjectId],
+    ref: 'pickupPlayers',
+  },
 }));

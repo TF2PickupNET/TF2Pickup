@@ -26,7 +26,7 @@ export function fetchProfile(userId: string) {
         return;
       }
 
-      const profile = await app.service('user-profile').get(userId);
+      const profile = await app.service('user-profiles').get(userId);
 
       dispatch({
         type: ADD_PROFILE,

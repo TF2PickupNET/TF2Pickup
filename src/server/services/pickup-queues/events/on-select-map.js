@@ -9,16 +9,17 @@ import { type SocketConnection } from '@feathersjs/socketio';
 import debug from 'debug';
 
 import maps from '../../../../config/maps';
+import { getPlayerById } from '../utils/get-player';
 
 type Data = {
   queueId: string,
   map: $Keys<typeof maps>,
 };
 
-const log = debug('TF2Pickup:pickup-queue:events:on-join');
+const log = debug('TF2Pickup:pickup-queues:events:on-join');
 
 export default function onSelectMap(app: App, connection: SocketConnection) {
-  const pickupQueue = app.service('pickup-queue');
+  const pickupQueue = app.service('pickup-queues');
   const pickupPlayers = app.service('pickup-players');
 
   return async (data: Data, cb: (Error | null) => void) => {
@@ -39,16 +40,15 @@ export default function onSelectMap(app: App, connection: SocketConnection) {
         return cb(new BadRequest('The selected map isn\'t an option'));
       }
 
-      const players = await Promise.all(queue.players.map(playerId => pickupPlayers.get(playerId)));
-      const existingPlayer = players.find(({ userId }) => userId === currentUser.id);
+      const player = await getPlayerById(app, queue.players, currentUser.id);
 
-      if (!existingPlayer) {
+      if (!player) {
         return cb(new BadRequest('You aren\'t in the pickup queue'));
       }
 
-      await pickupPlayers.patch(existingPlayer.id, { $set: { map: data.map } });
+      await pickupPlayers.patch(player.id, { $set: { map: data.map } });
 
-      log('User successfully selected a map', {
+      log('Player selected a map', {
         data,
         userId: currentUser.id,
       });

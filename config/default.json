@@ -3,10 +3,9 @@
     "port": 3000,
     "url": "http://localhost:3000",
     "mongourl": "mongodb://localhost:27017/tf2pickup",
-    "log_listener_port": 3500
+    "log_listener_port": 3500,
+    "elo-calculation": false
   },
-
-  "elo-calculation": false,
 
   "auth": {
     "required-hours": null,
@@ -15,8 +14,12 @@
   },
 
   "services": {
-    "steam": { "apikey": "25D833006F834D2FAF1A0A1F217D5606" },
-    "ozfortress": { "apikey": "" },
+    "steam": {
+      "apikey": "25D833006F834D2FAF1A0A1F217D5606",
+      "username": null,
+      "password": null
+    },
+    "ozfortress": { "apikey": null },
     "logstf": { "apikey": "" },
     "serveme": {
       "apikey-eu": "",

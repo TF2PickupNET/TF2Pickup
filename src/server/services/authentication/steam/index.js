@@ -7,7 +7,6 @@ import auth from '@feathersjs/authentication';
 
 import {
   createJWT,
-  redirectToUrlCookie,
   setUrlCookie,
 } from '../middlewares';
 
@@ -22,10 +21,5 @@ export default function steam(app: App) {
 
   app
     .use('/auth/steam', setUrlCookie, auth.express.authenticate('steam'))
-    .use(
-      '/auth/steam/callback',
-      auth.express.authenticate('steam'),
-      createJWT,
-      redirectToUrlCookie,
-    );
+    .use('/auth/steam/callback', auth.express.authenticate('steam'), createJWT);
 }

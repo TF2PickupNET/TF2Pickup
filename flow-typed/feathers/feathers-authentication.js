@@ -1,10 +1,16 @@
 // @flow strict-local
 
 import {
-  type App,
+  type ServerApp,
   type HookFunction,
+  type Connection,
 } from '@feathersjs/feathers';
-import { type ExpressMiddleware } from '@feathersjs/express';
+import {
+  type ExpressMiddleware,
+  type ExpressRequest,
+  type ExpressResponse,
+} from '@feathersjs/express';
+import { type SocketConnection } from '@feathersjs/socketio';
 
 declare module '@feathersjs/authentication' {
   declare type AuthenticationOptions = {
@@ -30,9 +36,21 @@ declare module '@feathersjs/authentication' {
     },
   };
 
+  declare export type Meta = {
+    provider: 'rest',
+    req: ExpressRequest,
+    res: ExpressResponse,
+  } | {
+    provider: 'socketio' | 'primus',
+    connection: Connection,
+    socket: SocketConnection,
+  };
+
+  declare export type Payload = { accessToken: string };
+
   declare interface Authentication {
-    (opts?: AuthenticationOptions): (app: App) => void,
-    hooks: { authenticate(strategies: $ReadOnlyArray<string>): HookFunction<App, {}> },
+    (opts?: AuthenticationOptions): (app: ServerApp) => void,
+    hooks: { authenticate(strategies: $ReadOnlyArray<string>): HookFunction<ServerApp, {}> },
     express: { authenticate(strategy: string): ExpressMiddleware },
   }
 

@@ -129,12 +129,8 @@ const makeMapStateToProps = (): MapStateToProps<State, Props> => {
     makeGetProfileById(),
     profile => Object
       .keys(regions)
-      .filter((name) => {
-        const service = regions[name].service;
-
-        // $FlowFixMe: For some reason flow throws an error here
-        return Boolean(profile[service]);
-      })
+      // $FlowFixMe: For some reason flow throws an error here
+      .filter(name => Boolean(profile[regions[name].service]))
       .map((name) => {
         const service = regions[name].service;
 
@@ -143,7 +139,7 @@ const makeMapStateToProps = (): MapStateToProps<State, Props> => {
           region: name,
           display: regions[name].fullName,
           // $FlowFixMe: For some reason flow throws an error here
-          name: profile[service],
+          name: profile[service].name,
         };
       }),
   );

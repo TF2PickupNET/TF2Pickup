@@ -67,4 +67,9 @@ export default mongoose.model('User', new mongoose.Schema({
       value => value.every(role => roleNames.includes(role)),
     ],
   },
+
+  hasCompletedSignUp: {
+    type: Boolean,
+    default: false,
+  },
 }));

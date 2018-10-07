@@ -17,6 +17,7 @@ interface User {
   createdOn: Date,
   lastPickup: number | null,
   roles: $ReadOnlyArray<$Keys<typeof roles>>,
+  hasCompletedSignUp: boolean,
 }
 
 export type {

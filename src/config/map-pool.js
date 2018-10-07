@@ -23,7 +23,9 @@ const bballMaps = [
 ];
 
 const mapPool: MapPool = {
-  'eu-6v6': [],
+  'eu-6v6': [
+    'koth_product_rc8',
+  ],
 
   'eu-9v9': [],
 

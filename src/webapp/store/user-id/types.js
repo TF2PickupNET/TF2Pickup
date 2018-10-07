@@ -2,7 +2,7 @@
 
 import { type Action } from 'redux';
 
-export type State = string;
+export type State = string | null;
 
 export type Actions = Action<'USER/LOGOUT', {}>
   | Action<'USER/LOGIN', { userId: string }>;

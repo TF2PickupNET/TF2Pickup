@@ -10,6 +10,7 @@ import onAcceptRules from './on-accept-rules';
 import onSetName from './on-set-name';
 import onAddRole from './on-add-role';
 import onRemoveRole from './on-remove-role';
+import onCompleteSignUp from './on-complete-sign-up';
 
 const log = debug('TF2Pickup:users:events');
 
@@ -30,5 +31,7 @@ export default function events(app: ServerApp) {
     socket.on('users:add-role', onAddRole(app, socket));
 
     socket.on('users:remove-role', onRemoveRole(app, socket));
+
+    socket.on('users:complete-sign-up', onCompleteSignUp(app, socket));
   });
 }

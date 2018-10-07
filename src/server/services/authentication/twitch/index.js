@@ -6,11 +6,6 @@ import oauth2 from '@feathersjs/authentication-oauth2';
 import { type App } from '@feathersjs/express';
 import config from 'config';
 
-import {
-  setUrlCookie,
-  redirectToUrlCookie,
-} from '../middlewares';
-
 import TwitchStrategy from './TwitchStrategy';
 import TwitchVerifier from './TwitchVerifier';
 
@@ -35,12 +30,10 @@ export default function twitch(app: App) {
 
         next();
       },
-      setUrlCookie,
       auth.express.authenticate('twitch'),
     )
     .use(
       '/auth/twitch/callback',
       auth.express.authenticate('twitch'),
-      redirectToUrlCookie,
     );
 }

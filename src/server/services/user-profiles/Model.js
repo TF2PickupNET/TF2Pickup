@@ -26,6 +26,7 @@ export default mongoose.model('UserProfile', new mongoose.Schema({
     validate: steamId({}),
     required: [true, 'SteamId on the userId object is required!'],
     unique: true,
+    ref: 'User',
   },
 
   lastUpdate: {
@@ -42,7 +43,7 @@ export default mongoose.model('UserProfile', new mongoose.Schema({
     friends: {
       type: [String],
       validate: [
-        (friends) => friends.every(id => new SteamID(id).isValid()),
+        friends => friends.every(id => new SteamID(id).isValid()),
       ],
     },
     isBanned: Boolean,

@@ -85,7 +85,7 @@ class LoadingScreen extends React.PureComponent<Props, LocalState> {
     try {
       await app.authenticate({
         strategy: 'jwt',
-        accessToken: window.localStorage.getItem('feathers-jwt')
+        accessToken: window.localStorage.getItem('feathers-jwt'),
       });
 
       this.setState({ loadingPercentage: 45 });

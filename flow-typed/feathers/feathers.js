@@ -1,17 +1,21 @@
 // @flow strict-local
 
 import { type FeathersError } from '@feathersjs/errors';
+import {
+  type Payload,
+  type Meta,
+} from '@feathersjs/authentication';
 
 import { type User } from '../../src/types/user';
 import { type Config } from '../../src/types/configuration';
 import { type UserProfile } from '../../src/types/user-profile';
 import { type UserSettings } from '../../src/types/user-settings';
+import { type PickupQueue } from '../../src/types/pickup-queue';
 
 import {
   type ClientSocket,
   type ServerSocket,
 } from './socket-events';
-import type { PickupQueue } from '../../src/types/pickup-queue';
 
 declare module '@feathersjs/feathers' {
   declare export type SKIP = Symbol;
@@ -179,7 +183,7 @@ declare module '@feathersjs/feathers' {
 
   declare interface App {
     service(path: 'configuration'): Service<Config>,
-    service(path: 'user-profile'): Service<UserProfile>,
+    service(path: 'user-profiles'): Service<UserProfile>,
     service(path: 'user-settings'): Service<UserSettings>,
     service(path: 'users'): Service<User>,
     service(path: 'pickup-queue'): Service<PickupQueue>,
@@ -200,11 +204,11 @@ declare module '@feathersjs/feathers' {
     on('socket-connection', cb: (socket: ServerSocket) => void): ServerApp,
     on(
       'login',
-      cb: (payload: {}, info: { connection: Connection }) => Promise<void>,
+      cb: (payload: Payload, meta: Meta) => Promise<void>,
     ): ServerApp,
     on(
       'logout',
-      cb: (payload: {}, info: { connection: Connection }) => Promise<void>,
+      cb: (payload: Payload, meta: Meta) => Promise<void>,
     ): ServerApp,
   }
 

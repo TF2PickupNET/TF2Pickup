@@ -13,10 +13,6 @@ import twitch from './twitch';
 const log = debug('TF2Pickup:authentication');
 const options = {
   secret: config.get('auth.secret'),
-  cookie: {
-    enabled: true,
-    name: 'feathers-jwt',
-  },
   jwt: {
     expiresIn: '7d',
     issuer: 'tf2pickup',

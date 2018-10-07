@@ -9,6 +9,7 @@ declare module 'steamcommunity' {
 
   declare export default class Community {
     inviteUserToGroup(userId: string, groupId: string, cb: () => void): void,
+    login(details: {}, cb: () => void): void,
     getSteamGroup(id: string): SteamGroup,
   }
 }

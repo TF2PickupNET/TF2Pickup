@@ -20,6 +20,8 @@ type Props = {
   name: string | null,
   isFriend: boolean,
   userId: string,
+  // Color prop is being used inside the styles
+  // eslint-disable-next-line react/no-unused-prop-types
   color: string | null,
   className: string,
   fetchUser: (userId: string) => void,
@@ -30,7 +32,10 @@ type Props = {
 };
 
 const styles = {
-  container: { lineHeight: '24px' },
+  container: {
+    lineHeight: '24px',
+    color: props => props.color,
+  },
 
   friendIcon: { marginRight: '4px' },
 };

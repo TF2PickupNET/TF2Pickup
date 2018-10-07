@@ -26,11 +26,13 @@ export interface ClientSocket {
     role: Roles,
     userId: string,
   }, cb: Callback): void,
+  emit('users:complete-sign-up', data: {}, cb: Callback): void,
 
   emit('user-settings:change-volume', data: { volume: number }, cb: Callback): void,
 }
 
 export interface ServerSocket extends SocketConnection {
+  on('users:complete-sign-up', (data: {}, cb: Callback) => void | Promise<void>): void,
   on(
     'users:change-region',
     (data: { region: $Keys<typeof regions> }, cb: Callback) => void | Promise<void>,

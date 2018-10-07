@@ -23,7 +23,7 @@ export default function onChangeRegion(app: App, connection: SocketConnection) {
     try {
       await app.service('users').patch(user.id, { region: data.region });
 
-      // Get every connection for the userId
+      // Get every connection for the user
       const connections = app
         .channel(`region:${oldRegion}`)
         .filter(conn => conn.user.id === user.id);

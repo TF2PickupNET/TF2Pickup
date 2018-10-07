@@ -31,10 +31,7 @@ type Props = {
     stepper: string,
   },
 };
-type LocalState = {
-  isFinished: boolean,
-  didJoinDiscord: boolean,
-};
+type LocalState = { didJoinDiscord: boolean };
 
 const { Step } = Steps;
 const steps = [{
@@ -90,22 +87,10 @@ const styles = {
 };
 
 class SignUpScreen extends React.PureComponent<Props, LocalState> {
-  constructor(props: Props) {
-    super(props);
-
-    const didAlreadyComplete = props.user !== null
-      && props.user.hasAcceptedTheRules !== null
-      && props.user.region !== null
-      && props.user.name !== null;
-
-    this.state = {
-      isFinished: didAlreadyComplete,
-      didJoinDiscord: didAlreadyComplete,
-    };
-  }
+  state = { didJoinDiscord: false };
 
   getCurrentStep() {
-    if (this.props.user === null) {
+    if (this.props.user === null || this.props.user.hasCompletedSignUp) {
       return null;
     }
 
@@ -117,7 +102,7 @@ class SignUpScreen extends React.PureComponent<Props, LocalState> {
       return steps[2];
     } else if (!this.state.didJoinDiscord) {
       return steps[3];
-    } else if (!this.state.isFinished) {
+    } else if (!this.props.user.hasCompletedSignUp) {
       return steps[4];
     }
 
@@ -131,16 +116,8 @@ class SignUpScreen extends React.PureComponent<Props, LocalState> {
       return;
     }
 
-    switch (currentStep.name) {
-      case 'join-discord': {
-        this.setState({ didJoinDiscord: true });
-        break;
-      }
-      case 'finish': {
-        this.setState({ isFinished: true });
-        break;
-      }
-      default: break;
+    if (currentStep.name === 'join-discord') {
+      this.setState({ didJoinDiscord: true });
     }
   };
 

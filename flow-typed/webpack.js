@@ -3,19 +3,19 @@
 declare module 'webpack-merge' {
   declare function merge(...obj: $ReadOnlyArray<{}>): {};
 
-  declare module.exports: merge;
+  declare module.exports: typeof merge;
 }
 
 declare module 'connect-history-api-fallback' {
   declare function history(): () => {};
 
-  declare module.exports: history;
+  declare module.exports: typeof history;
 }
 
 declare module 'koa-connect' {
   declare function connect(func: () => {}): () => void;
 
-  declare module.exports: connect;
+  declare module.exports: typeof connect;
 }
 
 declare module 'html-webpack-plugin' {
@@ -27,7 +27,7 @@ declare module 'html-webpack-plugin' {
 
   declare function HTMLPlugin(options: Options): {};
 
-  declare module.exports: HTMLPlugin;
+  declare module.exports: typeof HTMLPlugin;
 }
 
 declare module 'mini-css-extract-plugin' {
@@ -35,7 +35,7 @@ declare module 'mini-css-extract-plugin' {
 
   declare function ExtractPlugin(options: Options): {};
 
-  declare module.exports: ExtractPlugin;
+  declare module.exports: typeof ExtractPlugin;
 }
 
 declare module 'sw-precache-webpack-plugin' {
@@ -51,7 +51,7 @@ declare module 'sw-precache-webpack-plugin' {
 
   declare function ServiceWorkerPlugin(options: Options): {};
 
-  declare module.exports: ServiceWorkerPlugin;
+  declare module.exports: typeof ServiceWorkerPlugin;
 }
 
 declare module 'webpack-bundle-analyzer' {
@@ -63,11 +63,11 @@ declare module 'webpack-bundle-analyzer' {
 
   declare function BundleAnalyzerPlugin(options: Options): {};
 
-  declare module.exports: {BundleAnalyzerPlugin: BundleAnalyzerPlugin};
+  declare module.exports: {BundleAnalyzerPlugin: typeof BundleAnalyzerPlugin};
 }
 
 declare module 'webpack-serve-waitpage' {
   declare function middleware(options: {}): () => void;
 
-  declare module.exports: middleware;
+  declare module.exports: typeof middleware;
 }

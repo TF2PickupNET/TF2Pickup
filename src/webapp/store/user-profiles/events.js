@@ -8,7 +8,7 @@ import { updateProfile } from './actions';
 
 export function events() {
   return (app: ClientApp) => {
-    const users = app.service('user-profile');
+    const users = app.service('user-profiles');
 
     users.on('patched', (data) => {
       const user = store.getState().userProfiles[data.id];

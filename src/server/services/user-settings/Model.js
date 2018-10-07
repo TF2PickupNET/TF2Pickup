@@ -14,6 +14,7 @@ export default mongoose.model('UserSettings', new mongoose.Schema({
     validate: steamId({}),
     required: [true, 'The userId is required'],
     unique: true,
+    ref: 'User',
   },
 
   announcer: {

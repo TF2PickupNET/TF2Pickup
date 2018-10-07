@@ -5,23 +5,36 @@ import 'antd/dist/antd.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Route,
+} from 'react-router-dom';
 
 import store from './store';
 import BasicLayout from './layouts/BasicLayout';
 import registerServiceWorker from './register-service-worker';
 import MainLayout from './layouts/MainLayout';
 import Views from './views';
+import SteamLogin from './views/SteamLogin';
 
 function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <BasicLayout>
-          <MainLayout>
-            <Views />
-          </MainLayout>
-        </BasicLayout>
+        <div>
+          <Route
+            exact
+            strict
+            path="/login/steam"
+            component={SteamLogin}
+          />
+
+          <BasicLayout>
+            <MainLayout>
+              <Views />
+            </MainLayout>
+          </BasicLayout>
+        </div>
       </BrowserRouter>
     </Provider>
   );

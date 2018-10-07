@@ -8,12 +8,14 @@ import { type App } from '@feathersjs/express';
 import { type SocketConnection } from '@feathersjs/socketio';
 import debug from 'debug';
 
+import { getPlayerById } from '../utils/get-player';
+
 type Data = { queueId: string };
 
-const log = debug('TF2Pickup:pickup-queue:events:on-join');
+const log = debug('TF2Pickup:pickup-queues:events:on-join');
 
 export default function onReadyUp(app: App, connection: SocketConnection) {
-  const pickupQueue = app.service('pickup-queue');
+  const pickupQueue = app.service('pickup-queues');
   const pickupPlayers = app.service('pickup-players');
 
   return async (data: Data, cb: (Error | null) => void) => {
@@ -30,16 +32,15 @@ export default function onReadyUp(app: App, connection: SocketConnection) {
         return cb(new BadRequest('The pickup isn\'t in the ready-up state'));
       }
 
-      const players = await Promise.all(queue.players.map(playerId => pickupPlayers.get(playerId)));
-      const existingPlayer = players.find(({ userId }) => userId === currentUser.id);
+      const player = await getPlayerById(app, queue.players, currentUser.id);
 
-      if (!existingPlayer) {
+      if (!player) {
         return cb(new BadRequest('You aren\'t in the pickup queue'));
       }
 
-      await pickupPlayers.patch(existingPlayer.id, { $set: { isReady: true } });
+      await pickupPlayers.patch(player.id, { $set: { isReady: true } });
 
-      log('User successfully readied up', {
+      log('Player readied up', {
         data,
         userId: currentUser.id,
       });

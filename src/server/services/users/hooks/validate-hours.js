@@ -9,7 +9,7 @@ import { type CreateBeforeHookContext } from '@feathersjs/feathers';
 import debug from 'debug';
 
 import { type User } from '../../../../types/user';
-import steamApi from '../../steam-api';
+import steamApi from '../../../utils/steam-api';
 
 const log = debug('TF2Pickup:users:fetch-tf2-hours');
 const requiredHours = config.get('auth.required-hours');

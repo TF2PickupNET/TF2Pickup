@@ -3,21 +3,38 @@
 import React from 'react';
 import {
   Row,
-  Button,
+  Button, message,
 } from 'antd';
 import injectSheet from 'react-jss';
 
+import app from '../../../app';
+
 type State = { isProcessing: boolean };
-type Props = {
-  nextStep: () => void,
-  classes: { text: string },
-};
+type Props = { classes: { text: string } };
 
 const styles = { text: { textAlign: 'center' } };
 
 class FinishScreen extends React.PureComponent<Props, State> {
+  state = { isProcessing: false };
+
+  isMounted = true;
+
+  componentWillUnmount() {
+    this.isMounted = false;
+  }
+
   handleFinishClick = () => {
-    this.props.nextStep();
+    this.setState({ isProcessing: true });
+
+    app.io.emit('users:complete-sign-up', {}, (err) => {
+      if (err) {
+        message.error(`Couldn't finish the sign up: ${err.message}`);
+      }
+
+      if (this.isMounted) {
+        this.setState({ isProcessing: false });
+      }
+    });
   };
 
   render() {
@@ -33,7 +50,10 @@ class FinishScreen extends React.PureComponent<Props, State> {
           justify="center"
           align="middle"
         >
-          <Button onClick={this.handleFinishClick}>
+          <Button
+            loading={this.state.isProcessing}
+            onClick={this.handleFinishClick}
+          >
             Let&apos;s go
           </Button>
         </Row>

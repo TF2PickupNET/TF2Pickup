@@ -8,12 +8,14 @@ import { type App } from '@feathersjs/express';
 import { type SocketConnection } from '@feathersjs/socketio';
 import debug from 'debug';
 
+import { getPlayerById } from '../utils/get-player';
+
 type Data = { queueId: string };
 
-const log = debug('TF2Pickup:pickup-queue:events:on-leave');
+const log = debug('TF2Pickup:pickup-queues:events:on-leave');
 
 export default function onLeave(app: App, connection: SocketConnection) {
-  const pickupQueue = app.service('pickup-queue');
+  const pickupQueue = app.service('pickup-queues');
   const pickupPlayers = app.service('pickup-players');
 
   return async (data: Data, cb: (Error | null) => void) => {
@@ -25,20 +27,18 @@ export default function onLeave(app: App, connection: SocketConnection) {
 
     try {
       const queue = await pickupQueue.get(data.queueId);
-      const players = await Promise.all(queue.players.map(id => pickupPlayers.get(id)));
-      const player = players.find(({ userId }) => userId === currentUser.id);
-      const filteredPlayers = queue.players.filter(id => id !== player.id);
+      const player = await getPlayerById(app, queue.players, currentUser.id);
 
-      if (filteredPlayers.length === queue.players.length) {
-        return cb(
-          new BadRequest('Couldn\'t remove player from pickup because he wasn\'t in the pickup.'),
-        );
+      if (player === null) {
+        return cb(new BadRequest('You are not in the pickup'));
       }
+
+      const filteredPlayers = queue.players.filter(id => id !== player.id);
 
       await pickupPlayers.remove(player.id);
       await pickupQueue.patch(data.queueId, { $set: { players: filteredPlayers } });
 
-      log('User left pickup successfully', {
+      log('Player left pickup', {
         data,
         userId: currentUser.id,
       });

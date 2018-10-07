@@ -8,7 +8,7 @@ import setup from './setup';
 import Model from './Model';
 import events from './events';
 
-const log = debug('TF2Pickup:users');
+const log = debug('TF2Pickup:pickup-queues');
 
 export default function pickupQueues(app: App) {
   log('Setting up pickup-queues service');

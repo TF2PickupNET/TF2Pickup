@@ -12,10 +12,13 @@ import generateRandomMaps from './utils/generate-random-maps';
 const log = debug('TF2Pickup:pickup-queues:setup');
 
 async function clearExistingPickup(app, pickup) {
-  await app.service('pickup-queue').patch(pickup.id, {
-    status: 'waiting-for-players',
-    readyUpEnd: null,
-    players: [],
+  await app.service('pickup-queues').patch(pickup.id, {
+    $set: {
+      status: 'waiting-for-players',
+      readyUpEnd: null,
+      players: [],
+      maps: generateRandomMaps(pickup.id, null),
+    },
   });
 
   log(`Cleared existing pickup queue ${pickup.region} ${pickup.gamemode}`);
@@ -24,7 +27,7 @@ async function clearExistingPickup(app, pickup) {
 async function createNewPickup(app, region, gamemode) {
   const id = `${region}-${gamemode}`;
 
-  await app.service('pickup-queue').create({
+  await app.service('pickup-queues').create({
     region,
     gamemode,
     id,
@@ -41,14 +44,14 @@ export default function setup(app: App) {
   Object.keys(regions).forEach((region) => {
     Object.keys(gamemodes).forEach(async (gamemode) => {
       try {
-        const pickup = await app.service('pickup-queue').get(`${region}-${gamemode}`);
+        const pickup = await app.service('pickup-queues').get(`${region}-${gamemode}`);
 
         await clearExistingPickup(app, pickup);
       } catch (error) {
         if (error.code === 404) {
           await createNewPickup(app, region, gamemode);
         } else {
-          log(`Unknown error while setting up pickup queues for ${region} ${gamemode}`);
+          log(`Unknown error while setting up pickup queues for ${region} ${gamemode}`, { error });
         }
       }
     });

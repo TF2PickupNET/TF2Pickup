@@ -8,6 +8,7 @@ import {
 } from '../../../config';
 import { oneOf } from '../../utils/validators';
 import pickupStatus from '../../../config/pickup-status';
+import maps from '../../../config/maps';
 
 export default mongoose.model('PickupQueue', new mongoose.Schema({
   id: {
@@ -47,7 +48,12 @@ export default mongoose.model('PickupQueue', new mongoose.Schema({
   readyUpEnd: { type: Date },
 
   players: {
-    type: [mongoose.Types.ObjectId],
+    type: [String],
     ref: 'pickupPlayers',
+  },
+
+  maps: {
+    type: [String],
+    validate: [value => value.every(map => Object.keys(maps).includes(map)) && value.length === 3],
   },
 }));

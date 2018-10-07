@@ -6,7 +6,7 @@ import debug from 'debug';
 
 import Model from './Model';
 
-const log = debug('TF2Pickup:users');
+const log = debug('TF2Pickup:pickup-players');
 
 export default function pickupPlayers(app: App) {
   log('Setting up pickup-players service');

@@ -3,8 +3,8 @@
 import { mapPool } from '../../../../config';
 
 export function getRandomItems(array: $ReadOnlyArray<string>, amount: number) {
-  if (array.length === amount) {
-    return array;
+  if (amount === 0) {
+    return [];
   }
 
   const index = Math.floor(Math.random() * array.length);
@@ -14,7 +14,7 @@ export function getRandomItems(array: $ReadOnlyArray<string>, amount: number) {
     selectedItem,
     ...getRandomItems(
       array.filter(item => item !== selectedItem),
-      amount,
+      amount - 1,
     ),
   ];
 }

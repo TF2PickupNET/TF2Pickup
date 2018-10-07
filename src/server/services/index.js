@@ -9,6 +9,8 @@ import userSettings from './user-settings';
 import configuration from './configuration';
 import tf2Configs from './tf2-configs';
 import logs from './logs';
+import pickupQueues from './pickup-queues';
+import pickupPlayers from './pickup-players';
 
 export default function services(app: App) {
   app
@@ -18,5 +20,7 @@ export default function services(app: App) {
     .configure(configuration)
     .configure(tf2Configs)
     .configure(authentication)
+    .configure(pickupQueues)
+    .configure(pickupPlayers)
     .configure(logs);
 }

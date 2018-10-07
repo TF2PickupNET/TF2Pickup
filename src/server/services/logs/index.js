@@ -14,6 +14,5 @@ export default function logs(app: App) {
   app.use('/logs', service({
     Model,
     id: 'id',
-    _id: false,
   }));
 }

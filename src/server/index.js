@@ -5,6 +5,8 @@ import config from 'config';
 
 import createApp from './create-app';
 
+debug.enable('TF2Pickup*');
+
 const log = debug('TF2Pickup');
 const port: number = config.get('server.port');
 

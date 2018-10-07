@@ -25,9 +25,21 @@ const bballMaps = [
 const mapPool: MapPool = {
   'eu-6v6': [
     'koth_product_rc8',
+    'cp_process_final',
+    'cp_prolands_b2c',
+    'cp_gullywash_final1',
+    'cp_snakewater_final1',
+    'cp_sunshine',
+    'cp_reckoner_rc2',
   ],
 
-  'eu-9v9': [],
+  'eu-9v9': [
+    'koth_product_rc8',
+    'pl_upward',
+    'pl_borneo',
+    'pl_badwater',
+    'cp_steel',
+  ],
 
   'eu-bball': ultiduoMaps,
 

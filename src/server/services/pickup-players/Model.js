@@ -7,11 +7,11 @@ import maps from '../../../config/maps';
 import classes from '../../../config/classes';
 
 export default mongoose.model('PickupPlayer', new mongoose.Schema({
-  id: mongoose.Types.ObjectId,
+  id: mongoose.Schema.Types.ObjectId,
 
   userId: {
-    type: mongoose.Types.ObjectId,
-    ref: 'user',
+    type: String,
+    ref: 'User',
   },
 
   joinedOn: {

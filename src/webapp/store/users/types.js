@@ -1,6 +1,6 @@
 // @flow
 
-import { type User } from '../../../types/user';
+import { type User } from '../../../types/User';
 
 type State = { [key: string]: User };
 type Actions = {

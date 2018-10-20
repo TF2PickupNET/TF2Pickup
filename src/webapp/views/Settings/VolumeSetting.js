@@ -14,8 +14,8 @@ import playSound from '../../utils/play-sound';
 import { getVolume } from '../../store/settings/selectors';
 import { type State } from '../../store';
 
-type Props = {
-  volume: number,
+type ConnectedProps = {| volume: number |};
+type OwnProps = {
   className: string,
   classes: { slider: string },
   registerSaveHandler: (func: () => void) => void,
@@ -26,12 +26,12 @@ type LocalState = { volume: number };
 
 const styles = { slider: { marginTop: 50 } };
 
-class VolumeSetting extends React.PureComponent<Props, LocalState> {
+class VolumeSetting extends React.PureComponent<ConnectedProps & OwnProps, LocalState> {
   static FIELD_NAME = 'volume';
 
   state = { volume: this.props.volume };
 
-  constructor(props: Props) {
+  constructor(props: OwnProps & ConnectedProps) {
     super(props);
 
     props.registerSaveHandler(this.handleSave);
@@ -92,7 +92,7 @@ class VolumeSetting extends React.PureComponent<Props, LocalState> {
   }
 }
 
-const mapStateToProps = (state: State): $Shape<Props> => {
+const mapStateToProps = (state: State): ConnectedProps => {
   return { volume: getVolume(state) };
 };
 

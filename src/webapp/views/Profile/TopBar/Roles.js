@@ -21,9 +21,11 @@ import { getCurrentUser } from '../../../store/user-id/selectors';
 import { makeGetUserById } from '../../../store/users/selectors';
 import app from '../../../app';
 
-type Props = {
+type ConnectedProps = {|
   roles: $ReadOnlyArray<$Keys<typeof roles>>,
   canEditRoles: boolean,
+|};
+type OwnProps = {
   userId: string,
   classes: {
     rolesContainer: string,
@@ -51,7 +53,7 @@ const styles = {
   },
 };
 
-class Roles extends React.PureComponent<Props, LocalState> {
+class Roles extends React.PureComponent<OwnProps & ConnectedProps, LocalState> {
   state = { isSelectVisible: false };
 
   handleAddRoleClick = () => {
@@ -158,9 +160,10 @@ class Roles extends React.PureComponent<Props, LocalState> {
   }
 }
 
-const makeMapStateToProps = (): MapStateToProps<State, Props> => {
+const makeMapStateToProps = (): MapStateToProps<State, OwnProps, ConnectedProps> => {
   const getSortedRoles = createSelector(
     user => (user === null ? [] : user.roles),
+    // TODO: REFACTOR THIS
     // eslint-disable-next-line fp/no-mutating-methods
     userRoles => [...userRoles].sort((role1, role2) => roles[role1].level - roles[role2].level),
   );

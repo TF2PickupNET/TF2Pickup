@@ -5,7 +5,6 @@ import injectSheet from 'react-jss';
 import {
   connect,
   type MapStateToProps,
-  type MapDispatchToProps,
 } from 'react-redux';
 import { compose } from 'redux';
 import {
@@ -24,11 +23,13 @@ import { type State } from '../../store';
 import { getCurrentUserId } from '../../store/user-id/selectors';
 import { makeGetLastPickup } from '../../store/users/selectors';
 
-type Props = {
+type ConnectedProps = {
   lastPickup: null | number,
   userId: string | null,
+};
+type DispatchProps = {| logout: () => void |};
+type OwnProps = {
   location: Location,
-  logout: () => void,
   classes: { menu: string },
 };
 
@@ -38,7 +39,7 @@ const { Sider } = Layout;
 const gamemodeKeys = Object.keys(gamemodes);
 const styles = { menu: { height: '100%' } };
 
-class Sidebar extends React.PureComponent<Props> {
+class Sidebar extends React.PureComponent<OwnProps & ConnectedProps & DispatchProps> {
   static renderGamemodeItems(): Node {
     return gamemodeKeys.map(name => (
       <Menu.Item key={`/${name}`}>
@@ -122,7 +123,7 @@ class Sidebar extends React.PureComponent<Props> {
   }
 }
 
-const makeMapStateToProps = (): MapStateToProps<State, Props> => {
+const makeMapStateToProps = (): MapStateToProps<State, OwnProps, ConnectedProps> => {
   const getLastPickup = makeGetLastPickup();
 
   return (state) => {
@@ -132,7 +133,7 @@ const makeMapStateToProps = (): MapStateToProps<State, Props> => {
     };
   };
 };
-const mapDispatchToProps: MapDispatchToProps<Props> = (dispatch) => {
+const mapDispatchToProps = (dispatch): DispatchProps => {
   return { logout: () => dispatch(logoutUser()) };
 };
 

@@ -9,7 +9,6 @@ import {
 import {
   connect,
   type MapStateToProps,
-  type MapDispatchToProps,
 } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createSelector } from 'reselect';
@@ -27,17 +26,19 @@ import { type State } from '../../store';
 import TopBar from './TopBar';
 import Links from './Links';
 
-type Props = {
+type ConnectedProps = {|
   hasLoadedUser: boolean,
   hasLoadedProfile: boolean,
   name: string | null,
   isCurrentUser: boolean,
+|};
+type OwnProps = {
   fetchUser: (userId: string) => void,
   fetchProfile: (userId: string) => void,
   match: { params: { userId: string } },
 };
 
-class Profile extends React.PureComponent<Props> {
+class Profile extends React.PureComponent<ConnectedProps & OwnProps> {
   componentDidMount() {
     const { userId } = this.props.match.params;
 
@@ -91,7 +92,7 @@ class Profile extends React.PureComponent<Props> {
   }
 }
 
-const makeMapState = (): MapStateToProps<State, Props> => {
+const makeMapState = (): MapStateToProps<State, OwnProps, ConnectedProps> => {
   const hasLoadedUser = createSelector(
     makeGetUserById(),
     user => user !== null,
@@ -112,7 +113,7 @@ const makeMapState = (): MapStateToProps<State, Props> => {
     };
   };
 };
-const mapDispatchToProps: MapDispatchToProps<Props> = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     fetchUser: userId => dispatch(fetchUser(userId)),
     fetchProfile: userId => dispatch(fetchProfile(userId)),

@@ -4,7 +4,7 @@ import {
   permissions,
   roles,
 } from '../config';
-import { type User } from '../types/user';
+import { type User } from '../types/User';
 
 const DEFAULT_ROLE = { level: 0 };
 

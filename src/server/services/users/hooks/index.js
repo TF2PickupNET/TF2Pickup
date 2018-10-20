@@ -5,7 +5,7 @@ import debug from 'debug';
 import hooks from 'feathers-hooks-common';
 import { promisify } from 'util';
 
-import { type User } from '../../../../types/user';
+import { type User } from '../../../../types/User';
 import steamCommunity from '../../../utils/steam-community';
 
 import validateInSteamGroup from './validate-in-steam-group';

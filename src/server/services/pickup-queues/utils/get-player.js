@@ -2,7 +2,7 @@
 
 import { type App } from '@feathersjs/express';
 
-import { type PickupPlayer } from '../../../../types/pickup-player';
+import { type PickupPlayer } from '../../../../types/PickupPlayer';
 
 export function getPlayers(
   app: App,

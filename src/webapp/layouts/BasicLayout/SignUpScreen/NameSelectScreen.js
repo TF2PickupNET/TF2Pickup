@@ -26,7 +26,7 @@ type NameData = {
   display: string,
   name: string,
 };
-type Props = {
+type ConnectedProps = {
   names: $ReadOnlyArray<NameData>,
   region: $Keys<typeof regions> | null,
 };
@@ -37,8 +37,8 @@ type LocalState = {
 
 const { Group } = Radio;
 
-class NameSelectScreen extends React.PureComponent<Props, LocalState> {
-  static getDerivedStateFromProps(nextProps: Props, state: LocalState): $Shape<LocalState> {
+class NameSelectScreen extends React.PureComponent<ConnectedProps, LocalState> {
+  static getDerivedStateFromProps(nextProps: ConnectedProps, state: LocalState) {
     if (nextProps.region !== null && state.name === null) {
       const name = nextProps.names.find(({ region }) => region === nextProps.region);
 
@@ -123,7 +123,7 @@ class NameSelectScreen extends React.PureComponent<Props, LocalState> {
   }
 }
 
-const makeMapStateToProps = (): MapStateToProps<State, Props> => {
+const makeMapStateToProps = (): MapStateToProps<State, {}, ConnectedProps> => {
   const getRegion = makeGetRegion();
   const getNames = createSelector(
     makeGetProfileById(),

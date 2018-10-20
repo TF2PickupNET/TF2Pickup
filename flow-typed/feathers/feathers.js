@@ -6,11 +6,14 @@ import {
   type Meta,
 } from '@feathersjs/authentication';
 
-import { type User } from '../../src/types/user';
-import { type Config } from '../../src/types/configuration';
-import { type UserProfile } from '../../src/types/user-profile';
-import { type UserSettings } from '../../src/types/user-settings';
-import { type PickupQueue } from '../../src/types/pickup-queue';
+import { type User } from '../../src/types/User';
+import { type Config } from '../../src/types/Configuration';
+import { type UserProfile } from '../../src/types/UserProfile';
+import { type UserSettings } from '../../src/types/UserSettings';
+import { type PickupQueue } from '../../src/types/PickupQueue';
+import { type PickupPlayer } from '../../src/types/PickupPlayer';
+import { type Chat } from '../../src/types/Chat';
+import { type Message } from '../../src/types/Message';
 
 import {
   type ClientSocket,
@@ -186,7 +189,10 @@ declare module '@feathersjs/feathers' {
     service(path: 'user-profiles'): Service<UserProfile>,
     service(path: 'user-settings'): Service<UserSettings>,
     service(path: 'users'): Service<User>,
-    service(path: 'pickup-queue'): Service<PickupQueue>,
+    service(path: 'pickup-queues'): Service<PickupQueue>,
+    service(path: 'pickup-players'): Service<PickupPlayer>,
+    service(path: 'chats'): Service<Chat>,
+    service(path: 'messages'): Service<Message>,
     configure(cb: (app: App) => void): App,
     set(name: string, value: mixed): App,
     get(name: string): mixed,

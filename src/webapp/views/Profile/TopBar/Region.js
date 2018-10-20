@@ -11,8 +11,8 @@ import { makeGetRegion } from '../../../store/users/selectors';
 import { regions } from '../../../../config';
 import { type State } from '../../../store';
 
-type Props = {
-  region: $Keys<typeof regions> | null,
+type ConnectedProps = {| region: $Keys<typeof regions> | null |};
+type OwnProps = {
   userId: string, // eslint-disable-line react/no-unused-prop-types
   classes: { title: string },
 };
@@ -24,7 +24,7 @@ const styles = {
   },
 };
 
-function Region(props: Props) {
+function Region(props: OwnProps & ConnectedProps) {
   return (
     <span>
       <span className={props.classes.title}>Region:</span>
@@ -34,10 +34,10 @@ function Region(props: Props) {
   );
 }
 
-const makeMapStateToProps = (): MapStateToProps<State, Props> => {
+const makeMapStateToProps = (): MapStateToProps<State, OwnProps, ConnectedProps> => {
   const getRegion = makeGetRegion();
 
-  return (state: State, props: Props) => {
+  return (state, props) => {
     return { region: getRegion(state, props.userId) };
   };
 };

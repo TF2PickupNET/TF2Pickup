@@ -22,7 +22,11 @@ import { getCurrentUserId } from '../../store/user-id/selectors';
 
 import { SIDEBAR_WIDTH } from './Sidebar';
 
-type Props = {
+type ConnectedProps = {|
+  name: string | null,
+  avatar: string | null,
+|};
+type OwnProps = {
   classes: {
     header: string,
     menu: string,
@@ -30,8 +34,6 @@ type Props = {
     logo: string,
     avatar: string,
   },
-  name: string | null,
-  avatar: string | null,
 };
 type LocalState = { title: string | null };
 
@@ -66,7 +68,7 @@ const styles = {
   avatar: { marginLeft: 16 },
 };
 
-class Toolbar extends React.PureComponent<Props, LocalState> {
+class Toolbar extends React.PureComponent<OwnProps & ConnectedProps, LocalState> {
   state = { title: null };
 
   handleStateChange = (state?: { title?: string }) => {
@@ -134,7 +136,7 @@ class Toolbar extends React.PureComponent<Props, LocalState> {
   }
 }
 
-const makeMapStateToProps = (): MapStateToProps<State, Props> => {
+const makeMapStateToProps = (): MapStateToProps<State, OwnProps, ConnectedProps> => {
   const getName = makeGetUserName();
   const getAvatar = createSelector(
     makeGetProfileById(),

@@ -12,10 +12,8 @@ import { createSelector } from 'reselect';
 import { makeGetProfileById } from '../../../store/user-profiles/selectors';
 import { type State } from '../../../store';
 
-type Props = {
-  avatar: string,
-  classes: { avatar: string },
-};
+type ConnectedProps = {| avatar: string |};
+type OwnProps = { classes: { avatar: string } };
 
 const styles = {
   avatar: {
@@ -24,7 +22,7 @@ const styles = {
   },
 };
 
-function UserAvatar(props: Props) {
+function UserAvatar(props: OwnProps & ConnectedProps) {
   return (
     <Avatar
       shape="square"
@@ -34,7 +32,7 @@ function UserAvatar(props: Props) {
   );
 }
 
-const makeMapStateToProps = (): MapStateToProps<State, Props & { userId: string }> => {
+const makeMapStateToProps = (): MapStateToProps<State, { userId: string }, ConnectedProps> => {
   const getAvatar = createSelector(
     makeGetProfileById(),
     profile => (profile === null ? '' : profile.steam.avatar.large),

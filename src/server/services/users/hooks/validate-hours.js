@@ -8,7 +8,7 @@ import config from 'config';
 import { type CreateBeforeHookContext } from '@feathersjs/feathers';
 import debug from 'debug';
 
-import { type User } from '../../../../types/user';
+import { type User } from '../../../../types/User';
 import steamApi from '../../../utils/steam-api';
 
 const log = debug('TF2Pickup:users:fetch-tf2-hours');

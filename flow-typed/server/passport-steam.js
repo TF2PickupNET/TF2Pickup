@@ -2,7 +2,7 @@
 
 import { type ExpressMiddleware } from '@feathersjs/express';
 
-import { type User } from '../../src/types/user';
+import { type User } from '../../src/types/User';
 
 declare module 'passport-steam' {
   declare type Options = {

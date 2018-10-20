@@ -1,12 +1,10 @@
 // @flow
 
-import { type UserId } from './user';
-
 type ETF2LDivisions = 'Open' | 'Low' | 'Mid' | 'High' | 'Prem' | 'N/A';
 type OZFortressDivisions = 'Open' | 'Intermediate' | 'Premier' | 'N/A';
 
 interface UserProfile {
-  id: UserId,
+  id: string,
   lastUpdate: Date,
   steam: {
     id: string,

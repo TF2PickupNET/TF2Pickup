@@ -3,7 +3,7 @@
 import { type ClientApp } from '@feathersjs/feathers';
 import { type Dispatch } from 'redux';
 
-import { type UserProfile } from '../../../types/user-profile';
+import { type UserProfile } from '../../../types/UserProfile';
 
 import { type State } from '..';
 

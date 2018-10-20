@@ -18,15 +18,17 @@ import { makeIsFriend } from '../../store/user-profiles/selectors';
 import { fetchUser } from '../../store/users/actions';
 import { roles } from '../../../config';
 
-type Props = {
+type ConnectedProps = {|
   name: string | null,
   isFriend: boolean,
-  userId: string,
   // Color prop is being used inside the styles
   // eslint-disable-next-line react/no-unused-prop-types
   color: string | null,
+|};
+type DispatchProps = {| fetchUser: (userId: string) => void |};
+type OwnProps = {
+  userId: string,
   className: string,
-  fetchUser: (userId: string) => void,
   classes: {
     container: string,
     friendIcon: string,
@@ -42,7 +44,7 @@ const styles = {
   friendIcon: { marginRight: '4px' },
 };
 
-class UserItem extends React.PureComponent<Props> {
+class UserItem extends React.PureComponent<OwnProps & ConnectedProps & DispatchProps> {
   static defaultProps = { className: '' };
 
   componentDidMount() {
@@ -74,7 +76,7 @@ class UserItem extends React.PureComponent<Props> {
   }
 }
 
-const makeMapStateToProps = (): MapStateToProps<State, Props> => {
+const makeMapStateToProps = (): MapStateToProps<State, OwnProps, ConnectedProps> => {
   const getName = makeGetUserName();
   const isFriend = makeIsFriend();
   const getHighestRole = makeGetHighestRole();
@@ -89,10 +91,10 @@ const makeMapStateToProps = (): MapStateToProps<State, Props> => {
     };
   };
 };
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch): DispatchProps => {
   return { fetchUser: userId => dispatch(fetchUser(userId)) };
 };
 
-export default injectSheet(styles)(
-  connect(makeMapStateToProps, mapDispatchToProps)(UserItem),
+export default connect(makeMapStateToProps, mapDispatchToProps)(
+  injectSheet(styles)(UserItem),
 );

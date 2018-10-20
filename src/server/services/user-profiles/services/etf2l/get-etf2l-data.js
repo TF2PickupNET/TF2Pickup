@@ -5,7 +5,7 @@ import axios from 'axios';
 import debug from 'debug';
 import isBefore from 'date-fns/is_before';
 
-import { type UserProfile } from '../../../../../types/user-profile';
+import { type UserProfile } from '../../../../../types/UserProfile';
 
 import getETF2LDivisions from './get-etf2l-divisions';
 

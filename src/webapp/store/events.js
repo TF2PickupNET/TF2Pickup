@@ -6,6 +6,7 @@ import userIdEvents from './user-id/events';
 import settingsEvents from './settings/events';
 import profileEvents from './user-profiles/events';
 import usersEvents from './users/events';
+import messagesEvents from './messages/events';
 
 export default function events() {
   return (app: ClientApp) => {
@@ -13,6 +14,7 @@ export default function events() {
       .configure(userIdEvents())
       .configure(settingsEvents())
       .configure(profileEvents())
-      .configure(usersEvents());
+      .configure(usersEvents())
+      .configure(messagesEvents());
   };
 }

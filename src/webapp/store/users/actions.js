@@ -3,10 +3,7 @@
 import { type Dispatch } from 'redux';
 import { type ClientApp } from '@feathersjs/feathers';
 
-import {
-  type User,
-  type UserId,
-} from '../../../types/user';
+import { type User } from '../../../types/User';
 
 import { type State } from '..';
 
@@ -16,7 +13,7 @@ import {
   type Actions,
 } from './types';
 
-export function fetchUser(userId: UserId) {
+export function fetchUser(userId: string) {
   return async (
     dispatch: Dispatch<Actions>,
     getState: () => State,

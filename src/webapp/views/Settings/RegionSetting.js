@@ -17,8 +17,8 @@ import { makeGetRegion } from '../../store/users/selectors';
 import { getCurrentUserId } from '../../store/user-id/selectors';
 import { type State } from '../../store';
 
-type Props = {
-  region: $Keys<typeof regions> | null,
+type ConnectedProps = {| region: $Keys<typeof regions> | null |};
+type OwnProps = {
   className: string,
   registerSaveHandler: (func: () => void) => void,
   addUpdatedField: (name: string) => void,
@@ -36,12 +36,12 @@ const styles = {
   },
 };
 
-class RegionSetting extends React.PureComponent<Props, LocalState> {
+class RegionSetting extends React.PureComponent<OwnProps & ConnectedProps, LocalState> {
   static FIELD_NAME = 'region';
 
   state = { region: this.props.region };
 
-  constructor(props: Props) {
+  constructor(props: OwnProps & ConnectedProps) {
     super(props);
 
     props.registerSaveHandler(this.handleSave);
@@ -105,7 +105,7 @@ class RegionSetting extends React.PureComponent<Props, LocalState> {
   }
 }
 
-const makeMapStateToProps = (): MapStateToProps<State, Props> => {
+const makeMapStateToProps = (): MapStateToProps<State, OwnProps, ConnectedProps> => {
   const getRegion = makeGetRegion();
 
   return (state) => {

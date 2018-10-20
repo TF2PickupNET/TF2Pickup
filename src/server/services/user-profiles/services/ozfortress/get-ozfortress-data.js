@@ -4,7 +4,7 @@ import axios from 'axios';
 import debug from 'debug';
 import config from 'config';
 
-import { type UserProfile } from '../../../../../types/user-profile';
+import { type UserProfile } from '../../../../../types/UserProfile';
 
 import { findHighestDiv } from './utils';
 

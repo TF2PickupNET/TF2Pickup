@@ -4,7 +4,7 @@ import debug from 'debug';
 import { BadRequest } from '@feathersjs/errors';
 import { type App } from '@feathersjs/express';
 
-import { type User } from '../../../../types/user';
+import { type User } from '../../../../types/User';
 
 type Done = (error: Error | null, user: User | null) => void;
 

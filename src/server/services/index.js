@@ -11,6 +11,8 @@ import tf2Configs from './tf2-configs';
 import logs from './logs';
 import pickupQueues from './pickup-queues';
 import pickupPlayers from './pickup-players';
+import chats from './chats';
+import messages from './messages';
 
 export default function services(app: App) {
   app
@@ -22,5 +24,7 @@ export default function services(app: App) {
     .configure(authentication)
     .configure(pickupQueues)
     .configure(pickupPlayers)
-    .configure(logs);
+    .configure(logs)
+    .configure(chats)
+    .configure(messages);
 }

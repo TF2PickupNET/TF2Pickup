@@ -25,10 +25,10 @@ declare module 'react-redux' {
     CombinedProps = { dispatch: Dispatch<> } & StateProps & DispatchProps,
   > extends React$Component<$Diff<ElementConfig<Comp>, CombinedProps>> {}
 
-  declare export type MapStateToProps<State, Props> = <StateProps: $Shape<Props>>(
+  declare export type MapStateToProps<State, OwnProps, ConnectedProps> = (
     state: State,
-    props: Props,
-  ) => $Shape<Props>;
+    props: OwnProps,
+  ) => ConnectedProps;
 
   declare export interface MapDispatchToProps<Props> {
     (state: Dispatch<>, props: Props): $Shape<Props>,

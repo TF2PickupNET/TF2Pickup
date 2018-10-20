@@ -2,10 +2,8 @@
 
 import { announcers } from '../config';
 
-import { type UserId } from './user';
-
 export interface UserSettings {
-  id: UserId,
+  id: string,
   announcer: $Keys<typeof announcers>,
   volume: number,
 }

@@ -11,14 +11,14 @@ import injectSheet from 'react-jss';
 
 import { type State } from '../../../store';
 import { makeGetProfileById } from '../../../store/user-profiles/selectors';
-import { type UserProfile } from '../../../../types/user-profile';
+import { type UserProfile } from '../../../../types/UserProfile';
 
 type Link = {
   url: string,
   display: string,
   name: string,
 };
-type Props = { links: $ReadOnlyArray<Link | null> };
+type ConnectedProps = {| links: $ReadOnlyArray<Link | null> |};
 
 const styles = {
   sidebar: { width: 160 },
@@ -29,7 +29,7 @@ const styles = {
   },
 };
 
-class Links extends React.PureComponent<Props> {
+class Links extends React.PureComponent<ConnectedProps> {
   renderItem(item) {
     if (item === null) {
       return null;
@@ -90,7 +90,7 @@ function getLinkForService(name: $Keys<UserProfile>, profile: UserProfile): Link
   }
 }
 
-const makeMapStateToProps = (): MapStateToProps<State, Props & { userId: string }> => {
+const makeMapStateToProps = (): MapStateToProps<State, { userId: string }, ConnectedProps> => {
   const getLinks = createSelector(
     makeGetProfileById(),
     (profile) => {

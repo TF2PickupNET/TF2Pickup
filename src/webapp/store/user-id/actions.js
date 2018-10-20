@@ -1,6 +1,5 @@
 // @flow
 
-import { type UserId } from '../../../types/user';
 import app from '../../app';
 
 import {
@@ -8,7 +7,7 @@ import {
   LOGOUT_USER,
 } from './types';
 
-export function loginUser(userId: UserId) {
+export function loginUser(userId: string) {
   return {
     type: LOGIN_USER,
     payload: { userId },

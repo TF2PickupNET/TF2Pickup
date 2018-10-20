@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import Helmet from 'react-helmet';
 
-import { type User } from '../../../../types/user';
+import { type User } from '../../../../types/User';
 import { getCurrentUser } from '../../../store/user-id/selectors';
 import { type State } from '../../../store';
 

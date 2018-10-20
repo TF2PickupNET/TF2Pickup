@@ -7,7 +7,7 @@ import {
 import { Socket } from 'net';
 import { type FeathersError } from '@feathersjs/errors';
 
-import { type User } from '../../src/types/user';
+import { type User } from '../../src/types/User';
 
 declare module '@feathersjs/express' {
   declare export interface ExpressRequest {

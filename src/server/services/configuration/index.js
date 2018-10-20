@@ -6,7 +6,7 @@ import debug from 'debug';
 
 // $FlowFixMe: Weirdly this is untyped
 import pkg from '../../../../package.json';
-import { type Config } from '../../../types/configuration';
+import { type Config } from '../../../types/Configuration';
 import DefaultService from '../DefaultService';
 
 const log = debug('TF2Pickup:configuration');

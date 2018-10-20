@@ -12,19 +12,9 @@ import ProfileRedirect from './ProfileRedirect';
 import IndexRedirect from './IndexRedirect';
 import Settings from './Settings';
 import Profile from './Profile';
+import PickupQueue from './PickupQueue';
 
 export default class Views extends React.PureComponent<{}> {
-  static renderGamemodeRoutes(): Node {
-    return Object.keys(gamemodes).map(gamemode => (
-      <Route
-        key={gamemode}
-        exact
-        strict
-        path={`/${gamemode}`}
-      />
-    ));
-  }
-
   static renderProfileRoutes() {
     return [
       <Route
@@ -55,7 +45,12 @@ export default class Views extends React.PureComponent<{}> {
           component={IndexRedirect}
         />
 
-        {Views.renderGamemodeRoutes()}
+        <Route
+          exact
+          strict
+          path={`/(${Object.keys(gamemodes).join('|')})`}
+          component={PickupQueue}
+        />
 
         <Route
           exact

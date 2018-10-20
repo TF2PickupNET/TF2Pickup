@@ -7,10 +7,8 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-type Props = ContextRouter;
-
-export default class SteamLogin extends React.PureComponent<Props> {
-  constructor(props: Props) {
+export default class SteamLogin extends React.PureComponent<ContextRouter> {
+  constructor(props: ContextRouter) {
     super(props);
 
     const query = queryString.parse(props.location.search);

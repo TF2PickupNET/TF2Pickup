@@ -21,6 +21,7 @@ type ConnectedProps = {|
 |};
 type DispatchProps = {| fetchChat: (chatId: string) => void |};
 type OwnProps = {
+  // eslint-disable-next-line react/no-unused-prop-types
   getOnlineUsers: (state: State, chatId: string) => $ReadOnlyArray<string>,
   chatId: string,
   classes: {
@@ -33,6 +34,9 @@ const styles = {
   chat: {
     display: 'flex',
     flexDirection: 'row',
+    minHeight: 240,
+    height: 240,
+    marginBottom: 20,
   },
 
   messagesContainer: { flex: 3 },

@@ -7,7 +7,7 @@ const getMessages = state => state.messages;
 export function makeGetMessageById() {
   return createSelector(
     getMessages,
-    (_, id) => id,
+    (state, id) => id,
     (messages, id) => messages[id] || null,
   );
 }

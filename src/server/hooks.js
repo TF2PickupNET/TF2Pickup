@@ -7,10 +7,12 @@ import {
   type ErrorHookContext,
 } from '@feathersjs/feathers';
 import debug from 'debug';
+import PrettyError from 'pretty-error';
 
 import { isString } from '../utils';
 
 const log = debug('TF2Pickup:hooks');
+const pe = new PrettyError();
 
 export default {
   before: {
@@ -49,7 +51,7 @@ export default {
 
     log(
       `Error in '${hook.path}' service method ${hook.method.toUpperCase()}`,
-      { error: hook.error },
+      { error: pe.render(hook.error) },
     );
 
     return hook;

@@ -10,3 +10,8 @@ export const getVolume = createSelector(
   getSettings,
   settings => (settings === null ? 70 : settings.volume),
 );
+
+export const getEmojiSet = createSelector(
+  getSettings,
+  settings => (settings === null ? 'emojione' : settings.emojiSet),
+);

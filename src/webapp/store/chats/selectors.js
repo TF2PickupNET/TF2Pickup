@@ -7,7 +7,7 @@ const getChats = state => state.chats;
 export function makeGetChatById() {
   return createSelector(
     getChats,
-    (_, chatId) => chatId,
+    (state, chatId) => chatId,
     (chats, chatId) => chats[chatId] || null,
   );
 }

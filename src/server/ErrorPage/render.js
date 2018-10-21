@@ -1,7 +1,9 @@
 // @flow
 
 import { type FeathersError } from '@feathersjs/errors';
+import PrettyError from 'pretty-error';
 
+const re = new PrettyError();
 const styles = `
   * {
     margin: 0;
@@ -58,6 +60,8 @@ const head = `
   </head>
 `;
 
+re.withoutColors();
+
 export default function render(error: FeathersError) {
   return `
     <!doctype html>
@@ -74,7 +78,7 @@ export default function render(error: FeathersError) {
                     </span>
                     
                     <span class="message">
-                        ${error.message}
+                        ${re.render(error)}
                     </span>
                 </div>
             </div>

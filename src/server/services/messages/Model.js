@@ -11,7 +11,7 @@ export default mongoose.model('Message', new mongoose.Schema({
     type: String,
     ref: 'Chat',
   },
-  message: String,
+  message: Object,
 
   createdOn: {
     type: Date,

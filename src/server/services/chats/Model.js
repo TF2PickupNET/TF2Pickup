@@ -2,6 +2,4 @@
 
 import mongoose from 'mongoose';
 
-export default mongoose.model('Message', new mongoose.Schema({
-  id: { type: String },
-}));
+export default mongoose.model('Chat', new mongoose.Schema({ id: { type: String } }));

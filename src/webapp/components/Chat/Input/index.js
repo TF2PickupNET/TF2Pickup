@@ -2,127 +2,115 @@
 
 import React from 'react';
 import injectSheet from 'react-jss';
-import { Mention } from 'antd';
+import {
+  EditorState, convertToRaw,
+} from 'draft-js';
+
+import 'emoji-mart/css/emoji-mart.css';
 
 import app from '../../../app';
 import { type User } from '../../../../types/User';
+import Emoji from '../../Emoji';
 
-type ConnectedProps = {
-  lastPickupId: string,
-};
+import Input from './Input';
+import EmojiPicker from './EmojiPicker';
+
 type OwnProps = {
   onlineUsers: $ReadOnlyArray<User>,
   chatId: string,
+  classes: {
+    inputContainer: string,
+    emojiIcon: string,
+  },
 };
-type UserSuggestion = { type: 'user'} & User;
-type PickupSuggestion = { type: 'pickupId', id: string };
-type EmojiSuggestion = { type: 'emoji' };
-type Suggestion = UserSuggestion | PickupSuggestion | EmojiSuggestion;
 type LocalState = {
-  suggestions: $ReadOnlyArray<Suggestion>,
-  value: {},
+  editorState: EditorState,
+  showEmojiPicker: boolean,
+  lastEmoji: string,
 };
 
-class Input extends React.PureComponent<OwnProps & ConnectedProps, LocalState> {
+const styles = {
+  input: { flex: 1 },
+  inputContainer: {
+    position: 'relative',
+    height: 40,
+    display: 'flex',
+    alignItems: 'center',
+  },
+
+  emojiIcon: {
+    height: 32,
+    width: 32,
+    backgroundColor: 'white',
+    borderTopRightRadius: 2,
+    borderBottomRightRadius: 2,
+    padding: 4,
+    cursor: 'pointer',
+  },
+};
+
+class InputContainer extends React.PureComponent<OwnProps, LocalState> {
   state = {
-    suggestions: [],
-    value: Mention.toContentState(''),
+    editorState: EditorState.createEmpty(),
+    showEmojiPicker: false,
+    lastEmoji: 'santa',
   };
 
   createMessage() {
-    const message = Mention.toString(this.state.value);
-
-    app.io.emit('messages:create-new', {
-      message,
+    app.io.emit('messages:create', {
+      message: convertToRaw(this.state.editorState.getCurrentContent()),
       chatId: this.props.chatId,
-    });
+    }, () => null);
   }
 
-  handleUserMention(value) {
-    const searchValue = value.toLowerCase();
-    const suggestions = this.props.onlineUsers
-      .filter(user => user.name !== null && user.name.toLowerCase().includes(searchValue))
-      .map((user): { type: 'user'} & User => {
-        return {
-          ...user,
-          type: 'user',
-        };
-      });
-
-    this.setState({ suggestions });
-  }
-
-  handlePickupMention(value) {
-    if (this.props.lastPickupId.includes(value)) {
-      this.setState({
-        suggestions: [{
-          type: 'pickupId',
-          id: this.props.lastPickupId,
-        }],
-      });
-    }
-  }
-
-  handleEmojiMention(value) {
-    const searchValue = value.toLowerCase();
-    const suggestions = emojis
-      .filter(emoji => emoji.name.toLowerCase().includes(searchValue))
-      .map((user) => {
-        return {
-          ...user,
-          type: 'emoji',
-        };
-      });
-
-    this.setState({ suggestions });
-  }
-
-  handleSearchChange = (value, trigger) => {
-    switch (trigger) {
-      case '@': return this.handleUserMention(value);
-      case '#': return this.handlePickupMention(value);
-      case ':': return this.handleEmojiMention(value);
-      default: return null;
-    }
+  handleEmojiClick = () => {
+    this.setState({ showEmojiPicker: true });
   };
 
-  handleChange = (value) => {
-    this.setState({ value });
+  handleChange = (editorState) => {
+    this.setState({ editorState });
   };
 
-  handleKeyDown = () => {
+  handleReturn = () => {
     this.createMessage();
   };
 
-  renderSuggestions() {
-    return this.state.suggestions.map(suggestion => (
-      <Mention.Nav
-        key={suggestion.id}
-        value={suggestion.id}
-        data={suggestion}
-      >
-        {suggestion.type === 'pickupId' ? suggestion.id : suggestion.name}
-      </Mention.Nav>
-    ));
-  }
+  handleEmojiPickerClose = () => {
+    this.setState({ showEmojiPicker: false });
+  };
+
+  handleEmojiSelect = (emoji) => {
+    this.setState({
+      lastEmoji: emoji.id,
+      showEmojiPicker: false,
+    });
+  };
 
   render() {
     return (
-      <Mention
-        value={this.state.value}
-        style={{ width: '100%' }}
-        suggestions={this.renderSuggestions()}
-        prefix={[
-          '@',
-          '#',
-          ':',
-        ]}
-        onChange={this.handleChange}
-        onSearchChange={this.handleSearchChange}
-        onKeyDown={this.handleKeyDown}
-      />
+      <span className={this.props.classes.inputContainer}>
+        <Input
+          value={this.state.editorState}
+          onlineUsers={this.props.onlineUsers}
+          onChange={this.handleChange}
+          onReturn={this.handleReturn}
+        />
+
+        <span
+          className={this.props.classes.emojiIcon}
+          onClick={this.handleEmojiClick}
+        >
+          <Emoji emoji={this.state.lastEmoji} />
+        </span>
+
+        <EmojiPicker
+          show={this.state.showEmojiPicker}
+          onSelect={this.handleEmojiSelect}
+          onClose={this.handleEmojiPickerClose}
+        />
+      </span>
     );
   }
 }
 
-export default injectSheet({})(Input);
+export default injectSheet(styles)(InputContainer);

@@ -3,12 +3,14 @@
 import { type FeathersError } from '@feathersjs/errors';
 
 declare module 'debug' {
-  declare export default function debug(module: string): <Data>(
+  declare export type Data<Extra> = {|
+    userId?: string,
+    error?: FeathersError,
+    data?: Extra,
+  |};
+
+  declare export default function debug(module: string): <D>(
     message: string,
-    data?: {|
-      userId?: string,
-      error?: FeathersError,
-      data?: Data,
-    |},
+    data?: Data<D>,
   ) => void;
 }

@@ -24,6 +24,7 @@ export default function reducer(state: State = {}, action: Actions) {
     };
     case REMOVE_MESSAGE: {
       const {
+        // eslint-disable-next-line no-unused-vars
         [action.payload.messageId]: message,
         ...rest
       } = state;

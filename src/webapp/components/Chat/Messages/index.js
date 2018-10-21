@@ -13,9 +13,20 @@ import { type State } from '../../../store';
 import Message from './Message';
 
 type ConnectedProps = {| messages: $ReadOnlyArray<string> |};
-type OwnProps = { chatId: string };
+type OwnProps = {
+  // eslint-disable-next-line react/no-unused-prop-types
+  chatId: string,
+  classes: { messages: string },
+};
 
-const styles = {};
+const styles = {
+  messages: {
+    height: 200,
+    overflowY: 'scroll',
+    padding: 0,
+    margin: 0,
+  },
+};
 
 class Messages extends React.PureComponent<OwnProps & ConnectedProps> {
   listRef = React.createRef();
@@ -31,9 +42,6 @@ class Messages extends React.PureComponent<OwnProps & ConnectedProps> {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    // If we have a snapshot value, we've just added new items.
-    // Adjust scroll so these new items don't push the old ones out of view.
-    // (snapshot here is the value returned from getSnapshotBeforeUpdate)
     if (snapshot !== null && this.listRef.current) {
       this.listRef.current.scrollTop = this.listRef.current.scrollHeight - snapshot;
     }
@@ -41,13 +49,19 @@ class Messages extends React.PureComponent<OwnProps & ConnectedProps> {
 
   renderMessages() {
     return this.props.messages.map(id => (
-      <Message messageId={id} />
+      <Message
+        key={id}
+        messageId={id}
+      />
     ));
   }
 
   render() {
     return (
-      <ul ref={this.listRef}>
+      <ul
+        ref={this.listRef}
+        className={this.props.classes.messages}
+      >
         {this.renderMessages()}
       </ul>
     );

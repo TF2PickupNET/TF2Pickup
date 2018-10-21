@@ -2,11 +2,15 @@
 
 import mongoose from 'mongoose';
 
-import { announcers } from '../../../config';
+import {
+  announcers,
+  emojiSets,
+} from '../../../config';
 import {
   oneOf,
   steamId,
 } from '../../utils/validators';
+import { defaultSet } from '../../../config/emoji-sets';
 
 export default mongoose.model('UserSettings', new mongoose.Schema({
   id: {
@@ -28,6 +32,12 @@ export default mongoose.model('UserSettings', new mongoose.Schema({
     default: 70,
     min: 0,
     max: 100,
+  },
+
+  emojiSet: {
+    type: String,
+    validate: oneOf(Object.keys(emojiSets), {}),
+    default: defaultSet,
   },
 }));
 

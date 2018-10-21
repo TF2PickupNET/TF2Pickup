@@ -9,8 +9,8 @@ const REDIRECT_URL_COOKIE = 'REDIRECT-URL';
 
 export function setUrlCookie(req: ExpressRequest, res: ExpressResponse, next: () => void) {
   // Set the current url as a cookie so we can redirect to the exact url afterwards
-  if (req.headers.referrer) {
-    res.cookie(REDIRECT_URL_COOKIE, req.headers.referrer);
+  if (req.query.url) {
+    res.cookie(REDIRECT_URL_COOKIE, req.query.url);
   }
 
   next();

@@ -1,6 +1,6 @@
 [declarations]
-.*/node_modules/.*
-private/.*
+.*node_modules.*
+.*private.*
 
 [ignore]
 

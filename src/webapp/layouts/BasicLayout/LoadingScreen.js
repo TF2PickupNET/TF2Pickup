@@ -92,6 +92,8 @@ class LoadingScreen extends React.PureComponent<Props, LocalState> {
     } catch (error) {
       message.warn(`Couldn't authenticate. ${error.message}`);
 
+      window.localStorage.removeItem('feathers-jwt');
+
       this.setState({ loadingPercentage: 100 });
     }
   }

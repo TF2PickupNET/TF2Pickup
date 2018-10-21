@@ -10,7 +10,7 @@ import setup from './setup';
 const log = debug('TF2Pickup:chats');
 
 export default function chats(app: App) {
-  log('Setting up messages service');
+  log('Setting up chats service');
 
   app.use('/chats', service({
     Model,

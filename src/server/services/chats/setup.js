@@ -24,7 +24,7 @@ async function makeSureChatExists(chats, id) {
 export default function setup(app: ServerApp) {
   const chats = app.service('chats');
 
-  makeSureChatExists(chats,'global');
+  makeSureChatExists(chats, 'global');
 
   Object.keys(regions).forEach((region) => {
     makeSureChatExists(chats, region);

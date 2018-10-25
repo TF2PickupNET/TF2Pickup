@@ -1,18 +1,20 @@
 // @flow
 
-import React from 'react';
+import React, { lazy } from 'react';
 import {
   Switch,
   Route,
 } from 'react-router-dom';
 
 import { gamemodes } from '../../config';
+import createLazyRoute from '../utils/create-lazy-route';
 
 import ProfileRedirect from './ProfileRedirect';
 import IndexRedirect from './IndexRedirect';
-import Settings from './Settings';
-import Profile from './Profile';
-import PickupQueue from './PickupQueue';
+
+const Settings = lazy(() => import(/* webpackChunkName: "settings" */ './Settings'));
+const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './Profile'));
+const PickupQueue = lazy(() => import(/* webpackChunkName: "pickup-queue" */'./PickupQueue'));
 
 export default class Views extends React.PureComponent<{}> {
   static renderProfileRoutes() {
@@ -22,7 +24,7 @@ export default class Views extends React.PureComponent<{}> {
         exact
         strict
         path="/profile"
-        component={ProfileRedirect}
+        component={createLazyRoute(ProfileRedirect)}
       />,
 
       <Route
@@ -30,7 +32,7 @@ export default class Views extends React.PureComponent<{}> {
         exact
         strict
         path="/profile/:userId"
-        component={Profile}
+        component={createLazyRoute(Profile)}
       />,
     ];
   }
@@ -42,21 +44,21 @@ export default class Views extends React.PureComponent<{}> {
           exact
           strict
           path="/"
-          component={IndexRedirect}
+          component={createLazyRoute(IndexRedirect)}
         />
 
         <Route
           exact
           strict
           path={`/(${Object.keys(gamemodes).join('|')})`}
-          component={PickupQueue}
+          component={createLazyRoute(PickupQueue)}
         />
 
         <Route
           exact
           strict
           path="/settings"
-          component={Settings}
+          component={createLazyRoute(Settings)}
         />
 
         {Views.renderProfileRoutes()}

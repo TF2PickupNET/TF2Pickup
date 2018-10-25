@@ -1,6 +1,7 @@
 [declarations]
 .*node_modules.*
 .*private.*
+<PROJECT_ROOT>/node_modules/.*
 
 [ignore]
 

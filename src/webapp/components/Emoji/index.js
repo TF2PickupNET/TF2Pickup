@@ -2,33 +2,33 @@
 
 import React from 'react';
 import { Emoji as EmojiIcon } from 'emoji-mart';
-import { connect } from 'react-redux';
 
 import { getEmojiSet } from '../../store/settings/selectors';
 import { type State } from '../../store';
+import { useMapState } from '../../utils/use-store';
 
-type ConnectedProps = { emojiSet: string };
-type OwnProps = {
+type Props = {
   emoji: string,
   size: number,
 };
 
-function Emoji(props: OwnProps & ConnectedProps) {
+const mapState = (state: State) => {
+  return { emojiSet: getEmojiSet(state) };
+};
+
+function Emoji(props: Props) {
+  const { emojiSet } = useMapState(mapState);
+
   return (
     <EmojiIcon
       {...props}
       emoji={props.emoji}
-      set={props.emojiSet}
+      set={emojiSet}
       size={props.size}
     />
   );
 }
 
-// eslint-disable-next-line react/default-props-match-prop-types
 Emoji.defaultProps = { size: 24 };
 
-const mapStateToProps = (state: State): ConnectedProps => {
-  return { emojiSet: getEmojiSet(state) };
-};
-
-export default connect(mapStateToProps)(Emoji);
+export default Emoji;

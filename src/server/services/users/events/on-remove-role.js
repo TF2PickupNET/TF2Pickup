@@ -9,7 +9,7 @@ import { type SocketConnection } from '@feathersjs/socketio';
 import debug from 'debug';
 
 import { roles } from '../../../../config';
-import hasPermission from '../../../../utils/has-permission';
+import { hasPermission } from '../../../../utils/has-permission';
 
 type Data = {
   role: $Keys<typeof roles>,

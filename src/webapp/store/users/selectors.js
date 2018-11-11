@@ -2,13 +2,20 @@
 
 import { createSelector } from 'reselect';
 
-import roles from '../../../config/roles';
+import { roles } from '../../../config';
+import { type User } from '../../../types/User';
 
 import { type State } from '..';
 
-export const getUsers = (state: State) => state.users;
+import { getHighestRole } from '../../../utils/has-permission';
 
-export function makeGetUserById() {
+type GetRoles = (state: State, id: string | null) => $PropertyType<User, 'roles'>;
+type GetRegion = (state: State, id: string | null) => $PropertyType<User, 'region'>;
+type GetHighestRole = (state: State, id: string | null) => $Keys<typeof roles> | null;
+
+const getUsers = (state: State) => state.users;
+
+function makeGetUserById(): (state: State, id: string | null) => User | null {
   return createSelector(
     getUsers,
     (users, id) => id,
@@ -16,43 +23,56 @@ export function makeGetUserById() {
   );
 }
 
-export function makeGetRegion() {
+function makeGetRegion(): GetRegion {
   return createSelector(
     makeGetUserById(),
     user => (user === null ? null : user.region),
   );
 }
 
-export function makeGetRoles() {
+function makeGetRoles(): GetRoles {
   return createSelector(
     makeGetUserById(),
     user => (user === null ? [] : user.roles),
   );
 }
 
-export function makeGetHighestRole() {
+function makeGetSortedRoles(): GetRoles {
   return createSelector(
     makeGetRoles(),
-    userRoles => userRoles.reduce((highestRole, role: string) => {
-      if (highestRole === null || roles[highestRole].level < roles[role].level) {
-        return role;
-      }
-
-      return highestRole;
-    }, null),
+    // eslint-disable-next-line fp/no-mutating-methods
+    userRoles => [...userRoles].sort((role1, role2) => roles[role1].level - roles[role2].level),
   );
 }
 
-export function makeGetLastPickup() {
+function makeGetHighestRole(): GetHighestRole {
+  return createSelector(
+    makeGetUserById(),
+    user => (user === null ? null : getHighestRole(user)),
+  );
+}
+
+function makeGetLastPickup(): (state: State, id: string | null) => null | number {
   return createSelector(
     makeGetUserById(),
     user => (user === null ? null : user.lastPickup),
   );
 }
 
-export function makeGetUserName() {
+function makeGetUserName(): (state: State, id: string | null) => null | string {
   return createSelector(
     makeGetUserById(),
     user => (user === null ? null : user.name),
   );
 }
+
+export {
+  getUsers,
+  makeGetUserName,
+  makeGetSortedRoles,
+  makeGetRoles,
+  makeGetRegion,
+  makeGetHighestRole,
+  makeGetUserById,
+  makeGetLastPickup,
+};

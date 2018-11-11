@@ -9,7 +9,7 @@ import {
 import debug from 'debug';
 import PrettyError from 'pretty-error';
 
-import { isString } from '../utils';
+import { isString } from '../utils/string';
 
 const log = debug('TF2Pickup:hooks');
 const pe = new PrettyError();

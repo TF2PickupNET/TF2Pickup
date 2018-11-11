@@ -164,11 +164,11 @@ declare module '@feathersjs/feathers' {
     hooks(hooks: Hooks<App>): Service<Document>,
     publish(publisher: (data: {}) => $ReadOnlyArray<Connection>): Service<Document>,
     publish(
-      eventname: 'created' | 'patched' | 'remove',
+      eventname: 'created' | 'patched' | 'removed',
       publisher: (data: Document) => $ReadOnlyArray<Connection>,
     ): Service<Document>,
     on(
-      eventname: 'created' | 'patched' | 'remove',
+      eventname: 'created' | 'patched' | 'removed',
       cb: (data: Document) => void,
     ): Service<Document>,
     removeListener(eventname: string, listeners: ?mixed): Service<Document>,
@@ -194,8 +194,8 @@ declare module '@feathersjs/feathers' {
     service(path: 'chats'): Service<Chat>,
     service(path: 'messages'): Service<Message>,
     configure(cb: (app: App) => void): App,
-    set(name: string, value: mixed): App,
-    get(name: string): mixed,
+    set<V>(name: string, value: V): App,
+    get<V>(name: string): V,
     removeListener(eventname: string, listeners: ?mixed): App,
   }
 
@@ -220,10 +220,12 @@ declare module '@feathersjs/feathers' {
 
   declare export interface ClientApp extends App {
     configure(cb: (app: ClientApp) => void): ClientApp,
-    set(name: string, value: mixed): ClientApp,
-    get(name: string): mixed,
-    authenticate(): Promise<void>,
-    authenticate(options: { strategy: string }): Promise<void>,
+    set<V>(name: string, value: V): ClientApp,
+    get<V>(name: string): V,
+    authenticate(options: {
+      strategy: string,
+      accessToken: string,
+    }): Promise<{ accessToken: string }>,
     on('authenticated', fn: (payload: { accessToken: string }) => void | Promise<void>): ClientApp,
     on('logout', fn: () => void): ClientApp,
     logout(): Promise<void>,

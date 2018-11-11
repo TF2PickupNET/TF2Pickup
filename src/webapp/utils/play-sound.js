@@ -2,7 +2,7 @@
 
 import store from '../store';
 import { announcers } from '../../config';
-import { isString } from '../../utils';
+import { isString } from '../../utils/string';
 import { isNumber } from '../../utils/number';
 import { getSettings } from '../store/settings/selectors';
 

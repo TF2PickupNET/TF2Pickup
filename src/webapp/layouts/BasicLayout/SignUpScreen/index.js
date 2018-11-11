@@ -1,65 +1,27 @@
 // @flow
 
 import React from 'react';
-import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
 import {
   Row,
   Col,
-  Steps,
 } from 'antd';
 import Helmet from 'react-helmet';
 
-import { type User } from '../../../../types/User';
 import { getCurrentUser } from '../../../store/user-id/selectors';
-import { type State } from '../../../store';
+import { useMapState } from '../../../utils/use-store';
 
-import AcceptRulesScreen from './AcceptRulesScreen';
-import RegionSelectScreen from './RegionSelectScreen';
-import NameSelectScreen from './NameSelectScreen';
-import JoinDiscordScreen from './JoinDiscordScreen';
-import FinishScreen from './FinishScreen';
+import Stepper from './Stepper';
+import steps from './steps';
 
 type Props = {
-  user: User | null,
   children: Node,
   classes: {
     container: string,
     header: string,
-    contentContainer: string,
-    stepperContainer: string,
-    stepper: string,
   },
 };
-type LocalState = { didJoinDiscord: boolean };
 
-const { Step } = Steps;
-const steps = [{
-  name: 'accept-rules',
-  display: 'Accept the rules',
-  description: '',
-  Component: AcceptRulesScreen,
-}, {
-  name: 'region-select',
-  display: 'Select a region',
-  description: '',
-  Component: RegionSelectScreen,
-}, {
-  name: 'select-name',
-  display: 'Select a name',
-  description: '',
-  Component: NameSelectScreen,
-}, {
-  name: 'join-discord',
-  display: 'Join Discord',
-  description: '(Optional)',
-  Component: JoinDiscordScreen,
-}, {
-  name: 'finish',
-  display: 'Finish',
-  description: '',
-  Component: FinishScreen,
-}];
 const styles = {
   container: { height: '100vh' },
 
@@ -67,131 +29,72 @@ const styles = {
     textAlign: 'center',
     marginBottom: 25,
   },
-
-  stepperContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-
-  stepper: { width: 'auto' },
-
-  contentContainer: {
-    padding: '0 8px',
-    display: 'flex',
-    flexDirection: 'column',
-    height: '600px',
-    flex: 1,
-
-    '& > *': { padding: 8 },
-  },
 };
 
-class SignUpScreen extends React.PureComponent<Props, LocalState> {
-  state = { didJoinDiscord: false };
-
-  getCurrentStep() {
-    if (this.props.user === null || this.props.user.hasCompletedSignUp) {
-      return null;
-    }
-
-    if (!this.props.user.hasAcceptedTheRules) {
-      return steps[0];
-    } else if (this.props.user.region === null) {
-      return steps[1];
-    } else if (this.props.user.name === null) {
-      return steps[2];
-    } else if (!this.state.didJoinDiscord) {
-      return steps[3];
-    } else if (!this.props.user.hasCompletedSignUp) {
-      return steps[4];
-    }
-
+function getCurrentStep(user) {
+  if (user.hasCompletedSignUp) {
     return null;
   }
 
-  nextStep = () => {
-    const currentStep = this.getCurrentStep();
-
-    if (currentStep === null) {
-      return;
-    }
-
-    if (currentStep.name === 'join-discord') {
-      this.setState({ didJoinDiscord: true });
-    }
-  };
-
-  renderSteps(currentStep) {
-    const index = steps.findIndex(step => step === currentStep);
-
-    return (
-      <Steps
-        current={index}
-        direction="vertical"
-        className={this.props.classes.stepper}
-      >
-        {steps.map(step => (
-          <Step
-            key={step.name}
-            title={step.display}
-            description={step.description}
-          />
-        ))}
-      </Steps>
-    );
+  if (!user.hasAcceptedTheRules) {
+    return steps[0];
+  } else if (user.region === null) {
+    return steps[1];
+  } else if (user.name === null) {
+    return steps[2];
+  } else if (!user.hasCompletedSignUp) {
+    return steps[4];
   }
 
-  renderStepper(currentStep) {
-    const { Component } = currentStep;
+  return null;
+}
 
-    return (
+const mapState = (state) => {
+  return { user: getCurrentUser(state) };
+};
+
+function SignUpScreen(props: Props) {
+  const { user } = useMapState(mapState);
+
+  if (user === null) {
+    return null;
+  }
+
+  const currentStep = getCurrentStep(user);
+
+  if (currentStep === null) {
+    return props.children;
+  }
+
+  const index = steps.findIndex(step => step === currentStep);
+
+  return (
+    <Row
+      type="flex"
+      justify="center"
+      align="middle"
+      className={props.classes.container}
+    >
+      <Helmet>
+        <title>Sign Up</title>
+      </Helmet>
+
       <Col
         md={20}
         lg={16}
       >
-        <h2 className={this.props.classes.header}>
+        <h2 className={props.classes.header}>
           Please fill out some information before you can start playing
         </h2>
 
-        <div className={this.props.classes.stepperContainer}>
-          {this.renderSteps(currentStep)}
-
-          <div className={this.props.classes.contentContainer}>
-            <Component nextStep={this.nextStep} />
-          </div>
-        </div>
+        <Stepper
+          index={index}
+          component={currentStep.component}
+          steps={steps}
+        />
       </Col>
-    );
-  }
-
-  render() {
-    const currentStep = this.getCurrentStep();
-
-    if (currentStep === null) {
-      return this.props.children;
-    }
-
-    return (
-      <Row
-        type="flex"
-        justify="center"
-        align="middle"
-        className={this.props.classes.container}
-      >
-        <Helmet>
-          <title>Sign Up</title>
-        </Helmet>
-
-        {this.renderStepper(currentStep)}
-      </Row>
-    );
-  }
+    </Row>
+  );
 }
 
-const mapStateToProps = (state: State): $Shape<Props> => {
-  return { user: getCurrentUser(state) };
-};
-
-export default injectSheet(styles)(
-  connect(mapStateToProps)(SignUpScreen)
-);
+export default injectSheet(styles)(SignUpScreen);

@@ -6,18 +6,23 @@ import {
 } from '../config';
 import { type User } from '../types/User';
 
-const DEFAULT_ROLE = { level: 0 };
+function getHighestRole(user: User): $Keys<typeof roles> | null {
+  return user.roles.reduce((highestRole, role) => {
+    if (highestRole === null || roles[highestRole].level < roles[role].level) {
+      return role;
+    }
 
-function computeLevel(user: User) {
-  const highestRole = user.roles.reduce(
-    (accu, role) => (accu.level <= roles[role].level ? roles[role] : accu),
-    DEFAULT_ROLE,
-  );
-
-  return highestRole.level;
+    return highestRole;
+  }, null);
 }
 
-export default function hasPermission(
+function computeLevel(user: User) {
+  const highestRole = getHighestRole(user);
+
+  return highestRole === null ? 0 : roles[highestRole].level;
+}
+
+function hasPermission(
   permission: $Keys<typeof permissions>,
   currentUser: User | null,
   targetUser: User | null = null,
@@ -38,3 +43,9 @@ export default function hasPermission(
 
   return validators.every(validator => validator(currentUserWithLevel, targetUserWithLevel));
 }
+
+export {
+  hasPermission,
+  getHighestRole,
+  computeLevel,
+};

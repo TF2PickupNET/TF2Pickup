@@ -9,10 +9,16 @@ import {
 
 export default function reducer(state: State = {}, action: Actions) {
   switch (action.type) {
-    case ADD_PROFILE: return {
-      ...state,
-      [action.payload.profile.id]: action.payload.profile,
-    };
+    case ADD_PROFILE: {
+      if (state[action.payload.profile.id]) {
+        return state;
+      }
+
+      return {
+        ...state,
+        [action.payload.profile.id]: action.payload.profile,
+      };
+    }
     case UPDATE_PROFILE: {
       return {
         ...state,

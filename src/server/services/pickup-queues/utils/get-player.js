@@ -4,7 +4,7 @@ import { type App } from '@feathersjs/express';
 
 import { type PickupPlayer } from '../../../../types/PickupPlayer';
 
-export function getPlayers(
+function getPlayers(
   app: App,
   playerIds: $ReadOnlyArray<string>,
 ): Promise<$ReadOnlyArray<PickupPlayer>> {
@@ -13,7 +13,7 @@ export function getPlayers(
   return Promise.all(playerIds.map(id => pickupPlayers.get(id)));
 }
 
-export async function getPlayerById(
+async function getPlayerById(
   app: App,
   playerIds: $ReadOnlyArray<string>,
   userId: string,
@@ -22,3 +22,8 @@ export async function getPlayerById(
 
   return players.find(player => player.userId === userId) || null;
 }
+
+export {
+  getPlayers,
+  getPlayerById,
+};

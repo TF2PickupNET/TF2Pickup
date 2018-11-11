@@ -2,16 +2,24 @@
 
 import { createSelector } from 'reselect';
 
+import { emojiSets } from '../../../config';
+
 import { type State } from '..';
 
-export const getSettings = (state: State) => state.settings;
+const getSettings = (state: State) => state.settings;
 
-export const getVolume = createSelector(
+const getVolume: (state: State) => number = createSelector(
   getSettings,
   settings => (settings === null ? 70 : settings.volume),
 );
 
-export const getEmojiSet = createSelector(
+const getEmojiSet: (state: State) => $Keys<typeof emojiSets> = createSelector(
   getSettings,
   settings => (settings === null ? 'emojione' : settings.emojiSet),
 );
+
+export {
+  getSettings,
+  getVolume,
+  getEmojiSet,
+};

@@ -4,7 +4,14 @@ import { type Action } from 'redux';
 
 import { type Config } from '../../../types/Configuration';
 
-export type State = Config | null;
-export type Actions = Action<'CONFIG/SET', { config: Config }>;
+type State = Config | null;
+type Actions = Action<'CONFIG/SET', { config: Config }>;
 
-export const SET_CONFIG = 'CONFIG/SET';
+const SET_CONFIG = 'CONFIG/SET';
+
+export type {
+  SET_CONFIG,
+
+  State,
+  Actions,
+};

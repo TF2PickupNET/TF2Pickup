@@ -9,7 +9,7 @@ import { type Actions as MessagesActions } from '../messages/types';
 
 import {
   FETCHED_CHAT,
-  type Actions, ADD_MESSAGE_TO_CHAT, REMOVE_MESSAGE_FROM_CHAT,
+  type Actions,
 } from './types';
 
 export function fetchChat(chatId: string) {
@@ -31,34 +31,9 @@ export function fetchChat(chatId: string) {
 
     dispatch({
       type: FETCHED_CHAT,
-      payload: {
-        chat: {
-          ...chat,
-          messages: messages.map(message => message._id),
-        },
-      },
+      payload: { chat },
     });
 
     dispatch(fetchMessages(messages));
-  };
-}
-
-export function addMessageToChat(chatId: string, messageId: string) {
-  return {
-    type: ADD_MESSAGE_TO_CHAT,
-    payload: {
-      chatId,
-      messageId,
-    },
-  };
-}
-
-export function removeMessageFromChat(chatId: string, messageId: string) {
-  return {
-    type: REMOVE_MESSAGE_FROM_CHAT,
-    payload: {
-      chatId,
-      messageId,
-    },
   };
 }

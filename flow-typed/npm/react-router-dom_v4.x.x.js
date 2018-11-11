@@ -1,6 +1,8 @@
 // flow-typed signature: 928df3c83a85e46b1262c47094522f1f
 // flow-typed version: e9398ab068/react-router-dom_v4.x.x/flow_>=v0.63.x
 
+import { type Context } from 'react';
+
 declare module "react-router-dom" {
   import type { ComponentType, ElementConfig, Node } from 'react';
 
@@ -175,6 +177,8 @@ declare module "react-router-dom" {
     options?: MatchPathOptions | string,
     parent?: Match
   ): null | Match;
+
+  declare export var __RouterContext: Context<ContextRouter>;
 
   declare export function generatePath(pattern?: string, params?: Object): string;
 }

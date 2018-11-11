@@ -2,9 +2,12 @@
 
 import { createSelector } from 'reselect';
 
+import { type Chat } from '../../../types/Chat';
+import { type State } from '../reducers';
+
 const getChats = state => state.chats;
 
-export function makeGetChatById() {
+function makeGetChatById(): (state: State, id: string) => Chat | null {
   return createSelector(
     getChats,
     (state, chatId) => chatId,
@@ -12,9 +15,4 @@ export function makeGetChatById() {
   );
 }
 
-export function makeGetMessagesForChat() {
-  return createSelector(
-    makeGetChatById(),
-    chat => (chat === null ? [] : chat.messages),
-  );
-}
+export { makeGetChatById };

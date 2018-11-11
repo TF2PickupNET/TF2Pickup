@@ -2,7 +2,7 @@
 
 import { undef } from './utils';
 
-export function flatten([x, ...rest]: $ReadOnlyArray<mixed>) {
+function flatten([x, ...rest]: $ReadOnlyArray<mixed>) {
   if (undef(x)) {
     return [];
   }
@@ -19,3 +19,5 @@ export function flatten([x, ...rest]: $ReadOnlyArray<mixed>) {
     ...flatten(rest),
   ];
 }
+
+export { flatten };

@@ -6,18 +6,26 @@ import { getUsers } from '../users/selectors';
 
 import { type State } from '..';
 
-export const getCurrentUserId = (state: State) => state.userId;
+import { type User } from '../../../types/User';
 
-export const getCurrentUser = createSelector(
+const getCurrentUserId = (state: State) => state.userId;
+
+const getCurrentUser: (state: State) => User | null = createSelector(
   getUsers,
   getCurrentUserId,
   (users, userId) => (userId === null ? null : users[userId]),
 );
 
-export function makeIsCurrentUser() {
+function makeIsCurrentUser(): (state: State, id: string) => boolean {
   return createSelector(
     getCurrentUserId,
     (state, userId) => userId,
     (currentUserId, userId) => currentUserId === userId,
   );
 }
+
+export {
+  getCurrentUserId,
+  getCurrentUser,
+  makeIsCurrentUser,
+};

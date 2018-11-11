@@ -38,4 +38,4 @@ const reducers: Reducers = {
 
 export type { State };
 
-export default combineReducers(reducers);
+export default combineReducers<typeof reducers, Action<>>(reducers);

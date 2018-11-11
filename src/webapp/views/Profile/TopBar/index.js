@@ -6,7 +6,7 @@ import injectSheet from 'react-jss';
 
 import Roles from './Roles';
 import Name from './Name';
-import UserAvatar from './Avatar';
+import UserAvatar from './UserAvatar';
 import Region from './Region';
 
 type Props = {

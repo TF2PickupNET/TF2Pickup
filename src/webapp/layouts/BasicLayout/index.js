@@ -1,62 +1,52 @@
 // @flow
 
-import React, { type Node } from 'react';
-import { Layout } from 'antd';
+import React, {
+  type Node,
+  Suspense,
+} from 'react';
+import {
+  Layout,
+  Spin,
+} from 'antd';
 import Helmet from 'react-helmet';
 
 import favicon from '../../../../assets/images/favicon.ico';
+import CookieNotification from '../../components/CookieNotification';
+import NotificationRequester from '../../components/NotificationRequester';
+import SoundFix from '../../components/SoundFix';
+import SteamLoginToken from '../../components/SteamLoginToken';
 
-import IsConnected from './IsConnected';
-import IsAuthenticated from './IsAuthenticated';
-import LoadingScreen from './LoadingScreen';
-import SignUpScreen from './SignUpScreen';
-import VersionValidator from './VersionValidator';
-import CookieNotification from './CookieNotification';
-import NotificationRequester from './NotificationRequester';
-import BrowserValidator from './BrowserValidator';
-import SoundFix from './SoundFix';
+import Page from './Page';
 
 type Props = { children: Node };
 
-export default class BasicLayout extends React.PureComponent<Props> {
-  renderPage() {
-    return (
-      <IsConnected>
-        <BrowserValidator>
-          <LoadingScreen>
-            <VersionValidator>
-              <IsAuthenticated>
-                <SignUpScreen>
-                  {this.props.children}
-                </SignUpScreen>
-              </IsAuthenticated>
-            </VersionValidator>
-          </LoadingScreen>
-        </BrowserValidator>
-      </IsConnected>
-    );
-  }
+function BasicLayout(props: Props) {
+  return (
+    <Layout>
+      <SteamLoginToken />
 
-  render() {
-    return (
-      <Layout>
-        <SoundFix />
+      <SoundFix />
 
-        <CookieNotification />
+      <CookieNotification />
 
-        <NotificationRequester />
+      <NotificationRequester />
 
-        <Helmet titleTemplate="%s | TF2Pickup">
+      <Helmet titleTemplate="%s | TF2Pickup">
 
-          <link
-            rel="shortcut icon"
-            href={favicon}
-            type="image/x-icon"
-          />
-        </Helmet>
+        <link
+          rel="shortcut icon"
+          href={favicon}
+          type="image/x-icon"
+        />
+      </Helmet>
 
-        {this.renderPage()}
-      </Layout>
-    );
-  }
+      <Suspense fallback={<Spin delay={100} />}>
+        <Page>
+          {props.children}
+        </Page>
+      </Suspense>
+    </Layout>
+  );
 }
+
+export default BasicLayout;

@@ -20,7 +20,7 @@ import {
   regions,
 } from '../../../config';
 import DefaultService from '../DefaultService';
-import { isString } from '../../../utils';
+import { isString } from '../../../utils/string';
 
 type TF2Config = { config: string };
 type Query = {

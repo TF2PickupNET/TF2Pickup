@@ -6,11 +6,6 @@ import io from 'socket.io-client';
 import auth from '@feathersjs/authentication-client';
 
 import events from './store/events';
-import {
-  loginUser,
-  logoutUser,
-} from './store/user-id/actions';
-import store from './store';
 
 const API_ENDPOINT = window.location.hostname === 'localhost'
   ? 'http://localhost:3000'
@@ -30,16 +25,6 @@ app
   .configure(socketio(socket, { timeout: SOCKET_TIMEOUT }))
   .configure(auth({ storage: window.localStorage }))
   .configure(events());
-
-app.on('logout', () => {
-  store.dispatch(logoutUser());
-});
-
-app.on('authenticated', async (payload: { accessToken: string }) => {
-  const verifiedToken = await app.passport.verifyJWT(payload.accessToken);
-
-  store.dispatch(loginUser(verifiedToken.id));
-});
 
 export { API_ENDPOINT };
 

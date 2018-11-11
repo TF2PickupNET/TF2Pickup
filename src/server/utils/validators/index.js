@@ -1,5 +1,12 @@
 // @flow
 
-export { default as steamId } from './steam-id';
-export { default as oneOf } from './one-of';
-export { default as url } from './url';
+import steamId from './steam-id';
+import oneOf from './one-of';
+import url from './url';
+
+export {
+  steamId,
+  oneOf,
+  url,
+};
+

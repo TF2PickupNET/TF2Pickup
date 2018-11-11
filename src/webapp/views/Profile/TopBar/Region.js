@@ -1,19 +1,15 @@
 // @flow
 
 import React from 'react';
-import {
-  connect,
-  type MapStateToProps,
-} from 'react-redux';
 import injectSheet from 'react-jss';
 
 import { makeGetRegion } from '../../../store/users/selectors';
 import { regions } from '../../../../config';
-import { type State } from '../../../store';
+import { useMakeMapState } from '../../../utils/use-store';
 
-type ConnectedProps = {| region: $Keys<typeof regions> | null |};
-type OwnProps = {
-  userId: string, // eslint-disable-line react/no-unused-prop-types
+type Props = {
+  // eslint-disable-next-line react/no-unused-prop-types
+  userId: string,
   classes: { title: string },
 };
 
@@ -23,18 +19,7 @@ const styles = {
     marginRight: 4,
   },
 };
-
-function Region(props: OwnProps & ConnectedProps) {
-  return (
-    <span>
-      <span className={props.classes.title}>Region:</span>
-
-      {props.region === null ? '' : regions[props.region].fullName}
-    </span>
-  );
-}
-
-const makeMapStateToProps = (): MapStateToProps<State, OwnProps, ConnectedProps> => {
+const makeMapState = () => {
   const getRegion = makeGetRegion();
 
   return (state, props) => {
@@ -42,4 +27,16 @@ const makeMapStateToProps = (): MapStateToProps<State, OwnProps, ConnectedProps>
   };
 };
 
-export default injectSheet(styles)(connect(makeMapStateToProps)(Region));
+function Region(props: Props) {
+  const { region } = useMakeMapState(makeMapState, props);
+
+  return (
+    <span>
+      <span className={props.classes.title}>Region:</span>
+
+      {region === null ? '' : regions[region].fullName}
+    </span>
+  );
+}
+
+export default injectSheet(styles)(Region);

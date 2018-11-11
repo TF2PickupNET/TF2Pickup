@@ -5,7 +5,10 @@ module.exports = {
     'henribeck/react',
   ],
 
-  rules: { 'class-methods-use-this': 'off' },
+  rules: {
+    'flowtype/require-compound-type-alias': 'off',
+    'import/group-exports': 'error',
+  },
 
   overrides: [{
     files: ['src/config/maps.js'],

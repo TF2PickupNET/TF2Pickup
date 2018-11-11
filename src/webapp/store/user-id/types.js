@@ -2,10 +2,21 @@
 
 import { type Action } from 'redux';
 
-export type State = string | null;
+type State = string | null;
+type LogoutUserAction = Action<'USER/LOGOUT', {}>;
+type LoginUserAction = Action<'USER/LOGIN', { userId: string }>;
 
-export type Actions = Action<'USER/LOGOUT', {}>
-  | Action<'USER/LOGIN', { userId: string }>;
+type Actions = LogoutUserAction | LoginUserAction;
 
-export const LOGIN_USER = 'USER/LOGIN';
-export const LOGOUT_USER = 'USER/LOGOUT';
+const LOGIN_USER = 'USER/LOGIN';
+const LOGOUT_USER = 'USER/LOGOUT';
+
+export type {
+  LOGIN_USER,
+  LOGOUT_USER,
+
+  State,
+  Actions,
+  LoginUserAction,
+  LogoutUserAction,
+};

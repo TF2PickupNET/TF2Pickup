@@ -3,7 +3,7 @@
 type ETF2LDivisions = 'Open' | 'Low' | 'Mid' | 'High' | 'Prem' | 'N/A';
 type OZFortressDivisions = 'Open' | 'Intermediate' | 'Premier' | 'N/A';
 
-interface UserProfile {
+type UserProfile = {|
   id: string,
   lastUpdate: Date,
   steam: {
@@ -38,7 +38,7 @@ interface UserProfile {
     isBanned: boolean,
     bannedUntil: Date | null,
   },
-}
+|};
 
 export type {
   UserProfile,

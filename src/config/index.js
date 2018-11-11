@@ -1,11 +1,23 @@
 // @flow
 
-export { default as announcers } from './announcers';
-export { default as gamemodes } from './gamemodes';
-export { default as mapPool } from './map-pool';
-export { default as permissions } from './permissions';
-export { default as regions } from './regions';
-export { default as roles } from './roles';
-export { default as socialMedias } from './social-medias';
-export { default as mapTypes } from './config-types';
-export { default as emojiSets } from './emoji-sets';
+import announcers from './announcers';
+import gamemodes from './gamemodes';
+import mapPool from './map-pool';
+import permissions from './permissions';
+import regions from './regions';
+import roles from './roles';
+import socialMedias from './social-medias';
+import mapTypes from './config-types';
+import emojiSets from './emoji-sets';
+
+export {
+  announcers,
+  gamemodes,
+  mapPool,
+  permissions,
+  regions,
+  roles,
+  socialMedias,
+  mapTypes,
+  emojiSets,
+};

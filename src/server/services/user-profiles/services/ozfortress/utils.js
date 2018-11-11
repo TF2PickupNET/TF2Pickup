@@ -1,13 +1,13 @@
 // @flow
 
-export const divs = [
+const divs = [
   'N/A',
   'Open',
   'Intermediate',
   'Premier',
 ];
 
-export function findHighestDiv(rosters: $ReadOnlyArray<{ division: typeof divs }>) {
+function findHighestDiv(rosters: $ReadOnlyArray<{ division: typeof divs }>) {
   return rosters
     .map(roster => roster.division)
     .reduce((highestDiv, currentDiv) => {
@@ -17,3 +17,8 @@ export function findHighestDiv(rosters: $ReadOnlyArray<{ division: typeof divs }
       return highestDivIndex < currentDivIndex ? currentDiv : highestDiv;
     }, 'N/A');
 }
+
+export {
+  findHighestDiv,
+  divs,
+};

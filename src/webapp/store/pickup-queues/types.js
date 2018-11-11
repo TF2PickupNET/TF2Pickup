@@ -6,24 +6,25 @@ import { gamemodes } from '../../../config';
 import { type PickupQueue } from '../../../types/PickupQueue';
 
 type State = { [key: $Keys<typeof gamemodes>]: PickupQueue | null };
-type Actions = Action<'PICKUP-QUEUES/UPDATE', { queue: PickupQueue }>
-  | Action<'PICKUP-QUEUES/FETCHED', {
-      gamemode: $Keys<typeof gamemodes>,
-      queue: PickupQueue,
-    }>
-  | Action<'PICKUP-QUEUES/RESET', {}>;
+
+type UpdatePickupQueue = Action<'PICKUP-QUEUES/UPDATE', { queue: PickupQueue }>;
+type FetchedPickupQueue = Action<'PICKUP-QUEUES/FETCHED', { queue: PickupQueue }>;
+type ResetPickupQueue = Action<'PICKUP-QUEUES/RESET', {}>;
+
+type Actions = UpdatePickupQueue | FetchedPickupQueue | ResetPickupQueue;
 
 const UPDATE_QUEUE = 'PICKUP-QUEUES/UPDATE';
 const FETCHED_QUEUE = 'PICKUP-QUEUES/FETCHED';
 const RESET_QUEUES = 'PICKUP-QUEUES/RESET';
 
 export type {
-  State,
-  Actions,
-};
-
-export {
   UPDATE_QUEUE,
   FETCHED_QUEUE,
   RESET_QUEUES,
+
+  State,
+  Actions,
+  UpdatePickupQueue,
+  FetchedPickupQueue,
+  ResetPickupQueue,
 };

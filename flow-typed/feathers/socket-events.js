@@ -8,60 +8,50 @@ import {
   roles,
 } from '../../src/config';
 
-type Callback = (err: FeathersError) => void;
-type Roles = $Keys<typeof roles>;
+declare type Callback = (err: FeathersError | null) => void;
+declare type Roles = $Keys<typeof roles>;
 
-export interface ClientSocket {
+declare type Events = {
+  'users:complete-sign-up': {},
+  'users:change-region': { region: $Keys<typeof regions> },
+  'users:accept-rules': {},
+  'users:set-name': { name: string },
+  'users:add-role': {
+    role: Roles,
+    userId: string,
+  },
+  'users:remove-role': {
+    role: Roles,
+    userId: string,
+  },
+
+  'user-settings:change-volume': { volume: number },
+
+  'messages:create': {
+    chatId: string,
+    message: string,
+  },
+};
+
+declare interface ClientSocket {
   on('connect', cb: () => void): void,
   on('disconnect', cb: () => void): void,
 
-  emit('users:change-region', data: { region: $Keys<typeof regions> }, cb: Callback): void,
-  emit('users:accept-rules', data: {}, cb: Callback): void,
-  emit('users:set-name', data: { name: string }, cb: Callback): void,
-  emit('users:add-role', data: {
-    role: Roles,
-    userId: string,
-  }, cb: Callback): void,
-  emit('users:remove-role', data: {
-    role: Roles,
-    userId: string,
-  }, cb: Callback): void,
-  emit('users:complete-sign-up', data: {}, cb: Callback): void,
-
-  emit('user-settings:change-volume', data: { volume: number }, cb: Callback): void,
-}
-
-export interface ServerSocket extends SocketConnection {
-  on('users:complete-sign-up', (data: {}, cb: Callback) => void | Promise<void>): void,
-  on(
-    'users:change-region',
-    (data: { region: $Keys<typeof regions> }, cb: Callback) => void | Promise<void>,
-  ): void,
-  on(
-    'users:accept-rules',
-    (data: {}, cb: Callback) => void | Promise<void>,
-  ): void,
-  on(
-    'users:set-name',
-    (data: { name: string }, cb: Callback) => void | Promise<void>,
-  ): void,
-  on(
-    'users:add-role',
-    (data: {
-      userId: string,
-      role: Roles,
-    }, cb: Callback) => void | Promise<void>,
-  ): void,
-  on(
-    'users:remove-role',
-    (data: {
-      userId: string,
-      role: Roles,
-    }, cb: Callback) => void | Promise<void>,
-  ): void,
-
-  on(
-    'user-settings:change-volume',
-    (data: { volume: number }, cb: Callback) => void | Promise<void>,
+  emit<Name: $Keys<Events>>(
+    name: Name,
+    data: $ElementType<Events, Name>,
+    cb: Callback,
   ): void,
 }
+
+declare interface ServerSocket extends SocketConnection {
+  on<Name: $Keys<Events>>(
+    name: Name,
+    handler: (data: $ElementType<Events, Name>, cb: Callback) => void | Promise<void>,
+  ): void,
+}
+
+export type {
+  ServerSocket,
+  ClientSocket,
+};

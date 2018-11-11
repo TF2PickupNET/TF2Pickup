@@ -1,6 +1,9 @@
 // @flow
 
-import React from 'react';
+import React, {
+  useState,
+  useEffect,
+} from 'react';
 import injectSheet from 'react-jss';
 import {
   Spin,
@@ -9,60 +12,55 @@ import {
 import Markdown from 'react-markdown';
 import axios from 'axios';
 
-import { isString } from '../../../utils';
+import useIsMounted from '../../utils/use-is-mounted';
 
 type Props = {
   url: string,
   className: string,
   classes: { container: string },
 };
-type State = { content: string | void };
 
 const styles = { container: { overflow: 'scroll' } };
 const cache = new Map();
 
-class MarkdownView extends React.PureComponent<Props, State> {
-  static defaultProps = { className: '' };
+function MarkdownView(props: Props) {
+  const [content, setContent] = useState<string | null>(null);
+  const isMounted = useIsMounted();
 
-  state = { content: cache.get(this.props.url) };
+  useEffect(async () => {
+    const cachedContent = cache.get(props.url);
 
-  async componentDidMount() {
-    if (!cache.has(this.props.url)) {
-      const { data } = await axios.get(this.props.url);
+    if (cachedContent) {
+      setContent(cachedContent);
+    } else {
+      try {
+        const { data } = await axios.get(props.url);
 
-      cache.set(this.props.url, data);
+        cache.set(props.url, data);
 
-      // eslint-disable-next-line react/no-did-mount-set-state
-      this.setState({ content: data });
+        if (isMounted.current) {
+          setContent(data);
+        }
+      } catch (error) {
+        message.error(`Couldn't load markdown content: ${error.mesasge}`);
+      }
     }
-  }
+  }, [props.url]);
 
-  async fetchContent() {
-    try {
-      const { data } = await axios.get(this.props.url);
-
-      cache.set(this.props.url, data);
-
-      this.setState({ content: data });
-    } catch (error) {
-      message.error(`Couldn't load markdown content: ${error.mesasge}`);
-    }
-  }
-
-  render() {
-    if (isString(this.state.content)) {
-      return (
-        <Markdown
-          source={this.state.content}
-          className={`${this.props.classes.container} ${this.props.className}`}
-        />
-      );
-    }
-
+  if (content === null) {
     return (
       <Spin delay={150} />
     );
   }
+
+  return (
+    <Markdown
+      source={content}
+      className={`${props.classes.container} ${props.className}`}
+    />
+  );
 }
+
+MarkdownView.defaultProps = { className: '' };
 
 export default injectSheet(styles)(MarkdownView);

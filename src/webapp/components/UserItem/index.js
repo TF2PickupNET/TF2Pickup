@@ -1,15 +1,10 @@
 // @flow
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Icon } from 'antd';
 import injectSheet from 'react-jss';
-import {
-  connect,
-  type MapStateToProps,
-} from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { type State } from '../../store';
 import {
   makeGetHighestRole,
   makeGetUserName,
@@ -17,16 +12,10 @@ import {
 import { makeIsFriend } from '../../store/user-profiles/selectors';
 import { fetchUser } from '../../store/users/actions';
 import { roles } from '../../../config';
+import { useMakeMapState } from '../../utils/use-store';
+import useActions from '../../utils/use-actions';
 
-type ConnectedProps = {|
-  name: string | null,
-  isFriend: boolean,
-  // Color prop is being used inside the styles
-  // eslint-disable-next-line react/no-unused-prop-types
-  color: string | null,
-|};
-type DispatchProps = {| fetchUser: (userId: string) => void |};
-type OwnProps = {
+type Props = {
   userId: string,
   className: string,
   classes: {
@@ -43,40 +32,7 @@ const styles = {
 
   friendIcon: { marginRight: '4px' },
 };
-
-class UserItem extends React.PureComponent<OwnProps & ConnectedProps & DispatchProps> {
-  static defaultProps = { className: '' };
-
-  componentDidMount() {
-    if (this.props.name === null) {
-      this.props.fetchUser(this.props.userId);
-    }
-  }
-
-  render() {
-    if (this.props.name === null) {
-      return null;
-    }
-
-    return (
-      <Link
-        to={`/profile/${this.props.userId}`}
-        className={`${this.props.classes.container} ${this.props.className}`}
-      >
-        {this.props.isFriend && (
-          <Icon
-            type="user"
-            className={this.props.classes.friendIcon}
-          />
-        )}
-
-        {this.props.name}
-      </Link>
-    );
-  }
-}
-
-const makeMapStateToProps = (): MapStateToProps<State, OwnProps, ConnectedProps> => {
+const makeMapState = () => {
   const getName = makeGetUserName();
   const isFriend = makeIsFriend();
   const getHighestRole = makeGetHighestRole();
@@ -91,10 +47,40 @@ const makeMapStateToProps = (): MapStateToProps<State, OwnProps, ConnectedProps>
     };
   };
 };
-const mapDispatchToProps = (dispatch): DispatchProps => {
-  return { fetchUser: userId => dispatch(fetchUser(userId)) };
-};
 
-export default connect(makeMapStateToProps, mapDispatchToProps)(
-  injectSheet(styles)(UserItem),
-);
+function UserItem(props: Props) {
+  const {
+    name,
+    color,
+    isFriend,
+  } = useMakeMapState(makeMapState, props);
+  const actions = useActions({ fetchUser });
+
+  useEffect(() => {
+    actions.fetchUser(props.userId);
+  }, [props.userId]);
+
+  if (name === null) {
+    return null;
+  }
+
+  return (
+    <Link
+      to={`/profile/${props.userId}`}
+      className={`${props.classes.container} ${props.className}`}
+    >
+      {isFriend && (
+        <Icon
+          type="user"
+          className={props.classes.friendIcon}
+        />
+      )}
+
+      {name}
+    </Link>
+  );
+}
+
+UserItem.defaultProps = { className: '' };
+
+export default injectSheet(styles)(UserItem);

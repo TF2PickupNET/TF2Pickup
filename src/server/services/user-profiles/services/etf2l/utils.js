@@ -5,7 +5,7 @@ type Match = {
   competition: { type: string },
 };
 
-export const divs = [
+const divs = [
   'N/A',
   'Open',
   'Mid',
@@ -13,7 +13,7 @@ export const divs = [
   'Prem',
 ];
 
-export function normalizeDivisionName(match: Match) {
+function normalizeDivisionName(match: Match) {
   if (/^Division \d/.test(match.division.name)) {
     const level = parseInt(match.division.name.charAt(9), 10);
 
@@ -31,10 +31,16 @@ export function normalizeDivisionName(match: Match) {
   return match.division.name;
 }
 
-export function normalizeGamemodeName(match: Match) {
+function normalizeGamemodeName(match: Match) {
   switch (match.competition.type) {
     case '6on6': return '6v6';
     case 'Highlander': return '9v9';
     default: return match.competition.type;
   }
 }
+
+export {
+  normalizeDivisionName,
+  normalizeGamemodeName,
+  divs,
+};

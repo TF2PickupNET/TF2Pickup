@@ -4,7 +4,8 @@ import {
   type State,
   type Actions,
   CREATE_MESSAGE,
-  FETCHED_MESSAGES, REMOVE_MESSAGE,
+  FETCHED_MESSAGES,
+  UPDATE_MESSAGE,
 } from './types';
 
 export default function reducer(state: State = {}, action: Actions) {
@@ -22,14 +23,16 @@ export default function reducer(state: State = {}, action: Actions) {
         };
       }, {}),
     };
-    case REMOVE_MESSAGE: {
-      const {
-        // eslint-disable-next-line no-unused-vars
-        [action.payload.messageId]: message,
-        ...rest
-      } = state;
+    case UPDATE_MESSAGE: {
+      const { _id } = action.payload.message;
 
-      return rest;
+      return {
+        ...state,
+        [_id]: {
+          ...state[_id],
+          ...action.payload.message,
+        },
+      };
     }
     default: return state;
   }

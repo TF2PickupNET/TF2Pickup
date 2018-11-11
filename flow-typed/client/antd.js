@@ -19,6 +19,7 @@ declare module 'antd' {
 
   declare type Sizes = 'large' | 'default' | 'small';
   declare type Theme = 'light' | 'dark';
+  declare type Position = 'top' | 'bottom' | 'left' | 'right';
 
   declare export class Row extends React$Component<{|
     align?: 'top' | 'middle' | 'bottom',
@@ -42,7 +43,7 @@ declare module 'antd' {
   declare export class Progress extends React$Component<{|
     format?: (percent: number, successPercentage: number) => string,
     gapDegree?: number,
-    gapPosition?: 'top' | 'bottom' | 'left' | 'right',
+    gapPosition?: Position,
     percent: number,
     showInfo?: boolean,
     status?: 'success' | 'exception' | 'active',
@@ -86,7 +87,7 @@ declare module 'antd' {
     size?: Sizes,
     target?: string,
     type?: 'primary' | 'ghost' | 'dashed' | 'danger',
-    onClick: (ev: HTMLElement) => void,
+    onClick: (ev: HTMLElement) => void | Promise<void>,
     children: Node,
     className?: string,
   |}> {}
@@ -120,7 +121,7 @@ declare module 'antd' {
       tab: Node,
     }>,
     type?: 'inner',
-    onTabChange?: (tab: string) => void,
+    onTabChange?: (tab: string) => void | Promise<void>,
     title?: string | Node,
     children: Node,
   |}> {
@@ -157,7 +158,7 @@ declare module 'antd' {
     size?: Sizes,
     value: string | null,
     children: Node,
-    onChange: (ev: SyntheticInputEvent<HTMLInputElement>) => void,
+    onChange: (ev: SyntheticInputEvent<HTMLInputElement>) => void | Promise<void>,
     buttonStyle?: 'outline' | 'solid',
     options?: $ReadOnlyArray<string> | $ReadOnlyArray<{
       label: string,
@@ -198,7 +199,7 @@ declare module 'antd' {
     trigger?: Element<ElementType>,
     width?: number,
     children: Node,
-    onCollapse?: (collapsed: boolean) => void,
+    onCollapse?: (collapsed: boolean) => void | Promise<void>,
   |}> {}
 
   declare export class Layout extends React$Component<{|
@@ -261,18 +262,18 @@ declare module 'antd' {
       item: Node,
       key: string,
       keyPath: string,
-    }) => void,
+    }) => void | Promise<void>,
     onDeselect?: ({
       item: Node,
       key: string,
       selectedKeys: $ReadOnlyArray<string>,
-    }) => void,
-    onOpenChange?: (openKeys: $ReadOnlyArray<string>) => void,
+    }) => void | Promise<void>,
+    onOpenChange?: (openKeys: $ReadOnlyArray<string>) => void | Promise<void>,
     onSelect?: ({
       item: Node,
       key: string,
       selectedKeys: $ReadOnlyArray<string>,
-    }) => void,
+    }) => void | Promise<void>,
     children: ChildrenArray<Element<MenuItem | MenuItemGroup | Divider>>,
   |}> {
     static Item: Class<MenuItem>,
@@ -281,7 +282,7 @@ declare module 'antd' {
   }
 
   declare export class Alert extends React$Component<{|
-    afterClose?: () => void,
+    afterClose?: () => void | Promise<void>,
     banner?: boolean,
     closable?: boolean,
     closeText?: Node,
@@ -290,7 +291,7 @@ declare module 'antd' {
     message: Node,
     showIcon?: boolean,
     type?: 'success' | 'info' | 'warning' | 'error',
-    onClose?: () => void,
+    onClose?: () => void | Promise<void>,
   |}> {}
 
   declare type NotificationPlacements = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
@@ -304,7 +305,7 @@ declare module 'antd' {
     key: string,
     message: Node,
     placement?: NotificationPlacements,
-    onClose?: () => void,
+    onClose?: () => void | Promise<void>,
   |};
 
   declare export class notification {
@@ -339,8 +340,8 @@ declare module 'antd' {
     tipFormatter?: (value: number) => Node | null,
     value: number | [number, number],
     vertical?: boolean,
-    onAfterChange?: (value: number) => void,
-    onChange: (value: number) => void,
+    onAfterChange?: (value: number) => void | Promise<void>,
+    onChange: (value: number) => void | Promise<void>,
     marks?: { number: Node } | {
       number: {
         style: {},
@@ -356,14 +357,14 @@ declare module 'antd' {
   |}> {}
 
   declare export class Tag extends React$Component<{|
-    afterClose?: () => void,
+    afterClose?: () => void | Promise<void>,
     closable?: boolean,
     color?: string,
     children: Node,
-    onClose?: () => void,
+    onClose?: () => void | Promise<void>,
     visible?: boolean,
     className?: string,
-    onClick?: () => void,
+    onClick?: () => void | Promise<void>,
   |}> {}
 
   declare class SelectOption extends React$Component<{|
@@ -398,16 +399,16 @@ declare module 'antd' {
     size?: Sizes,
     tokenSeparators?: $ReadOnlyArray<string>,
     value?: string | $ReadOnlyArray<string>,
-    onBlur?: () => void,
-    onChange?: (value: string) => void,
-    onDeselect?: (value: string) => void,
-    onFocus?: () => void,
-    onInputKeyDown?: () => void,
-    onMouseEnter?: () => void,
-    onMouseLeave?: () => void,
-    onPopupScroll?: () => void,
-    onSearch?: (input: string) => void,
-    onSelect?: (value: string) => void,
+    onBlur?: () => void | Promise<void>,
+    onChange?: (value: string) => void | Promise<void>,
+    onDeselect?: (value: string) => void | Promise<void>,
+    onFocus?: () => void | Promise<void>,
+    onInputKeyDown?: () => void | Promise<void>,
+    onMouseEnter?: () => void | Promise<void>,
+    onMouseLeave?: () => void | Promise<void>,
+    onPopupScroll?: () => void | Promise<void>,
+    onSearch?: (input: string) => void | Promise<void>,
+    onSelect?: (value: string) => void | Promise<void>,
     className?: string,
   |}> {
     static Option: Class<SelectOption>,
@@ -434,5 +435,34 @@ declare module 'antd' {
     renderItem: (item: T) => Node,
   }> {
     static Item: Class<ListItem>,
+  }
+
+  declare class TabPane extends React$Component<{
+    forceRender?: boolean,
+    tab: Node,
+  }> {}
+
+  declare export class Tabs extends React$Component<{
+    activeKey: string,
+    animated?: boolean | {
+      inkBar?: boolean,
+      tabPane?: boolean,
+    },
+    renderTabBar?: () => Node,
+    defaultActiveKey?: string,
+    hideAdd?: boolean,
+    size?: Sizes,
+    tabBarExtraContent?: Node,
+    tabBarGutter?: number,
+    className?: string,
+    tabPosition?: Position,
+    type?: 'line' | 'card' | 'editable-card',
+    onChange?: (activeKey: string) => void,
+    onEdit?: (target: string) => void,
+    onNextClick?: () => void,
+    onPrevClick?: () => void,
+    onTabClick?: (tab: string) => void,
+  }> {
+    static TabPane: Class<TabPane>,
   }
 }

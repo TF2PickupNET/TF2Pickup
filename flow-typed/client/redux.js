@@ -8,9 +8,14 @@ declare module 'redux' {
     payload: Payload,
   }
 
-  declare export type Dispatch<A = Action<>> = (action: A) => void;
+  declare export type AsyncAction<State> = (
+    dispatch: <T, P>(action: Action<T, P> | AsyncAction<State>) => void,
+    getState: () => State,
+  ) => void | Promise<void>;
 
-  declare export type DispatchAsync<A = Action<>> = (action: AsyncAction<{}, A>) => void;
+  declare export type Dispatch<Actions = Action<>, State = {}> = (
+    action: Actions | AsyncAction<Actions, State>,
+  ) => void;
 
   declare export type Reducer<State, Actions> = (
     state: State | void,
@@ -26,14 +31,14 @@ declare module 'redux' {
 
   declare export interface Store<State> {
     getState(): State,
-    dispatch<T, A>(action: Action<T, A>): void,
+    dispatch<T, P, Actions>(action: Action<T, P> | AsyncAction<State, Actions>): void,
     subscribe(listener: () => void): () => void,
     nextReducer(reducer: Reducer<State, Action<>>): void,
   }
 
   declare export type CombinedReducer<S, A> = (state: $Shape<S> & {} | void, action: A) => S;
 
-  declare export function combineReducers<O: {}, CA>(
+  declare export function combineReducers<O: {}, CA: Action<>>(
     reducers: O
   ): CombinedReducer<$ObjMap<O, <S, A>(r: Reducer<S, A>) => S>, CA>;
 

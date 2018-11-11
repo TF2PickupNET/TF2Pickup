@@ -8,7 +8,10 @@ import { type ServerApp } from '@feathersjs/feathers';
 import { type SocketConnection } from '@feathersjs/socketio';
 import debug from 'debug';
 
-import { type Message } from '../../../../types/Message';
+type Data = {
+  chatId: string,
+  message: string,
+};
 
 const log = debug('TF2Pickup:messages:on-create-message');
 
@@ -16,7 +19,7 @@ export default function onCreateMessage(app: ServerApp, connection: SocketConnec
   const messages = app.service('messages');
   const chats = app.service('chats');
 
-  return async (data: Message, cb: (error: Error | null) => void) => {
+  return async (data: Data, cb: (error: Error | null) => void) => {
     const { user } = connection.feathers;
 
     if (!user) {
@@ -32,14 +35,14 @@ export default function onCreateMessage(app: ServerApp, connection: SocketConnec
 
       const message = await messages.create(data);
 
-      log('Created new message', {
+      log('Created a new message', {
         userId: user.id,
         data: { message },
       });
 
       return cb(null);
     } catch (error) {
-      log('Error while creating new message', {
+      log('Error while creating a new message', {
         userId: user.id,
         data,
         error,

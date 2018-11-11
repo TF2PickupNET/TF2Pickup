@@ -1,22 +1,20 @@
 // @flow
 
 import React from 'react';
-import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import { getCurrentUserId } from '../../store/user-id/selectors';
+import { useMapState } from '../../utils/use-store';
 import { type State } from '../../store';
 
-type Props = { userId: string | null };
-
-function ProfileRedirect(props: Props) {
-  return (
-    <Redirect to={props.userId === null ? '/' : `/profile/${props.userId}`} />
-  );
-}
-
-const mapStateToProps = (state: State): $Shape<Props> => {
+const mapState = (state: State) => {
   return { userId: getCurrentUserId(state) };
 };
 
-export default connect(mapStateToProps)(ProfileRedirect);
+export default function ProfileRedirect() {
+  const { userId } = useMapState(mapState);
+
+  return (
+    <Redirect to={userId === null ? '/' : `/profile/${userId}`} />
+  );
+}

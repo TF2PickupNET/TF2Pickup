@@ -1,101 +1,79 @@
 // @flow
 
-import React from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import {
-  message,
   Slider,
   Button,
 } from 'antd';
-import { connect } from 'react-redux';
 import injectSheet from 'react-jss';
 
-import app from '../../app';
 import playSound from '../../utils/play-sound';
 import { getVolume } from '../../store/settings/selectors';
-import { type State } from '../../store';
+import { useMapState } from '../../utils/use-store';
+import { updateVolume } from '../../store/settings/actions';
 
-type ConnectedProps = {| volume: number |};
-type OwnProps = {
-  className: string,
-  classes: { slider: string },
-  registerSaveHandler: (func: () => void) => void,
-  addUpdatedField: (name: string) => void,
-  removeUpdatedField: (name: string) => void,
+type Props = {
+  classes: {
+    container: string,
+    slider: string,
+  },
 };
-type LocalState = { volume: number };
 
-const styles = { slider: { marginTop: 50 } };
+const styles = {
+  container: { padding: 16 },
+  slider: { marginTop: 50 },
+};
 
-class VolumeSetting extends React.PureComponent<ConnectedProps & OwnProps, LocalState> {
-  static FIELD_NAME = 'volume';
-
-  state = { volume: this.props.volume };
-
-  constructor(props: OwnProps & ConnectedProps) {
-    super(props);
-
-    props.registerSaveHandler(this.handleSave);
-  }
-
-  handleSave = () => {
-    if (this.state.volume === this.props.volume) {
-      return;
-    }
-
-    app.io.emit('user-settings:change-volume', { volume: this.state.volume }, (err) => {
-      console.log(err);
-
-      if (err) {
-        message.error(`Couldn't change your volume. ${err.message}`);
-      } else {
-        this.props.removeUpdatedField(VolumeSetting.FIELD_NAME);
-      }
-    });
-  };
-
-  handleChange = (value: number) => {
-    if (value === this.props.volume) {
-      this.props.removeUpdatedField(VolumeSetting.FIELD_NAME);
-    } else {
-      this.props.addUpdatedField(VolumeSetting.FIELD_NAME);
-    }
-
-    this.setState({ volume: value });
-  };
-
-  handleTestClick = () => {
-    playSound('notification', { volume: this.state.volume });
-  };
-
-  render() {
-    return (
-      <React.Fragment>
-        <div className={this.props.className}>
-          <h3>
-            Volume
-          </h3>
-
-          <Slider
-            value={this.state.volume}
-            min={0}
-            max={100}
-            className={this.props.classes.slider}
-            onChange={this.handleChange}
-          />
-
-          <Button onClick={this.handleTestClick}>
-            Test Volume
-          </Button>
-        </div>
-      </React.Fragment>
-    );
-  }
-}
-
-const mapStateToProps = (state: State): ConnectedProps => {
+const mapState = (state) => {
   return { volume: getVolume(state) };
 };
 
-export default injectSheet(styles)(
-  connect(mapStateToProps)(VolumeSetting)
-);
+function VolumeSetting(props: Props) {
+  const { volume } = useMapState(mapState);
+  const [selectedVolume, setSelectedVolume] = useState(volume);
+  const handleTestClick = useCallback(
+    () => playSound('notification', { volume: selectedVolume }),
+    [selectedVolume],
+  );
+  const handleChange = useCallback((value: number) => {
+    setSelectedVolume(value);
+  }, []);
+  const handleAfterChange = useCallback(() => {
+    if (selectedVolume !== volume) {
+      updateVolume(selectedVolume);
+    }
+  }, [selectedVolume]);
+
+  useEffect(() => {
+    if (volume !== selectedVolume) {
+      setSelectedVolume(volume);
+    }
+  }, [volume]);
+
+  return (
+    <div className={props.classes.container}>
+      <h3>
+          Volume
+      </h3>
+
+      <Slider
+        value={selectedVolume}
+        min={0}
+        max={100}
+        className={props.classes.slider}
+        onChange={handleChange}
+        onAfterChange={handleAfterChange}
+      />
+
+      <Button onClick={handleTestClick}>
+          Test Volume
+      </Button>
+    </div>
+  );
+}
+
+export default injectSheet(styles)(VolumeSetting);

@@ -1,24 +1,35 @@
 // @flow
 
-import { type ClientApp } from '@feathersjs/feathers';
-import { type Dispatch } from 'redux';
+import { type AsyncAction } from 'redux';
 
 import { type UserProfile } from '../../../types/UserProfile';
+import app from '../../app';
 
 import { type State } from '..';
 
 import {
   ADD_PROFILE,
   UPDATE_PROFILE,
-  type Actions,
+  type UpdateProfileAction,
+  type AddProfileAction,
 } from './types';
 
-export function fetchProfile(userId: string) {
-  return async (
-    dispatch: Dispatch<Actions>,
-    getState: () => State,
-    app: ClientApp,
-  ) => {
+function addProfile(profile: UserProfile): AddProfileAction {
+  return {
+    type: ADD_PROFILE,
+    payload: { profile },
+  };
+}
+
+function updateProfile(profile: UserProfile): UpdateProfileAction {
+  return {
+    type: UPDATE_PROFILE,
+    payload: { profile },
+  };
+}
+
+function fetchProfile(userId: string): AsyncAction<State> {
+  return async (dispatch, getState) => {
     try {
       const profiles = getState().userProfiles;
 
@@ -28,19 +39,15 @@ export function fetchProfile(userId: string) {
 
       const profile = await app.service('user-profiles').get(userId);
 
-      dispatch({
-        type: ADD_PROFILE,
-        payload: { profile },
-      });
+      dispatch(addProfile(profile));
     } catch (error) {
       console.log('Couldn\'t fetch user-profiles for user', userId, error);
     }
   };
 }
 
-export function updateProfile(profile: UserProfile) {
-  return {
-    type: UPDATE_PROFILE,
-    payload: { profile },
-  };
-}
+export {
+  updateProfile,
+  addProfile,
+  fetchProfile,
+};

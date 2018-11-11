@@ -21,9 +21,15 @@ export default function reducer(state: State = defaultState, action: Actions) {
   switch (action.type) {
     case RESET_QUEUES: return defaultState;
     case FETCHED_QUEUE: {
+      const { gamemode } = action.payload.queue;
+
+      if (state[gamemode]) {
+        return state;
+      }
+
       return {
         ...state,
-        [action.payload.gamemode]: action.payload.queue,
+        [gamemode]: action.payload.queue,
       };
     }
     case UPDATE_QUEUE: {

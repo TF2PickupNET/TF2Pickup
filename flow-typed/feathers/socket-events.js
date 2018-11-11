@@ -31,6 +31,13 @@ declare type Events = {
     chatId: string,
     message: string,
   },
+
+  'warnings:add-warning': {
+    for: string,
+    message: string,
+  },
+
+  'warnings:read-warning': { id: string },
 };
 
 declare interface ClientSocket {

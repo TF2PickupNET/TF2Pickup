@@ -4,8 +4,6 @@ import { type ClientApp } from '@feathersjs/feathers';
 
 import store from '..';
 
-import playSound from '../../utils/play-sound';
-
 import {
   addWarning,
   updateWarning,

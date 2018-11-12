@@ -14,12 +14,12 @@ import { type PickupQueue } from '../../src/types/PickupQueue';
 import { type PickupPlayer } from '../../src/types/PickupPlayer';
 import { type Chat } from '../../src/types/Chat';
 import { type Message } from '../../src/types/Message';
+import { type Warning } from '../../src/types/Warning';
 
 import {
   type ClientSocket,
   type ServerSocket,
 } from './socket-events';
-import type { Warning } from '../../src/types/Warning';
 
 declare module '@feathersjs/feathers' {
   declare export type SKIP = Symbol;

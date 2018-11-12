@@ -33,6 +33,7 @@ const warningsCreate: Permission = [
   minLevel(roles.admin.level),
   (currentUser, targetUser) => targetUser !== null && targetUser.level < roles.admin.level,
 ];
+const warningsSee = [minLevel(roles.admin.level)];
 
 const permissions = {
   'user.change-role': changeUsersRole,
@@ -45,7 +46,9 @@ const permissions = {
   'server.configure': configureServer,
   'server.see-rcon': seeRCON,
   'announcers.use-all': useAllAnnouncers,
+
   'warnings.create': warningsCreate,
+  'warnings.see': warningsSee,
 };
 
 export default permissions;

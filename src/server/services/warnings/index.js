@@ -6,6 +6,7 @@ import debug from 'debug';
 
 import Model from './Model';
 import events from './events';
+import hooks from './hooks';
 
 const log = debug('TF2Pickup:users');
 
@@ -17,6 +18,7 @@ export default function warnings(app: App) {
   app
     .configure(events)
     .service('warnings')
+    .hooks(hooks)
     .publish('created', (data) => {
       const connections = app.channel('authenticated');
 

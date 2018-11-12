@@ -14,20 +14,23 @@ import { type Warning } from '../../../types/Warning';
 
 export default {
   before: {
-    find(hook: FindBeforeHookContext<Warning>) {
-      if (!isString(hook.params.query.for)) {
+    async find(hook: FindBeforeHookContext<Warning>) {
+      const {
+        user: currentUser,
+        query,
+      } = hook.params;
+
+      if (!isString(query.for)) {
         throw new BadRequest();
       }
 
-      if (!hook.params.user) {
+      if (!currentUser) {
         throw new NotAuthenticated();
       }
 
-      if (hook.params.user.id === hook.params.query.for) {
-        return hook;
-      }
+      const user = await hook.app.service('users').get(query.for);
 
-      if (hasPermission('warnings.see', hook.params.user)) {
+      if (hasPermission('warnings.see', currentUser, user)) {
         return hook;
       }
 

@@ -33,7 +33,15 @@ const warningsCreate: Permission = [
   minLevel(roles.admin.level),
   (currentUser, targetUser) => targetUser !== null && targetUser.level < roles.admin.level,
 ];
-const warningsSee = [minLevel(roles.admin.level)];
+const warningsSee: Permission = [
+  (currentUser, targetUser) => {
+    if (targetUser === null) {
+      return false;
+    }
+
+    return minLevel(roles.admin.level)(currentUser) || targetUser.id === currentUser.id;
+  },
+];
 
 const permissions = {
   'user.change-role': changeUsersRole,

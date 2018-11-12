@@ -31,7 +31,7 @@ function addUser(user: User): AddUserAction {
   };
 }
 
-function fetchUser(userId: string): AsyncAction<State> {
+function fetchUser(userId: string, cb?: (err: Error | null) => void): AsyncAction<State> {
   return async (dispatch, getState) => {
     if (makeGetUserById()(getState(), userId) !== null) {
       return;
@@ -41,8 +41,16 @@ function fetchUser(userId: string): AsyncAction<State> {
       const user = await app.service('users').get(userId);
 
       dispatch(addUser(user));
+
+      if (cb) {
+        cb(null);
+      }
     } catch (error) {
       console.error('Error while fetching a userId', userId, error.message);
+
+      if (cb) {
+        cb(error);
+      }
     }
   };
 }

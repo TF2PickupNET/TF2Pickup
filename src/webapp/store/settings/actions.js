@@ -8,6 +8,8 @@ import app from '../../app';
 
 import { type State } from '..';
 
+import { getCurrentUserId } from '../user-id/selectors';
+
 import {
   SET_SETTINGS,
   UPDATE_SETTINGS,
@@ -44,17 +46,33 @@ function updateVolume(volume: number): Promise<void> {
   });
 }
 
-function fetchSettings(): AsyncAction<State> {
+function fetchSettings(cb?: (error: Error | null) => void): AsyncAction<State> {
   return async (dispatch, getState) => {
-    const userId = getState().userId;
+    const userId = getCurrentUserId(getState());
 
     if (userId === null) {
+      if (cb) {
+        cb(null);
+      }
+
       return;
     }
 
-    const settings = await app.service('user-settings').get(userId);
+    try {
+      const settings = await app.service('user-settings').get(userId);
 
-    dispatch(setSettings(settings));
+      dispatch(setSettings(settings));
+
+      if (cb) {
+        cb(null);
+      }
+    } catch (error) {
+      message.error(`Error while fetching settings: ${error.message}`);
+
+      if (cb) {
+        cb(error);
+      }
+    }
   };
 }
 

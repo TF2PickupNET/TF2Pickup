@@ -14,6 +14,7 @@ import { type PickupQueue } from '../../src/types/PickupQueue';
 import { type PickupPlayer } from '../../src/types/PickupPlayer';
 import { type Chat } from '../../src/types/Chat';
 import { type Message } from '../../src/types/Message';
+import { type Warning } from '../../src/types/Warning';
 
 import {
   type ClientSocket,
@@ -193,6 +194,7 @@ declare module '@feathersjs/feathers' {
     service(path: 'pickup-players'): Service<PickupPlayer>,
     service(path: 'chats'): Service<Chat>,
     service(path: 'messages'): Service<Message>,
+    service(path: 'warnings'): Service<Warning>,
     configure(cb: (app: App) => void): App,
     set<V>(name: string, value: V): App,
     get<V>(name: string): V,

@@ -1,6 +1,7 @@
 // @flow
 
 type Warning = {|
+  _id: string,
   from: string,
   for: string,
   message: string,

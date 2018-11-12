@@ -19,6 +19,7 @@ import {
   type ClientSocket,
   type ServerSocket,
 } from './socket-events';
+import type { Warning } from '../../src/types/Warning';
 
 declare module '@feathersjs/feathers' {
   declare export type SKIP = Symbol;
@@ -193,6 +194,7 @@ declare module '@feathersjs/feathers' {
     service(path: 'pickup-players'): Service<PickupPlayer>,
     service(path: 'chats'): Service<Chat>,
     service(path: 'messages'): Service<Message>,
+    service(path: 'warnings'): Service<Warning>,
     configure(cb: (app: App) => void): App,
     set<V>(name: string, value: V): App,
     get<V>(name: string): V,

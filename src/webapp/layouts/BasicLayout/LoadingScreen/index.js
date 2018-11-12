@@ -14,14 +14,6 @@ import {
 } from 'antd';
 import Helmet from 'react-helmet';
 
-import {
-  getCurrentUser,
-  getCurrentUserId,
-} from '../../../store/user-id/selectors';
-import { getSettings } from '../../../store/settings/selectors';
-import { makeGetProfileById } from '../../../store/user-profiles/selectors';
-import { useMakeMapState } from '../../../utils/use-store';
-
 import steps from './steps';
 
 type Props = {
@@ -38,29 +30,13 @@ const styles = {
   text: { textAlign: 'center' },
 };
 
-const makeMapState = () => {
-  const getProfileById = makeGetProfileById();
-
-  return (state) => {
-    const userId = getCurrentUserId(state);
-
-    return {
-      userId,
-      config: state.config !== null,
-      user: getCurrentUser(state) !== null,
-      settings: getSettings(state) !== null,
-      profile: getProfileById(state, userId) !== null,
-    };
-  };
-};
-
-function LoadingScreen(props: Props) {
+function useStepper() {
   const [currentStep, setCurrentStep] = useState<$Keys<typeof steps>>('load-configuration');
   const [isFinished, setIsFinished] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const state = useMakeMapState(makeMapState);
+  const [err, setError] = useState(null);
 
-  const handleTransitionEnd = useCallback(() => {
+  const nextStep = useCallback(() => {
     if (steps[currentStep].next === null) {
       setIsLoading(false);
     } else {
@@ -69,17 +45,39 @@ function LoadingScreen(props: Props) {
     }
   }, [currentStep]);
 
-  useEffect(() => {
-    // $FlowFixMe
-    steps[currentStep].handler(state);
+  useEffect(async () => {
+    if (currentStep === null) {
+      return;
+    }
+
+    try {
+      await steps[currentStep].handler();
+
+      setIsFinished(true);
+    } catch (error) {
+      setError(error);
+    }
   }, [currentStep]);
 
-  useEffect(() => {
-    if (steps[currentStep].isFinished(state)) {
-      setIsFinished(true);
-    }
-  }, [props, currentStep, state]);
+  return {
+    currentStep,
+    isFinished,
+    isLoading,
+    err,
+    nextStep,
+  };
+}
 
+function LoadingScreen(props: Props) {
+  const {
+    currentStep,
+    isFinished,
+    isLoading,
+    err,
+    nextStep,
+  } = useStepper();
+
+  const handleTransitionEnd = useCallback(() => nextStep(), [nextStep]);
   const percentage = isFinished ? steps[currentStep].end : steps[currentStep].start;
 
   if (isLoading) {
@@ -101,7 +99,7 @@ function LoadingScreen(props: Props) {
         >
           <Progress
             percent={percentage}
-            status="active"
+            status={err ? 'exception' : 'active'}
             onTransitionEnd={handleTransitionEnd}
           />
 

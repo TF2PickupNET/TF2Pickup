@@ -39,7 +39,7 @@ const warningsSee: Permission = [
       return false;
     }
 
-    return minLevel(roles.admin.level)(currentUser) || targetUser.id === currentUser.id;
+    return minLevel(roles.admin.level)(currentUser, targetUser) || targetUser.id === currentUser.id;
   },
 ];
 

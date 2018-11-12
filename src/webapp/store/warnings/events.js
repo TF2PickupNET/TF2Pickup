@@ -4,6 +4,8 @@ import { type ClientApp } from '@feathersjs/feathers';
 
 import store from '..';
 
+import playSound from '../../utils/play-sound';
+
 import {
   addWarning,
   updateWarning,
@@ -18,6 +20,8 @@ export default function events() {
       })
       .on('created', (warning) => {
         store.dispatch(addWarning(warning));
+
+        playSound('notification');
       });
   };
 }

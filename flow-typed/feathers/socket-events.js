@@ -32,12 +32,12 @@ declare type Events = {
     message: string,
   },
 
-  'warnings:add-warning': {
+  'warnings:create': {
     for: string,
     message: string,
   },
 
-  'warnings:read-warning': { id: string },
+  'warnings:read': { id: string },
 };
 
 declare interface ClientSocket {

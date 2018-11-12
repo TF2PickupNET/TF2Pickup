@@ -29,6 +29,10 @@ const reserveServer: Permission = [minLevel(roles.admin.level)];
 const configureServer: Permission = [minLevel(roles.admin.level)];
 const seeRCON: Permission = [minLevel(roles.admin.level)];
 const useAllAnnouncers: Permission = [minLevel(roles.honoraryUser.level)];
+const warningsCreate: Permission = [
+  minLevel(roles.admin.level),
+  (currentUser, targetUser) => targetUser !== null && targetUser.level < roles.admin.level,
+];
 
 const permissions = {
   'user.change-role': changeUsersRole,
@@ -41,6 +45,7 @@ const permissions = {
   'server.configure': configureServer,
   'server.see-rcon': seeRCON,
   'announcers.use-all': useAllAnnouncers,
+  'warnings.create': warningsCreate,
 };
 
 export default permissions;

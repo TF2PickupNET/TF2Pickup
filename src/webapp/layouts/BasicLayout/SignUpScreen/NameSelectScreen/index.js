@@ -5,43 +5,25 @@ import React, {
   useCallback,
   useEffect,
 } from 'react';
-import { createSelector } from 'reselect';
 import {
   Row,
   Button,
   Radio,
+  message,
 } from 'antd';
 
-import { regions } from '../../../../../config';
-import { makeGetProfileById } from '../../../../store/user-profiles/selectors';
 import { getCurrentUserId } from '../../../../store/user-id/selectors';
 import { makeGetRegion } from '../../../../store/users/selectors';
 import { useMakeMapState } from '../../../../utils/use-store';
 import useAsync from '../../../../utils/use-async';
 import { setName } from '../../../../store/users/actions';
+import { makeGetNames } from '../../../../store/user-profiles/selectors';
 
 const { Group } = Radio;
 
 const makeMapState = () => {
   const getRegion = makeGetRegion();
-  const getNames = createSelector(
-    makeGetProfileById(),
-    profile => Object
-      .keys(regions)
-      // $FlowFixMe: For some reason flow throws an error here
-      .filter(name => Boolean(profile[regions[name].service]))
-      .map((name) => {
-        const service = regions[name].service;
-
-        return {
-          service,
-          region: name,
-          display: regions[name].fullName,
-          // $FlowFixMe: For some reason flow throws an error here
-          name: profile[service].name,
-        };
-      }),
-  );
+  const getNames = makeGetNames();
 
   return (state) => {
     const userId = getCurrentUserId(state);
@@ -53,41 +35,63 @@ const makeMapState = () => {
   };
 };
 
-function NameSelectScreen() {
+function useSelectName() {
+  const [selectedName, setSelectedName] = useState(null);
   const {
     names,
     region,
   } = useMakeMapState(makeMapState);
-  const [selectedName, setSelectedName] = useState(null);
+  const onSubmit = useCallback(() => {
+    if (selectedName === null) {
+      message.error('Please select a name first!');
+
+      return Promise.resolve();
+    }
+
+    return setName(selectedName);
+  }, [selectedName]);
   const {
     isLoading,
-    run: handleClick,
-  } = useAsync(
-    useCallback(
-      () => (selectedName === null ? Promise.resolve() : setName(selectedName)),
-      [selectedName],
-    ),
-  );
-  const handleRadioChange = useCallback(
+    run: handleSubmit,
+  } = useAsync(onSubmit);
+  const handleChange = useCallback(
     (ev: SyntheticInputEvent<HTMLInputElement>) => setSelectedName(ev.target.value),
     [],
   );
 
   useEffect(() => {
-    if (selectedName === null) {
-      const regionName = names.find(nameInfo => nameInfo.region === region);
+    if (selectedName === null && region !== null) {
+      const regionName = names.find(name => name.region === region);
 
       if (regionName) {
         setSelectedName(regionName.name);
       }
     }
-  }, [region]);
+  }, [region, selectedName]);
+
+  return {
+    selectedName,
+    handleChange,
+    names,
+    isLoading,
+    handleSubmit,
+  };
+}
+
+function NameSelectScreen() {
+  const {
+    selectedName,
+    handleChange,
+    names,
+    isLoading,
+    handleSubmit,
+  } = useSelectName();
 
   return (
     <React.Fragment>
       <Group
         value={selectedName}
-        onChange={handleRadioChange}
+        onChange={handleChange}
       >
         {names.map(nameInfo => (
           <Radio
@@ -106,7 +110,7 @@ function NameSelectScreen() {
       >
         <Button
           loading={isLoading}
-          onClick={handleClick}
+          onClick={handleSubmit}
         >
           Select Name
         </Button>

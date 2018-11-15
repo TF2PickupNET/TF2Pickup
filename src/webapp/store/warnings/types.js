@@ -14,10 +14,13 @@ const ADD_WARNING = 'WARNINGS/ADD';
 const UPDATE_WARNING = 'WARNINGS/UPDATE';
 
 export type {
-  ADD_WARNING,
-  UPDATE_WARNING,
   State,
   Actions,
   UpdateWarningAction,
   AddWarningAction,
+};
+
+export {
+  ADD_WARNING,
+  UPDATE_WARNING,
 };

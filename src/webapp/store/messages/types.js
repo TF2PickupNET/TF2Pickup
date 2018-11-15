@@ -17,13 +17,15 @@ const FETCHED_MESSAGES = 'MESSAGES/FETCHED';
 const UPDATE_MESSAGE = 'MESSAGES/UPDATE';
 
 export type {
-  CREATE_MESSAGE,
-  FETCHED_MESSAGES,
-  UPDATE_MESSAGE,
-
   State,
   Actions,
   CreateMessageAction,
   FetchedMessagesAction,
   UpdateMessageAction,
+};
+
+export {
+  CREATE_MESSAGE,
+  FETCHED_MESSAGES,
+  UPDATE_MESSAGE,
 };

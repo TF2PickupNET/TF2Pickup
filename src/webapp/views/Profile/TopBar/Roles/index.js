@@ -13,7 +13,7 @@ import {
 import { useMakeMapState } from '../../../../utils/use-store';
 
 import Role from './Role';
-import RoleSelect from './RoleSelect';
+import AddRoleTag from './AddRoleTag';
 
 type Props = {
   userId: string,
@@ -69,7 +69,7 @@ function Roles(props: Props) {
         />
       ))}
 
-      <RoleSelect
+      <AddRoleTag
         userId={props.userId}
         userRoles={userRoles}
         canEditRoles={canEditRoles}

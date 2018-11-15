@@ -1,6 +1,5 @@
 // @flow
 
-import { createContext } from 'react';
 import {
   createStore,
   applyMiddleware,
@@ -18,11 +17,6 @@ const store: Store<State> = createStore(
   composeWithDevTools(middlewares),
 );
 
-const StoreContext = createContext<Store<State>>(store);
-
-export type {
-  StoreContext,
-  State,
-};
+export type { State };
 
 export default store;

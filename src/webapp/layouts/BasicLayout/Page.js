@@ -15,15 +15,15 @@ function Page(props: Props) {
   return (
     <IsConnected>
       <BrowserValidator>
-        <LoadingScreen>
-          <VersionValidator>
-            <IsAuthenticated>
+        <IsAuthenticated>
+          <LoadingScreen>
+            <VersionValidator>
               <SignUpScreen>
                 {props.children}
               </SignUpScreen>
-            </IsAuthenticated>
-          </VersionValidator>
-        </LoadingScreen>
+            </VersionValidator>
+          </LoadingScreen>
+        </IsAuthenticated>
       </BrowserValidator>
     </IsConnected>
   );

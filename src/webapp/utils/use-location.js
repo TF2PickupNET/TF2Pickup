@@ -5,10 +5,8 @@ import {
   useEffect,
   useState,
 } from 'react';
-import {
-  __RouterContext as RouterContext,
-  type Location,
-} from 'react-router-dom';
+import { type Location } from 'react-router-dom';
+import { __RouterContext as RouterContext } from 'react-router';
 
 export default function useLocation(): Location {
   const context = useContext(RouterContext);

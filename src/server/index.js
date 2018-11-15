@@ -2,7 +2,6 @@
 
 import debug from 'debug';
 import config from 'config';
-import PrettyError from 'pretty-error';
 
 import createApp from './create-app';
 
@@ -10,7 +9,6 @@ debug.enable('TF2Pickup*');
 
 const log = debug('TF2Pickup');
 const port: number = config.get('server.port');
-const pe = new PrettyError();
 
 /**
  * Start the server.
@@ -33,7 +31,7 @@ async function startServer() {
 }
 
 process.on('unhandledRejection', (reason) => {
-  log('Unhandled promise rejection', { error: pe.render(reason) });
+  log('Unhandled promise rejection', { error: reason });
 });
 
 startServer();

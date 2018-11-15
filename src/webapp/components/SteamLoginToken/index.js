@@ -16,6 +16,8 @@ function SteamLoginToken() {
   if (token) {
     window.localStorage.setItem('feathers-jwt', token);
 
+    console.log(token);
+
     return (
       <Redirect
         to={{

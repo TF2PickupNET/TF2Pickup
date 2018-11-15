@@ -10,8 +10,8 @@ type Actions = Action<'CONFIG/SET', { config: Config }>;
 const SET_CONFIG = 'CONFIG/SET';
 
 export type {
-  SET_CONFIG,
-
   State,
   Actions,
 };
+
+export { SET_CONFIG };

@@ -6,38 +6,82 @@ import {
 } from 'react';
 import { message } from 'antd';
 
-import app from '../../../app';
+import { socket } from '../../../app';
 
 function useIsConnected() {
   const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    const handleConnect = () => setIsConnected(true);
+    const handleDisconnect = (reason) => {
+      setIsConnected(false);
+
+      switch (reason) {
+        case 'io server disconnect': {
+          message.error('It seems our server just went down :(');
+          break;
+        }
+        case 'io client disconnect': {
+          message.error('You lost the connection to our server');
+          break;
+        }
+        default: console.log(reason);
+      }
+    };
+    const handleReconnect = () => {
+      message.success('Successfully reconnected to our server');
+    };
+
+    socket
+      .on('connect', handleConnect)
+      .on('reconnect', handleReconnect)
+      .on('disconnect', handleDisconnect);
+
+    socket.connect();
+
+    return () => {
+      socket
+        .off('connect', handleConnect)
+        .off('reconnect', handleReconnect)
+        .off('disconnect', handleDisconnect);
+    };
+  }, []);
+
+  return isConnected;
+}
+
+function useIsFirstConnect() {
   const [isFirstConnect, setIsFirstConnect] = useState(true);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setIsFirstConnect(false), 5 * 1000);
-
-    app.io.on('connect', () => {
+    const handleConnect = () => {
+      setIsFirstConnect(false);
+    };
+    const handleConnectError = () => {
       if (isFirstConnect) {
-        setIsFirstConnect(false);
-        clearTimeout(timeout);
+        message.error('Error while connecting to our server');
       } else {
-        message.info('You just connected back to our server!');
+        setIsFirstConnect(false);
       }
+    };
 
-      setIsConnected(true);
-    });
+    socket
+      .on('connect', handleConnect)
+      .on('connect_error', handleConnectError);
 
-    app.io.on('disconnect', () => {
-      message.warn('We lost the connection to our server!');
-      setIsConnected(false);
-    });
+    socket.connect();
 
-    return () => clearTimeout(timeout);
-  }, []);
+    return () => {
+      socket
+        .off('connect', handleConnect)
+        .off('connect_error', handleConnectError);
+    };
+  }, [isFirstConnect]);
 
-  return {
-    isConnected,
-    isFirstConnect,
-  };
+  return isFirstConnect;
 }
 
-export default useIsConnected;
+export {
+  useIsConnected,
+  useIsFirstConnect,
+};

@@ -1,13 +1,7 @@
 // @flow
 
-import React, {
-  type Node,
-  Suspense,
-} from 'react';
-import {
-  Layout,
-  Spin,
-} from 'antd';
+import React, { type Node } from 'react';
+import { Layout } from 'antd';
 import Helmet from 'react-helmet';
 
 import favicon from '../../../../assets/images/favicon.ico';
@@ -40,11 +34,9 @@ function BasicLayout(props: Props) {
         />
       </Helmet>
 
-      <Suspense fallback={<Spin delay={100} />}>
-        <Page>
-          {props.children}
-        </Page>
-      </Suspense>
+      <Page>
+        {props.children}
+      </Page>
     </Layout>
   );
 }

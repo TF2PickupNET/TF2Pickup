@@ -1,13 +1,10 @@
 // @flow
 
 import React, { useCallback } from 'react';
-import {
-  message,
-  Tag,
-} from 'antd';
+import { Tag } from 'antd';
 
 import { roles } from '../../../../../config';
-import app from '../../../../app';
+import { removeRole } from '../../../../store/users/actions';
 
 type Props = {
   role: $Keys<typeof roles>,
@@ -17,15 +14,8 @@ type Props = {
 
 export default function Role(props: Props) {
   const handleRoleRemove = useCallback(() => {
-    app.io.emit('users:remove-role', {
-      role: props.role,
-      userId: props.userId,
-    }, (err) => {
-      if (err) {
-        message.error(`Couldn't remove role from user because: ${err.message}`);
-      }
-    });
-  }, [props.role, props.userId]);
+    removeRole(props.userId, props.role);
+  }, [props.userId, props.role]);
 
   return (
     <Tag

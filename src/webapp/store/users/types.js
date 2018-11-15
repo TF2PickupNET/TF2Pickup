@@ -13,10 +13,13 @@ const UPDATE_USER = 'USERS/UPDATE';
 const ADD_USER = 'USERS/ADD';
 
 export type {
-  UPDATE_USER,
-  ADD_USER,
   State,
   Actions,
   AddUserAction,
   UpdateUserAction,
+};
+
+export {
+  UPDATE_USER,
+  ADD_USER,
 };

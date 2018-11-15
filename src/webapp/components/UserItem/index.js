@@ -68,6 +68,7 @@ function UserItem(props: Props) {
     <Link
       to={`/profile/${props.userId}`}
       className={`${props.classes.container} ${props.className}`}
+      style={{ color }}
     >
       {isFriend && (
         <Icon

@@ -11,7 +11,6 @@ import { getCurrentUserId } from '../../../store/user-id/selectors';
 const steps = {
   'load-configuration': {
     text: 'Loading configuration',
-    start: 0,
     end: 20,
     handler() {
       // eslint-disable-next-line promise/avoid-new
@@ -25,27 +24,25 @@ const steps = {
   },
   'load-user': {
     text: 'Loading user',
-    start: 20,
     end: 40,
     handler() {
       // eslint-disable-next-line promise/avoid-new
       return new Promise<void>((resolve, reject) => {
         const userId = getCurrentUserId(store.getState());
 
-        if (userId !== null) {
+        if (userId === null) {
+          reject(new Error('You are not logged in!'));
+        } else {
           store.dispatch(
             fetchUser(userId, error => (error === null ? resolve() : reject(error))),
           );
         }
-
-        reject(new Error('You are not logged in!'));
       });
     },
     next: 'load-settings',
   },
   'load-settings': {
     text: 'Loading settings',
-    start: 40,
     end: 60,
     handler() {
       // eslint-disable-next-line promise/avoid-new
@@ -59,40 +56,38 @@ const steps = {
   },
   'load-profile': {
     text: 'Loading profile',
-    start: 60,
     end: 80,
     handler() {
       // eslint-disable-next-line promise/avoid-new
       return new Promise<void>((resolve, reject) => {
         const userId = getCurrentUserId(store.getState());
 
-        if (userId !== null) {
+        if (userId === null) {
+          reject(new Error('You are not logged in!'));
+        } else {
           store.dispatch(
             fetchProfile(userId, error => (error === null ? resolve() : reject(error))),
           );
         }
-
-        reject(new Error('You are not logged in!'));
       });
     },
     next: 'load-warnings',
   },
   'load-warnings': {
-    text: 'Loading profile',
-    start: 80,
+    text: 'Loading warnings',
     end: 100,
     handler() {
       // eslint-disable-next-line promise/avoid-new
       return new Promise<void>((resolve, reject) => {
         const userId = getCurrentUserId(store.getState());
 
-        if (userId !== null) {
+        if (userId === null) {
+          reject(new Error('You are not logged in!'));
+        } else {
           store.dispatch(
             fetchWarningsForUser(userId, error => (error === null ? resolve() : reject(error))),
           );
         }
-
-        reject(new Error('You are not logged in!'));
       });
     },
     next: null,

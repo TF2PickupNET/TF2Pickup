@@ -41,7 +41,7 @@ function showNotification() {
 
 export default function CookieNotification() {
   useEffect(() => {
-    if (localStorage.getItem(CookieNotification.KEY) === 'true') {
+    if (localStorage.getItem(KEY) === 'true') {
       return null;
     }
 

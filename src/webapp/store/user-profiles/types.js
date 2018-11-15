@@ -13,10 +13,13 @@ const ADD_PROFILE = 'PROFILE/ADD';
 const UPDATE_PROFILE = 'PROFILE/UPDATE';
 
 export type {
-  ADD_PROFILE,
-  UPDATE_PROFILE,
   State,
   Actions,
   AddProfileAction,
   UpdateProfileAction,
+};
+
+export {
+  ADD_PROFILE,
+  UPDATE_PROFILE,
 };

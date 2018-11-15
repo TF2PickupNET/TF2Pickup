@@ -15,9 +15,9 @@ const SOCKET_TIMEOUT = 2000;
 const socket = io(API_ENDPOINT, {
   path: '/ws/',
   transports: ['websocket'],
-  reconnectionDelay: 5 * 1000,
-  reconnectionDelayMax: 60 * 1000,
+  reconnection: false,
   timeout: SOCKET_TIMEOUT,
+  autoConnect: false,
 });
 const app: ClientApp = feathers();
 
@@ -26,6 +26,9 @@ app
   .configure(auth({ storage: window.localStorage }))
   .configure(events());
 
-export { API_ENDPOINT };
+export {
+  API_ENDPOINT,
+  socket,
+};
 
 export default app;

@@ -9,6 +9,8 @@ import { regions } from '../../../config';
 
 import { type State } from '..';
 
+import roles from '../../../config/roles';
+
 import {
   ADD_USER,
   UPDATE_USER,
@@ -31,9 +33,11 @@ function addUser(user: User): AddUserAction {
   };
 }
 
+const getUserById = makeGetUserById();
+
 function fetchUser(userId: string, cb?: (err: Error | null) => void): AsyncAction<State> {
   return async (dispatch, getState) => {
-    if (makeGetUserById()(getState(), userId) !== null) {
+    if (getUserById(getState(), userId) !== null) {
       return;
     }
 
@@ -46,7 +50,7 @@ function fetchUser(userId: string, cb?: (err: Error | null) => void): AsyncActio
         cb(null);
       }
     } catch (error) {
-      console.error('Error while fetching a userId', userId, error.message);
+      console.error('Error while fetching a user', userId, error.message);
 
       if (cb) {
         cb(error);
@@ -90,9 +94,9 @@ function acceptRules(): Promise<void> {
   return new Promise((resolve, reject) => {
     app.io.emit('users:accept-rules', {}, (err) => {
       if (err) {
-        message.error();
+        message.error(`Error while accepting rules: ${err.message}`);
       } else {
-        message.success();
+        message.success('Successfully accepted the rules');
       }
 
       return err ? reject(err) : resolve();
@@ -105,9 +109,45 @@ function completeSignUp(): Promise<void> {
   return new Promise((resolve, reject) => {
     app.io.emit('users:complete-sign-up', {}, (err) => {
       if (err) {
-        message.error();
+        message.error(`Error while completing sign up: ${err.message}`);
       } else {
-        message.success();
+        message.success('Successfully completed sign up');
+      }
+
+      return err ? reject(err) : resolve();
+    });
+  });
+}
+
+function addRole(userId: string, role: $Keys<typeof roles>): Promise<void> {
+  // eslint-disable-next-line promise/avoid-new
+  return new Promise((resolve, reject) => {
+    app.io.emit('users:add-role', {
+      role,
+      userId,
+    }, (err) => {
+      if (err) {
+        message.error(`Error while adding role to user: ${err.message}`);
+      } else {
+        message.success(`Successfully added ${roles[role].display} tp user`);
+      }
+
+      return err ? reject(err) : resolve();
+    });
+  });
+}
+
+function removeRole(userId: string, role: $Keys<typeof roles>): Promise<void> {
+  // eslint-disable-next-line promise/avoid-new
+  return new Promise((resolve, reject) => {
+    app.io.emit('users:remove-role', {
+      role,
+      userId,
+    }, (err) => {
+      if (err) {
+        message.error(`Error while removing role to user: ${err.message}`);
+      } else {
+        message.success(`Successfully remove ${roles[role].display} from user`);
       }
 
       return err ? reject(err) : resolve();
@@ -123,4 +163,6 @@ export {
   updateUser,
   fetchUser,
   addUser,
+  addRole,
+  removeRole,
 };

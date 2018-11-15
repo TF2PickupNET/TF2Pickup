@@ -42,13 +42,11 @@ function authenticate(cb: (success: boolean) => void): AsyncAction<State> {
 
       message.success('Successfully authenticated');
 
-      dispatch(loginUser(id));
-
       cb(true);
+
+      dispatch(loginUser(id));
     } catch (error) {
       message.warn(`Couldn't authenticate. ${error.message}`);
-
-      window.localStorage.removeItem('feathers-jwt');
 
       cb(false);
     }

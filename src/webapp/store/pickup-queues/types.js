@@ -18,13 +18,15 @@ const FETCHED_QUEUE = 'PICKUP-QUEUES/FETCHED';
 const RESET_QUEUES = 'PICKUP-QUEUES/RESET';
 
 export type {
-  UPDATE_QUEUE,
-  FETCHED_QUEUE,
-  RESET_QUEUES,
-
   State,
   Actions,
   UpdatePickupQueue,
   FetchedPickupQueue,
   ResetPickupQueue,
+};
+
+export {
+  UPDATE_QUEUE,
+  FETCHED_QUEUE,
+  RESET_QUEUES,
 };

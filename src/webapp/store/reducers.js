@@ -15,7 +15,7 @@ import messages from './messages/reducer';
 import chats from './chats/reducer';
 import warnings from './warnings/reducer';
 
-type ExtractState = <R, A>((state: R, action: A) => R) => R;
+type ExtractState = <S, A>((state: S, action: A) => S) => S;
 type State = {|
   userId: $Call<ExtractState, typeof userId>,
   config: $Call<ExtractState, typeof config>,

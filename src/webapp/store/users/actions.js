@@ -129,7 +129,7 @@ function addRole(userId: string, role: $Keys<typeof roles>): Promise<void> {
       if (err) {
         message.error(`Error while adding role to user: ${err.message}`);
       } else {
-        message.success(`Successfully added ${roles[role].display} tp user`);
+        message.success(`Successfully added ${roles[role].display} to user`);
       }
 
       return err ? reject(err) : resolve();

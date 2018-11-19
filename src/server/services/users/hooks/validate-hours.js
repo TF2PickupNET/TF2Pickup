@@ -25,7 +25,7 @@ If the problem persists concat a developer over discord.
 
 const notEnoughHoursMessage = `
 You don't have the required minimum hours in TF2 to play TF2Pickup.
-You need atleast ${requiredHours} hours in TF2.
+You need at least ${requiredHours} hours in TF2.
 `;
 
 export default async function validateHours(hook: CreateBeforeHookContext<User>) {

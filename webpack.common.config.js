@@ -3,7 +3,7 @@
 const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+const SWPreCacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
 const babelConfig = require('./babel.client.config');
 
@@ -68,14 +68,13 @@ module.exports = {
       filename: 'index.html',
       inject: 'body',
     }),
-    new SWPrecacheWebpackPlugin({
+    new SWPreCacheWebpackPlugin({
       cacheId: 'tf2pickup-app',
       filename: 'service-worker.js',
-      dontCacheBustUrlsMatching: /[\w\d]{8}/,
       minify: true,
       navigateFallback: '/index.html',
       staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/],
-      navigateFallbackWhitelist: [/^\/(?!auth|api)/],
+      navigateFallbackWhitelist: [/^\/(?!auth)/],
     }),
   ],
 

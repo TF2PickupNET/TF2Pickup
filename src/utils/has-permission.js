@@ -24,6 +24,9 @@ function computeLevel(user: User) {
   return highestRole === null ? 0 : roles[highestRole].level;
 }
 
+// eslint-disable-next-line no-undef
+const env = process.env.NODE_ENV;
+
 function hasPermission(
   permission: Permission,
   currentUser: User | null,
@@ -34,7 +37,7 @@ function hasPermission(
   }
 
   if (targetUser !== null && targetUser.id === currentUser.id) {
-    return process.env.NODE_ENV === 'development';
+    return env === 'development';
   }
 
   const validators = permissions[permission];

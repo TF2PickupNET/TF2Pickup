@@ -4,15 +4,11 @@ module.exports = {
   rules: {
     'no-console': 'off',
     'react/destructuring-assignment': 'off',
+    'max-lines-per-function': ['error', {
+      max: 60,
+      skipBlankLines: true,
+      skipComments: true,
+      IIFEs: false,
+    }],
   },
-
-  overrides: [{
-    files: [
-      'views/index.js',
-    ],
-    rules: {
-      'capitalized-comments': 'off',
-      'no-inline-comments': 'off',
-    },
-  }]
 };

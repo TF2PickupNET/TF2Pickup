@@ -1,6 +1,10 @@
 // @flow
 
-import { type ElementType, type Element, type ComponentType } from 'react';
+import {
+  type ElementType,
+  type Element,
+  type ComponentType,
+} from 'react';
 
 declare module 'react-test-renderer' {
   declare interface TestInstance<Props> {

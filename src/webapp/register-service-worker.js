@@ -1,6 +1,7 @@
 // @flow
 
 import { message } from 'antd';
+
 import store from './store';
 import { setHasUpdate } from './store/has-update/actions';
 

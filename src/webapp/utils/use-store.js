@@ -11,23 +11,26 @@ import shallowEqual from 'shallowequal';
 
 import store, { type State } from '../store';
 
-function useMapState<MappedState: {}, Props: ?{}>(
-  mapState: ((state: State, props: Props) => MappedState),
-  props: Props,
+// eslint-disable-next-line max-params
+function useMapState<MappedState, Arg1, Arg2, Arg3>(
+  mapState: (state: State, arg1: Arg1, arg2: Arg2, arg3: Arg3) => MappedState,
+  arg1: Arg1,
+  arg2: Arg2,
+  arg3: Arg3,
 ): MappedState {
   const [mappedState, setMappedState] = useState(
     // Lazy initialization
-    () => mapState(store.getState(), props),
+    () => mapState(store.getState(), arg1, arg2, arg3),
   );
 
   // Track the current state and props
   // This is needed for not subscribing every time to the store when the props or state change
   const currentState = useRef(mappedState);
-  const currentProps = useRef(props);
+  const currentData = useRef([arg1, arg2, arg3]);
 
   // For updating the state
   const updateState = useCallback(() => {
-    const nextState = mapState(store.getState(), currentProps.current);
+    const nextState = mapState(store.getState(), ...currentData.current);
 
     if (!shallowEqual(nextState, currentState.current)) {
       currentState.current = nextState;
@@ -37,9 +40,9 @@ function useMapState<MappedState: {}, Props: ?{}>(
 
   // Rerun the mapStateToProps function whenever the props change
   useEffect(() => {
-    currentProps.current = props;
+    currentData.current = [arg1, arg2, arg3];
     updateState();
-  }, [props]);
+  }, [arg1, arg2, arg3]);
 
   // Subscribe to store changes
   useEffect(
@@ -50,13 +53,16 @@ function useMapState<MappedState: {}, Props: ?{}>(
   return mappedState;
 }
 
-function useMakeMapState<MappedState: {}, Props: ?{}>(
-  makeMapState: () => (state: State, props: Props) => MappedState,
-  props: Props,
+// eslint-disable-next-line max-params
+function useMakeMapState<MappedState, Arg1, Arg2, Arg3>(
+  makeMapState: () => (state: State, arg1: Arg1, arg2: Arg2, arg3: Arg3) => MappedState,
+  arg1: Arg1,
+  arg2: Arg2,
+  arg3: Arg3,
 ): MappedState {
   const mapState = useMemo(makeMapState, []);
 
-  return useMapState(mapState, props);
+  return useMapState(mapState, arg1, arg2, arg3);
 }
 
 export {

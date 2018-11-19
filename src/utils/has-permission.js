@@ -6,6 +6,8 @@ import {
 } from '../config';
 import { type User } from '../types/User';
 
+type Permission = $Keys<typeof permissions>;
+
 function getHighestRole(user: User): $Keys<typeof roles> | null {
   return user.roles.reduce((highestRole, role) => {
     if (highestRole === null || roles[highestRole].level < roles[role].level) {
@@ -22,13 +24,20 @@ function computeLevel(user: User) {
   return highestRole === null ? 0 : roles[highestRole].level;
 }
 
+// eslint-disable-next-line no-undef
+const env = process.env.NODE_ENV;
+
 function hasPermission(
-  permission: $Keys<typeof permissions>,
+  permission: Permission,
   currentUser: User | null,
   targetUser: User | null = null,
 ) {
   if (currentUser === null) {
     return false;
+  }
+
+  if (targetUser !== null && targetUser.id === currentUser.id) {
+    return env === 'development';
   }
 
   const validators = permissions[permission];
@@ -44,8 +53,19 @@ function hasPermission(
   return validators.every(validator => validator(currentUserWithLevel, targetUserWithLevel));
 }
 
+function hasSomePermission(
+  perms: $ReadOnlyArray<Permission>,
+  currentUser: User | null,
+  targetUser: User | null = null,
+) {
+  return perms.some(
+    permission => hasPermission(permission, currentUser, targetUser)
+  );
+}
+
 export {
   hasPermission,
   getHighestRole,
   computeLevel,
+  hasSomePermission,
 };

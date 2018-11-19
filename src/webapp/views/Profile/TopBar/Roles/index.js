@@ -11,14 +11,12 @@ import {
   makeGetUserById,
 } from '../../../../store/users/selectors';
 import { useMakeMapState } from '../../../../utils/use-store';
+import { useMatch } from '../../../../utils/use-router';
 
 import Role from './Role';
-import RoleSelect from './RoleSelect';
+import AddRoleTag from './AddRoleTag';
 
-type Props = {
-  userId: string,
-  classes: { rolesContainer: string },
-};
+type Props = { classes: { rolesContainer: string } };
 
 const styles = {
   rolesContainer: {
@@ -34,14 +32,14 @@ const makeMapState = () => {
   const getUser = makeGetUserById();
   const getRoles = makeGetSortedRoles();
 
-  return (state, props) => {
-    const userRoles = getRoles(state, props.userId);
+  return (state, userId) => {
+    const userRoles = getRoles(state, userId);
 
     return {
       canEditRoles: hasPermission(
         'user.change-role',
         getCurrentUser(state),
-        getUser(state, props.userId),
+        getUser(state, userId),
       ),
       userRoles,
     };
@@ -49,10 +47,11 @@ const makeMapState = () => {
 };
 
 function Roles(props: Props) {
+  const userId = useMatch(match => match.params.userId, null);
   const {
     canEditRoles,
     userRoles,
-  } = useMakeMapState(makeMapState, props);
+  } = useMakeMapState(makeMapState, userId);
 
   return (
     <div className={props.classes.rolesContainer}>
@@ -60,17 +59,17 @@ function Roles(props: Props) {
         User
       </Tag>
 
-      {userRoles.map(role => (
+      {userId !== null && userRoles.map(role => (
         <Role
           key={role}
           role={role}
-          userId={props.userId}
+          userId={userId}
           canEditRoles={canEditRoles}
         />
       ))}
 
-      <RoleSelect
-        userId={props.userId}
+      <AddRoleTag
+        userId={userId}
         userRoles={userRoles}
         canEditRoles={canEditRoles}
       />

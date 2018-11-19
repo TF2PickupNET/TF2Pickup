@@ -6,12 +6,10 @@ import injectSheet from 'react-jss';
 import { makeGetRegion } from '../../../store/users/selectors';
 import { regions } from '../../../../config';
 import { useMakeMapState } from '../../../utils/use-store';
+import { useMatch } from '../../../utils/use-router';
+import { isString } from '../../../../utils/string';
 
-type Props = {
-  // eslint-disable-next-line react/no-unused-prop-types
-  userId: string,
-  classes: { title: string },
-};
+type Props = { classes: { title: string } };
 
 const styles = {
   title: {
@@ -22,13 +20,14 @@ const styles = {
 const makeMapState = () => {
   const getRegion = makeGetRegion();
 
-  return (state, props) => {
-    return { region: getRegion(state, props.userId) };
+  return (state, userId) => {
+    return { region: getRegion(state, userId) };
   };
 };
 
 function Region(props: Props) {
-  const { region } = useMakeMapState(makeMapState, props);
+  const userId = useMatch(match => match.params.userId);
+  const { region } = useMakeMapState(makeMapState, isString(userId) ? userId : null);
 
   return (
     <span>

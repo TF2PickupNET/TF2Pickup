@@ -2,74 +2,94 @@
 
 import store from '../../../store';
 import { fetchConfig } from '../../../store/config/actions';
-import { authenticate } from '../../../store/user-id/actions';
 import { fetchUser } from '../../../store/users/actions';
 import { fetchSettings } from '../../../store/settings/actions';
 import { fetchProfile } from '../../../store/user-profiles/actions';
-
-type Props = {
-  config: boolean,
-  userId: string | null,
-  user: boolean,
-  settings: boolean,
-  profile: boolean,
-};
+import { fetchWarningsForUser } from '../../../store/warnings/actions';
+import { getCurrentUserId } from '../../../store/user-id/selectors';
 
 const steps = {
   'load-configuration': {
     text: 'Loading configuration',
-    start: 10,
-    end: 30,
+    end: 20,
     handler() {
-      store.dispatch(fetchConfig());
+      // eslint-disable-next-line promise/avoid-new
+      return new Promise<void>((resolve, reject) => {
+        store.dispatch(
+          fetchConfig(error => (error === null ? resolve() : reject(error)))
+        );
+      });
     },
-    isFinished: (props: Props) => props.config !== null,
-    next: 'authenticate',
-  },
-  authenticate: {
-    text: 'Loading configuration',
-    start: 30,
-    end: 50,
-    handler() {
-      authenticate();
-    },
-    isFinished: (props: Props) => props.userId !== null,
     next: 'load-user',
   },
   'load-user': {
     text: 'Loading user',
-    start: 50,
-    end: 70,
-    handler(props: Props) {
-      if (props.userId !== null) {
-        store.dispatch(fetchUser(props.userId));
-      }
+    end: 40,
+    handler() {
+      // eslint-disable-next-line promise/avoid-new
+      return new Promise<void>((resolve, reject) => {
+        const userId = getCurrentUserId(store.getState());
+
+        if (userId === null) {
+          reject(new Error('You are not logged in!'));
+        } else {
+          store.dispatch(
+            fetchUser(userId, error => (error === null ? resolve() : reject(error))),
+          );
+        }
+      });
     },
-    isFinished: (props: Props) => props.user,
     next: 'load-settings',
   },
   'load-settings': {
     text: 'Loading settings',
-    start: 70,
-    end: 85,
-    handler(props: Props) {
-      if (props.userId !== null) {
-        store.dispatch(fetchSettings());
-      }
+    end: 60,
+    handler() {
+      // eslint-disable-next-line promise/avoid-new
+      return new Promise<void>((resolve, reject) => {
+        store.dispatch(
+          fetchSettings(error => (error === null ? resolve() : reject(error))),
+        );
+      });
     },
-    isFinished: (props: Props) => props.settings,
     next: 'load-profile',
   },
   'load-profile': {
     text: 'Loading profile',
-    start: 85,
-    end: 100,
-    handler(props: Props) {
-      if (props.userId !== null) {
-        store.dispatch(fetchProfile(props.userId));
-      }
+    end: 80,
+    handler() {
+      // eslint-disable-next-line promise/avoid-new
+      return new Promise<void>((resolve, reject) => {
+        const userId = getCurrentUserId(store.getState());
+
+        if (userId === null) {
+          reject(new Error('You are not logged in!'));
+        } else {
+          store.dispatch(
+            fetchProfile(userId, error => (error === null ? resolve() : reject(error))),
+          );
+        }
+      });
     },
-    isFinished: (props: Props) => props.profile,
+    next: 'load-warnings',
+  },
+  'load-warnings': {
+    text: 'Loading warnings',
+    end: 100,
+    handler() {
+      // eslint-disable-next-line promise/avoid-new
+      return new Promise<void>((resolve, reject) => {
+        const userId = getCurrentUserId(store.getState());
+
+        if (userId === null) {
+          reject(new Error('You are not logged in!'));
+        } else {
+          store.dispatch(
+            fetchWarningsForUser(userId, error => (error === null ? resolve() : reject(error))),
+          );
+        }
+      });
+    },
     next: null,
   },
 };

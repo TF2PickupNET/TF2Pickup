@@ -178,7 +178,5 @@ declare module "react-router-dom" {
     parent?: Match
   ): null | Match;
 
-  declare export var __RouterContext: Context<ContextRouter>;
-
   declare export function generatePath(pattern?: string, params?: Object): string;
 }

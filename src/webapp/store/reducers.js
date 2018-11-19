@@ -13,8 +13,10 @@ import userProfiles from './user-profiles/reducer';
 import users from './users/reducer';
 import messages from './messages/reducer';
 import chats from './chats/reducer';
+import warnings from './warnings/reducer';
+import hasUpdate from './has-update/reducer';
 
-type ExtractState = <R, A>((state: R, action: A) => R) => R;
+type ExtractState = <S, A>((state: S, action: A) => S) => S;
 type State = {|
   userId: $Call<ExtractState, typeof userId>,
   config: $Call<ExtractState, typeof config>,
@@ -23,6 +25,8 @@ type State = {|
   users: $Call<ExtractState, typeof users>,
   chats: $Call<ExtractState, typeof chats>,
   messages: $Call<ExtractState, typeof messages>,
+  warnings: $Call<ExtractState, typeof warnings>,
+  hasUpdate: $Call<ExtractState, typeof hasUpdate>,
 |};
 type Reducers = $ObjMap<State, <S, A: Action<>>(arg: S) => Reducer<S, A>>;
 
@@ -34,6 +38,8 @@ const reducers: Reducers = {
   userProfiles,
   messages,
   chats,
+  warnings,
+  hasUpdate,
 };
 
 export type { State };

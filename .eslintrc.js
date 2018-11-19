@@ -7,7 +7,6 @@ module.exports = {
 
   rules: {
     'flowtype/require-compound-type-alias': 'off',
-    'import/group-exports': 'error',
   },
 
   overrides: [{

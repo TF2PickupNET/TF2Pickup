@@ -13,6 +13,8 @@ import Helmet from 'react-helmet';
 // $FlowFixMe: Flow can't type json files
 import pkg from '../../../../../package.json';
 import { useMapState } from '../../../utils/use-store';
+import { getVersion } from '../../../store/config/selectors';
+import { getHasUpdate } from '../../../store/has-update/selectors';
 
 type Props = {
   children: Node,
@@ -26,11 +28,17 @@ function handleClick() {
 }
 
 const mapState = (state) => {
-  return { version: state.config ? state.config.version : null };
+  return {
+    version: getVersion(state),
+    hasUpdate: getHasUpdate(state),
+  };
 };
 
 function VersionValidator(props: Props) {
-  const { version } = useMapState(mapState);
+  const {
+    version,
+    hasUpdate,
+  } = useMapState(mapState);
 
   if (pkg.version === version) {
     return props.children;
@@ -48,16 +56,21 @@ function VersionValidator(props: Props) {
       </Helmet>
 
       <Col>
-        <Card title="Please refresh the page">
+        <Card
+          title="Please refresh the page"
+          actions={hasUpdate && (
+            <Button onClick={handleClick}>
+              Refresh
+            </Button>
+          )}
+        >
           It seems that your version is out of sync with the version of the server.
           Please refresh the page to have a consistent experience.
 
           Server version: {version}
           Your version: {pkg.version}
 
-          <Button onClick={handleClick}>
-            Refresh
-          </Button>
+          {hasUpdate && 'An update is available, reload the page to download it.'}
         </Card>
       </Col>
     </Row>

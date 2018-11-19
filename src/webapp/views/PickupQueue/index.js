@@ -11,6 +11,7 @@ import useActions from '../../utils/use-actions';
 import { useMakeMapState } from '../../utils/use-store';
 
 import Tabs from './Tabs';
+import UnreadWarnings from './UnreadWarnings';
 
 const makeMapState = () => {
   const getRegion = makeGetRegion();
@@ -31,6 +32,10 @@ function PickupQueue(props: ContextRouter) {
   return (
     <React.Fragment>
       <Tabs pathname={props.location.pathname} />
+
+      <UnreadWarnings>
+        Hello
+      </UnreadWarnings>
     </React.Fragment>
   );
 }

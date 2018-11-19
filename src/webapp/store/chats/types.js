@@ -10,8 +10,8 @@ type Actions = Action<'CHATS/FETCHED', { chat: Chat }>;
 const FETCHED_CHAT = 'CHATS/FETCHED';
 
 export type {
-  FETCHED_CHAT,
-
   State,
   Actions,
 };
+
+export { FETCHED_CHAT };

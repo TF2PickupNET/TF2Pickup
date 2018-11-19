@@ -1,7 +1,5 @@
 // @flow strict-local
 
-import babel from './babel.client.config';
-
 export default {
   require: [
     'raf/polyfill',
@@ -14,5 +12,5 @@ export default {
   verbose: true,
   compileEnhancements: true,
   files: ['src/**/*.test.js'],
-  babel: { testOptions: babel },
+  babel: { testOptions: { configFile: './babel.client.config.js' } },
 };

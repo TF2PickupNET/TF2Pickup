@@ -13,6 +13,7 @@ import pickupQueues from './pickup-queues';
 import pickupPlayers from './pickup-players';
 import chats from './chats';
 import messages from './messages';
+import warnings from './warnings';
 
 export default function services(app: App) {
   app
@@ -26,5 +27,6 @@ export default function services(app: App) {
     .configure(pickupPlayers)
     .configure(logs)
     .configure(chats)
-    .configure(messages);
+    .configure(messages)
+    .configure(warnings);
 }

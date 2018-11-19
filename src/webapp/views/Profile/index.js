@@ -17,6 +17,7 @@ import { useMakeMapState } from '../../utils/use-store';
 import TopBar from './TopBar';
 import Links from './Links';
 import LoadingScreen from './LoadingScreen';
+import AdminActions from './AdminActions';
 
 type Props = { match: { params: { userId: string } } };
 
@@ -26,9 +27,7 @@ const makeMapState = () => {
   const isCurrentUser = makeIsCurrentUser();
   const getUserName = makeGetUserName();
 
-  return (state, props) => {
-    const { userId } = props.match.params;
-
+  return (state, userId) => {
     return {
       hasLoadedUser: getUserById(state, userId) !== null,
       hasLoadedProfile: getProfileById(state, userId) !== null,
@@ -38,8 +37,7 @@ const makeMapState = () => {
   };
 };
 
-function Profile(props: Props) {
-  const userId = props.match.params.userId;
+function useLoadProfile(userId) {
   const actions = useActions({
     fetchUser,
     fetchProfile,
@@ -47,9 +45,7 @@ function Profile(props: Props) {
   const {
     hasLoadedUser,
     hasLoadedProfile,
-    isCurrentUser,
-    name,
-  } = useMakeMapState(makeMapState, props);
+  } = useMakeMapState(makeMapState, userId);
 
   useEffect(() => {
     if (!hasLoadedUser) {
@@ -63,11 +59,30 @@ function Profile(props: Props) {
     }
   }, [hasLoadedProfile]);
 
+  return {
+    hasLoadedProfile,
+    hasLoadedUser,
+  };
+}
+
+function Profile(props: Props) {
+  const userId = props.match.params.userId;
+  const {
+    isCurrentUser,
+    name,
+  } = useMakeMapState(makeMapState, userId);
+  const {
+    hasLoadedUser,
+    hasLoadedProfile,
+  } = useLoadProfile(userId);
+
   if (!hasLoadedUser || !hasLoadedProfile) {
     return (<LoadingScreen />);
   }
 
-  const title = isCurrentUser ? 'Your Profile' : `Profile of ${name === null ? 'Unknown' : name}`;
+  const title = isCurrentUser
+    ? 'Your Profile'
+    : `Profile of ${name === null ? 'Unknown' : name}`;
 
   return (
     <React.Fragment>
@@ -75,10 +90,12 @@ function Profile(props: Props) {
         <title>{title}</title>
       </Helmet>
 
-      <TopBar userId={userId} />
+      <TopBar />
 
       <div style={{ marginTop: 16 }}>
-        <Links userId={userId} />
+        <Links />
+
+        <AdminActions />
       </div>
     </React.Fragment>
   );

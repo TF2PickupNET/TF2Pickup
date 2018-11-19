@@ -1,6 +1,6 @@
 // @flow
 
-import React, { lazy } from 'react';
+import React from 'react';
 import {
   Switch,
   Route,
@@ -10,10 +10,9 @@ import { gamemodes } from '../../config';
 
 import ProfileRedirect from './ProfileRedirect';
 import IndexRedirect from './IndexRedirect';
-
-const Settings = lazy(() => import(/* webpackChunkName: "settings" */ './Settings'));
-const Profile = lazy(() => import(/* webpackChunkName: "profile" */ './Profile'));
-const PickupQueue = lazy(() => import(/* webpackChunkName: "pickup-queue" */'./PickupQueue'));
+import Settings from './Settings';
+import Profile from './Profile';
+import PickupQueue from './PickupQueue';
 
 const routes = [{
   path: '/profile',

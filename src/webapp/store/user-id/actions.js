@@ -1,8 +1,11 @@
 // @flow
 
+import { type AsyncAction } from 'redux';
 import { message } from 'antd';
 
 import app from '../../app';
+
+import { type State } from '..';
 
 import {
   LOGIN_USER,
@@ -27,21 +30,27 @@ function logoutUser(): LogoutUserAction {
   };
 }
 
-async function authenticate() {
-  try {
-    await app.authenticate({
-      strategy: 'jwt',
-      accessToken: window.localStorage.getItem('feathers-jwt'),
-    });
+function authenticate(cb: (success: boolean) => void): AsyncAction<State> {
+  return async (dispatch) => {
+    try {
+      const { accessToken } = await app.authenticate({
+        strategy: 'jwt',
+        accessToken: window.localStorage.getItem('feathers-jwt'),
+      });
 
-    return true;
-  } catch (error) {
-    message.warn(`Couldn't authenticate. ${error.message}`);
+      const { id } = await app.passport.verifyJWT(accessToken);
 
-    window.localStorage.removeItem('feathers-jwt');
+      message.success('Successfully authenticated');
 
-    throw error;
-  }
+      cb(true);
+
+      dispatch(loginUser(id));
+    } catch (error) {
+      message.warn(`Couldn't authenticate. ${error.message}`);
+
+      cb(false);
+    }
+  };
 }
 
 export {

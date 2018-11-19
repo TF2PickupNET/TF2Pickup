@@ -12,11 +12,13 @@ const LOGIN_USER = 'USER/LOGIN';
 const LOGOUT_USER = 'USER/LOGOUT';
 
 export type {
-  LOGIN_USER,
-  LOGOUT_USER,
-
   State,
   Actions,
   LoginUserAction,
   LogoutUserAction,
+};
+
+export {
+  LOGIN_USER,
+  LOGOUT_USER,
 };

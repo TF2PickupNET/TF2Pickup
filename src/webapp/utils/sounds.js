@@ -66,10 +66,10 @@ const announcerSounds: AnnouncerSounds = Object
     };
   }, {});
 
-export type {
+export type { PickupSounds };
+
+export {
   normalSounds,
   defaultPickupSounds,
   announcerSounds,
-
-  PickupSounds,
 };

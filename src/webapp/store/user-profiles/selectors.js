@@ -7,13 +7,18 @@ import { type UserProfile } from '../../../types/UserProfile';
 
 import { type State } from '..';
 
-type Link = {
-  url: string,
-  display: string,
-  name: string,
-};
+import regions from '../../../config/regions';
+
+import getLinkForService, { type Link } from './utils/get-link-for-service';
+
 type AvatarSize = 'small' | 'medium' | 'large';
 type GetAvatar = (state: State, id: string | null, size: AvatarSize) => string | null;
+type GetNames = (state: State, userId: string | null) => $ReadOnlyArray<{|
+  service: $Keys<UserProfile>,
+  region: $Keys<typeof regions>,
+  display: string,
+  name: string,
+|}>;
 
 const getProfiles = (state: State) => state.userProfiles;
 
@@ -48,32 +53,6 @@ function makeGetAvatar(): GetAvatar {
   );
 }
 
-function getLinkForService(name: $Keys<UserProfile>, profile: UserProfile): Link | null {
-  switch (name) {
-    case 'steam': return {
-      url: `https://steamcommunity.com/profiles/${profile.steam.id}`,
-      name: 'steam',
-      display: 'Steam',
-    };
-    case 'etf2l': return {
-      url: `https://etf2l.org/forum/user/${profile.etf2l.id}`,
-      name: 'etf2l',
-      display: 'ETF2L',
-    };
-    case 'ozfortress': return {
-      url: `https://warzone.ozfortress.com/users/${profile.ozfortress.id}`,
-      name: 'ozfortress',
-      display: 'ozfortress',
-    };
-    case 'twitch': return {
-      url: `https://www.twitch.tv/${profile.twitch.name}`,
-      name: 'twitch',
-      display: 'Twitch',
-    };
-    default: return null;
-  }
-}
-
 function makeGetServiceLinks(): (state: State, id: string) => $ReadOnlyArray<Link> {
   return createSelector(
     makeGetProfileById(),
@@ -96,10 +75,36 @@ function makeGetServiceLinks(): (state: State, id: string) => $ReadOnlyArray<Lin
   );
 }
 
+function makeGetNames(): GetNames {
+  return createSelector(
+    makeGetProfileById(),
+    (profile) => {
+      if (profile === null) {
+        return [];
+      }
+
+      return Object
+        .keys(regions)
+        .filter(name => Boolean(profile[regions[name].service]))
+        .map((name) => {
+          const service = regions[name].service;
+
+          return {
+            service,
+            region: name,
+            display: regions[name].fullName,
+            name: profile[service].name,
+          };
+        });
+    },
+  );
+}
+
 export {
   makeGetAvatar,
   makeIsFriend,
   makeGetSteamFriends,
   makeGetProfileById,
   makeGetServiceLinks,
+  makeGetNames,
 };

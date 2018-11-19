@@ -10,7 +10,6 @@ import UserAvatar from './UserAvatar';
 import Region from './Region';
 
 type Props = {
-  userId: string,
   classes: {
     topBar: string,
     infoContainer: string,
@@ -32,14 +31,14 @@ const styles = {
 function TopBar(props: Props) {
   return (
     <Card className={props.classes.topBar}>
-      <UserAvatar userId={props.userId} />
+      <UserAvatar />
 
       <div className={props.classes.infoContainer}>
-        <Name userId={props.userId} />
+        <Name />
 
-        <Roles userId={props.userId} />
+        <Roles />
 
-        <Region userId={props.userId} />
+        <Region />
       </div>
     </Card>
   );

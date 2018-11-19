@@ -1,6 +1,10 @@
 // @flow
 
-import React, { type Node } from 'react';
+import React, {
+  type Node,
+  useEffect,
+  useState,
+} from 'react';
 import injectSheet from 'react-jss';
 import {
   Card,
@@ -14,6 +18,9 @@ import { type State } from '../../../store';
 import { redirectToSteamAuth } from '../../../utils/auth';
 import { getCurrentUserId } from '../../../store/user-id/selectors';
 import { useMapState } from '../../../utils/use-store';
+import useActions from '../../../utils/use-actions';
+import { authenticate } from '../../../store/user-id/actions';
+import useIsMounted from '../../../utils/use-is-mounted';
 
 type Props = {
   children: Node,
@@ -32,6 +39,17 @@ const mapState = (state: State) => {
 
 function IsAuthenticated(props: Props) {
   const { userId } = useMapState(mapState);
+  const [isAuthenticating, setIsAuthenticating] = useState(true);
+  const actions = useActions({ authenticate });
+  const isMounted = useIsMounted();
+
+  useEffect(() => {
+    actions.authenticate(() => {
+      if (isMounted.current) {
+        setIsAuthenticating(false);
+      }
+    });
+  }, []);
 
   if (userId === null) {
     return (
@@ -46,11 +64,15 @@ function IsAuthenticated(props: Props) {
         </Helmet>
 
         <Col>
-          <Card title="You need to login">
-            <Button onClick={handleClick}>
-              Login with Steam
-            </Button>
-          </Card>
+          {isAuthenticating ? (
+            <h4>Authenticating...</h4>
+          ) : (
+            <Card title="You need to login">
+              <Button onClick={handleClick}>
+                Login with Steam
+              </Button>
+            </Card>
+          )}
         </Col>
       </Row>
     );

@@ -9,7 +9,10 @@ import {
 import injectSheet from 'react-jss';
 import Helmet from 'react-helmet';
 
-import useIsConnected from './use-is-connected';
+import {
+  useIsConnected,
+  useIsFirstConnect,
+} from './use-is-connected';
 
 type Props = {
   children: Node,
@@ -26,10 +29,8 @@ const styles = {
 };
 
 function IsConnected(props: Props) {
-  const {
-    isFirstConnect,
-    isConnected,
-  } = useIsConnected();
+  const isConnected = useIsConnected();
+  const isFirstConnect = useIsFirstConnect();
 
   if (isConnected) {
     return props.children;

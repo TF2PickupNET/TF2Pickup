@@ -3,7 +3,7 @@
 const merge = require('webpack-merge');
 const convert = require('koa-connect');
 const history = require('connect-history-api-fallback');
-const webpackServeWaitpage = require('webpack-serve-waitpage');
+const webpackServeWaitPage = require('webpack-serve-waitpage');
 
 const common = require('./webpack.common.config');
 
@@ -32,7 +32,7 @@ module.exports = merge(common, {
     },
 
     add(app, middleware, options) {
-      app.use(webpackServeWaitpage(options));
+      app.use(webpackServeWaitPage(options));
 
       app.use(convert(history()));
     },

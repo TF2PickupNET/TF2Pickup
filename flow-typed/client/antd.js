@@ -76,7 +76,7 @@ declare module 'antd' {
     }): void,
   }
 
-  declare export class Button extends React$Component<{|
+  declare type ButtonProps = {|
     disabled?: boolean,
     ghost?: boolean,
     href?: string,
@@ -90,7 +90,9 @@ declare module 'antd' {
     onClick: (ev: HTMLElement) => void | Promise<void>,
     children: Node,
     className?: string,
-  |}> {}
+  |};
+
+  declare export class Button extends React$Component<ButtonProps> {}
 
   declare export class CardGrid extends React$Component<{|
     className?: string,
@@ -106,7 +108,7 @@ declare module 'antd' {
   |}> {}
 
   declare export class Card extends React$Component<{|
-    actions?: $ReadOnlyArray<ElementType>,
+    actions?: Node,
     activeTabKey?: string,
     bodyStyle?: {},
     bordered?: boolean,
@@ -465,4 +467,33 @@ declare module 'antd' {
   }> {
     static TabPane: Class<TabPane>,
   }
+
+  declare export class Modal extends React$Component<{
+    afterClose?: () => void,
+    bodyStyle?: {},
+    className?: string,
+    cancelText?: string,
+    centered?: boolean,
+    closable?: boolean,
+    confirmLoading?: boolean,
+    destroyOnClose?: boolean,
+    footer?: Node,
+    children: Node,
+    getContainer?: (instance: Modal) => HTMLElement,
+    mask?: boolean,
+    maskClosable?: boolean,
+    maskStyle?: {},
+    okText?: string,
+    okType?: string,
+    okButtonProps?: ButtonProps,
+    cancelButtonProps?: ButtonProps,
+    style?: {},
+    title: Node,
+    visible: boolean,
+    width?: number,
+    wrapClassName?: string,
+    zIndex?: number,
+    onCancel: () => void,
+    onOk: () => void,
+  }> {}
 }

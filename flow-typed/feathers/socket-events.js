@@ -37,7 +37,7 @@ declare type Events = {
     message: string,
   },
 
-  'warnings:read': { id: string },
+  'warnings:mark-as-read': { id: string },
 };
 
 declare interface ClientSocket {

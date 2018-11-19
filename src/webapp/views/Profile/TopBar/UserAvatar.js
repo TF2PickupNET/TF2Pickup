@@ -3,16 +3,18 @@
 import React from 'react';
 
 import Avatar from '../../../components/Avatar';
+import { useMatch } from '../../../utils/use-router';
+import { isString } from '../../../../utils/string';
 
-type Props = { userId: string };
+function UserAvatar() {
+  const userId = useMatch(match => match.params.userId);
 
-function UserAvatar(props: Props) {
   return (
     <Avatar
       avatarSize="large"
       shape="square"
       size={160}
-      id={props.userId}
+      id={isString(userId) ? userId : null}
     />
   );
 }

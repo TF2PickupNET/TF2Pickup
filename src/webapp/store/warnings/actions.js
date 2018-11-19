@@ -1,7 +1,7 @@
 // @flow
 
 import { type AsyncAction } from 'redux';
-import { message } from 'antd';
+import { message as Message } from 'antd';
 
 import app from '../../app';
 
@@ -33,6 +33,39 @@ function updateWarning(warning: Warning): UpdateWarningAction {
   };
 }
 
+function markWarningAsRead(id: string): Promise<void> {
+  // eslint-disable-next-line promise/avoid-new
+  return new Promise((resolve, reject) => {
+    app.io.emit('warnings:mark-as-read', { id }, (err) => {
+      if (err) {
+        Message.error(`Error while marking warning as read: ${err.message}`);
+      } else {
+        Message.success('Successfully marked warning as read');
+      }
+
+      return err ? reject(err) : resolve();
+    });
+  });
+}
+
+function createWarning(userId: string, message: string): Promise<void> {
+  // eslint-disable-next-line promise/avoid-new
+  return new Promise((resolve, reject) => {
+    app.io.emit('warnings:create', {
+      message,
+      for: userId,
+    }, (err) => {
+      if (err) {
+        Message.error(`Error while marking warning as read: ${err.message}`);
+      } else {
+        Message.success('Successfully marked warning as read');
+      }
+
+      return err ? reject(err) : resolve();
+    });
+  });
+}
+
 function fetchWarningsForUser(
   userId: string,
   cb?: (error: Error | null) => void,
@@ -59,7 +92,7 @@ function fetchWarningsForUser(
 
       return cb && cb(null);
     } catch (error) {
-      message.error(`Error while fetching warnings for user ${userId}: ${error.message}`);
+      Message.error(`Error while fetching warnings for user ${userId}: ${error.message}`);
 
       return cb && cb(error);
     }
@@ -70,4 +103,6 @@ export {
   addWarning,
   updateWarning,
   fetchWarningsForUser,
+  markWarningAsRead,
+  createWarning,
 };

@@ -14,6 +14,7 @@ import users from './users/reducer';
 import messages from './messages/reducer';
 import chats from './chats/reducer';
 import warnings from './warnings/reducer';
+import hasUpdate from './has-update/reducer';
 
 type ExtractState = <S, A>((state: S, action: A) => S) => S;
 type State = {|
@@ -25,6 +26,7 @@ type State = {|
   chats: $Call<ExtractState, typeof chats>,
   messages: $Call<ExtractState, typeof messages>,
   warnings: $Call<ExtractState, typeof warnings>,
+  hasUpdate: $Call<ExtractState, typeof hasUpdate>,
 |};
 type Reducers = $ObjMap<State, <S, A: Action<>>(arg: S) => Reducer<S, A>>;
 
@@ -37,6 +39,7 @@ const reducers: Reducers = {
   messages,
   chats,
   warnings,
+  hasUpdate,
 };
 
 export type { State };

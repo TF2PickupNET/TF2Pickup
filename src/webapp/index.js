@@ -1,6 +1,7 @@
 // @flow
 
 import 'modern-normalize/modern-normalize.css';
+import 'antd/dist/antd.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';

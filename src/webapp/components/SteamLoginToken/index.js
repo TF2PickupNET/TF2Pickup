@@ -4,7 +4,7 @@ import queryString from 'query-string';
 import { Redirect } from 'react-router-dom';
 import React from 'react';
 
-import useLocation from '../../utils/use-location';
+import { useLocation } from '../../utils/use-router';
 
 function SteamLoginToken() {
   const location = useLocation();

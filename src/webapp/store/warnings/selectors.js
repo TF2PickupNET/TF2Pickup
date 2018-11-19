@@ -6,6 +6,8 @@ import { type State } from '..';
 
 import { type Warning } from '../../../types/Warning';
 
+type GetWarningIdsForUser = (state: State, userId: string | null) => $ReadOnlyArray<string>;
+
 const getWarnings = (state: State) => state.warnings;
 
 function makeGetWarningById(): (state: State, id: string) => Warning | null {
@@ -16,7 +18,17 @@ function makeGetWarningById(): (state: State, id: string) => Warning | null {
   );
 }
 
-function makeGetWarningIdsForUser(): (state: State, userId: string) => $ReadOnlyArray<string> {
+function makeGetWarningIdsForUser(): GetWarningIdsForUser {
+  return createSelector(
+    getWarnings,
+    (state, id) => id,
+    (warnings, userId) => Object
+      .keys(warnings)
+      .filter(id => warnings[id].for === userId)
+  );
+}
+
+function makeGetUnreadWarningIdsForUser(): GetWarningIdsForUser {
   return createSelector(
     getWarnings,
     (state, id) => id,
@@ -29,4 +41,5 @@ function makeGetWarningIdsForUser(): (state: State, userId: string) => $ReadOnly
 export {
   makeGetWarningById,
   makeGetWarningIdsForUser,
+  makeGetUnreadWarningIdsForUser,
 };

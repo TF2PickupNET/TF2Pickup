@@ -7,11 +7,9 @@ import { makeGetAvatar } from '../../store/user-profiles/selectors';
 import { useMakeMapState } from '../../utils/use-store';
 
 type Props = {
-  // eslint-disable-next-line react/no-unused-prop-types
-  id: string,
+  id: string | null,
   className: string,
   size: number,
-  // eslint-disable-next-line react/no-unused-prop-types
   avatarSize: 'small' | 'medium' | 'large',
   shape: 'circle' | 'square',
 };
@@ -19,13 +17,13 @@ type Props = {
 const makeMapState = () => {
   const getAvatar = makeGetAvatar();
 
-  return (state, props) => {
-    return { avatar: getAvatar(state, props.id, props.avatarSize) };
+  return (state, id, avatarSize) => {
+    return { avatar: getAvatar(state, id, avatarSize) };
   };
 };
 
 function Avatar(props: Props) {
-  const { avatar } = useMakeMapState(makeMapState, props);
+  const { avatar } = useMakeMapState(makeMapState, props.id, props.avatarSize);
 
   return (
     <AvatarC

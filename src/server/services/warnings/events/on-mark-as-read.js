@@ -12,7 +12,7 @@ type Data = { id: string };
 
 const log = debug('TF2Pickup:warnings:on-read-warning');
 
-export default function onReadWarning(app: App, connection: SocketConnection) {
+export default function onMarkAsRead(app: App, connection: SocketConnection) {
   return async (data: Data, cb: (error: null | Error) => void) => {
     const currentUser = connection.feathers.user;
 

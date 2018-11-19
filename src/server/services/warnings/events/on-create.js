@@ -17,7 +17,7 @@ type Data = {
 
 const log = debug('TF2Pickup:warnings:on-add-warning');
 
-export default function onCreateWarning(app: App, connection: SocketConnection) {
+export default function onCreate(app: App, connection: SocketConnection) {
   return async (data: Data, cb: (error: null | Error) => void) => {
     const currentUser = connection.feathers.user;
 

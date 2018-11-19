@@ -9,13 +9,12 @@ import {
 } from 'antd';
 
 import { gamemodes } from '../../../../config';
-import useLocation from '../../../utils/use-location';
+import { useLocation } from '../../../utils/use-router';
+import { useMakeMapState } from '../../../utils/use-store';
+import { makeGetLastPickup } from '../../../store/users/selectors';
+import { getCurrentUserId } from '../../../store/user-id/selectors';
 
-import UserSection from './UserSection';
-
-type Props = {
-  classes: { menu: string },
-};
+type Props = { classes: { menu: string } };
 
 const SIDEBAR_WIDTH = 256;
 const { Sider } = Layout;
@@ -30,6 +29,19 @@ const gamemodeItems = Object.keys(gamemodes).map(name => (
   </Menu.Item>
 ));
 
+const makeMapState = () => {
+  const getLastPickupId = makeGetLastPickup();
+
+  return (state) => {
+    const userId = getCurrentUserId(state);
+
+    return {
+      userId,
+      lastPickupId: getLastPickupId(state, userId),
+    };
+  };
+};
+
 function Sidebar(props: Props) {
   const location = useLocation();
   const handleItemClick = useCallback((options: { key: string }) => {
@@ -37,10 +49,15 @@ function Sidebar(props: Props) {
       this.props.logout();
     }
   }, []);
+  const {
+    userId,
+    lastPickupId,
+  } = useMakeMapState(makeMapState);
 
   return (
     <Sider width={SIDEBAR_WIDTH}>
       <Menu
+        theme="light"
         mode="inline"
         selectedKeys={[location.pathname]}
         className={props.classes.menu}
@@ -55,7 +72,33 @@ function Sidebar(props: Props) {
 
         <Menu.Divider />
 
-        <UserSection />
+        {userId !== null && (
+          <React.Fragment>
+            {lastPickupId !== null && (
+              <Menu.Item key={`/pickup/${lastPickupId}`}>
+                <Link to={`/pickup/${lastPickupId}`}>
+                  Last Pickup
+                </Link>
+              </Menu.Item>
+            )}
+
+            <Menu.Item key="/settings">
+              <Link to="/settings">
+                Settings
+              </Link>
+            </Menu.Item>
+
+            <Menu.Item key={`/profile/${userId}`}>
+              <Link to="/profile">
+                Profile
+              </Link>
+            </Menu.Item>
+
+            <Menu.Item key="logout">
+              Logout
+            </Menu.Item>
+          </React.Fragment>
+        )}
       </Menu>
     </Sider>
   );

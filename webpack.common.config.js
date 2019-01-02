@@ -1,25 +1,20 @@
-// @flow
-
 const path = require('path');
+const { NoEmitOnErrorsPlugin } = require('webpack');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const SWPreCacheWebpackPlugin = require('sw-precache-webpack-plugin');
-
-const babelConfig = require('./babel.client.config');
+const WorkboxPlugin = require('workbox-webpack-plugin');
+const TSConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const rules = [{
-  test: /\.jsx?$/,
+  test: /\.tsx?$/,
   exclude: /(node_modules)/,
   use: {
-    loader: 'babel-loader',
-    options: babelConfig,
+    loader: 'ts-loader',
+    options: { transpileOnly: true },
   },
 }, {
   test: /\.css$/,
-  use: [MiniCssExtractPlugin.loader, {
-    loader: 'css-loader',
-    options: { minimize: true },
-  }],
+  use: [MiniCssExtractPlugin.loader, 'css-loader'],
 }, {
   test: /\.(png|jpg|gif|mp3|ico)$/,
   use: 'file-loader',
@@ -55,28 +50,29 @@ const optimization = {
 };
 
 module.exports = {
-  entry: { app: path.resolve(__dirname, 'src/webapp/index.js') },
+  entry: { app: path.resolve(__dirname, 'src/webapp/index.tsx') },
   output: { publicPath: '/' },
   module: { rules },
 
   optimization,
 
   plugins: [
+    new NoEmitOnErrorsPlugin(),
     new MiniCssExtractPlugin({ filename: '[name].[hash].css' }),
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, 'src/webapp/index.html'),
       filename: 'index.html',
       inject: 'body',
     }),
-    new SWPreCacheWebpackPlugin({
-      cacheId: 'tf2pickup-app',
-      filename: 'service-worker.js',
-      minify: true,
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
       navigateFallback: '/index.html',
-      staticFileGlobsIgnorePatterns: [/\.map$/, /manifest\.json$/],
-      navigateFallbackWhitelist: [/^\/(?!auth)/],
     }),
   ],
 
-  resolve: { extensions: ['.js', '.jsx'] },
+  resolve: {
+    plugins: [new TSConfigPathsPlugin({ configFile: 'tsconfig.client.json' })],
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+  },
 };

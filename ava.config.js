@@ -1,9 +1,7 @@
-// @flow strict-local
-
 export default {
   require: [
     'raf/polyfill',
-    './tests/setup/register.js',
+    'ts-node/register/transpile-only',
   ],
   failFast: true,
   cache: true,
@@ -11,6 +9,6 @@ export default {
   failWithoutAssertions: true,
   verbose: true,
   compileEnhancements: true,
-  files: ['src/**/*.test.js'],
-  babel: { testOptions: { configFile: './babel.client.config.js' } },
+  extensions: ['ts', 'tsx'],
+  files: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
 };

@@ -1,5 +1,5 @@
 node_modules/
-dist/
+build/
 /config/*.json
 !config/default.json
 yarn-error.log

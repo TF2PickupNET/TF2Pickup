@@ -4,7 +4,7 @@
 <PROJECT_ROOT>/node_modules/.*
 
 [ignore]
-.*/node_modules/draft-js-plugins-editor/lib/Editor/index.js.flow
+.*/node_modules/draft-js-plugins-editor/lib/Editor/index.tsx.flow
 
 [include]
 

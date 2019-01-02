@@ -1,5 +1,4 @@
-// @flow
-
+const { WatchIgnorePlugin, NamedModulesPlugin } = require('webpack');
 const merge = require('webpack-merge');
 const convert = require('koa-connect');
 const history = require('connect-history-api-fallback');
@@ -37,5 +36,13 @@ module.exports = merge(common, {
       app.use(convert(history()));
     },
   },
+
+  plugins: [
+    new WatchIgnorePlugin([
+      /\.js$/,
+      /\.d\.ts$/,
+    ]),
+    new NamedModulesPlugin(),
+  ],
 });
 

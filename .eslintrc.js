@@ -1,24 +1,12 @@
 module.exports = {
   extends: [
     'henribeck',
-    'henribeck/flow',
     'henribeck/react',
+    'henribeck/typescript',
   ],
 
-  rules: {
-    'flowtype/require-compound-type-alias': 'off',
-  },
-
   overrides: [{
-    files: ['src/config/maps.js'],
+    files: ['src/config/maps.ts'],
     rules: { camelcase: 'off' },
-  }, {
-    files: [
-      'src/webapp/*.js',
-      'src/webapp/**/*.js',
-      'src/server/*.js',
-      'src/server/**/*.js',
-    ],
-    rules: { 'promise/prefer-await-to-callbacks': 'off' },
   }],
 };

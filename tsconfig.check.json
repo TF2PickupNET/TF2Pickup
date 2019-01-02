@@ -4,7 +4,7 @@
     "paths": {
       "feathers-hooks-common": ["./typings/feathers/feathers-hooks-common.d.ts"],
       "redux-thunk": ["./typings/redux-thunk.d.ts"],
-      "redux-devtools-extension": ["./typings/redux-devtools-extension.d.ts"],
+      "redux-devtools-extension": ["./typings/redux-devtools-extension.d.ts"]
     }
   }
 }

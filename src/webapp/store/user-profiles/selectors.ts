@@ -2,15 +2,15 @@ import { createSelector } from 'reselect';
 
 import { getCurrentUserId } from '../user-id/selectors';
 import UserProfile from '../../../types/UserProfile';
+import { AsyncStatus } from '../types';
+import { Keys } from '../../../utils/types';
+import regions from '../../../config/regions';
 
 import { State } from '..';
 
-import regions from '../../../config/regions';
-
 import getLinkForService from './utils/get-link-for-service';
-import { AsyncStatus } from '../types';
 
-type AvatarSize = 'small' | 'medium' | 'large';
+type AvatarSize = keyof UserProfile['steam']['avatar'];
 
 const getProfiles = (state: State) => state.userProfiles;
 
@@ -40,9 +40,7 @@ const makeGetProfileError = () => createSelector(
 
 const makeGetSteamFriends = () => createSelector(
   makeGetProfile(),
-  profile => (
-    profile === null ? [] : profile.steam.friends
-  ),
+  profile => (profile === null ? [] : profile.steam.friends),
 );
 
 const makeIsFriend = () => createSelector(
@@ -53,19 +51,17 @@ const makeIsFriend = () => createSelector(
 
 const makeGetAvatar = (size: AvatarSize) => createSelector(
   makeGetProfile(),
-  (profile) => (
-    profile === null ? null : profile.steam.avatar[size]
-  ),
+  profile => (profile === null ? null : profile.steam.avatar[size]),
 );
 
 const makeGetServiceLinks = () => createSelector(
   makeGetProfile(),
   (profile) => {
-    if(profile === null) {
+    if (profile === null) {
       return [];
     }
 
-    const keys = Object.keys(profile) as Array<keyof UserProfile>;
+    const keys = Object.keys(profile) as Keys<UserProfile>;
 
     return keys
       .map(service => getLinkForService(service, profile))
@@ -73,27 +69,39 @@ const makeGetServiceLinks = () => createSelector(
   },
 );
 
+interface NameOption {
+  service: keyof UserProfile,
+  region: keyof typeof regions,
+  display: string,
+  name: string,
+}
+
+const regionKeys = Object.keys(regions) as Keys<typeof regions>;
+
 const makeGetNames = () => createSelector(
   makeGetProfile(),
   (profile) => {
-    if(profile === null) {
+    if (profile === null) {
       return [];
     }
 
-    const regionKeys = Object.keys(regions) as Array<keyof typeof regions>;
-
     return regionKeys
-      .filter((name: keyof typeof regions) => regions[name].service in profile)
-      .map((region) => {
+      .map((region): NameOption | null => {
         const service = regions[region].service;
+        const data = profile[service];
 
-        return {
-          service,
-          region,
-          display: regions[region].fullName,
-          name: profile[service]!.name,
-        };
-      });
+        if (data) {
+          return {
+            service,
+            region,
+            display: regions[region].fullName,
+            name: data.name,
+          };
+        }
+
+        return null;
+      })
+      .filter((name: NameOption | null): name is NameOption => name !== null);
   },
 );
 

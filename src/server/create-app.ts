@@ -1,4 +1,7 @@
-import feathers, { ServerApp, ServerSocket } from '@feathersjs/feathers';
+import feathers, {
+  ServerApp,
+  ServerSocket,
+} from '@feathersjs/feathers';
 import express from '@feathersjs/express';
 import socketio from '@feathersjs/socketio';
 import mongoose from 'mongoose';

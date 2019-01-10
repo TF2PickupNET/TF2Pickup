@@ -10,7 +10,7 @@ const getCurrentUser = createSelector(
   getUsers,
   getCurrentUserId,
   (users, userId) => {
-    if (userId === null || !users[userId]) {
+    if (userId === null || !(userId in users)) {
       return null;
     }
 

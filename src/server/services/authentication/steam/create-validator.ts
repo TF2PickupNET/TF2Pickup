@@ -8,6 +8,23 @@ type Done = (error: Error | null, user: User | null) => void;
 
 const log = debug('TF2Pickup:auth:steam:validator');
 
+function createNewUser(app: ServerApp, userId: string) {
+  log('Creating new user because no user was found', { userId });
+
+  return app.service('users').create({
+    id: userId,
+    name: null,
+    region: null,
+    online: true,
+    lastOnline: Date.now(),
+    hasAcceptedTheRules: false,
+    createdOn: Date.now(),
+    lastPickup: null,
+    roles: [],
+    hasCompletedSignUp: false,
+  });
+}
+
 export default function createValidator(app: ServerApp) {
   return async (identifier: string, _: {}, done: Done) => {
     const match = identifier.match(/https?:\/\/steamcommunity\.com\/openid\/id\/(\d+)/);
@@ -20,8 +37,7 @@ export default function createValidator(app: ServerApp) {
     log('New steam login with id', { userId: id });
 
     const users = app.service('users');
-    
-    
+
     try {
       const user = await users.get(id);
 
@@ -41,20 +57,7 @@ export default function createValidator(app: ServerApp) {
 
     // Create a new userId when no userId was found
     try {
-      log('Creating new user because no user was found', { userId: id });
-
-      const newUser = await users.create({
-        id,
-        name: null,
-        region: null,
-        online: true,
-        lastOnline: Date.now(),
-        hasAcceptedTheRules: false,
-        createdOn: Date.now(),
-        lastPickup: null,
-        roles: [],
-        hasCompletedSignUp: false,
-      });
+      const newUser = await createNewUser(app, id);
 
       return done(null, newUser);
     } catch (error) {

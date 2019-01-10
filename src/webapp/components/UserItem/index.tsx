@@ -1,20 +1,21 @@
 import React, { useEffect } from 'react';
-import injectSheet, {Classes} from 'react-jss';
+import withStyles, { WithStyles } from 'react-jss';
 import PersonIcon from '@atlaskit/icon/glyph/person';
 import { Link } from 'react-router-dom';
 
-import {makeGetUserName} from '../../store/users/selectors';
+import { makeGetUserName } from '../../store/users/selectors';
 import { fetchUser } from '../../store/users/actions';
-import {useMakeMapState} from '../../store/use-store';
+import { useMakeMapState } from '../../store/use-store';
 import useActions from '../../store/use-actions';
-import {State} from "../../store";
-import {makeIsFriend} from "../../store/user-profiles/selectors";
+import { State } from '../../store';
+import { makeIsFriend } from '../../store/user-profiles/selectors';
 
 const styles = {
   container: { lineHeight: '24px' },
 
   friendIcon: { marginRight: '4px' },
 };
+
 const makeMapState = () => {
   const getName = makeGetUserName();
   const isFriend = makeIsFriend();
@@ -27,7 +28,7 @@ const makeMapState = () => {
   };
 };
 
-interface Props extends Classes<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   userId: string,
   className: string,
 }
@@ -65,4 +66,4 @@ function UserItem(props: Props) {
 
 UserItem.defaultProps = { className: '' };
 
-export default injectSheet<Props>(styles)(UserItem);
+export default withStyles(styles)(UserItem);

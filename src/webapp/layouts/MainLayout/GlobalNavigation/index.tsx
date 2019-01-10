@@ -1,6 +1,9 @@
 import React, { useMemo } from 'react';
 import { RouterHistory } from 'react-router-dom';
-import { GlobalNav, GlobalItemProps } from '@atlaskit/navigation-next';
+import {
+  GlobalNav,
+  GlobalItemProps,
+} from '@atlaskit/navigation-next';
 import SettingsIcon from '@atlaskit/icon/glyph/settings';
 import SignOutIcon from '@atlaskit/icon/glyph/sign-out';
 import InfoIcon from '@atlaskit/icon/glyph/editor/info';

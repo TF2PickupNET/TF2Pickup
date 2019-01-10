@@ -3,10 +3,10 @@ import {
   Payload,
   DoneFunction,
 } from '@feathersjs/authentication-jwt';
-import { ExpressRequest } from "@feathersjs/express";
+import { ExpressRequest } from '@feathersjs/express';
 
 export default class JWTVerifier extends Verifier {
-  async verify(_: ExpressRequest, payload: Payload, done: DoneFunction) {
+  public async verify(_: ExpressRequest, payload: Payload, done: DoneFunction) {
     try {
       const user = await this.app.service('users').get(payload.id);
 

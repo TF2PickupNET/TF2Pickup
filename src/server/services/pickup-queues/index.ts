@@ -1,8 +1,9 @@
-import {ServerApp} from "@feathersjs/feathers";
-import debug from "debug";
-import service from "feathers-mongoose";
-import Model from "./Model";
-import setupQueues from "./setup-queues";
+import { ServerApp } from '@feathersjs/feathers';
+import debug from 'debug';
+import service from 'feathers-mongoose';
+
+import Model from './Model';
+import setupQueues from './setup-queues';
 
 const log = debug('TF2Pickup:pickup-queues');
 
@@ -19,6 +20,6 @@ export default function pickupQueues() {
 
     app
       .service('pickup-queues')
-      .publish('patched', (queue) => app.channel(`region:${queue.region}`));
+      .publish('patched', queue => app.channel(`region:${queue.region}`));
   };
 }

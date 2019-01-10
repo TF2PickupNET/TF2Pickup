@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import UserSettings from '../../../types/UserSettings';
-import {AsyncItem} from "../types";
+import { AsyncItem } from '../types';
 
 const START_FETCH_SETTINGS = 'SETTINGS/START-FETCH';
 const FETCHED_SETTINGS = 'SETTINGS/FETCHED';
@@ -10,7 +10,8 @@ const UPDATE_SETTINGS = 'SETTINGS/UPDATE';
 
 type State = AsyncItem<UserSettings>;
 
-type Actions = Action<typeof START_FETCH_SETTINGS>
+type Actions =
+  | Action<typeof START_FETCH_SETTINGS>
   | Action<typeof FETCHED_SETTINGS, { settings: UserSettings }>
   | Action<typeof FETCH_FAILED_SETTINGS, { error: Error }>
   | Action<typeof UPDATE_SETTINGS, { settings: UserSettings }>;

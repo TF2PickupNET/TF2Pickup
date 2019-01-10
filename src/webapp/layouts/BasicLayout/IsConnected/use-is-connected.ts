@@ -2,7 +2,6 @@ import {
   useState,
   useEffect,
 } from 'react';
-// import { message } from 'antd';
 
 import { socket } from '../../../app';
 
@@ -11,24 +10,11 @@ function useIsConnected() {
 
   useEffect(() => {
     const handleConnect = () => setIsConnected(true);
-    const handleDisconnect = (reason: string) => {
+    const handleDisconnect = () => {
       setIsConnected(false);
-
-      // TODO: Check the reasons again
-      switch (reason) {
-        case 'io server disconnect': {
-          // message.error('It seems our server just went down :(', 2);
-          break;
-        }
-        case 'io client disconnect': {
-          // message.error('You lost the connection to our server', 2);
-          break;
-        }
-        default: console.log(reason);
-      }
     };
     const handleReconnect = () => {
-      // message.success('Successfully reconnected to our server', 1);
+      // Message.success('Successfully reconnected to our server', 1);
     };
 
     socket

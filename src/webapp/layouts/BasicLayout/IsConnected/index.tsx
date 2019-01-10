@@ -1,13 +1,13 @@
 import React, { ReactNode } from 'react';
-import injectSheet, {Classes} from 'react-jss';
+import withStyles, { WithStyles } from 'react-jss';
 
-import {Row} from '../../../components/Grid';
+import { Row } from '../../../components/Grid';
+import DocumentTitle from '../../../components/DocumentTitle';
 
 import {
   useIsConnected,
   useIsFirstConnect,
 } from './use-is-connected';
-import DocumentTitle from "../../../components/DocumentTitle";
 
 const styles = {
   container: { minHeight: '100vh' },
@@ -18,7 +18,7 @@ const styles = {
   },
 };
 
-interface Props extends Classes<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   children: ReactNode,
 }
 
@@ -62,4 +62,4 @@ function IsConnected(props: Props) {
   );
 }
 
-export default injectSheet<Props>(styles)(IsConnected);
+export default withStyles(styles)(IsConnected);

@@ -1,11 +1,10 @@
 import React, {
   useCallback,
-  useEffect,
   useState,
 } from 'react';
 import Button from '@atlaskit/button';
 import Range from '@atlaskit/range';
-import {createSelector} from "reselect";
+import { createSelector } from 'reselect';
 
 import playSound from '../../utils/play-sound';
 import { getVolume } from '../../store/settings/selectors';
@@ -30,32 +29,19 @@ function VolumeSetting() {
   // Update the currently selected volume
   const handleChange = useCallback((value: number) => {
     setSelectedVolume(value);
+
+    updateVolume(selectedVolume);
   }, []);
-
-  // Update the volume in the settings when the user removes focus from the slider
-  const handleBlur = useCallback(() => {
-    if (selectedVolume !== volume) {
-      updateVolume(selectedVolume);
-    }
-  }, [selectedVolume, volume]);
-
-  // Update the selected volume when the volume from the settings change
-  useEffect(() => {
-    if (volume !== selectedVolume) {
-      setSelectedVolume(volume);
-    }
-  }, [volume]);
 
   return (
     <React.Fragment>
       <Range
         value={selectedVolume}
         onChange={handleChange}
-        onBlur={handleBlur}
       />
 
       <Button onClick={handleTestClick}>
-          Test Volume
+        Test Volume
       </Button>
     </React.Fragment>
   );

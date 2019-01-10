@@ -1,3 +1,6 @@
+import { createStateCreator } from '../types';
+import Configuration from '../../../types/Configuration';
+
 import {
   State,
   Actions,
@@ -5,8 +8,6 @@ import {
   FETCHED_CONFIG,
   FETCH_ERROR_CONFIG,
 } from './types';
-import {createStateCreator} from "../types";
-import Configuration from "../../../types/Configuration";
 
 const stateCreator = createStateCreator<Configuration>();
 const defaultState = stateCreator.createNotStartedState();

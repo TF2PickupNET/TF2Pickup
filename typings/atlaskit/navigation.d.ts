@@ -68,7 +68,7 @@ declare module '@atlaskit/navigation-next' {
   const ContainerHeader: ComponentType<ItemProps>;
   const Separator: ComponentType<{}>;
   const GroupHeading: ComponentType<GroupHeadingProps>;
-  const GlobalNav: ComponentType<GlobalItemProps>;
+  const GlobalNav: ComponentType<GlobalNavProps>;
 
   export {
     ItemProps,

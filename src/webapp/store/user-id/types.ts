@@ -5,10 +5,9 @@ type State = string | null;
 const LOGIN_USER = 'USER/LOGIN';
 const LOGOUT_USER = 'USER/LOGOUT';
 
-type LogoutUserAction = Action<typeof LOGOUT_USER, {}>;
-type LoginUserAction = Action<typeof LOGIN_USER, { userId: string }>;
-
-type Actions = LogoutUserAction | LoginUserAction;
+type Actions =
+  | Action<typeof LOGOUT_USER>
+  | Action<typeof LOGIN_USER, { userId: string }>;
 
 export {
   State,

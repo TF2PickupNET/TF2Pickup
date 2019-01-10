@@ -4,12 +4,10 @@ import React, {
 } from 'react';
 import Button from '@atlaskit/button';
 import Banner from '@atlaskit/banner';
-import injectSheet, {Classes} from "react-jss";
+import withStyles, { WithStyles } from 'react-jss';
 
 const styles = {
-  text: {
-    margin: '0 8px',
-  },
+  text: { margin: '0 8px' },
 
   button: {
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -18,7 +16,7 @@ const styles = {
   },
 };
 
-type Props = Classes<typeof styles>;
+type Props = WithStyles<typeof styles>;
 
 function NotificationRequester(props: Props) {
   const [showBanner, setShowBanner] = useState(Notification.permission === 'default');
@@ -39,15 +37,21 @@ function NotificationRequester(props: Props) {
         Enable notifications for a better experience.
       </span>
 
-      <Button className={props.classes.button} onClick={handleEnableClick}>
+      <Button
+        className={props.classes.button}
+        onClick={handleEnableClick}
+      >
         Yes
       </Button>
 
-      <Button className={props.classes.button} onClick={handleDenyClick}>
+      <Button
+        className={props.classes.button}
+        onClick={handleDenyClick}
+      >
         No
       </Button>
     </Banner>
   );
 }
 
-export default injectSheet<Props>(styles)(NotificationRequester);
+export default withStyles(styles)(NotificationRequester);

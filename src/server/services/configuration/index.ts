@@ -1,4 +1,7 @@
-import { ServiceDefinition, ServerApp } from '@feathersjs/feathers';
+import {
+  ServiceDefinition,
+  ServerApp,
+} from '@feathersjs/feathers';
 import debug from 'debug';
 
 import pkg from '../../../../package.json';
@@ -7,15 +10,14 @@ import Configuration from '../../../types/Configuration';
 const log = debug('TF2Pickup:configuration');
 
 class ConfigurationService implements ServiceDefinition<Configuration> {
-  config: Configuration = { version: pkg.version };
+  private readonly config: Configuration = { version: pkg.version };
 
-  get() {
+  public get() {
     return Promise.resolve(this.config);
   }
 }
 
 export default function configuration() {
-
   return (app: ServerApp) => {
     log('Setting up configuration service');
 

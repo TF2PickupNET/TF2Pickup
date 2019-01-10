@@ -6,7 +6,9 @@ import SteamLoginToken from '../../components/SteamLoginToken';
 
 import Page from './Page';
 
-type Props = { children: ReactNode };
+interface Props {
+  children: ReactNode,
+}
 
 function BasicLayout(props: Props) {
   return (

@@ -7,7 +7,7 @@ import UserProfile from '../../../../../types/UserProfile';
 import { findHighestDiv } from './utils';
 
 const log = debug('TF2Pickup:userId-user-profiles:ozfortress:data');
-const apikey = config.get('services.ozfortress.apikey');
+const apikey = config.get<string | null>('services.ozfortress.apikey');
 
 export default async function getOzfortressData(
   user: UserProfile,

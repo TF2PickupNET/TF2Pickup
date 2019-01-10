@@ -7,18 +7,18 @@ import SteamID from 'steamid';
 import { CreateBeforeHookContext } from '@feathersjs/feathers';
 import { promisify } from 'util';
 import debug from 'debug';
+import { SteamGroup } from 'steamcommunity';
 
 import User from '../../../../types/User';
-import steamCommunity from "../../../utils/steam-community";
-import {SteamGroup} from "steamcommunity";
+import steamCommunity from '../../../utils/steam-community';
 
 const log = debug('TF2Pickup:users:is-in-steam-group');
 
 const getSteamGroup = promisify(
-  steamCommunity.getSteamGroup.bind(steamCommunity)
+  steamCommunity.getSteamGroup.bind(steamCommunity),
 );
 
-const steamGroupName = config.get<string>('auth.steam-group');
+const steamGroupName = config.get<string | null>('auth.steam-group');
 
 const generalErrorMessage = `
 Something went wrong while trying to get the members of the Steam Group.
@@ -36,7 +36,6 @@ export default async function validateInSteamGroup(hook: CreateBeforeHookContext
     return;
   }
 
-  // eslint-disable-next-line fp/no-let
   let isInGroup = false;
 
   try {

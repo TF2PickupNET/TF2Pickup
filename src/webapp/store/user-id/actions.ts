@@ -2,6 +2,7 @@ import { AsyncAction } from 'redux';
 import { NotAuthenticated } from '@feathersjs/errors';
 
 import app from '../../app';
+import { isString } from '../../../utils/string';
 
 import { State } from '..';
 
@@ -40,7 +41,7 @@ function loginUser(): AsyncAction<State, Actions> {
 
       const { id } = await app.passport.verifyJWT(accessToken);
 
-      if (!id) {
+      if (!isString(id)) {
         return new NotAuthenticated(
           'Missing id field in JWT Payload!',
         );

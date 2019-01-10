@@ -20,7 +20,6 @@ function computeLevel(user: User) {
   return highestRole === null ? 0 : roles[highestRole].level;
 }
 
-// eslint-disable-next-line no-undef
 const env = process.env.NODE_ENV;
 
 function hasPermission(

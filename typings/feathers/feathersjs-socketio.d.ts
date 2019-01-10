@@ -10,16 +10,21 @@ declare module '@feathersjs/socketio' {
     path: string,
   }
 
-  export interface SocketConnection {
+  interface SocketConnection {
     feathers: Connection,
   }
 
-  export interface Socket {
+  interface Socket {
     on(eventname: 'connection', cb: (socket: ServerSocket) => void): Socket,
     on(eventname: string, cb: (data?: object) => void): Socket,
     use(cb: (socket: Socket, next: () => void) => void): Socket,
     emit(eventname: string, data?: object): Socket,
   }
+
+  export {
+    Socket,
+    SocketConnection,
+  };
 
   export default function socket(
     options: Options,

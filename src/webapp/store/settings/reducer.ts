@@ -1,3 +1,6 @@
+import { createStateCreator } from '../types';
+import UserSettings from '../../../types/UserSettings';
+
 import {
   UPDATE_SETTINGS,
   FETCH_FAILED_SETTINGS,
@@ -6,8 +9,6 @@ import {
   Actions,
   State,
 } from './types';
-import {createStateCreator} from "../types";
-import UserSettings from "../../../types/UserSettings";
 
 const stateCreator = createStateCreator<UserSettings>();
 const defaultState = stateCreator.createNotStartedState();

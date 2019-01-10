@@ -9,17 +9,15 @@ import { createSelector } from 'reselect';
 import regions from '../../../config/regions';
 import { makeGetRegion } from '../../store/users/selectors';
 import { getCurrentUserId } from '../../store/user-id/selectors';
-import { useMakeMapState } from '../../store/use-store';
+import { useMapState } from '../../store/use-store';
 import { updateRegion } from '../../store/users/actions';
 import { State } from '../../store';
 import { Keys } from '../../../utils/types';
 
-const makeMapState = () => {
-  const getRegion = makeGetRegion();
+const getRegion = makeGetRegion();
 
-  return (state: State) => {
-    return { region: getRegion(state, getCurrentUserId(state)) };
-  };
+const mapState = (state: State) => {
+  return { region: getRegion(state, getCurrentUserId(state)) };
 };
 
 const regionKeys = Object.keys(regions) as Keys<typeof regions>;
@@ -31,7 +29,7 @@ const options = regionKeys.map((region) => {
 });
 
 function RegionSetting() {
-  const { region } = useMakeMapState(makeMapState);
+  const { region } = useMapState(mapState);
   const [selectedRegion, setSelectedRegion] = useState(region);
   const handleChange = useCallback((ev) => {
     setSelectedRegion(ev.target.value);
@@ -57,8 +55,6 @@ function RegionSetting() {
     />
   );
 }
-
-const getRegion = makeGetRegion();
 
 export default {
   selector: createSelector(

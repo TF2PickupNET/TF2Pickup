@@ -1,15 +1,18 @@
-import React, {ReactNode} from 'react';
-import injectSheet, {Classes} from 'react-jss';
+import React, { ReactNode } from 'react';
+import withStyles, { WithStyles } from 'react-jss';
 
 import { getCurrentUser } from '../../../store/user-id/selectors';
 import { useMapState } from '../../../store/use-store';
+import {
+  Row,
+  Column,
+} from '../../../components/Grid';
+import User from '../../../../types/User';
+import { State } from '../../../store';
+import DocumentTitle from '../../../components/DocumentTitle';
 
 import Stepper from './Stepper';
 import steps from './steps';
-import {Row, Column} from "../../../components/Grid";
-import User from "../../../../types/User";
-import {State} from "../../../store";
-import DocumentTitle from '../../../components/DocumentTitle';
 
 const styles = {
   container: {
@@ -45,7 +48,7 @@ const mapState = (state: State) => {
   return { user: getCurrentUser(state) };
 };
 
-interface Props extends Classes<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   children: ReactNode,
 }
 
@@ -89,4 +92,4 @@ function SignUpScreen(props: Props) {
   );
 }
 
-export default injectSheet<Props>(styles)(SignUpScreen);
+export default withStyles(styles)(SignUpScreen);

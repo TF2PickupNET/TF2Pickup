@@ -1,16 +1,16 @@
-import gamemodes from "../../../../../config/gamemodes";
-import {ETF2LDivisions} from "../../../../../types/UserProfile";
-import {isNumber} from "../../../../../utils/number";
+import gamemodes from '../../../../../config/gamemodes';
+import { ETF2LDivisions } from '../../../../../types/UserProfile';
+import { isNumber } from '../../../../../utils/number';
 
 interface Match {
   merced: number,
   division: { name: string },
-  competition: { type: string },
+  competition: { type: keyof typeof gamemodes | '6on6' | 'Highlander' },
   gamemode: keyof typeof gamemodes,
-  divName: string,
+  divName: string | null,
 }
 
-const divs: Array<ETF2LDivisions> = [
+const divs: ETF2LDivisions[] = [
   'N/A',
   'Open',
   'Mid',
@@ -23,21 +23,29 @@ function normalizeDivisionName({ division }: Match): ETF2LDivisions | null {
   const level = match && isNumber(match[1]) ? match[1] : -1;
 
   switch (level) {
-    case 1: return 'High';
-    case 2: return 'High';
-    case 3: return 'Mid';
-    case 4: return 'Mid';
-    case 5: return 'Open';
-    case 6: return 'Low';
-    default: return null;
+    case 1:
+    case 2:
+      return 'High';
+    case 3:
+    case 4:
+      return 'Mid';
+    case 5:
+      return 'Open';
+    case 6:
+      return 'Low';
+    default:
+      return null;
   }
 }
 
-function normalizeGamemodeName(match: Match) {
+function normalizeGamemodeName(match: Match): keyof typeof gamemodes {
   switch (match.competition.type) {
-    case '6on6': return '6v6';
-    case 'Highlander': return '9v9';
-    default: return match.competition.type;
+    case '6on6':
+      return '6v6';
+    case 'Highlander':
+      return '9v9';
+    default:
+      return match.competition.type;
   }
 }
 

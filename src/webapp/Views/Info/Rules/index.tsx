@@ -1,7 +1,7 @@
 import React from 'react';
 
 import RulesComp from '../../../components/Rules';
-import DocumentTitle from "../../../components/DocumentTitle";
+import DocumentTitle from '../../../components/DocumentTitle';
 
 export default function Rules() {
   return (

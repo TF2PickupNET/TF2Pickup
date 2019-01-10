@@ -1,5 +1,9 @@
+// eslint-disable-next-line filenames/match-exported
 import axios from 'axios';
 import debug from 'debug';
+
+import gamemodes from '../../../../../config/gamemodes';
+import { ETF2LDivisions } from '../../../../../types/UserProfile';
 
 import {
   divs,
@@ -7,12 +11,10 @@ import {
   normalizeGamemodeName,
   Match,
 } from './utils';
-import gamemodes from "../../../../../config/gamemodes";
-import {ETF2LDivisions} from "../../../../../types/UserProfile";
 
 const log = debug('TF2Pickup:users:etf2l:get-divisions');
 
-function normalizeMatch(match: Match) {
+function normalizeMatch(match: Match): Match {
   return {
     ...match,
     gamemode: normalizeGamemodeName(match),
@@ -40,7 +42,7 @@ export default async function getETF2LDivisions(id: string, etf2lId: string) {
     const response = await axios.get(`http://api.etf2l.org/player/${etf2lId}/results.json`, {
       params: {
         since: 0,
-        per_page: 100, // eslint-disable-line camelcase
+        per_page: 100, // eslint-disable-line camelcase, typescript/camelcase
       },
     });
     const matches = response.data.results;

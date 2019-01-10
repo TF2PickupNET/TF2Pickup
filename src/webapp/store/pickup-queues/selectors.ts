@@ -1,6 +1,8 @@
-import {State} from "..";
-import {createSelector} from "reselect";
-import gamemodes from "../../../config/gamemodes";
+import { createSelector } from 'reselect';
+
+import gamemodes from '../../../config/gamemodes';
+
+import { State } from '..';
 
 const getPickupQueues = (state: State) => state.pickupQueues;
 
@@ -26,4 +28,4 @@ export {
   makeGetPickupQueue,
   makeGetPickupQueueError,
   makeGetPickupQueueStatus,
-}
+};

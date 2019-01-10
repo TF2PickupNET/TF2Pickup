@@ -2,15 +2,18 @@ import { AsyncAction } from 'redux';
 
 import UserProfile from '../../../types/UserProfile';
 import app from '../../app';
+import { AsyncStatus } from '../types';
 
 import { State } from '..';
 
 import {
   UPDATE_PROFILE,
-  Actions, FETCHED_PROFILE, FETCH_ERROR_PROFILE, START_FETCH_PROFILE,
+  Actions,
+  FETCHED_PROFILE,
+  FETCH_ERROR_PROFILE,
+  START_FETCH_PROFILE,
 } from './types';
-import {makeGetProfileStatus} from "./selectors";
-import {AsyncStatus} from "../types";
+import { makeGetProfileStatus } from './selectors';
 
 function updateProfile(profile: UserProfile): Actions {
   return {

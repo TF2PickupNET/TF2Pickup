@@ -1,5 +1,6 @@
 import isUrl from 'is-url';
-import {Validator} from "./types";
+
+import { Validator } from './types';
 
 interface Options {
   msg?: string,
@@ -9,9 +10,9 @@ interface Options {
 export default function url({
   msg = '{VALUE} is not a valid url!',
   nullIsAllowed = false,
-}: Options): Validator {
+}: Options): Validator<string | null> {
   return [
-    (value: string) => isUrl(value) || (nullIsAllowed && value === null),
+    value => (value === null ? nullIsAllowed : isUrl(value)),
     msg,
   ];
 }

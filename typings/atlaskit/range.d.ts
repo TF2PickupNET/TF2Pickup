@@ -8,10 +8,11 @@ declare module '@atlaskit/range' {
     isDisabled?: boolean,
     max?: number,
     min?: number,
-    onChange: (val: number) => void,
+    onChange(val: number): void,
     step?: number,
     value: number,
-    onBlur: FocusEventHandler,
+    onBlur?: FocusEventHandler,
+    onFocus?: FocusEventHandler,
   }
 
   const Range: ComponentType<RangeProps>;

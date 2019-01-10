@@ -3,7 +3,7 @@ declare module '@feathersjs/express' {
   import { Socket } from 'net';
   import { FeathersError } from '@feathersjs/errors';
 
-  export interface ExpressRequest {
+  interface ExpressRequest {
     app: ServerApp,
     baseUrl: string,
     body: {},
@@ -51,7 +51,7 @@ declare module '@feathersjs/express' {
 
   type ExpressRenderCallback = (err: Error | null, html?: string) => unknown;
 
-  export interface ExpressResponse {
+  interface ExpressResponse {
     headersSent: boolean,
     locals: { [name: string]: unknown },
     append(field: string, value?: string): ExpressResponse,
@@ -96,7 +96,7 @@ declare module '@feathersjs/express' {
 
   type ExpressNextFunction = (err?: Error | 'route') => unknown;
 
-  export type ExpressMiddleware = (
+  type ExpressMiddleware = (
     req: ExpressRequest,
     res: ExpressResponse,
     next: ExpressNextFunction,
@@ -120,6 +120,12 @@ declare module '@feathersjs/express' {
   }
 
   const express: Express;
+
+  export {
+    ExpressMiddleware,
+    ExpressRequest,
+    ExpressResponse,
+  };
 
   export default express;
 }

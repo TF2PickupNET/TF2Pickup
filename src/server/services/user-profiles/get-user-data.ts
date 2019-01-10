@@ -1,4 +1,7 @@
-import { isBefore, subDays } from 'date-fns';
+import {
+  isBefore,
+  subDays,
+} from 'date-fns';
 import deepMerge from 'deepmerge';
 
 import UserProfile from '../../../types/UserProfile';

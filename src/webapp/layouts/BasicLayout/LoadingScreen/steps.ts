@@ -1,14 +1,26 @@
-import store, {State} from '../../../store';
-import {fetchConfig} from '../../../store/config/actions';
-import {fetchUser} from '../../../store/users/actions';
-import {fetchSettings} from '../../../store/settings/actions';
-import {fetchProfile} from '../../../store/user-profiles/actions';
-import {getCurrentUserId} from '../../../store/user-id/selectors';
-import {getConfigError, getConfigStatus} from '../../../store/config/selectors';
-import {makeGetUserError, makeGetUserStatus} from '../../../store/users/selectors';
-import {getSettingsError, getSettingsStatus} from "../../../store/settings/selectors";
-import {AsyncStatus} from "../../../store/types";
-import {makeGetProfileError, makeGetProfileStatus} from "../../../store/user-profiles/selectors";
+import store, { State } from '../../../store';
+import { fetchConfig } from '../../../store/config/actions';
+import { fetchUser } from '../../../store/users/actions';
+import { fetchSettings } from '../../../store/settings/actions';
+import { fetchProfile } from '../../../store/user-profiles/actions';
+import { getCurrentUserId } from '../../../store/user-id/selectors';
+import {
+  getConfigError,
+  getConfigStatus,
+} from '../../../store/config/selectors';
+import {
+  makeGetUserError,
+  makeGetUserStatus,
+} from '../../../store/users/selectors';
+import {
+  getSettingsError,
+  getSettingsStatus,
+} from '../../../store/settings/selectors';
+import { AsyncStatus } from '../../../store/types';
+import {
+  makeGetProfileError,
+  makeGetProfileStatus,
+} from '../../../store/user-profiles/selectors';
 
 const getUserStatus = makeGetUserStatus();
 const getUserError = makeGetUserError();
@@ -19,8 +31,12 @@ const steps = {
   'load-configuration': {
     text: 'Loading configuration',
     end: 20,
-    hasFinished: (state: State) => getConfigStatus(state) === AsyncStatus.SUCCESS,
-    hasError: (state: State) => getConfigError(state),
+    hasFinished(state: State) {
+      return getConfigStatus(state) === AsyncStatus.SUCCESS;
+    },
+    hasError(state: State) {
+      return getConfigError(state);
+    },
     handler() {
       store.dispatch(fetchConfig());
     },
@@ -29,8 +45,12 @@ const steps = {
   'load-user': {
     text: 'Loading user',
     end: 40,
-    hasFinished: (state: State) => getUserStatus(state, getCurrentUserId(state)) === AsyncStatus.SUCCESS,
-    hasError: (state: State) => getUserError(state, getCurrentUserId(state)),
+    hasFinished(state: State) {
+      return getUserStatus(state, getCurrentUserId(state)) === AsyncStatus.SUCCESS;
+    },
+    hasError(state: State) {
+      return getUserError(state, getCurrentUserId(state));
+    },
     handler() {
       const userId = getCurrentUserId(store.getState());
 
@@ -41,8 +61,12 @@ const steps = {
   'load-settings': {
     text: 'Loading settings',
     end: 60,
-    hasFinished: (state: State) => getSettingsStatus(state) === AsyncStatus.SUCCESS,
-    hasError: (state: State) => getSettingsError(state),
+    hasFinished(state: State) {
+      return getSettingsStatus(state) === AsyncStatus.SUCCESS;
+    },
+    hasError(state: State) {
+      return getSettingsError(state);
+    },
     handler() {
       store.dispatch(fetchSettings());
     },
@@ -51,8 +75,12 @@ const steps = {
   'load-profile': {
     text: 'Loading profile',
     end: 100,
-    hasFinished: (state: State) => getProfileStatus(state, getCurrentUserId(state)) === AsyncStatus.SUCCESS,
-    hasError: (state: State) => getProfileError(state, getCurrentUserId(state)),
+    hasFinished(state: State) {
+      return getProfileStatus(state, getCurrentUserId(state)) === AsyncStatus.SUCCESS;
+    },
+    hasError(state: State) {
+      return getProfileError(state, getCurrentUserId(state));
+    },
     handler() {
       const userId = getCurrentUserId(store.getState());
 

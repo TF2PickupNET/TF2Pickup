@@ -2,6 +2,7 @@ import debug from 'debug';
 
 import UserProfile from '../../../../../types/UserProfile';
 import steamApi from '../../../../utils/steam-api';
+
 import getSteamFriends from './get-steam-friends';
 import getVACBans from './get-vac-bans';
 

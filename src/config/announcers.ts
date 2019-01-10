@@ -4,6 +4,8 @@ interface Announcer {
   needsPurchase: boolean,
 }
 
+const DEFAULT_ANNOUNCER = 'default';
+
 const defaultAnnouncer: Announcer = {
   name: 'default',
   display: 'TF2 Announcer (default)',
@@ -70,6 +72,9 @@ const announcers = {
   jon,
 };
 
-export { Announcer };
+export {
+  Announcer,
+  DEFAULT_ANNOUNCER,
+};
 
 export default announcers;

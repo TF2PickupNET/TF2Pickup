@@ -1,12 +1,17 @@
-import {ServerApp} from "@feathersjs/feathers";
-import gamemodes from "../../../config/gamemodes";
-import {Keys} from "../../../utils/types";
-import regions from "../../../config/regions";
+import { ServerApp } from '@feathersjs/feathers';
+
+import gamemodes from '../../../config/gamemodes';
+import { Keys } from '../../../utils/types';
+import regions from '../../../config/regions';
 
 const gamemodeKeys = Object.keys(gamemodes) as Keys<typeof gamemodes>;
 const regionKeys = Object.keys(regions) as Keys<typeof regions>;
 
-async function setupQueue(app: ServerApp, region: keyof typeof regions, gamemode: keyof typeof gamemodes) {
+async function setupQueue(
+  app: ServerApp,
+  region: keyof typeof regions,
+  gamemode: keyof typeof gamemodes,
+) {
   const pickupQueues = app.service('pickup-queues');
   const id = `${region}-${gamemode}`;
 
@@ -29,7 +34,6 @@ async function setupQueue(app: ServerApp, region: keyof typeof regions, gamemode
       });
     }
   }
-
 }
 
 export default function setupQueues() {
@@ -39,5 +43,5 @@ export default function setupQueues() {
         setupQueue(app, region, gamemode);
       });
     });
-  }
+  };
 }

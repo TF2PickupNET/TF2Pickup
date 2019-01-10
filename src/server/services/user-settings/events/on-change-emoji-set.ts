@@ -3,7 +3,10 @@ import {
   BadRequest,
 } from '@feathersjs/errors';
 import { SocketConnection } from '@feathersjs/socketio';
-import { SocketEventHandler, ServerApp } from '@feathersjs/feathers';
+import {
+  SocketEventHandler,
+  ServerApp,
+} from '@feathersjs/feathers';
 import debug from 'debug';
 
 import emojiSets from '../../../../config/emoji-sets';

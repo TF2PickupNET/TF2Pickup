@@ -1,7 +1,8 @@
 import { AsyncAction } from 'redux';
 
-import { State } from '..';
 import app from '../../app';
+
+import { State } from '..';
 
 import {
   Actions,
@@ -28,7 +29,7 @@ export function fetchConfig(): AsyncAction<State, Actions> {
       dispatch({
         type: FETCH_ERROR_CONFIG,
         payload: { error },
-      })
+      });
     }
   };
 }

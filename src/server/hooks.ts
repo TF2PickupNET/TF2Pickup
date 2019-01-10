@@ -12,7 +12,7 @@ const log = debug('TF2Pickup:hooks');
 
 export default {
   before: {
-    all(hook: BeforeHookContext<any>) {
+    all(hook: BeforeHookContext<object>) {
       if (hook.params.provider === 'external') {
         return auth.hooks.authenticate(['jwt'])(hook);
       }
@@ -23,7 +23,7 @@ export default {
     update: hooks.disallow(),
     patch: hooks.disallow('external'),
 
-    remove(hook: RemoveBeforeHookContext<any>) {
+    remove(hook: RemoveBeforeHookContext<object>) {
       if (hook.path === 'authentication') {
         return hook;
       }
@@ -31,7 +31,7 @@ export default {
       return hooks.disallow('external')(hook);
     },
 
-    create(hook: CreateBeforeHookContext<any>) {
+    create(hook: CreateBeforeHookContext<object>) {
       if (hook.path === 'authentication') {
         return hook;
       }
@@ -41,7 +41,7 @@ export default {
   },
 
   error: {
-    all(hook: ErrorHookContext<any>) {
+    all(hook: ErrorHookContext<object>) {
       if (hook.error.code === 404) {
         return hook;
       }

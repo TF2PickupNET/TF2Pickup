@@ -32,9 +32,12 @@ function useLocation(): Location {
   return context.location;
 }
 
-function useMatch<R, D>(selector: (match: Match) => R | null, defaultValue: D): R | D {
+function useMatch<Return, DefaultValue>(
+  selector: (match: Match) => Return | null,
+  defaultValue: DefaultValue,
+): Return | DefaultValue {
   const context = useContext(RouterContext);
-  const getMatch = (): R | D => {
+  const getMatch = (): Return | DefaultValue => {
     const value = selector(context.match);
 
     return value === null ? defaultValue : value;

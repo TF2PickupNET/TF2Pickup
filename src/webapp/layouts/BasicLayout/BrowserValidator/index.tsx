@@ -5,9 +5,10 @@ import React, {
 } from 'react';
 import is from 'is_js';
 import Button from '@atlaskit/button';
-import {Row} from '../../../components/Grid';
-import injectSheet, {Classes} from 'react-jss';
-import DocumentTitle from "../../../components/DocumentTitle";
+import withStyles, { WithStyles } from 'react-jss';
+
+import { Row } from '../../../components/Grid';
+import DocumentTitle from '../../../components/DocumentTitle';
 
 const styles = {
   container: { minHeight: '100vh' },
@@ -23,7 +24,7 @@ const commonCardContent = (
     <br />
 
     Please note that when you report any bug or something is broken
-    and you aren&amp;t using a desktop and supported browser,
+    and you aren&apos;t using a desktop and supported browser,
     we will not fix your bug.
   </React.Fragment>
 );
@@ -32,7 +33,8 @@ const cardTitle = isDesktop
   : 'It appears you are not on a desktop browser';
 const cardContent = isDesktop ? (
   <React.Fragment>
-    You are apparently using an unsupported browsers.<br />
+    You are apparently using an unsupported browsers.
+    <br />
 
     We currently only support:
     <ul>
@@ -49,9 +51,11 @@ const cardContent = isDesktop ? (
   </React.Fragment>
 );
 
-interface Props extends Classes<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   children: ReactNode,
 }
+
+const hideWarning = isValidBrowser && isDesktop;
 
 function BrowserValidator(props: Props) {
   const [ignoreWarning, setIgnoreWarning] = useState(
@@ -63,7 +67,7 @@ function BrowserValidator(props: Props) {
     setIgnoreWarning(true);
   }, []);
 
-  if ((isDesktop && isValidBrowser) || ignoreWarning) {
+  if (hideWarning || ignoreWarning) {
     return (
       <React.Fragment>
         {props.children}
@@ -95,4 +99,4 @@ function BrowserValidator(props: Props) {
   );
 }
 
-export default injectSheet<Props>(styles)(BrowserValidator);
+export default withStyles(styles)(BrowserValidator);

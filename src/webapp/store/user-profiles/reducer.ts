@@ -1,3 +1,6 @@
+import { createStateCreator } from '../types';
+import UserProfile from '../../../types/UserProfile';
+
 import {
   UPDATE_PROFILE,
   START_FETCH_PROFILE,
@@ -6,8 +9,6 @@ import {
   Actions,
   State,
 } from './types';
-import { createStateCreator } from '../types';
-import UserProfile from '../../../types/UserProfile';
 
 const stateCreator = createStateCreator<UserProfile>();
 

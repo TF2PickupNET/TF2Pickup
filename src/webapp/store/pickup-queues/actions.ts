@@ -1,19 +1,22 @@
-import {AsyncAction} from "redux";
-import {State} from "..";
+import { AsyncAction } from 'redux';
+
+import gamemodes from '../../../config/gamemodes';
+import app from '../../app';
+import { makeGetRegion } from '../users/selectors';
+import { getCurrentUserId } from '../user-id/selectors';
+import PickupQueue from '../../../types/PickupQueue';
+import { AsyncStatus } from '../types';
+
+import { State } from '..';
+
+import { makeGetPickupQueueStatus } from './selectors';
 import {
   Actions,
   FETCH_ERROR_PICKUP_QUEUE,
   FETCHED_PICKUP_QUEUE,
   START_FETCH_PICKUP_QUEUE,
-  UPDATE_PICKUP_QUEUE
-} from "./types";
-import gamemodes from "../../../config/gamemodes";
-import app from "../../app";
-import {makeGetRegion} from "../users/selectors";
-import {getCurrentUserId} from "../user-id/selectors";
-import PickupQueue from "../../../types/PickupQueue";
-import {makeGetPickupQueueStatus} from "./selectors";
-import {AsyncStatus} from "../types";
+  UPDATE_PICKUP_QUEUE,
+} from './types';
 
 const getRegion = makeGetRegion();
 

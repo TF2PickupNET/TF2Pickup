@@ -9,9 +9,9 @@ export function events() {
     const users = app.service('user-profiles');
 
     users.on('patched', (data) => {
-      const user = store.getState().userProfiles[data.id];
+      const profiles = store.getState().userProfiles;
 
-      if (user) {
+      if (data.id in profiles) {
         store.dispatch(updateProfile(data));
       }
     });

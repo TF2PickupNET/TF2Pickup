@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import reducers, { State } from './reducers';
-import Actions from "./actions";
+import Actions from './actions';
 
 const middlewares = applyMiddleware(thunk);
 

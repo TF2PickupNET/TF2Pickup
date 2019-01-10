@@ -10,13 +10,14 @@ const FETCHED_PROFILE = 'PROFILE/FETCHED';
 const FETCH_ERROR_PROFILE = 'PROFILE/FETCH-ERROR';
 const UPDATE_PROFILE = 'PROFILE/UPDATE';
 
-type Actions = Action<typeof UPDATE_PROFILE, { profile: UserProfile }>
+type Actions =
+  | Action<typeof UPDATE_PROFILE, { profile: UserProfile }>
   | Action<typeof START_FETCH_PROFILE, { userId: string }>
   | Action<typeof FETCHED_PROFILE, { profile: UserProfile }>
   | Action<typeof FETCH_ERROR_PROFILE, {
-  error: Error,
-  userId: string,
-}>;
+    error: Error,
+    userId: string,
+  }>;
 
 export {
   UPDATE_PROFILE,

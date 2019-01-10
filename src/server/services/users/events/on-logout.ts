@@ -1,4 +1,3 @@
-
 import { ServerApp } from '@feathersjs/feathers';
 import {
   Meta,

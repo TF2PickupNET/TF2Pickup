@@ -1,6 +1,10 @@
+// eslint-disable-next-line filenames/match-exported
 import debug from 'debug';
 import path from 'path';
-import { ServiceDefinition, ServerApp } from '@feathersjs/feathers';
+import {
+  ServiceDefinition,
+  ServerApp,
+} from '@feathersjs/feathers';
 import {
   BadRequest,
   NotFound,
@@ -9,9 +13,12 @@ import {
 import gamemodes from '../../../config/gamemodes';
 import regions from '../../../config/regions';
 import { isString } from '../../../utils/string';
-import readFile from "../../../utils/read-file";
+import readFile from '../../../utils/read-file';
 
-interface TF2Config { config: string }
+interface TF2Config {
+  config: string,
+}
+
 interface Query {
   region?: string,
   gamemode?: string,
@@ -21,43 +28,40 @@ interface Query {
 const log = debug('TF2Pickup:tf2-configs');
 const dir = path.join(__dirname, '../../../../../dist/tf2configs');
 
-class TF2ConfigsService implements ServiceDefinition<TF2Config> {
-  static validateOptions({
+function validateOptions(options: Query) {
+  const {
     region,
     gamemode,
     configType,
-  }: Query) {
-    if (!isString(region) || !(region in regions)) {
-      return new BadRequest(`Invalid region: ${region}`);
-    }
+  } = options;
 
-    if (!isString(gamemode) || !(gamemode in gamemodes)) {
-      return new BadRequest(`Invalid gamemode: ${gamemode}`);
-    }
-
-    // @ts-ignore
-    const validConfigTypes = gamemodes[gamemode].mapTypes;
-
-    if (!validConfigTypes.includes(configType)) {
-      return new BadRequest(
-        `Invalid config type for gamemode: ${configType === null ? 'No type' : configType}`
-      );
-    }
-
-    return null;
+  if (!isString(region) || !(region in regions)) {
+    throw new BadRequest(`Invalid region: ${region}`);
   }
 
+  if (!isString(gamemode) || !(gamemode in gamemodes)) {
+    throw new BadRequest(`Invalid gamemode: ${gamemode}`);
+  }
+
+  // @ts-ignore
+  const validConfigTypes = gamemodes[gamemode].mapTypes;
+
+  if (!validConfigTypes.includes(configType)) {
+    throw new BadRequest(
+      `Invalid config type for gamemode: ${configType === null ? 'No type' : configType}`,
+    );
+  }
+}
+
+const TF2ConfigsService: ServiceDefinition<TF2Config> = {
   async get(id: string) {
     const [region, gamemode, configType = null] = id.split('_');
-    const error = TF2ConfigsService.validateOptions({
+
+    validateOptions({
       region,
       gamemode,
       configType,
     });
-
-    if (error !== null) {
-      throw error;
-    }
 
     const fileName = configType === null
       ? `${region}_${gamemode}.cfg`
@@ -74,8 +78,8 @@ class TF2ConfigsService implements ServiceDefinition<TF2Config> {
 
       throw error;
     }
-  }
-}
+  },
+};
 
 export default function tf2Configs() {
   return (app: ServerApp) => {
@@ -86,6 +90,6 @@ export default function tf2Configs() {
      *
      * This returns whether or not the server runs in beta mode and which version it's currently.
      */
-    app.use('/tf2-configs', new TF2ConfigsService());
+    app.use('/tf2-configs', TF2ConfigsService);
   };
 }

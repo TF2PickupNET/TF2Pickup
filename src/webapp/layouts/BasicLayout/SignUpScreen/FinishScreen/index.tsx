@@ -1,22 +1,20 @@
-import React, {useCallback} from 'react';
-import injectSheet from 'react-jss';
+import React from 'react';
+import withStyles, { WithStyles } from 'react-jss';
 import Button from '@atlaskit/button';
 
 import { completeSignUp } from '../../../../store/users/actions';
 import useAsync from '../../../../utils/use-async';
-import {Row} from "../../../../components/Grid";
-
-type Props = { classes: { text: string } };
+import { Row } from '../../../../components/Grid';
 
 const styles = { text: { textAlign: 'center' } };
+
+type Props = WithStyles<typeof styles>;
 
 function FinishScreen(props: Props) {
   const {
     isLoading,
     run: handleFinishClick,
-  } = useAsync(
-    useCallback(() => completeSignUp(), []),
-  );
+  } = useAsync(completeSignUp);
 
   return (
     <React.Fragment>
@@ -28,8 +26,8 @@ function FinishScreen(props: Props) {
       <Row justify="center">
         <Button
           isLoading={isLoading}
-          onClick={handleFinishClick}
           appearance="primary"
+          onClick={handleFinishClick}
         >
           Let&apos;s go
         </Button>
@@ -38,4 +36,4 @@ function FinishScreen(props: Props) {
   );
 }
 
-export default injectSheet<Props>(styles)(FinishScreen);
+export default withStyles(styles)(FinishScreen);

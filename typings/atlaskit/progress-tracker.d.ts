@@ -1,5 +1,5 @@
 declare module '@atlaskit/progress-tracker' {
-  import {ComponentType} from "react";
+  import { ComponentType } from 'react';
 
   type Status = 'unvisited' | 'visited' | 'current' | 'disabled';
 

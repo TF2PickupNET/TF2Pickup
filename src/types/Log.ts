@@ -1,6 +1,6 @@
 interface Log {
-  path: String,
-  message: String,
+  path: string,
+  message: string,
   createdOn: number,
   data: {},
 }

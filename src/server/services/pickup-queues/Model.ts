@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
-import regions from "../../../config/regions";
-import gamemodes from "../../../config/gamemodes";
-import oneOf from "../../utils/validators/one-of";
-import pickupStatus from "../../../config/pickup-status";
-import PickupQueue from "../../../types/PickupQueue";
-import maps from "../../../config/maps";
+
+import regions from '../../../config/regions';
+import gamemodes from '../../../config/gamemodes';
+import oneOf from '../../utils/validators/one-of';
+import pickupStatus from '../../../config/pickup-status';
+import PickupQueue from '../../../types/PickupQueue';
+import maps from '../../../config/maps';
 
 export default mongoose.model('PickupQueue', new mongoose.Schema({
   id: {
@@ -12,7 +13,7 @@ export default mongoose.model('PickupQueue', new mongoose.Schema({
     validate(this: PickupQueue, id: string) {
       const [region, gamemode] = id.split('-');
 
-      return region  === this.region && gamemode === this.gamemode;
+      return region === this.region && gamemode === this.gamemode;
     },
     required: true,
   },
@@ -45,7 +46,7 @@ export default mongoose.model('PickupQueue', new mongoose.Schema({
     min: 3,
     max: 3,
     validate(val: string[]) {
-      return val.every(map => map in maps)
+      return val.every(map => map in maps);
     },
     required: true,
   },

@@ -21,9 +21,9 @@ function useMapState<MappedState, Arg1, Arg2>(
   arg2: Arg2,
 ): MappedState;
 
-function useMapState<MappedState>(
-  mapState: (state: any, ...args: any[]) => any,
-  ...args: any[]
+function useMapState<MappedState, Args extends []>(
+  mapState: (state: State, ...args: Args) => MappedState,
+  ...args: Args
 ): MappedState {
   const currentData = useRef(args);
 
@@ -52,7 +52,7 @@ function useMapState<MappedState>(
 
   // Subscribe to store changes
   useEffect(
-    () => store.subscribe(() => updateState()),
+    () => store.subscribe(updateState),
     [store],
   );
 
@@ -72,9 +72,9 @@ function useMakeMapState<MappedState, Arg1, Arg2>(
   arg2: Arg2,
 ): MappedState;
 
-function useMakeMapState<MappedState>(
-  makeMapState: any,
-  ...args: any[]
+function useMakeMapState<MappedState, Args extends []>(
+  makeMapState: () => (state: State, ...args: Args) => MappedState,
+  ...args: Args
 ): MappedState {
   const mapState = useCallback(makeMapState, []);
 

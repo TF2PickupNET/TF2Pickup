@@ -1,5 +1,7 @@
 import React, { ReactNode } from 'react';
-import injectSheet, {Classes} from 'react-jss';
+import withStyles, { WithStyles } from 'react-jss';
+
+import { isNumber } from '../../../utils/number';
 
 interface OwnProps {
   col?: number,
@@ -8,18 +10,20 @@ interface OwnProps {
 }
 
 const COLUMNS = 24;
-const defaultProps: Partial<Props> = {
-  col: COLUMNS,
-  className: '',
-};
 const styles = {
   column: {
     flex: 1,
-    maxWidth: (props: OwnProps) => `${props.col! / COLUMNS * 100}%`,
-  }
+    maxWidth(props: Props) {
+      if (isNumber(props.col)) {
+        return `${props.col / COLUMNS * 100}%`;
+      }
+
+      return null;
+    },
+  },
 };
 
-type Props = OwnProps & Classes<typeof styles>;
+interface Props extends OwnProps, WithStyles<typeof styles> {}
 
 function Column(props: Props) {
   return (
@@ -29,6 +33,6 @@ function Column(props: Props) {
   );
 }
 
-Column.defaultProps = defaultProps;
+Column.defaultProps = { className: '' };
 
-export default injectSheet<Props>(styles)(Column);
+export default withStyles(styles)(Column);

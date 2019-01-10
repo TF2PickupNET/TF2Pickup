@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 
-type Props = {
+interface Props {
   date: number | Date,
   withDay?: boolean,
   className?: string,
   locale?: string,
   timeZone?: string,
   divider?: string,
-};
+}
 
 function DateDisplay(props: Props) {
   const date = useMemo(() => new Date(props.date), [props.date]);

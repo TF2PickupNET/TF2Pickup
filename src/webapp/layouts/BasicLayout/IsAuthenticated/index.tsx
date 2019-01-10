@@ -2,7 +2,7 @@ import React, {
   useState,
   ReactNode,
 } from 'react';
-import injectSheet, { Classes } from 'react-jss';
+import withStyles, { WithStyles } from 'react-jss';
 import Button from '@atlaskit/button';
 import { Redirect } from 'react-router-dom';
 
@@ -13,8 +13,8 @@ import { getCurrentUserId } from '../../../store/user-id/selectors';
 import { useMapState } from '../../../store/use-store';
 import useActions from '../../../store/use-actions';
 import { loginUser } from '../../../store/user-id/actions';
-import useAsyncEffect from "../../../utils/use-async-effect";
-import DocumentTitle from "../../../components/DocumentTitle";
+import useAsyncEffect from '../../../utils/use-async-effect';
+import DocumentTitle from '../../../components/DocumentTitle';
 import { useLocation } from '../../../utils/use-router';
 
 const styles = {
@@ -33,8 +33,8 @@ const mapState = (state: State) => {
   return { userId: getCurrentUserId(state) };
 };
 
-interface Props extends Classes<typeof styles> {
-  children: ReactNode
+interface Props extends WithStyles<typeof styles> {
+  children: ReactNode,
 }
 
 function IsAuthenticated(props: Props) {
@@ -84,4 +84,4 @@ function IsAuthenticated(props: Props) {
   );
 }
 
-export default injectSheet<Props>(styles)(IsAuthenticated);
+export default withStyles(styles)(IsAuthenticated);

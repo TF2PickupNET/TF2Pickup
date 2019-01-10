@@ -13,6 +13,7 @@ declare module 'passport-steam' {
     done: (err: Error | null, user: {} | null) => void,
   ) => void | Promise<void>;
 
+  // eslint-disable-next-line typescript/no-extraneous-class
   export default class SteamStrategy implements Strategy {
     public constructor(options: Options, callback: Callback);
   }

@@ -1,6 +1,9 @@
 import React, { ComponentType } from 'react';
-import injectSheet, {Classes} from 'react-jss';
-import { ProgressTracker, Status } from '@atlaskit/progress-tracker';
+import withStyles, { WithStyles } from 'react-jss';
+import {
+  ProgressTracker,
+  Status,
+} from '@atlaskit/progress-tracker';
 
 import steps from './steps';
 
@@ -30,14 +33,12 @@ function getStatusForStepIndex(index: number, currentIndex: number): Status {
   return 'unvisited';
 }
 
-interface Props extends Classes<typeof styles> {
-  component: ComponentType<any>,
+interface Props extends WithStyles<typeof styles> {
+  component: ComponentType<object>,
   index: number,
 }
 
 function Stepper(props: Props) {
-  const Component = props.component;
-
   const items = steps.map((step, index) => {
     const status = getStatusForStepIndex(index, props.index);
 
@@ -58,10 +59,10 @@ function Stepper(props: Props) {
       />
 
       <div className={props.classes.contentContainer}>
-        <Component />
+        <props.component />
       </div>
     </div>
   );
 }
 
-export default injectSheet<Props>(styles)(Stepper);
+export default withStyles(styles)(Stepper);

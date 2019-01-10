@@ -1,22 +1,22 @@
-import React, {ReactNode} from 'react';
-import injectSheet from 'react-jss';
-import {isString} from "../../../utils/string";
+import React, { ReactNode } from 'react';
+import withStyles, { WithStyles } from 'react-jss';
 
-interface Props {
+import { isString } from '../../../utils/string';
+
+interface OwnProps {
   dir?: 'column' | 'row',
   justify?: 'space-between' | 'space-around' | 'start' | 'center' | 'end',
   align?: 'start' | 'center' | 'end',
   children: ReactNode,
-  classes: { row: string },
   className?: string,
   inline?: boolean,
 }
 
 const styles = {
   row: {
-    display: (props: Props) => props.inline ? 'inline-flex' : 'flex',
-    flexDirection: (props: Props) => props.dir,
-    alignItems(props: Props) {
+    display: (props: OwnProps) => (props.inline ? 'inline-flex' : 'flex'),
+    flexDirection: (props: OwnProps) => props.dir,
+    alignItems(props: OwnProps) {
       if (!isString(props.align)) {
         return null;
       }
@@ -28,7 +28,7 @@ const styles = {
           return `flex-${props.align}`;
       }
     },
-    justifyContent(props: Props) {
+    justifyContent(props: OwnProps) {
       if (!isString(props.justify)) {
         return null;
       }
@@ -45,6 +45,8 @@ const styles = {
   },
 };
 
+interface Props extends OwnProps, WithStyles<typeof styles> {}
+
 function Row(props: Props) {
   return (
     <div className={`${props.classes.row} ${props.className}`}>
@@ -55,4 +57,4 @@ function Row(props: Props) {
 
 Row.defaultProps = { className: '' };
 
-export default injectSheet<Props>(styles)(Row);
+export default withStyles(styles)(Row);

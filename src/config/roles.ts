@@ -33,13 +33,13 @@ const donator: Role = {
   color: '#ffc53d',
 };
 
-export { Role };
-
 const roles = {
   headAdmin,
   admin,
   honoraryUser,
   donator,
 };
+
+export { Role };
 
 export default roles;

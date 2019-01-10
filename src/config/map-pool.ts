@@ -1,10 +1,9 @@
+import { Keys } from '../utils/types';
+
 import maps from './maps';
 
-type Maps = Array<keyof typeof maps>;
-
-type MapPool = {
-  [key: string]: Maps,
-};
+type Maps = Keys<typeof maps>;
+type MapPool = Record<string, Maps>;
 
 const ultiduoMaps: Maps = [
   'koth_ultiduo_r_b7',

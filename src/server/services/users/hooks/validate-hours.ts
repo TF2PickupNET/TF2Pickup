@@ -10,7 +10,7 @@ import User from '../../../../types/User';
 import steamApi from '../../../utils/steam-api';
 
 const log = debug('TF2Pickup:users:fetch-tf2-hours');
-const requiredHours = config.get('auth.required-hours');
+const requiredHours = config.get<number | null>('auth.required-hours');
 const tf2AppId = 440;
 
 const generalErrorMessage = `
@@ -31,14 +31,13 @@ export default async function validateHours(hook: CreateBeforeHookContext<User>)
     return;
   }
 
-  // eslint-disable-next-line fp/no-let
   let hours = 0;
 
   try {
     const { data } = await steamApi.get('IPlayerService/GetOwnedGames/v0001/', {
       params: {
         steamid: hook.data.id,
-        include_played_free_games: 1, // eslint-disable-line camelcase
+        include_played_free_games: 1, // eslint-disable-line camelcase, typescript/camelcase
       },
     });
     const games = data.response && data.response.games ? data.response.games : [];

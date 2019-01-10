@@ -6,12 +6,14 @@ import { updateUser } from './actions';
 
 export default function events() {
   return (app: ClientApp) => {
-    app.service('users').on('patched', (data) => {
-      const users = store.getState().users;
+    app
+      .service('users')
+      .on('patched', (data) => {
+        const users = store.getState().users;
 
-      if (users[data.id]) {
-        store.dispatch(updateUser(data));
-      }
-    });
+        if (data.id in users) {
+          store.dispatch(updateUser(data));
+        }
+      });
   };
 }

@@ -5,8 +5,21 @@ module.exports = {
     'henribeck/typescript',
   ],
 
+  rules: {
+    'promise/prefer-await-to-callbacks': 'off'
+  },
+
   overrides: [{
     files: ['src/config/maps.ts'],
-    rules: { camelcase: 'off' },
+    rules: {
+      camelcase: 'off',
+      'typescript/camelcase': 'off',
+    },
+  }, {
+    files: ['typings/feathers/feathersjs-errors.d.ts'],
+    rules: {
+      'unicorn/custom-error-definition': 'off',
+      'max-classes-per-file': 'off',
+    },
   }],
 };

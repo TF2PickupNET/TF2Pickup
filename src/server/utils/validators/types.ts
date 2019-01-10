@@ -1,5 +1,5 @@
-type Validator = [
-  (val: any) => boolean,
+type Validator<Val> = [
+  (val: Val) => boolean,
   string
 ];
 

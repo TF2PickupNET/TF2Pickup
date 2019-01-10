@@ -2,7 +2,10 @@ import {
   NotAuthenticated,
   BadRequest,
 } from '@feathersjs/errors';
-import { ServerApp, SocketEventHandler } from '@feathersjs/feathers';
+import {
+  ServerApp,
+  SocketEventHandler,
+} from '@feathersjs/feathers';
 import { SocketConnection } from '@feathersjs/socketio';
 import debug from 'debug';
 
@@ -13,11 +16,10 @@ export default function onSetName(
   connection: SocketConnection,
 ): SocketEventHandler<'users:set-name'> {
   const users = app.service('users');
+  const user = connection.feathers.user;
 
   return async (data, cb) => {
-    const user = connection.feathers.user;
-
-    // Make sure a userId is authenticated
+    // Make sure the user is authenticated
     if (!user) {
       return cb(new NotAuthenticated());
     }
@@ -34,11 +36,6 @@ export default function onSetName(
     });
 
     if (existingUser) {
-      log('User tried to use already used name', {
-        userId: user.id,
-        data,
-      });
-
       return cb(new BadRequest('This name is already taken'));
     }
 
@@ -54,8 +51,8 @@ export default function onSetName(
     } catch (error) {
       log('Error while setting user name', {
         userId: user.id,
-        error,
         data,
+        error,
       });
 
       return cb(error);

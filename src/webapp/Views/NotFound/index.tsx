@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import Button from '@atlaskit/button';
-import injectSheet, { Classes } from 'react-jss';
+import withStyles, { WithStyles } from 'react-jss';
 import { ContextRouter } from 'react-router-dom';
 
 import { Row } from '../../components/Grid';
@@ -8,7 +8,7 @@ import DocumentTitle from '../../components/DocumentTitle';
 
 const styles = { buttonContainer: { marginTop: 12 } };
 
-type Props = ContextRouter & Classes<typeof styles>;
+type Props = ContextRouter & WithStyles<typeof styles>;
 
 function NotFound(props: Props) {
   const handleBack = useCallback(() => {
@@ -22,7 +22,7 @@ function NotFound(props: Props) {
       <Row justify="center">
         <h2>Not Found</h2>
         <div>
-          We couldn't find what you are looking for.
+          We couldn&apos;t find what you are looking for.
         </div>
 
         <Row
@@ -39,4 +39,4 @@ function NotFound(props: Props) {
   );
 }
 
-export default injectSheet<Props>(styles)(NotFound);
+export default withStyles(styles)(NotFound);

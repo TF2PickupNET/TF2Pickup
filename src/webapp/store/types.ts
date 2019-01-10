@@ -5,42 +5,42 @@ const enum AsyncStatus {
   ERROR = 'ERROR',
 }
 
-type AsyncItem<T> =
+type AsyncItem<Item> =
    { status: AsyncStatus.LOADING, item: null, error: null }
- | { status: AsyncStatus.SUCCESS, item: T, error: null }
+ | { status: AsyncStatus.SUCCESS, item: Item, error: null }
  | { status: AsyncStatus.ERROR, item: null, error: Error }
  | { status: AsyncStatus.NOT_STARTED, item: null, error: null };
 
-function createStateCreator<T>() {
+function createStateCreator<Item>() {
   return {
-    createLoadingState(): AsyncItem<T> {
+    createLoadingState(): AsyncItem<Item> {
       return {
         status: AsyncStatus.LOADING,
         item: null,
         error: null,
       };
     },
-    createNotStartedState(): AsyncItem<T> {
+    createNotStartedState(): AsyncItem<Item> {
       return {
         status: AsyncStatus.LOADING,
         item: null,
         error: null,
       };
     },
-    createSuccessState(item: T): AsyncItem<T> {
+    createSuccessState(item: Item): AsyncItem<Item> {
       return {
         status: AsyncStatus.SUCCESS,
         item,
         error: null,
       };
     },
-    createErrorState(error: Error): AsyncItem<T> {
+    createErrorState(error: Error): AsyncItem<Item> {
       return {
         status: AsyncStatus.ERROR,
         item: null,
         error,
       };
-    }
+    },
   };
 }
 

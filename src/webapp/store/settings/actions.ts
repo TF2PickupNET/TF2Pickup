@@ -1,5 +1,4 @@
 import { AsyncAction } from 'redux';
-// import { message } from 'antd';
 
 import UserSettings from '../../../types/UserSettings';
 import app from '../../app';
@@ -27,9 +26,9 @@ function updateVolume(volume: number): Promise<void> {
   return new Promise((resolve, reject) => {
     app.io.emit('user-settings:change-volume', { volume }, (err) => {
       if (err) {
-        // message.error(`Couldn't change your volume: ${err.message}`, 2);
+        // Message.error(`Couldn't change your volume: ${err.message}`, 2);
       } else {
-        // message.success(`Successfully changed your volume to ${volume}%`, 1);
+        // Message.success(`Successfully changed your volume to ${volume}%`, 1);
       }
 
       return err ? reject(err) : resolve();
@@ -42,9 +41,9 @@ function updateEmojiSet(emojiSet: keyof typeof emojiSets): Promise<void> {
   return new Promise((resolve, reject) => {
     app.io.emit('user-settings:change-emoji-set', { emojiSet }, (err) => {
       if (err) {
-        // message.error(`Couldn't change your emoji set: ${err.message}`, 2);
+        // Message.error(`Couldn't change your emoji set: ${err.message}`, 2);
       } else {
-        // message.success(
+        // Message.success(
         //   `Successfully changed your emoji set to ${emojiSets[emojiSet].display}`,
         //   1,
         // );
@@ -67,7 +66,7 @@ function fetchSettings(): AsyncAction<State, Actions> {
       type: START_FETCH_SETTINGS,
       payload: {},
     });
-    
+
     try {
       const settings = await app.service('user-settings').get(userId);
 

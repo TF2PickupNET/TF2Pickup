@@ -14,7 +14,7 @@ export default function steam() {
   return (app: ServerApp) => {
     app.passport.use(
       new SteamStrategy({
-        returnURL: `${config.get('server.url')}/auth/steam/callback`,
+        returnURL: `${config.get<string>('server.url')}/auth/steam/callback`,
         realm: config.get('server.url'),
         profile: false,
       }, createValidator(app)),

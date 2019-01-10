@@ -8,7 +8,7 @@ import IsAuthenticated from './IsAuthenticated';
 import SignUpScreen from './SignUpScreen';
 
 interface Props {
-  children: ReactNode
+  children: ReactNode,
 }
 
 function Page(props: Props) {

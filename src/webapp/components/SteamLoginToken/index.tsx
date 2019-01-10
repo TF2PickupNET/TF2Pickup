@@ -1,5 +1,5 @@
 import { Redirect } from 'react-router-dom';
-import React, {ReactNode} from 'react';
+import React, { ReactNode } from 'react';
 
 import { useLocation } from '../../utils/use-router';
 import { isString } from '../../../utils/string';

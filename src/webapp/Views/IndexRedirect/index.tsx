@@ -1,10 +1,12 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
+import { isString } from '../../../utils/string';
+
 export default function IndexRedirect() {
-  const lastGamemode = localStorage.getItem('last-gamemode') || '6v6';
+  const lastGamemode = localStorage.getItem('last-gamemode');
 
   return (
-    <Redirect to={`/${lastGamemode}`} />
+    <Redirect to={`/${isString(lastGamemode) ? lastGamemode : '6v6'}`} />
   );
 }

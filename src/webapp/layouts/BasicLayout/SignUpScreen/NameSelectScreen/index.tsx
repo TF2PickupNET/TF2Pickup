@@ -5,16 +5,16 @@ import React, {
 } from 'react';
 import { RadioGroup } from '@atlaskit/radio';
 import Button from '@atlaskit/button';
+import { createSelector } from 'reselect';
 
 import { getCurrentUserId } from '../../../../store/user-id/selectors';
 import { makeGetRegion } from '../../../../store/users/selectors';
-import {useMakeMapState} from '../../../../store/use-store';
+import { useMakeMapState } from '../../../../store/use-store';
 import useAsync from '../../../../utils/use-async';
 import { setName } from '../../../../store/users/actions';
 import { makeGetNames } from '../../../../store/user-profiles/selectors';
-import {Row} from "../../../../components/Grid";
-import {createSelector} from "reselect";
-import {State} from "../../../../store";
+import { Row } from '../../../../components/Grid';
+import { State } from '../../../../store';
 
 const makeMapState = () => {
   const getRegion = makeGetRegion();
@@ -26,7 +26,7 @@ const makeMapState = () => {
         value: name.name,
         label: name.name,
       };
-    })
+    }),
   );
 
   return (state: State) => {
@@ -45,19 +45,17 @@ function useSelectName() {
     names,
     region,
   } = useMakeMapState(makeMapState);
-  const onSubmit = useCallback(() => {
-    if (selectedName === null) {
-      return Promise.resolve();
+  const onSubmit = useCallback(async () => {
+    if (selectedName !== null) {
+      await setName(selectedName);
     }
-
-    return setName(selectedName);
   }, [selectedName]);
   const {
     isLoading,
     run: handleSubmit,
   } = useAsync(onSubmit);
   const handleChange = useCallback(
-    (ev) => setSelectedName(ev.target.value),
+    ev => setSelectedName(ev.target.value),
     [],
   );
 

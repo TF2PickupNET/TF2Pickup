@@ -8,11 +8,11 @@ import { RadioGroup } from '@atlaskit/radio';
 import regions from '../../../../../config/regions';
 import { updateRegion } from '../../../../store/users/actions';
 import useAsync from '../../../../utils/use-async';
-import {Row} from "../../../../components/Grid";
+import { Row } from '../../../../components/Grid';
 
 const regionKeys = Object.keys(regions) as Array<keyof typeof regions>;
 
-const options = regionKeys.map(region => {
+const options = regionKeys.map((region) => {
   return {
     label: regions[region].fullName,
     value: region,
@@ -22,23 +22,17 @@ const options = regionKeys.map(region => {
 
 export default function RegionSelectScreen() {
   const [region, setRegion] = useState<null | keyof typeof regions>(null);
+  const handleSubmit = useCallback(async () => {
+    if (region !== null) {
+      await updateRegion(region);
+    }
+  }, [region]);
   const {
     isLoading,
     run: handleClick,
-  } = useAsync(
-    useCallback(
-      () => {
-        if (region === null) {
-          return Promise.resolve();
-        }
-
-        return updateRegion(region);
-      },
-      [region],
-    ),
-  );
+  } = useAsync(handleSubmit);
   const handleChange = useCallback(
-    (ev) => setRegion(ev.target.value),
+    ev => setRegion(ev.target.value),
     [],
   );
 

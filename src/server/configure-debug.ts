@@ -2,9 +2,10 @@ import debug, { Data } from 'debug';
 import { ServerApp } from '@feathersjs/feathers';
 import stripAnsi from 'strip-ansi';
 import PrettyError from 'pretty-error';
-import Log from "../types/Log";
 
-const logs: Array<Log> = [];
+import Log from '../types/Log';
+
+const logs: Log[] = [];
 const pe = new PrettyError();
 
 pe.skipNodeFiles();
@@ -50,7 +51,7 @@ function createLogger(callback: (log: Log) => void) {
     let message = args[0];
     let data = args[1];
 
-    if (typeof data === 'string') {
+    if (typeof args[1] === 'string') {
       message = `${args[0]} ${args[1]}`;
       data = args[2];
     }

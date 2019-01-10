@@ -1,6 +1,6 @@
-import {OZFortressDivisions} from "../../../../../types/UserProfile";
+import { OZFortressDivisions } from '../../../../../types/UserProfile';
 
-const divs: Array<OZFortressDivisions> = [
+const divs: OZFortressDivisions[] = [
   'N/A',
   'Open',
   'Intermediate',

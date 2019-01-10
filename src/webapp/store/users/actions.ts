@@ -1,12 +1,12 @@
 import { AsyncAction } from 'redux';
-// import { message } from 'antd';
 
 import app from '../../app';
 import regions from '../../../config/regions';
+import roles from '../../../config/roles';
+import User from '../../../types/User';
+import { AsyncStatus } from '../types';
 
 import { State } from '..';
-
-import roles from '../../../config/roles';
 
 import {
   FETCHED_USER,
@@ -14,9 +14,7 @@ import {
   STARTED_FETCH_USER,
   Actions, UPDATE_USER,
 } from './types';
-import {makeGetUserStatus} from './selectors';
-import User from "../../../types/User";
-import {AsyncStatus} from "../types";
+import { makeGetUserStatus } from './selectors';
 
 const getUserStatus = makeGetUserStatus();
 
@@ -64,9 +62,9 @@ function updateRegion(region: keyof typeof regions): Promise<void> {
   return new Promise((resolve, reject) => {
     app.io.emit('users:change-region', { region }, (err) => {
       if (err) {
-        // message.error(`Couldn't change your region: ${err.message}`, 2);
+        // Message.error(`Couldn't change your region: ${err.message}`, 2);
       } else {
-        // message.success(`Successfully changed your region to ${regions[region].fullName}`, 1);
+        // Message.success(`Successfully changed your region to ${regions[region].fullName}`, 1);
       }
 
       return err ? reject(err) : resolve();
@@ -79,9 +77,9 @@ function setName(name: string): Promise<void> {
   return new Promise((resolve, reject) => {
     app.io.emit('users:set-name', { name }, (err) => {
       if (err) {
-        // message.error(`Couldn't set your name: ${err.message}`, 2);
+        // Message.error(`Couldn't set your name: ${err.message}`, 2);
       } else {
-        // message.success(`Successfully set your name to ${name}`, 1);
+        // Message.success(`Successfully set your name to ${name}`, 1);
       }
 
       return err ? reject(err) : resolve();
@@ -92,11 +90,11 @@ function setName(name: string): Promise<void> {
 function acceptRules(): Promise<void> {
   // eslint-disable-next-line promise/avoid-new
   return new Promise((resolve, reject) => {
-    app.io.emit('users:accept-rules', {}, (err) => {
+    app.io.emit('users:accept-rules', null, (err) => {
       if (err) {
-        // message.error(`Error while accepting rules: ${err.message}`, 2);
+        // Message.error(`Error while accepting rules: ${err.message}`, 2);
       } else {
-        // message.success('Successfully accepted the rules', 1);
+        // Message.success('Successfully accepted the rules', 1);
       }
 
       return err ? reject(err) : resolve();
@@ -107,11 +105,11 @@ function acceptRules(): Promise<void> {
 function completeSignUp(): Promise<void> {
   // eslint-disable-next-line promise/avoid-new
   return new Promise((resolve, reject) => {
-    app.io.emit('users:complete-sign-up', {}, (err) => {
+    app.io.emit('users:complete-sign-up', null, (err) => {
       if (err) {
-        // message.error(`Error while completing sign up: ${err.message}`, 2);
+        // Message.error(`Error while completing sign up: ${err.message}`, 2);
       } else {
-        // message.success('Successfully completed sign up', 1);
+        // Message.success('Successfully completed sign up', 1);
       }
 
       return err ? reject(err) : resolve();
@@ -127,9 +125,9 @@ function addRole(userId: string, role: keyof typeof roles): Promise<void> {
       userId,
     }, (err) => {
       if (err) {
-        // message.error(`Error while adding role: ${err.message}`, 2);
+        // Message.error(`Error while adding role: ${err.message}`, 2);
       } else {
-        // message.success(`Successfully added ${roles[role].display}`, 1);
+        // Message.success(`Successfully added ${roles[role].display}`, 1);
       }
 
       return err ? reject(err) : resolve();
@@ -145,9 +143,9 @@ function removeRole(userId: string, role: keyof typeof roles): Promise<void> {
       userId,
     }, (err) => {
       if (err) {
-        // message.error(`Error while removing role: ${err.message}`, 2);
+        // Message.error(`Error while removing role: ${err.message}`, 2);
       } else {
-        // message.success(`Successfully remove ${roles[role].display}`, 1);
+        // Message.success(`Successfully remove ${roles[role].display}`, 1);
       }
 
       return err ? reject(err) : resolve();

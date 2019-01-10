@@ -1,4 +1,4 @@
-function flatten<T>([x, ...rest]: T[]): T[] {
+function flatten<Item>([x, ...rest]: Item[]): Item[] {
   if (typeof x === 'undefined') {
     return [];
   }
@@ -8,7 +8,7 @@ function flatten<T>([x, ...rest]: T[]): T[] {
   }
 
   return [
-    ...(Array.isArray(x) ? flatten(x) : [x]),
+    ...Array.isArray(x) ? flatten(x) : [x],
     ...flatten(rest),
   ];
 }

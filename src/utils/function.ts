@@ -1,4 +1,4 @@
-function isFunc(val: unknown): val is Function {
+function isFunc(val: any): val is Function {
   return typeof val === 'function';
 }
 

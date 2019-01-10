@@ -1,8 +1,5 @@
 declare module 'redux-thunk' {
-  import {
-    Enhancer,
-    Action,
-  } from 'redux';
+  import { Enhancer } from 'redux';
 
   const thunk: Enhancer<any, any>;
 

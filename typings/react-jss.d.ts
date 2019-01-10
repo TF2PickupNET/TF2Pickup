@@ -1,30 +1,58 @@
 declare module 'react-jss' {
+  import {ComponentType, ReactNode} from 'react';
   import {
-    ComponentType,
-    ReactNode,
-  } from 'react';
+    CreateGenerateId,
+    GenerateId,
+    Jss,
+    SheetsRegistry,
+    Styles,
+    StyleSheetFactoryOptions,
+  } from 'jss';
+  import {ThemeProvider, withTheme, createTheming, Theming} from 'theming';
 
-  interface ThemeProviderProps {
-    theme: object,
-    children: ReactNode,
+  const jss: Jss;
+  const createGenerateId: CreateGenerateId;
+  const JssProvider: ComponentType<{
+    jss?: Jss
+    registry?: SheetsRegistry
+    generateId?: GenerateId
+    classNamePrefix?: string
+    disableStylesGeneration?: boolean
+    children: ReactNode
+  }>;
+
+  type ThemedStyles<Theme> = (theme: Theme) => Styles;
+
+  interface WithStyles<S extends Styles | ThemedStyles<any>> {
+    classes: Record<S extends ThemedStyles<any> ? keyof ReturnType<S> : keyof S, string>
   }
 
-  const ThemeProvider: ComponentType<ThemeProviderProps>;
-
-  interface Classes<Styles> {
-    classes: Record<Styles extends (theme: any) => object ? keyof ReturnType<Styles> : keyof Styles, string>;
+  interface Options extends StyleSheetFactoryOptions {
+    index?: number
+    injectTheme?: boolean
+    jss?: Jss
+    theming: Theming<object>
   }
 
-  type Omit<Obj, Key extends string> = Pick<Obj, Exclude<keyof Obj, Key>>;
+  type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 
-  function injectSheet<Props>(
-    styles: object | ((theme: object) => object)
-  ): (props: ComponentType<Props>) => ComponentType<Omit<Props, 'classes'>>;
+  function withStyles<S extends Styles | ThemedStyles<any>>(
+    styles: S,
+    options?: Options,
+  ): <Props extends WithStyles<S>>(
+    comp: ComponentType<Props>
+  ) => ComponentType<Omit<Props, 'classes'> & {classes?: Partial<Props['classes']>}>;
 
   export {
-    Classes,
+    SheetsRegistry,
+    jss,
+    createGenerateId,
+    JssProvider,
+    WithStyles,
     ThemeProvider,
+    withTheme,
+    createTheming
   };
 
-  export default injectSheet;
+  export default withStyles;
 }

@@ -1,7 +1,8 @@
-import gamemodes from "../../../config/gamemodes";
-import {AsyncItem} from "../types";
-import PickupQueue from "../../../types/PickupQueue";
-import {Action} from "redux";
+import { Action } from 'redux';
+
+import gamemodes from '../../../config/gamemodes';
+import { AsyncItem } from '../types';
+import PickupQueue from '../../../types/PickupQueue';
 
 type State = Record<keyof typeof gamemodes, AsyncItem<PickupQueue>>;
 
@@ -15,9 +16,9 @@ type Actions =
   | Action<typeof START_FETCH_PICKUP_QUEUE, { gamemode: keyof typeof gamemodes }>
   | Action<typeof FETCHED_PICKUP_QUEUE, { queue: PickupQueue }>
   | Action<typeof FETCH_ERROR_PICKUP_QUEUE, {
-      error: Error,
-      gamemode: keyof typeof gamemodes,
-    }>;
+    error: Error,
+    gamemode: keyof typeof gamemodes,
+  }>;
 
 export {
   State,

@@ -2,10 +2,11 @@ import { ServerApp } from '@feathersjs/feathers';
 import service from 'feathers-mongoose';
 import debug from 'debug';
 
+import UserProfile from '../../../types/UserProfile';
+
 import Model from './Model';
 import hooks from './hooks';
 import setupEvents from './setup-events';
-import UserProfile from "../../../types/UserProfile";
 
 const log = debug('TF2Pickup:user-profiles');
 
@@ -27,7 +28,7 @@ export default function userProfiles() {
         'patched',
         (data: UserProfile) => app
           .channel('authenticated')
-          .filter(connection => connection.user.id === data.id)
+          .filter(connection => connection.user.id === data.id),
       );
   };
 }

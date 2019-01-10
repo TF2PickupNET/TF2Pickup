@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
 import SteamID from 'steamid';
 
+import oneOf from '../../utils/validators/one-of';
+import steamId from '../../utils/validators/steam-id';
+import url from '../../utils/validators/url';
+
 import { divs as etf2lDivs } from './services/etf2l/utils';
 import { divs as ozfortressDivs } from './services/ozfortress/utils';
-import oneOf from "../../utils/validators/one-of";
-import steamId from "../../utils/validators/steam-id";
-import url from "../../utils/validators/url";
 
 function createDivisionType(divs: string[]) {
   return {

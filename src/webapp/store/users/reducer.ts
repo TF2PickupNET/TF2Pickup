@@ -1,3 +1,6 @@
+import { createStateCreator } from '../types';
+import User from '../../../types/User';
+
 import {
   FETCHED_USER,
   FETCH_FAILED,
@@ -6,8 +9,6 @@ import {
   State,
   Actions,
 } from './types';
-import {createStateCreator} from "../types";
-import User from "../../../types/User";
 
 const stateCreator = createStateCreator<User>();
 

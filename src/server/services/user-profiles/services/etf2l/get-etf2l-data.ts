@@ -1,6 +1,7 @@
+// eslint-disable-next-line filenames/match-exported
 import axios from 'axios';
 import debug from 'debug';
-import {isBefore} from 'date-fns';
+import { isBefore } from 'date-fns';
 
 import UserProfile from '../../../../../types/UserProfile';
 

@@ -9,9 +9,9 @@ type Callback = (err: FeathersError<number, string> | null) => void;
 type Roles = keyof typeof roles;
 
 interface Events {
-  'users:complete-sign-up': {},
+  'users:complete-sign-up': null,
   'users:change-region': { region: keyof typeof regions },
-  'users:accept-rules': {},
+  'users:accept-rules': null,
   'users:set-name': { name: string },
   'users:add-role': {
     role: Roles,
@@ -39,8 +39,7 @@ interface Events {
 }
 
 interface ClientSocket {
-  on(event: 'connect', cb: () => void): void,
-  on(event: 'disconnect', cb: () => void): void,
+  on(event: 'connect' | 'disconnect', cb: () => void): void,
 
   emit<Name extends keyof Events>(
     name: Name,

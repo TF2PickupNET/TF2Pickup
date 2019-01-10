@@ -9,13 +9,13 @@ export default function SoundFix() {
   const [playedSound, setPlayedSound] = useState(false);
 
   useEffect(() => {
-    function handleClick() {
+    const handleClick = () => {
       if (document.visibilityState === 'visible' && !playedSound) {
         playSound('sound-fix', { volume: 1 });
 
         setPlayedSound(true);
       }
-    }
+    };
 
     document.addEventListener('click', handleClick);
 

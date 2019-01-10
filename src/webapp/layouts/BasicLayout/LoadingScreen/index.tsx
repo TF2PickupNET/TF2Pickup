@@ -4,18 +4,19 @@ import React, {
   useCallback,
   useEffect,
 } from 'react';
-import injectSheet, {Classes} from 'react-jss';
-import Button from "@atlaskit/button";
+import withStyles, { WithStyles } from 'react-jss';
+import Button from '@atlaskit/button';
 import Spinner from '@atlaskit/spinner';
 
 import {
   Row,
   Column,
 } from '../../../components/Grid';
+import { State } from '../../../store';
+import { useMapState } from '../../../store/use-store';
+import DocumentTitle from '../../../components/DocumentTitle';
+
 import steps from './steps';
-import {State} from "../../../store";
-import {useMapState} from "../../../store/use-store";
-import DocumentTitle from "../../../components/DocumentTitle";
 
 const styles = {
   container: { minHeight: '100vh' },
@@ -26,7 +27,7 @@ const styles = {
 function useStepper() {
   const [currentStep, setCurrentStep] = useState<keyof typeof steps>('load-configuration');
   const [isLoading, setIsLoading] = useState(true);
-  const state = useMapState((state: State) => state);
+  const state = useMapState((state1: State) => state1);
 
   const runStep = useCallback(() => {
     steps[currentStep].handler();
@@ -36,7 +37,7 @@ function useStepper() {
     const isFinished = steps[currentStep].hasFinished(state);
 
     if (isFinished) {
-      const next = steps[currentStep].next as keyof typeof steps;
+      const next = steps[currentStep].next as null | keyof typeof steps;
 
       if (next === null) {
         setIsLoading(false);
@@ -58,7 +59,7 @@ function useStepper() {
   };
 }
 
-interface Props extends Classes<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   children: ReactNode,
 }
 
@@ -105,4 +106,4 @@ function LoadingScreen(props: Props) {
   );
 }
 
-export default injectSheet<Props>(styles)(LoadingScreen);
+export default withStyles(styles)(LoadingScreen);

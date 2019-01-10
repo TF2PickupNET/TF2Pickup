@@ -4,7 +4,10 @@ import {
 } from '@feathersjs/errors';
 import { SocketConnection } from '@feathersjs/socketio';
 import debug from 'debug';
-import { SocketEventHandler, ServerApp } from '@feathersjs/feathers';
+import {
+  SocketEventHandler,
+  ServerApp,
+} from '@feathersjs/feathers';
 
 const log = debug('TF2Pickup:users:events:on-change-region');
 

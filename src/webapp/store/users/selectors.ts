@@ -1,11 +1,10 @@
 import { createSelector } from 'reselect';
 
 import roles from '../../../config/roles';
+import { getHighestRole } from '../../../utils/has-permission';
+import { AsyncStatus } from '../types';
 
 import { State } from '..';
-
-import { getHighestRole } from '../../../utils/has-permission';
-import {AsyncStatus} from "../types";
 
 type Role = keyof typeof roles;
 
@@ -14,7 +13,7 @@ const getUsers = (state: State) => state.users;
 const makeGetUserStatus = () => createSelector(
   getUsers,
   (_: State, id: string | null) => id,
-  (users, id) => id !== null && id in users ? users[id].status : AsyncStatus.NOT_STARTED,
+  (users, id) => (id !== null && id in users ? users[id].status : AsyncStatus.NOT_STARTED),
 );
 
 const makeGetUser = () => createSelector(
@@ -26,7 +25,7 @@ const makeGetUser = () => createSelector(
 const makeGetUserError = () => createSelector(
   getUsers,
   (_: State, id: string | null) => id,
-  (users, id) => id !== null && id in users ? users[id].error : null,
+  (users, id) => (id !== null && id in users ? users[id].error : null),
 );
 
 function makeGetRegion() {
@@ -46,9 +45,8 @@ function makeGetRoles() {
 function makeGetSortedRoles() {
   return createSelector(
     makeGetRoles(),
-    // eslint-disable-next-line fp/no-mutating-methods
     userRoles => [...userRoles].sort(
-      (role1: Role, role2: Role) => roles[role1].level - roles[role2].level
+      (role1: Role, role2: Role) => roles[role1].level - roles[role2].level,
     ),
   );
 }

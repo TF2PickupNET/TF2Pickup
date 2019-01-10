@@ -1,6 +1,8 @@
-import {ClientApp} from "@feathersjs/feathers";
-import store from "../index";
-import {updatePickupQueue} from "./actions";
+import { ClientApp } from '@feathersjs/feathers';
+
+import store from '..';
+
+import { updatePickupQueue } from './actions';
 
 export default function events() {
   return (app: ClientApp) => {

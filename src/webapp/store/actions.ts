@@ -5,8 +5,7 @@ import { Actions as UserProfilesActions } from './user-profiles/types';
 import { Actions as UsersActions } from './users/types';
 import { Actions as PickupQueuesActions } from './pickup-queues/types';
 
-type Actions =
-  | ConfigActions
+type Actions = ConfigActions
   | SettingsActions
   | UserIdActions
   | UserProfilesActions

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import injectSheet, { Classes } from 'react-jss';
+import withStyles, { WithStyles } from 'react-jss';
 
 import { Theme } from '../../theme';
 import { Row } from '../Grid';
@@ -15,7 +15,7 @@ function styles(theme: Theme) {
   };
 }
 
-interface Props extends Classes<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   children: ReactNode,
 }
 
@@ -32,4 +32,4 @@ function ContentNavigation(props: Props) {
 
 export { Item };
 
-export default injectSheet<Props>(styles)(ContentNavigation);
+export default withStyles(styles)(ContentNavigation);

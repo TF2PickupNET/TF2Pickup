@@ -1,31 +1,31 @@
 import path, { ParsedPath } from 'path';
 import fs from 'fs';
 import shell from 'shelljs';
-import {format} from 'date-fns';
+import { format } from 'date-fns';
 import { promisify } from 'util';
+import debug from 'debug';
 
 import pkg from '../package.json';
 import readFile from '../src/utils/read-file';
-import regions from "../src/config/regions";
-import gamemodes from "../src/config/gamemodes";
-import configTypes from "../src/config/config-types";
+import regions from '../src/config/regions';
+import gamemodes from '../src/config/gamemodes';
+import configTypes from '../src/config/config-types';
 
 const writeFile = promisify(fs.writeFile);
 const src = path.join(__dirname, '../src/tf2configs');
 const dist = path.join(__dirname, '../dist/tf2configs');
+const log = debug('TF2Pickup:build-configs');
 
 interface ConfigInfo {
   region: keyof typeof regions,
   gamemode: keyof typeof gamemodes,
-  configType: keyof typeof configTypes | null
+  configType: keyof typeof configTypes | null,
 }
 
+type ConfigInfos = [keyof typeof regions, keyof typeof gamemodes, keyof typeof configTypes | null];
+
 function getInfoForFile(file: string): ConfigInfo | null {
-  const [region, gamemode, configType = null] = file.split('_') as [
-    keyof typeof regions,
-    keyof typeof gamemodes,
-    keyof typeof configTypes | null
-  ];
+  const [region, gamemode, configType = null] = file.split('_') as ConfigInfos;
   const validConfigType = configType === null || configType in configTypes;
 
   if (region in regions && gamemode in gamemodes && validConfigType) {
@@ -70,7 +70,7 @@ async function compileFile(filePath: string, root = false): Promise<string> {
       }
 
       return line;
-    })
+    }),
   );
 
   return [
@@ -103,15 +103,15 @@ async function buildConfigs() {
       return gamemodes[info.gamemode].mapTypes.includes(info.configType);
     });
 
-  for (const file of files) {
+  await Promise.all(files.map(async (file: string) => {
     try {
       const compiledFile = await compileFile(path.join(src, file), true);
 
       await writeFile(path.join(dist, file), compiledFile, 'utf-8');
     } catch (error) {
-      console.log('Error while building config:', file);
+      log('Error while building config:', { data: { file } });
     }
-  }
+  }));
 }
 
 buildConfigs();

@@ -2,10 +2,11 @@ import { ServerApp } from '@feathersjs/feathers';
 import service from 'feathers-mongoose';
 import debug from 'debug';
 
+import UserSettings from '../../../types/UserSettings';
+
 import Model from './Model';
 import hooks from './hooks';
 import events from './events';
-import UserSettings from "../../../types/UserSettings";
 
 const log = debug('TF2Pickup:user-settings');
 
@@ -20,16 +21,15 @@ export default function userSettings() {
 
     app.configure(events);
 
-    const userSettings = app.service('user-settings');
-
-    userSettings
+    app
+      .service('user-settings')
       .hooks(hooks)
       // Publish the events only to the userId that owns the document
       .publish(
         'patched',
         (data: UserSettings) => app
           .channel('authenticated')
-          .filter(connection => connection.user.id === data.id)
+          .filter(connection => connection.user.id === data.id),
       );
   };
 }

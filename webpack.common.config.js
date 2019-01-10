@@ -72,7 +72,7 @@ module.exports = {
   ],
 
   resolve: {
-    plugins: [new TSConfigPathsPlugin({ configFile: 'tsconfig.client.json' })],
+    plugins: [new TSConfigPathsPlugin({ configFile: 'tsconfig.json' })],
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
 };

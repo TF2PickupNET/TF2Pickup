@@ -1,5 +1,6 @@
 import React from 'react';
-import injectSheet, { Classes } from 'react-jss';
+import withStyles, { WithStyles } from 'react-jss';
+import Panel from '@atlaskit/panel';
 
 import {
   Row,
@@ -12,9 +13,9 @@ import EmojiSetting from './EmojiSetting';
 import Header from './Header';
 
 const styles = {
-  panel: { '& > .ant-collapse-header': { display: 'flex' } },
-
   content: { padding: '0px 8px 0 24px' },
+
+  container: { flex: 1 },
 };
 
 const settings = [
@@ -23,33 +24,28 @@ const settings = [
   EmojiSetting,
 ];
 
-type Props = Classes<typeof styles>;
+type Props = WithStyles<typeof styles>;
 
 function Settings(props: Props) {
   return (
-    <Row justify="center">
+    <Row justify="center" className={props.classes.container}>
       <Column col={16}>
-        <Collapse bordered={false}>
-          {settings.map(setting => (
-            <Collapse.Panel
-              key={setting.key}
-              className={props.classes.panel}
-              header={(
-                <Header
-                  selector={setting.selector}
-                  title={setting.title}
-                />
-              )}
-            >
-              <div className={props.classes.content}>
-                <setting.Comp/>
-              </div>
-            </Collapse.Panel>
-          ))}
-        </Collapse>
+        {settings.map(setting => (
+          <Panel
+            key={setting.key}
+            header={(
+              <Header title={setting.title} />
+            )}
+          >
+            <div className={props.classes.content}>
+              <setting.Comp />
+            </div>
+          </Panel>
+        ))}
+
       </Column>
     </Row>
   );
 }
 
-export default injectSheet<Props>(styles)(Settings);
+export default withStyles(styles)(Settings);

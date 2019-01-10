@@ -1,29 +1,29 @@
-function mapObjectKeys<Obj, K extends keyof Obj, NewKey extends string>(
+function mapObjectKeys<Obj, Key extends keyof Obj, NewKey extends string>(
   obj: Obj,
-  fn: (key: K, val: Obj[K]) => NewKey,
-): { [key in NewKey]: Obj[K] } {
-  const keys = Object.keys(obj) as Array<K>;
+  fn: (key: Key, val: Obj[Key]) => NewKey,
+): { [key in NewKey]: Obj[Key] } {
+  const keys = Object.keys(obj) as Key[];
 
-  return keys.reduce((accu, key: K) => {
+  return keys.reduce<object>((accu, key: Key) => {
     return {
       ...accu,
       [fn(key, obj[key])]: obj[key],
     };
-  }, {}) as { [key in NewKey]: Obj[K] };
+  }, {}) as { [key in NewKey]: Obj[Key] };
 }
 
-function mapObjectValues<Obj, K extends keyof Obj, NewValues>(
+function mapObjectValues<Obj, Key extends keyof Obj, NewValues>(
   obj: Obj,
-  fn: (key: K, val: Obj[K]) => NewValues,
-): { [key in K]: NewValues } {
-  const keys = Object.keys(obj) as Array<K>;
+  fn: (key: Key, val: Obj[Key]) => NewValues,
+): { [key in Key]: NewValues } {
+  const keys = Object.keys(obj) as Key[];
 
-  return keys.reduce((accu, key: K) => {
+  return keys.reduce<object>((accu, key: Key) => {
     return {
       ...accu,
       [key]: fn(key, obj[key]),
     };
-  }, {}) as { [key in K]: NewValues };
+  }, {}) as { [key in Key]: NewValues };
 }
 
 export {

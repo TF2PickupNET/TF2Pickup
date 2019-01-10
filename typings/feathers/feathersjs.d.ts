@@ -1,3 +1,4 @@
+// eslint-disable-line max-lines
 declare module '@feathersjs/feathers' {
   import { Server } from 'http';
   import { FeathersError } from '@feathersjs/errors';
@@ -8,15 +9,15 @@ declare module '@feathersjs/feathers' {
   } from '@feathersjs/authentication';
   import { ExpressMiddleware } from '@feathersjs/express';
 
-  export type SKIP = Symbol;
-  export type Method = 'find' | 'get' | 'create' | 'update' | 'patch' | 'remove';
-  export type HookType = 'before' | 'after' | 'error';
+  type SKIP = Symbol;
+  type Method = 'find' | 'get' | 'create' | 'update' | 'patch' | 'remove';
+  type HookType = 'before' | 'after' | 'error';
 
-  export interface Connection {
+  interface Connection {
     user: import('../../src/types/User').default,
   }
 
-  export interface Params<Query extends object> {
+  interface Params<Query extends object> {
     query: Query,
     provider: 'rest' | 'socketio' | 'primus' | void,
     user?: import('../../src/types/User').default,
@@ -25,7 +26,7 @@ declare module '@feathersjs/feathers' {
     connection: Connection,
   }
 
-  export interface CommonHookContext<Document> {
+  interface CommonHookContext<Document> {
     app: ServerApp,
     service: ServerService<Document>,
     path: string,
@@ -35,77 +36,77 @@ declare module '@feathersjs/feathers' {
     statusCode: number,
   }
 
-  export interface ErrorHookContext<Document> extends CommonHookContext<Document> {
+  interface ErrorHookContext<Document> extends CommonHookContext<Document> {
     type: 'error',
     error: FeathersError<number, string>,
     result: void,
   }
 
-  export interface BeforeHookContext<Document> extends CommonHookContext<Document> {
+  interface BeforeHookContext<Document> extends CommonHookContext<Document> {
     type: 'before',
     result: void,
   }
 
-  export interface AfterHookContext<Document> extends CommonHookContext<Document> {
+  interface AfterHookContext<Document> extends CommonHookContext<Document> {
     type: 'after',
     dispatch: void,
   }
 
-  export interface CreateBeforeHookContext<Document> extends BeforeHookContext<Document> {
+  interface CreateBeforeHookContext<Document> extends BeforeHookContext<Document> {
     method: 'create',
     data: Document,
   }
 
-  export interface CreateAfterHookContext<Document> extends AfterHookContext<Document> {
+  interface CreateAfterHookContext<Document> extends AfterHookContext<Document> {
     method: 'create',
     data: Document,
     result: Document,
   }
 
-  export interface GetBeforeHookContext<Document> extends BeforeHookContext<Document> {
+  interface GetBeforeHookContext<Document> extends BeforeHookContext<Document> {
     method: 'get',
     id: string,
   }
 
-  export interface GetAfterHookContext<Document> extends AfterHookContext<Document> {
+  interface GetAfterHookContext<Document> extends AfterHookContext<Document> {
     method: 'get',
     id: string,
     result: Document,
   }
 
-  export interface FindBeforeHookContext<Document> extends BeforeHookContext<Document> {
+  interface FindBeforeHookContext<Document> extends BeforeHookContext<Document> {
     method: 'find',
   }
 
-  export interface FindAfterHookContext<Document> extends AfterHookContext<Document> {
+  interface FindAfterHookContext<Document> extends AfterHookContext<Document> {
     method: 'find',
     result: Document[],
   }
 
-  export interface PatchBeforeHookContext<Document> extends BeforeHookContext<Document> {
+  interface PatchBeforeHookContext<Document> extends BeforeHookContext<Document> {
     method: 'patch',
     id: string | null,
     data: {},
   }
 
-  export interface PatchAfterHookContext<Document> extends AfterHookContext<Document> {
+  interface PatchAfterHookContext<Document> extends AfterHookContext<Document> {
     method: 'patch',
     id: string | null,
     data: {},
     result: Document,
   }
 
-  export interface RemoveBeforeHookContext<Document> extends BeforeHookContext<Document> {
+  interface RemoveBeforeHookContext<Document> extends BeforeHookContext<Document> {
     method: 'remove',
     id: string | null,
   }
 
-  export interface RemoveAfterHookContext<Document> extends CommonHookContext<Document> {
+  interface RemoveAfterHookContext<Document> extends CommonHookContext<Document> {
     method: 'remove',
     id: string | null,
   }
 
-  export type HookResult<Context> =
+  type HookResult<Context> =
     | Context
     | SKIP
     | void
@@ -113,11 +114,11 @@ declare module '@feathersjs/feathers' {
     | Promise<SKIP>
     | Promise<void>;
 
-  export type HookFunction<Context> =
+  type HookFunction<Context> =
     | ((context: Context) => HookResult<Context>)
     | Array<((context: Context) => HookResult<Context>)>;
 
-  export interface Hooks<Doc> {
+  interface Hooks<Doc> {
     before?: {
       all?: HookFunction<BeforeHookContext<Doc>>,
       create?: HookFunction<CreateBeforeHookContext<Doc>>,
@@ -147,7 +148,7 @@ declare module '@feathersjs/feathers' {
     },
   }
 
-  export interface Channel {
+  interface Channel {
     join(connection: Connection): Channel,
     leave(connection: Connection): Channel,
     leave(fn: (connection: Connection) => boolean): Channel,
@@ -157,7 +158,7 @@ declare module '@feathersjs/feathers' {
     connections: Connection[],
   }
 
-  export interface ServiceQueries<Document> {
+  interface ServiceQueries<Document> {
     get(id: string): Promise<Document>,
     find(query: {
       query: Partial<Document> & {
@@ -171,7 +172,7 @@ declare module '@feathersjs/feathers' {
     remove(id: string): Promise<Document>,
   }
 
-  export interface ServerService<Document> extends ServiceQueries<Document> {
+  interface ServerService<Document> extends ServiceQueries<Document> {
     hooks(hooks: Hooks<Document>): ServerService<Document>,
     publish(publisher: (data: {}) => Connection[]): ServerService<Document>,
     publish(
@@ -185,7 +186,7 @@ declare module '@feathersjs/feathers' {
     removeListener(eventname: string, listeners: (data: Document) => void): ServerService<Document>,
   }
 
-  export interface ClientService<Document> extends ServiceQueries<Document> {
+  interface ClientService<Document> extends ServiceQueries<Document> {
     on(
       eventname: 'created' | 'patched' | 'removed',
       cb: (data: Document) => void,
@@ -193,7 +194,7 @@ declare module '@feathersjs/feathers' {
     removeListener(eventname: string, listeners: (data: Document) => void): ClientService<Document>,
   }
 
-  export interface ServiceDefinition<Document> {
+  interface ServiceDefinition<Document> {
     setup?(app: ServerApp, path: string): void,
     find?(params: Params<object>): Promise<Document[]>,
     get?(id: string, params: Params<object>): Promise<Document>,
@@ -230,7 +231,7 @@ declare module '@feathersjs/feathers' {
   type ServerSocket = import('./socket-events').ServerSocket;
   type ClientSocket = import('./socket-events').ClientSocket;
 
-  export interface ServerApp extends ServerServices {
+  interface ServerApp extends ServerServices {
     configure(cb: (app: ServerApp) => void): ServerApp,
     channels: Channel[],
     use<Document>(path: string, service: ServiceDefinition<Document>): ServerApp,
@@ -240,7 +241,7 @@ declare module '@feathersjs/feathers' {
     channel(name: string): Channel,
     listen(port: number): Server,
     on(
-      event: 'login',
+      event: 'login' | 'logout',
       cb: (payload: Payload, meta: SocketMeta) => void | Promise<void>,
     ): ServerApp,
     on(
@@ -250,10 +251,6 @@ declare module '@feathersjs/feathers' {
     on(
       event: 'socket-connection',
       cb: (socket: ServerSocket) => void| Promise<void>,
-    ): ServerApp,
-    on(
-      event: 'logout',
-      cb: (payload: Payload, meta: SocketMeta) => void | Promise<void>,
     ): ServerApp,
     on(
       event: 'listening',
@@ -273,7 +270,7 @@ declare module '@feathersjs/feathers' {
     },
   }
 
-  export interface ClientApp extends ClientServices {
+  interface ClientApp extends ClientServices {
     configure(cb: (app: ClientApp) => void): ClientApp,
     authenticate(options: {
       strategy: string,
@@ -294,14 +291,47 @@ declare module '@feathersjs/feathers' {
     io: ClientSocket,
   }
 
-  export type SocketEventHandler<Name extends keyof SocketEvents> = (
+  type SocketEventHandler<Name extends keyof SocketEvents> = (
     data: SocketEvents[Name],
     cb: SocketCallback,
   ) => void | Promise<void>;
 
   export {
+    SocketEventHandler,
     ServerSocket,
     ClientSocket,
+    ClientApp,
+    ServerApp,
+    ServiceDefinition,
+    ClientService,
+    ServerService,
+    ServiceQueries,
+    Channel,
+    SKIP,
+    Connection,
+    Params,
+
+    Hooks,
+    HookResult,
+    HookFunction,
+
+    CommonHookContext,
+
+    ErrorHookContext,
+    BeforeHookContext,
+    AfterHookContext,
+
+    CreateBeforeHookContext,
+    PatchBeforeHookContext,
+    RemoveBeforeHookContext,
+    FindBeforeHookContext,
+    GetBeforeHookContext,
+
+    CreateAfterHookContext,
+    PatchAfterHookContext,
+    RemoveAfterHookContext,
+    FindAfterHookContext,
+    GetAfterHookContext,
   };
 
   export default function create<App>(): App;

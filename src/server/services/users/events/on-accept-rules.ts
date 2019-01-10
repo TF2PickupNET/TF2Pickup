@@ -1,5 +1,8 @@
 import { NotAuthenticated } from '@feathersjs/errors';
-import { ServerApp, SocketEventHandler } from '@feathersjs/feathers';
+import {
+  ServerApp,
+  SocketEventHandler,
+} from '@feathersjs/feathers';
 import { SocketConnection } from '@feathersjs/socketio';
 import debug from 'debug';
 

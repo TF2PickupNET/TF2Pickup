@@ -1,13 +1,13 @@
-import React, {ReactNode} from 'react';
-import injectSheet, {Classes} from 'react-jss';
-import Button from "@atlaskit/button";
+import React, { ReactNode } from 'react';
+import withStyles, { WithStyles } from 'react-jss';
+import Button from '@atlaskit/button';
 
-import {Row} from '../../../components/Grid';
+import { Row } from '../../../components/Grid';
 import pkg from '../../../../../package.json';
 import { useMapState } from '../../../store/use-store';
 import { getVersion } from '../../../store/config/selectors';
-import {State} from "../../../store";
-import DocumentTitle from "../../../components/DocumentTitle";
+import { State } from '../../../store';
+import DocumentTitle from '../../../components/DocumentTitle';
 
 const styles = { container: { minHeight: '100vh' } };
 
@@ -19,7 +19,7 @@ const mapState = (state: State) => {
   return { version: getVersion(state) };
 };
 
-interface Props extends Classes<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   children: ReactNode,
 }
 
@@ -63,4 +63,4 @@ function VersionValidator(props: Props) {
   );
 }
 
-export default injectSheet<Props>(styles)(VersionValidator);
+export default withStyles(styles)(VersionValidator);

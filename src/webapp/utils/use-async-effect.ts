@@ -1,15 +1,19 @@
-import useIsMounted from "./use-is-mounted";
-import {useEffect} from "react";
+import { useEffect } from 'react';
+
+import useIsMounted from './use-is-mounted';
 
 export default function useAsyncEffect(fn: () => any, callback: () => void) {
   const isMounted = useIsMounted();
 
-  // @ts-ignore: The react definition doesn't allow for async functions inside useEffect
-  useEffect(async () => {
+  const run =  async () => {
     await fn();
 
     if (isMounted.current) {
       callback();
     }
+  };
+
+  useEffect(() => {
+    run();
   }, []);
 }

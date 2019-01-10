@@ -9,6 +9,7 @@ import {
   useLocation,
   useHistory,
 } from '../../../utils/use-router';
+import { isString } from '../../../../utils/string';
 
 interface Props extends ItemProps {
   isHeader?: boolean,
@@ -24,7 +25,7 @@ function Item(props: Props) {
   const location = useLocation();
   const history = useHistory();
   const handleClick = useCallback(() => {
-    if (path) {
+    if (isString(path)) {
       history.push(path);
     }
   }, []);

@@ -13,7 +13,7 @@ import {
   FETCH_ERROR_PROFILE,
   START_FETCH_PROFILE,
 } from './types';
-import { makeGetProfileStatus } from './selectors';
+import { makeGetProfileStatusById } from './selectors';
 
 function updateProfile(profile: UserProfile): Actions {
   return {
@@ -23,7 +23,7 @@ function updateProfile(profile: UserProfile): Actions {
 }
 
 function fetchProfile(userId: string | null): AsyncAction<State, Actions> {
-  const getProfileStatus = makeGetProfileStatus();
+  const getProfileStatus = makeGetProfileStatusById();
 
   return async (dispatch, getState) => {
     if (userId === null || getProfileStatus(getState(), userId) !== AsyncStatus.NOT_STARTED) {

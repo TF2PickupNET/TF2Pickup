@@ -14,9 +14,9 @@ import {
   STARTED_FETCH_USER,
   Actions, UPDATE_USER,
 } from './types';
-import { makeGetUserStatus } from './selectors';
+import { makeGetUserStatusById } from './selectors';
 
-const getUserStatus = makeGetUserStatus();
+const getUserStatus = makeGetUserStatusById();
 
 function updateUser(user: User): Actions {
   return {

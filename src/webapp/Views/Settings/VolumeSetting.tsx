@@ -1,10 +1,11 @@
 import React, {
   useCallback,
   useState,
+  useRef,
+  useEffect,
 } from 'react';
 import Button from '@atlaskit/button';
 import Range from '@atlaskit/range';
-import { createSelector } from 'reselect';
 
 import playSound from '../../utils/play-sound';
 import { getVolume } from '../../store/settings/selectors';
@@ -19,6 +20,7 @@ const mapState = (state: State) => {
 function VolumeSetting() {
   const { volume } = useMapState(mapState);
   const [selectedVolume, setSelectedVolume] = useState(volume);
+  const update = useRef<NodeJS.Timeout | null>(null);
 
   // Play a sound with the currently selected volume
   const handleTestClick = useCallback(
@@ -30,8 +32,20 @@ function VolumeSetting() {
   const handleChange = useCallback((value: number) => {
     setSelectedVolume(value);
 
-    updateVolume(selectedVolume);
+    // Remove the previous timeout if one exists
+    if (update.current !== null) {
+      clearTimeout(update.current);
+    }
+
+    // Update the value on the server after 1s
+    update.current = setTimeout(() => {
+      updateVolume(value);
+    }, 1000);
   }, []);
+
+  useEffect(() => {
+    setSelectedVolume(volume);
+  }, [volume]);
 
   return (
     <React.Fragment>
@@ -48,10 +62,6 @@ function VolumeSetting() {
 }
 
 export default {
-  selector: createSelector(
-    (state: State) => state,
-    (state: State) => `${getVolume(state)}%`,
-  ),
   key: 'volume',
   title: 'Volume',
   Comp: VolumeSetting,

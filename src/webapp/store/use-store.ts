@@ -2,7 +2,7 @@ import {
   useState,
   useRef,
   useCallback,
-  useEffect,
+  useEffect, useMemo,
 } from 'react';
 import shallowEqual from 'shallowequal';
 
@@ -76,7 +76,7 @@ function useMakeMapState<MappedState, Args extends []>(
   makeMapState: () => (state: State, ...args: Args) => MappedState,
   ...args: Args
 ): MappedState {
-  const mapState = useCallback(makeMapState, []);
+  const mapState = useMemo(makeMapState, []);
 
   // @ts-ignore
   return useMapState(mapState, ...args);

@@ -1,10 +1,5 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback } from 'react';
 import { RadioGroup } from '@atlaskit/radio';
-import { createSelector } from 'reselect';
 
 import { getEmojiSet } from '../../store/settings/selectors';
 import emojiSets from '../../../config/emoji-sets';
@@ -27,26 +22,13 @@ const options = emojiSetKeys.map((emojiSet) => {
 
 function EmojiSetting() {
   const { emoji } = useMapState(mapState);
-  const [selectedEmojiSet, setSelectedEmojiSet] = useState(emoji);
   const handleChange = useCallback((ev) => {
-    setSelectedEmojiSet(ev.target.value);
+    updateEmojiSet(ev.target.value);
   }, []);
-
-  useEffect(() => {
-    if (selectedEmojiSet !== emoji) {
-      updateEmojiSet(selectedEmojiSet);
-    }
-  }, [selectedEmojiSet]);
-
-  useEffect(() => {
-    if (emoji !== selectedEmojiSet) {
-      setSelectedEmojiSet(emoji);
-    }
-  }, [emoji]);
 
   return (
     <RadioGroup
-      value={selectedEmojiSet}
+      value={emoji}
       options={options}
       onChange={handleChange}
     />
@@ -56,9 +38,5 @@ function EmojiSetting() {
 export default {
   key: 'emoji-set',
   title: 'Emoji Set',
-  selector: createSelector(
-    getEmojiSet,
-    emojiSet => emojiSets[emojiSet].display,
-  ),
   Comp: EmojiSetting,
 };

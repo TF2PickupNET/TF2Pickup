@@ -4,7 +4,7 @@ import {
   Route,
 } from 'react-router-dom';
 
-import ProfileRedirect from './ProfileRedirect';
+import Profile from './Profile';
 import IndexRedirect from './IndexRedirect';
 import NotFound from './NotFound';
 import LogOut from './SignOut';
@@ -14,7 +14,7 @@ import Settings from './Settings';
 const routes = [
   {
     path: '/profile',
-    component: ProfileRedirect,
+    component: Profile,
   },
   {
     path: '/',
@@ -41,7 +41,7 @@ const routes = [
   {
     path: '*',
     component: NotFound,
-  }
+  },
 ];
 
 function Views() {

@@ -14,7 +14,7 @@ type AvatarSize = keyof UserProfile['steam']['avatar'];
 
 const getProfiles = (state: State) => state.userProfiles;
 
-const makeGetProfile = () => createSelector(
+const makeGetProfileById = () => createSelector(
   getProfiles,
   (_: State, userId: string | null) => userId,
   (profiles, userId) => (
@@ -22,7 +22,7 @@ const makeGetProfile = () => createSelector(
   ),
 );
 
-const makeGetProfileStatus = () => createSelector(
+const makeGetProfileStatusById = () => createSelector(
   getProfiles,
   (_: State, userId: string | null) => userId,
   (profiles, userId) => (
@@ -30,7 +30,7 @@ const makeGetProfileStatus = () => createSelector(
   ),
 );
 
-const makeGetProfileError = () => createSelector(
+const makeGetProfileErrorById = () => createSelector(
   getProfiles,
   (_: State, userId: string | null) => userId,
   (profiles, userId) => (
@@ -39,7 +39,7 @@ const makeGetProfileError = () => createSelector(
 );
 
 const makeGetSteamFriends = () => createSelector(
-  makeGetProfile(),
+  makeGetProfileById(),
   profile => (profile === null ? [] : profile.steam.friends),
 );
 
@@ -50,12 +50,12 @@ const makeIsFriend = () => createSelector(
 );
 
 const makeGetAvatar = (size: AvatarSize) => createSelector(
-  makeGetProfile(),
+  makeGetProfileById(),
   profile => (profile === null ? null : profile.steam.avatar[size]),
 );
 
 const makeGetServiceLinks = () => createSelector(
-  makeGetProfile(),
+  makeGetProfileById(),
   (profile) => {
     if (profile === null) {
       return [];
@@ -79,7 +79,7 @@ interface NameOption {
 const regionKeys = Object.keys(regions) as Keys<typeof regions>;
 
 const makeGetNames = () => createSelector(
-  makeGetProfile(),
+  makeGetProfileById(),
   (profile) => {
     if (profile === null) {
       return [];
@@ -109,9 +109,9 @@ export {
   makeGetAvatar,
   makeIsFriend,
   makeGetSteamFriends,
-  makeGetProfile,
+  makeGetProfileById,
   makeGetServiceLinks,
   makeGetNames,
-  makeGetProfileError,
-  makeGetProfileStatus,
+  makeGetProfileErrorById,
+  makeGetProfileStatusById,
 };

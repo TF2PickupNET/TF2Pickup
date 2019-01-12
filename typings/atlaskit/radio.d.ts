@@ -17,7 +17,7 @@ declare module '@atlaskit/radio' {
     isDisabled?: boolean,
     isRequired?: boolean,
     options: Option[],
-    onChange: (ev: ChangeEvent) => void,
+    onChange(ev: ChangeEvent<HTMLInputElement>): void,
   }
 
   const RadioGroup: ComponentType<RadioGroupProps>;

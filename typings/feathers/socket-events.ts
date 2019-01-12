@@ -4,6 +4,7 @@ import { SocketConnection } from '@feathersjs/socketio';
 import regions from '../../src/config/regions';
 import roles from '../../src/config/roles';
 import emojiSets from '../../src/config/emoji-sets';
+import announcers from '../../src/config/announcers';
 
 type Callback = (err: FeathersError<number, string> | null) => void;
 type Roles = keyof typeof roles;
@@ -24,6 +25,7 @@ interface Events {
 
   'user-settings:change-volume': { volume: number },
   'user-settings:change-emoji-set': { emojiSet: keyof typeof emojiSets },
+  'user-settings:change-announcer': { announcer: keyof typeof announcers },
 
   'messages:create': {
     chatId: string,

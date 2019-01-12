@@ -12,7 +12,7 @@ import DocumentTitle from '../../../components/DocumentTitle';
 const styles = { container: { minHeight: '100vh' } };
 
 function handleClick() {
-  window.location.reload(true);
+  window.location.reload();
 }
 
 const mapState = (state: State) => {

@@ -22,7 +22,7 @@ function Navigation(props: Props) {
   return (
     <PageNavigation>
       <HeaderSection>
-        {({ className }: { className: string }) => (
+        {({ className }) => (
           <div className={`${className} ${props.classes.header}`}>
             <Item
               isHeader

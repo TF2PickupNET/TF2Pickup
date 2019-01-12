@@ -8,7 +8,7 @@ import Button from '@atlaskit/button';
 import { createSelector } from 'reselect';
 
 import { getCurrentUserId } from '../../../../store/user-id/selectors';
-import { makeGetRegion } from '../../../../store/users/selectors';
+import { makeGetUserRegion } from '../../../../store/users/selectors';
 import { useMakeMapState } from '../../../../store/use-store';
 import useAsync from '../../../../utils/use-async';
 import { setName } from '../../../../store/users/actions';
@@ -17,7 +17,7 @@ import { Row } from '../../../../components/Grid';
 import { State } from '../../../../store';
 
 const makeMapState = () => {
-  const getRegion = makeGetRegion();
+  const getUserRegion = makeGetUserRegion();
   const getNames = createSelector(
     makeGetNames(),
     names => names.map((name) => {
@@ -34,7 +34,7 @@ const makeMapState = () => {
 
     return {
       names: getNames(state, userId),
-      region: getRegion(state, userId),
+      region: getUserRegion(state, userId),
     };
   };
 };

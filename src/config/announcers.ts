@@ -8,7 +8,7 @@ const DEFAULT_ANNOUNCER = 'default';
 
 const defaultAnnouncer: Announcer = {
   name: 'default',
-  display: 'TF2 Announcer (default)',
+  display: 'TF2 Announcer',
   needsPurchase: false,
 };
 
@@ -26,7 +26,7 @@ const admirable: Announcer = {
 
 const admirablePyrovision: Announcer = {
   name: 'admirable-pyrovision',
-  display: 'Admirable (Pyrovision)',
+  display: 'Admirable Pyrovision',
   needsPurchase: true,
 };
 

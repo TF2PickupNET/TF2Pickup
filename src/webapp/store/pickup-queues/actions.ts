@@ -2,7 +2,7 @@ import { AsyncAction } from 'redux';
 
 import gamemodes from '../../../config/gamemodes';
 import app from '../../app';
-import { makeGetRegion } from '../users/selectors';
+import { makeGetUserRegion } from '../users/selectors';
 import { getCurrentUserId } from '../user-id/selectors';
 import PickupQueue from '../../../types/PickupQueue';
 import { AsyncStatus } from '../types';
@@ -18,7 +18,7 @@ import {
   UPDATE_PICKUP_QUEUE,
 } from './types';
 
-const getRegion = makeGetRegion();
+const getUserRegion = makeGetUserRegion();
 
 function fetchPickup(gamemode: keyof typeof gamemodes): AsyncAction<State, Actions> {
   const getPickupQueueStatus = makeGetPickupQueueStatus();
@@ -34,7 +34,7 @@ function fetchPickup(gamemode: keyof typeof gamemodes): AsyncAction<State, Actio
     });
 
     const state = getState();
-    const region = getRegion(state, getCurrentUserId(state));
+    const region = getUserRegion(state, getCurrentUserId(state));
 
     try {
       const queue = await app.service('pickup-queues').get(`${region}-${gamemode}`);

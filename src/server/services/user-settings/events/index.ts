@@ -3,6 +3,7 @@ import debug from 'debug';
 
 import onChangeVolume from './on-change-volume';
 import onChangeEmojiSet from './on-change-emoji-set';
+import onChangeAnnouncer from './on-change-announcer';
 
 const log = debug('TF2Pickup:user-settings:events');
 
@@ -13,5 +14,7 @@ export default function events(app: ServerApp) {
     socket.on('user-settings:change-volume', onChangeVolume(app, socket));
 
     socket.on('user-settings:change-emoji-set', onChangeEmojiSet(app, socket));
+
+    socket.on('user-settings:change-announcer', onChangeAnnouncer(app, socket));
   });
 }

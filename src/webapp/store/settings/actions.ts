@@ -4,6 +4,7 @@ import UserSettings from '../../../types/UserSettings';
 import app from '../../app';
 import { getCurrentUserId } from '../user-id/selectors';
 import emojiSets from '../../../config/emoji-sets';
+import announcers from '../../../config/announcers';
 
 import { State } from '..';
 
@@ -54,6 +55,24 @@ function updateEmojiSet(emojiSet: keyof typeof emojiSets): Promise<void> {
   });
 }
 
+function updateAnnouncer(announcer: keyof typeof announcers): Promise<void> {
+  // eslint-disable-next-line promise/avoid-new
+  return new Promise((resolve, reject) => {
+    app.io.emit('user-settings:change-announcer', { announcer }, (err) => {
+      if (err) {
+        // Message.error(`Couldn't change your emoji set: ${err.message}`, 2);
+      } else {
+        // Message.success(
+        //   `Successfully changed your emoji set to ${emojiSets[emojiSet].display}`,
+        //   1,
+        // );
+      }
+
+      return err ? reject(err) : resolve();
+    });
+  });
+}
+
 function fetchSettings(): AsyncAction<State, Actions> {
   return async (dispatch, getState) => {
     const userId = getCurrentUserId(getState());
@@ -88,4 +107,5 @@ export {
   fetchSettings,
   updateEmojiSet,
   updateSettings,
+  updateAnnouncer,
 };

@@ -9,8 +9,8 @@ import {
   getConfigStatus,
 } from '../../../store/config/selectors';
 import {
-  makeGetUserError,
-  makeGetUserStatus,
+  makeGetUserStatusById,
+  makeGetUserErrorById,
 } from '../../../store/users/selectors';
 import {
   getSettingsError,
@@ -18,14 +18,14 @@ import {
 } from '../../../store/settings/selectors';
 import { AsyncStatus } from '../../../store/types';
 import {
-  makeGetProfileError,
-  makeGetProfileStatus,
+  makeGetProfileStatusById,
+  makeGetProfileErrorById,
 } from '../../../store/user-profiles/selectors';
 
-const getUserStatus = makeGetUserStatus();
-const getUserError = makeGetUserError();
-const getProfileStatus = makeGetProfileStatus();
-const getProfileError = makeGetProfileError();
+const getUserStatus = makeGetUserStatusById();
+const getUserError = makeGetUserErrorById();
+const getProfileStatus = makeGetProfileStatusById();
+const getProfileError = makeGetProfileErrorById();
 
 const steps = {
   'load-configuration': {

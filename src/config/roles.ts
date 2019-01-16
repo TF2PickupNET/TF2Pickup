@@ -2,8 +2,15 @@ interface Role {
   name: string,
   display: string,
   level: number,
-  color: string,
+  color: string | null,
 }
+
+const user: Role = {
+  name: 'user',
+  display: 'User',
+  level: 0,
+  color: null,
+};
 
 const headAdmin: Role = {
   name: 'headAdmin',
@@ -34,6 +41,7 @@ const donator: Role = {
 };
 
 const roles = {
+  user,
   headAdmin,
   admin,
   honoraryUser,

@@ -30,7 +30,7 @@ const makeMapState = () => {
 
 interface Props extends WithStyles<typeof styles> {
   userId: string,
-  className: string,
+  className?: string,
 }
 
 function UserItem(props: Props) {

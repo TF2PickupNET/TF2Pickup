@@ -1,83 +1,30 @@
 import React, { useMemo } from 'react';
-import { RouterHistory } from 'react-router-dom';
-import {
-  GlobalNav,
-  GlobalItemProps,
-} from '@atlaskit/navigation-next';
-import SettingsIcon from '@atlaskit/icon/glyph/settings';
-import SignOutIcon from '@atlaskit/icon/glyph/sign-out';
-import InfoIcon from '@atlaskit/icon/glyph/editor/info';
-
-import gamemodes from '../../../../config/gamemodes';
+import { GlobalNav } from '@atlaskit/navigation-next';
 import { useHistory } from '../../../utils/use-router';
-import { Keys } from '../../../../utils/types';
 
-import UserAvatar from './UserAvatar';
+import { State } from '../../../store';
+import { getCurrentUserId } from '../../../store/user-id/selectors';
+import { useMapState } from '../../../store/use-store';
+import {
+  getPrimaryItems,
+  getSecondaryItems,
+  useMapItems,
+} from './items';
 
-const gamemodeKeys = Object.keys(gamemodes) as Keys<typeof gamemodes>;
-
-interface ItemProps extends GlobalItemProps {
-  path: string,
-}
-
-const globalNavPrimaryItems: ItemProps[] = [
-  {
-    id: 'home',
-    icon: () => 'TF2P',
-    path: '/',
-  },
-  ...gamemodeKeys.map((gamemode) => {
-    return {
-      id: gamemode,
-      path: `/${gamemode}`,
-      icon: () => gamemodes[gamemode].display,
-    };
-  }),
-  {
-    id: 'info',
-    icon: InfoIcon,
-    label: 'Info',
-    path: '/info',
-  },
-];
-
-const globalNavSecondaryItems: ItemProps[] = [
-  {
-    id: 'settings',
-    icon: SettingsIcon,
-    label: 'Settings',
-    path: '/settings',
-  },
-  {
-    id: 'profile',
-    icon: UserAvatar,
-    label: 'Profile',
-    path: '/profile',
-  },
-  {
-    id: 'sign-out',
-    icon: SignOutIcon,
-    label: 'Sign Out',
-    path: '/sign-out',
-  },
-];
-
-function useMapItems(items: ItemProps[], history: RouterHistory): ItemProps[] {
-  return useMemo(() => items.map((item) => {
-    return {
-      ...item,
-      onClick: () => history.push(item.path),
-    };
-  }), [items, history]);
-}
+const mapState = (state: State) => {
+  return { isLoggedIn: getCurrentUserId(state) !== null };
+};
 
 function GlobalNavigation() {
+  const { isLoggedIn } = useMapState(mapState);
   const history = useHistory();
+  const primaryItems = useMemo(getPrimaryItems, []);
+  const secondaryItems = useMemo(() => getSecondaryItems(isLoggedIn), [isLoggedIn]);
 
   return (
     <GlobalNav
-      primaryItems={useMapItems(globalNavPrimaryItems, history)}
-      secondaryItems={useMapItems(globalNavSecondaryItems, history)}
+      primaryItems={useMapItems(primaryItems, history)}
+      secondaryItems={useMapItems(secondaryItems, history)}
     />
   );
 }

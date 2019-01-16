@@ -10,6 +10,8 @@ import {
 } from 'react-router-dom';
 import { __RouterContext as RouterContext } from 'react-router';
 
+import { isString } from '../../utils/string';
+
 function useHistory(): RouterHistory {
   const context = useContext(RouterContext);
 
@@ -32,15 +34,15 @@ function useLocation(): Location {
   return context.location;
 }
 
-function useMatch<Return, DefaultValue>(
-  selector: (match: Match) => Return | null,
+function useMatch<DefaultValue>(
+  selector: (match: Match) => string,
   defaultValue: DefaultValue,
-): Return | DefaultValue {
+): string | DefaultValue {
   const context = useContext(RouterContext);
-  const getMatch = (): Return | DefaultValue => {
+  const getMatch = (): string | DefaultValue => {
     const value = selector(context.match);
 
-    return value === null ? defaultValue : value;
+    return isString(value) ? value : defaultValue;
   };
   const [match, setMatch] = useState(getMatch);
 

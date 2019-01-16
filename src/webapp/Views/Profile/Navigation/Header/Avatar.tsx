@@ -1,12 +1,14 @@
 import React from 'react';
-import { ItemAvatar } from '@atlaskit/navigation-next';
-import { matchPath } from 'react-router-dom';
+import {
+  ItemAvatar,
+  ItemBeforeAfterProps,
+} from '@atlaskit/navigation-next';
 
 import { useMakeMapState } from '../../../../store/use-store';
 import { makeGetAvatar } from '../../../../store/user-profiles/selectors';
 import { makeGetUserIsOnline } from '../../../../store/users/selectors';
 import { State } from '../../../../store';
-import { useLocation } from '../../../../utils/use-router';
+import { useUserId } from '../../utils';
 
 const makeMapState = () => {
   const getAvatar = makeGetAvatar('large');
@@ -20,10 +22,8 @@ const makeMapState = () => {
   };
 };
 
-function Avatar(props) {
-  const { pathname } = useLocation();
-  const match = matchPath(pathname, { path: '/profile/:userId' });
-  const userId = match ? match.params.userId : null;
+function Avatar(props: ItemBeforeAfterProps) {
+  const userId = useUserId();
   const {
     avatar,
     isOnline,

@@ -5,6 +5,7 @@ import { Theme } from '../../theme';
 import { Row } from '../Grid';
 
 import Item from './Item';
+import Header from './Header';
 
 function styles(theme: Theme) {
   return {
@@ -30,6 +31,9 @@ function ContentNavigation(props: Props) {
   );
 }
 
-export { Item };
+export {
+  Item,
+  Header,
+};
 
 export default withStyles(styles)(ContentNavigation);

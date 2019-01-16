@@ -25,7 +25,7 @@ export default async function getETF2LData(user: UserProfile, oneDaySinceLastUpd
     const response = await axios.get(`http://api.etf2l.org/player/${user.id}.json`);
     const player = response.data.player;
 
-    const divs = oneDaySinceLastUpdate ? await getETF2LDivisions(user.id, player.id) : {};
+    const divs = oneDaySinceLastUpdate || true ? await getETF2LDivisions(user.id, player.id) : {};
     const ban = player.bans === null ? null : findCurrentBan(player.bans);
 
     return {

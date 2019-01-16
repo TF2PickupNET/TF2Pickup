@@ -5,6 +5,7 @@ import {
   Row,
   Column,
 } from '../../components/Grid';
+import RequireLogin from '../../components/RequireLogin';
 
 import RegionSetting from './RegionSetting';
 import VolumeSetting from './VolumeSetting';
@@ -39,7 +40,7 @@ type Props = WithStyles<typeof styles>;
 
 function Settings(props: Props) {
   return (
-    <React.Fragment>
+    <RequireLogin>
       <Navigation />
 
       <Row
@@ -58,10 +59,9 @@ function Settings(props: Props) {
               </div>
             </React.Fragment>
           ))}
-
         </Column>
       </Row>
-    </React.Fragment>
+    </RequireLogin>
   );
 }
 

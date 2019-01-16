@@ -202,6 +202,17 @@
     babel-runtime "^6.26.0"
     uuid "^3.1.0"
 
+"@atlaskit/inline-dialog@^9.0.13":
+  version "9.0.13"
+  resolved "https://registry.yarnpkg.com/@atlaskit/inline-dialog/-/inline-dialog-9.0.13.tgz#78e0459e000bcee27aff4cad0166cc35e15381cf"
+  integrity sha512-0PVw+TXg7WBwlAJ4YYlk+ZEdqcHeAtFMgUxj1ngf8FKqfSLmPqRGPp9HtmkdCnd+g0ecHqvwfRCw2CJyjbSqPg==
+  dependencies:
+    "@atlaskit/analytics-next" "^3.1.2"
+    "@atlaskit/popper" "^0.3.6"
+    "@atlaskit/theme" "^7.0.1"
+    "@babel/runtime" "^7.0.0"
+    react-node-resolver "^1.0.1"
+
 "@atlaskit/item@^8.0.14":
   version "8.0.14"
   resolved "https://registry.yarnpkg.com/@atlaskit/item/-/item-8.0.14.tgz#c6702d91e0265792ce03f51b75410b49aab6470c"

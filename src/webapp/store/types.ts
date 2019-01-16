@@ -22,7 +22,7 @@ function createStateCreator<Item>() {
     },
     createNotStartedState(): AsyncItem<Item> {
       return {
-        status: AsyncStatus.LOADING,
+        status: AsyncStatus.NOT_STARTED,
         item: null,
         error: null,
       };

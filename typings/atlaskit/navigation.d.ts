@@ -4,6 +4,7 @@ declare module '@atlaskit/navigation-next' {
     MouseEventHandler,
     ReactNode,
   } from 'react';
+  import { AvatarProps } from '@atlaskit/avatar';
 
   interface ItemBeforeAfterProps {
     isActive?: boolean,
@@ -29,12 +30,13 @@ declare module '@atlaskit/navigation-next' {
     target?: string,
     text: ReactNode,
     component?: ComponentType<ItemProps>,
+    styles?(styles: Record<string, object>): Record<string, object>,
   }
 
   interface SectionProps {
     id?: string,
     parentId?: string,
-    children: (props: { className: string }) => ReactNode,
+    children(props: { className: string }): ReactNode,
     alwaysShowScrollHint?: boolean,
   }
 
@@ -62,6 +64,10 @@ declare module '@atlaskit/navigation-next' {
     secondaryItems: GlobalItemProps[],
   }
 
+  interface ItemAvatar extends AvatarProps {
+    itemState: ItemBeforeAfterProps,
+  }
+
   const MenuSection: ComponentType<SectionProps>;
   const HeaderSection: ComponentType<SectionProps>;
   const Item: ComponentType<ItemProps>;
@@ -69,6 +75,7 @@ declare module '@atlaskit/navigation-next' {
   const Separator: ComponentType<{}>;
   const GroupHeading: ComponentType<GroupHeadingProps>;
   const GlobalNav: ComponentType<GlobalNavProps>;
+  const ItemAvatar: ComponentType<ItemAvatar>;
 
   export {
     ItemProps,
@@ -80,6 +87,8 @@ declare module '@atlaskit/navigation-next' {
     HeaderSection,
     GroupHeading,
     GlobalNav,
+    ItemAvatar,
+    ItemBeforeAfterProps,
     GlobalItemProps,
   };
 }

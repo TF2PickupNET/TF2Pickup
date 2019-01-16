@@ -3,6 +3,7 @@ declare module '@atlaskit/theme' {
     B500: string,
     N10: string,
     N20: string,
+    N40: string,
     N900: string,
   }
 

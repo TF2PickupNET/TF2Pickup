@@ -26,7 +26,7 @@ export default function onRemoveRole(
       const targetUser = await users.get(data.userId);
 
       if (!hasPermission('user.change-role', currentUser, targetUser)) {
-        return cb(new Forbidden('You don\'t have the permission to add the role'));
+        return cb(new Forbidden('You don\'t have the permission to remove the role'));
       }
 
       if (!targetUser.roles.includes(data.role)) {

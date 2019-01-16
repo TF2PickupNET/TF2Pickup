@@ -7,13 +7,12 @@ import {
 import Profile from './Profile';
 import IndexRedirect from './IndexRedirect';
 import NotFound from './NotFound';
-import LogOut from './SignOut';
 import Info from './Info';
 import Settings from './Settings';
 
 const routes = [
   {
-    path: '/profile',
+    path: ['/profile', '/profile/:userId'],
     component: Profile,
   },
   {
@@ -25,12 +24,6 @@ const routes = [
   {
     path: '/info',
     component: Info,
-  },
-  {
-    path: '/sign-out',
-    exact: true,
-    strict: true,
-    component: LogOut,
   },
   {
     path: '/settings',
@@ -49,7 +42,7 @@ function Views() {
     <Switch>
       {routes.map(route => (
         <Route
-          key={route.path}
+          key={Array.isArray(route.path) ? route.path[0] : route.path}
           {...route}
         />
       ))}

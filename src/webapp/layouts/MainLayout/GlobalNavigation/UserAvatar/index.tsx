@@ -23,6 +23,7 @@ function UserAvatar() {
       isActive={false}
       borderColor="transparent"
       src={url}
+      size="small"
     />
   );
 }

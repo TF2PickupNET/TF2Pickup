@@ -1,12 +1,10 @@
 import React from 'react';
-import {
-  ContainerHeader,
-  HeaderSection,
-  Item,
-  MenuSection,
-} from '@atlaskit/navigation-next';
+import { MenuSection } from '@atlaskit/navigation-next';
 
-import PageNavigation from '../../components/PageNavigation';
+import PageNavigation, {
+  Item,
+  Header,
+} from '../../components/PageNavigation';
 import { State } from '../../store';
 import { makeGetUserRegion } from '../../store/users/selectors';
 import { getCurrentUserId } from '../../store/user-id/selectors';
@@ -43,13 +41,7 @@ function Navigation() {
 
   return (
     <PageNavigation>
-      <HeaderSection>
-        {({ className }) => (
-          <div className={className}>
-            <ContainerHeader text="Settings" />
-          </div>
-        )}
-      </HeaderSection>
+      <Header text="Settings" />
 
       <MenuSection>
         {({ className }) => (

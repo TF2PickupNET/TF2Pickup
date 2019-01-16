@@ -22,7 +22,9 @@ function normalizeMatch(match: Match): Match {
   };
 }
 
-const isMatchValid = (match: Match) => match.merced === 0 && match.divName !== null;
+const isMatchValid = (match: Match) => match.merced === 0
+  && match.divName !== null
+  && match.gamemode !== null;
 
 function findHighestDiv(gamemode: keyof typeof gamemodes) {
   return (highestDiv: ETF2LDivisions, match: Match) => {
@@ -47,8 +49,8 @@ export default async function getETF2LDivisions(id: string, etf2lId: string) {
     });
     const matches = response.data.results;
     const filteredMatches = matches
-      .filter(isMatchValid)
-      .map(normalizeMatch);
+      .map(normalizeMatch)
+      .filter(isMatchValid);
 
     return {
       div6v6: filteredMatches.reduce(findHighestDiv('6v6'), 'N/A'),

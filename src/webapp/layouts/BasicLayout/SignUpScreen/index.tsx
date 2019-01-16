@@ -26,8 +26,8 @@ const styles = {
   },
 };
 
-function getCurrentStep(user: User) {
-  if (user.hasCompletedSignUp) {
+function getCurrentStep(user: User | null) {
+  if (user === null || user.hasCompletedSignUp) {
     return null;
   }
 
@@ -54,11 +54,6 @@ interface Props extends WithStyles<typeof styles> {
 
 function SignUpScreen(props: Props) {
   const { user } = useMapState(mapState);
-
-  if (user === null) {
-    return null;
-  }
-
   const currentStep = getCurrentStep(user);
 
   if (currentStep === null) {

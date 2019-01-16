@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import {
-  ContainerHeader,
   Item as ItemComp,
   ItemProps,
 } from '@atlaskit/navigation-next';
@@ -12,30 +11,40 @@ import {
 import { isString } from '../../../../utils/string';
 
 interface Props extends ItemProps {
-  isHeader?: boolean,
   path?: string,
 }
+
+const itemStyles = (style: Record<string, any>) => {
+  style.itemBase.marginBottom = '8px';
+
+  return style;
+};
+
 
 function Item(props: Props) {
   const {
     path,
-    isHeader,
+    onClick,
     ...otherProps
   } = props;
   const location = useLocation();
   const history = useHistory();
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback((ev) => {
     if (isString(path)) {
       history.push(path);
     }
+
+    if (onClick) {
+      onClick(ev);
+    }
   }, []);
-  const Comp = isHeader ? ContainerHeader : ItemComp;
 
   return (
-    <Comp
+    <ItemComp
       {...otherProps}
       isSelected={location.pathname === path}
       onClick={handleClick}
+      styles={itemStyles}
     />
   );
 }

@@ -1,6 +1,8 @@
 declare module 'react-jss' {
   import { ComponentType } from 'react';
 
+  const ThemeProvider: ComponentType<{ theme: object }>;
+
   type Styles = Record<string, object>;
 
   type ThemedStyles<Theme> = (theme: Theme) => Styles;
@@ -17,7 +19,10 @@ declare module 'react-jss' {
     comp: ComponentType<Props>,
   ) => ComponentType<Omit<Props, 'classes'> & {classes?: Partial<Props['classes']>}>;
 
-  export { WithStyles };
+  export {
+    WithStyles,
+    ThemeProvider,
+  };
 
   export default withStyles;
 }

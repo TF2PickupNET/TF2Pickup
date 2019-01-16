@@ -2,9 +2,9 @@ import React, { ReactNode } from 'react';
 
 import IsConnected from './IsConnected';
 import BrowserValidator from './BrowserValidator';
-import LoadingScreen from './LoadingScreen';
+import LoadingScreen from './LoadConfig';
 import VersionValidator from './VersionValidator';
-import IsAuthenticated from './IsAuthenticated';
+import Authenticate from './Authenticate';
 import SignUpScreen from './SignUpScreen';
 
 interface Props {
@@ -15,7 +15,7 @@ function Page(props: Props) {
   return (
     <IsConnected>
       <BrowserValidator>
-        <IsAuthenticated>
+        <Authenticate>
           <LoadingScreen>
             <VersionValidator>
               <SignUpScreen>
@@ -23,7 +23,7 @@ function Page(props: Props) {
               </SignUpScreen>
             </VersionValidator>
           </LoadingScreen>
-        </IsAuthenticated>
+        </Authenticate>
       </BrowserValidator>
     </IsConnected>
   );

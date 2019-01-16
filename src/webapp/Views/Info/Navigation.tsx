@@ -1,7 +1,5 @@
 import React from 'react';
-import withStyles, { WithStyles } from 'react-jss';
 import {
-  HeaderSection,
   MenuSection,
   Separator,
   GroupHeading,
@@ -11,27 +9,18 @@ import ShortcutIcon from '@atlaskit/icon/glyph/shortcut';
 import PageNavigation, { Item } from '../../components/PageNavigation';
 import socialMedias from '../../../config/social-medias';
 import { Keys } from '../../../utils/types';
-
-const styles = { header: { paddingBottom: 16 } };
-
-type Props = WithStyles<typeof styles>;
+import Header from '../../components/PageNavigation/Header';
 
 const socialMediaKeys = Object.keys(socialMedias) as Keys<typeof socialMedias>;
 
-function Navigation(props: Props) {
+function Navigation() {
   return (
     <PageNavigation>
-      <HeaderSection>
-        {({ className }) => (
-          <div className={`${className} ${props.classes.header}`}>
-            <Item
-              isHeader
-              path="/info"
-              text="Information"
-            />
-          </div>
-        )}
-      </HeaderSection>
+      <Header
+        path="/info"
+        text="Information"
+      />
+
       <MenuSection>
         {({ className }: { className: string }) => (
           <div className={className}>
@@ -74,4 +63,4 @@ function Navigation(props: Props) {
   );
 }
 
-export default withStyles(styles)(Navigation);
+export default Navigation;

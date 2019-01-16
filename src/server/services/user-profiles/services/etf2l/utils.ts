@@ -19,6 +19,14 @@ const divs: ETF2LDivisions[] = [
 ];
 
 function normalizeDivisionName({ division }: Match): ETF2LDivisions | null {
+  if (division.name === null) {
+    return null;
+  }
+
+  if (divs.includes(division.name as ETF2LDivisions)) {
+    return division.name as ETF2LDivisions;
+  }
+
   const match = division.name.match(/^Division \d/);
   const level = match && isNumber(match[1]) ? match[1] : -1;
 
@@ -38,14 +46,18 @@ function normalizeDivisionName({ division }: Match): ETF2LDivisions | null {
   }
 }
 
-function normalizeGamemodeName(match: Match): keyof typeof gamemodes {
+function normalizeGamemodeName(match: Match): keyof typeof gamemodes | null {
+  if (match.competition.type in gamemodes) {
+    return match.competition.type as keyof typeof gamemodes;
+  }
+
   switch (match.competition.type) {
     case '6on6':
       return '6v6';
     case 'Highlander':
       return '9v9';
     default:
-      return match.competition.type;
+      return null;
   }
 }
 

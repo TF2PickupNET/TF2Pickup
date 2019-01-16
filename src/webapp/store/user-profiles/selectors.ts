@@ -8,7 +8,7 @@ import regions from '../../../config/regions';
 
 import { State } from '..';
 
-import getLinkForService from './utils/get-link-for-service';
+import getLinkForService, { Link } from './utils/get-link-for-service';
 
 type AvatarSize = keyof UserProfile['steam']['avatar'];
 
@@ -65,7 +65,7 @@ const makeGetServiceLinks = () => createSelector(
 
     return keys
       .map(service => getLinkForService(service, profile))
-      .filter(link => link !== null);
+      .filter((link): link is Link => link !== null);
   },
 );
 

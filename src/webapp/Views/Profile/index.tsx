@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import { getCurrentUserId } from '../../store/user-id/selectors';
@@ -8,6 +8,8 @@ import { State } from '../../store';
 import Navigation from './Navigation';
 import { useUserId } from './utils';
 import RequireLogin from '../../components/RequireLogin';
+import { fetchUser } from '../../store/users/actions';
+import { fetchProfile } from '../../store/user-profiles/actions';
 
 const mapState = (state: State) => {
   return { currentUserId: getCurrentUserId(state) };
@@ -16,6 +18,13 @@ const mapState = (state: State) => {
 function Profile() {
   const userId = useUserId();
   const { currentUserId } = useMapState(mapState);
+
+  useEffect(() => {
+    if (userId !== null) {
+      fetchUser(userId);
+      fetchProfile(userId);
+    }
+  }, [userId]);
 
   if (userId === null) {
     return (

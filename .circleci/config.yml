@@ -1,57 +1,36 @@
 version: 2
 
+DEFAULTS: &DEFAULTS
+  working_directory: ~/tf2pickup
+  docker:
+    - image: circleci/node:10
+  steps:
+    - checkout
+    - run:
+        name: Install Packages
+        command: yarn install
+
 jobs:
   lint:
-    working_directory: ~/tf2pickup
-    docker:
-      - image: circleci/node:10
+    << : *DEFAULTS
     steps:
-      - checkout
-      - run:
-          name: Install Packages
-          command: yarn install
       - run:
           name: Lint
-          command: yarn run lint
-
-  flow:
-    working_directory: ~/tf2pickup
-    docker:
-      - image: circleci/node:10
-    steps:
-      - checkout
-      - run:
-          name: Install Packages
-          command: yarn install
-      - run:
-          name: Flow
-          command: yarn run flow
+          command: yarn lint
 
   test:
-    working_directory: ~/tf2pickup
-    docker:
-      - image: circleci/node:10
+    << : *DEFAULTS
     steps:
-      - checkout
-      - run:
-          name: Install Packages
-          command: yarn install
       - run:
           name: Test
-          command: yarn run test
+          command: yarn test
 
   build:
-    working_directory: ~/tf2pickup
-    docker:
-      - image: circleci/node:10
+    << : *DEFAULTS
     steps:
-      - checkout
-      - run:
-          name: Install Packages
-          command: yarn install
       - run:
           name: Build
-          command: yarn run build
+          command: yarn build
 
 workflows:
   version: 2
@@ -59,6 +38,5 @@ workflows:
   test:
     jobs:
       - lint
-      - flow
       - test
       - build

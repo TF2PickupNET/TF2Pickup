@@ -28,8 +28,7 @@ declare module '@feathersjs/express' {
     xhr: boolean,
     user: import('../../src/types/User').default,
     get(field: string): string | void,
-    accepts(types: string): string | false,
-    accepts(types: string[]): string | false,
+    accepts(types: string | string[]): string | false,
     acceptsCharsets(...charsets: string[]): string | false,
     acceptsEncodings(...encoding: string[]): string | false,
     acceptsLanguages(...lang: string[]): string | false,
@@ -40,7 +39,7 @@ declare module '@feathersjs/express' {
 
   interface ExpressCookieOptions {
     domain?: string,
-    encode?: (value: string) => string,
+    encode?(value: string): string,
     expires?: Date,
     httpOnly?: boolean,
     maxAge?: number,
@@ -109,12 +108,12 @@ declare module '@feathersjs/express' {
     rest(): (app: ServerApp) => void,
     notFound(options: { verbose: boolean }): ExpressMiddleware,
     errorHandler(options: {
-      html: (
+      html(
         error: FeathersError<number, string>,
         req: ExpressRequest,
         res: ExpressResponse,
         next: ExpressNextFunction,
-      ) => void,
+      ): void,
       logger: boolean,
     }): ExpressMiddleware,
   }

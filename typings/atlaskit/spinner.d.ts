@@ -6,7 +6,7 @@ declare module '@atlaskit/spinner' {
   interface SpinnerProps {
     delay?: number,
     invertColor?: boolean,
-    onComplete?: () => void,
+    onComplete?(): void,
     size?: Size,
     isCompleting?: boolean,
   }

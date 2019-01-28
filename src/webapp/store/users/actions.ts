@@ -27,7 +27,9 @@ function updateUser(user: User): Actions {
 
 function fetchUser(userId: string | null): AsyncAction<State, Actions> {
   return async (dispatch, getState) => {
-    if (userId === null || getUserStatus(getState(), userId) !== AsyncStatus.NOT_STARTED) {
+    const status = getUserStatus(getState(), userId);
+
+    if (userId === null || status !== AsyncStatus.NOT_STARTED) {
       return;
     }
 

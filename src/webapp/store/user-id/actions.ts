@@ -11,6 +11,9 @@ import {
   LOGOUT_USER,
   Actions,
 } from './types';
+import { fetchUser } from '../users/actions';
+import { fetchSettings } from '../settings/actions';
+import { fetchProfile } from '../user-profiles/actions';
 
 function logoutUser(): AsyncAction<State, Actions> {
   return async (dispatch) => {
@@ -28,9 +31,7 @@ function loginUser(): AsyncAction<State, Actions> {
     const token = window.localStorage.getItem('feathers-jwt');
 
     if (token === null) {
-      return new NotAuthenticated(
-        'Missing JWT token!',
-      );
+      return new NotAuthenticated('Missing JWT token!');
     }
 
     try {
@@ -42,15 +43,19 @@ function loginUser(): AsyncAction<State, Actions> {
       const { id } = await app.passport.verifyJWT(accessToken);
 
       if (!isString(id)) {
-        return new NotAuthenticated(
-          'Missing id field in JWT Payload!',
-        );
+        return new NotAuthenticated('Missing id field in JWT Payload!');
       }
 
       dispatch({
         type: LOGIN_USER,
         payload: { userId: id },
       });
+
+      await Promise.all([
+        dispatch(fetchUser(id)),
+        dispatch(fetchSettings()),
+        dispatch(fetchProfile(id)),
+      ]);
 
       return null;
     } catch (error) {

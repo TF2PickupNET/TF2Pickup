@@ -14,7 +14,7 @@ declare module '@atlaskit/avatar' {
     isSelected?: boolean,
     presence?: 'online' | 'busy' | 'focus' | 'offline',
     src?: string | null,
-    onClick?: () => void,
+    onClick?(): void,
     className?: string,
   }
 

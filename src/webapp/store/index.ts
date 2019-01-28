@@ -8,6 +8,11 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import reducers, { State } from './reducers';
 import Actions from './actions';
+import useActions from './use-actions';
+import {
+  useMakeMapState,
+  useMapState,
+} from './use-store';
 
 const middlewares = applyMiddleware(thunk);
 
@@ -18,6 +23,12 @@ const store: Store<State, Actions> = createStore(
     : middlewares,
 );
 
-export { State };
+export {
+  State,
+
+  useActions,
+  useMakeMapState,
+  useMapState,
+};
 
 export default store;

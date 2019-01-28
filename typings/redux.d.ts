@@ -14,12 +14,16 @@ declare module 'redux' {
     action: Actions,
   ) => State;
 
-  interface Enhancer<State, Actions> {
-    (options: {
-      dispatch(action: Actions): void,
-      getState(): State,
-    }): (next: (action: Actions) => Actions) => (action: Actions) => Actions,
+  interface EnhancerOptions<State, Actions> {
+    dispatch(action: Actions): void,
+    getState(): State,
   }
+
+  type NextAction<Actions> = (action: Actions) => Actions;
+
+  type Enhancer<State, Actions> = (
+    options: EnhancerOptions<State, Actions>,
+  ) => (next: NextAction<Actions>) => NextAction<Actions>;
 
   interface Store<State, Actions> {
     getState(): State,
@@ -30,7 +34,7 @@ declare module 'redux' {
 
   function combineReducers<S extends object>(
     reducers: { [K in keyof S]: Reducer<S[K], Action<any, any>> }
-  ): Reducer<S, Action<string, object>>
+  ): Reducer<S, Action<string, object>>;
 
   function applyMiddleware<State, Actions>(
     ...middlewares: Array<Enhancer<State, Actions>>

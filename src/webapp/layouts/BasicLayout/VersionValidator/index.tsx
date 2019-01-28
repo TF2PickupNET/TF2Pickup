@@ -4,9 +4,11 @@ import Button from '@atlaskit/button';
 
 import { Row } from '../../../components/Grid';
 import pkg from '../../../../../package.json';
-import { useMapState } from '../../../store/use-store';
 import { getVersion } from '../../../store/config/selectors';
-import { State } from '../../../store';
+import {
+  State,
+  useMapState,
+} from '../../../store';
 import DocumentTitle from '../../../components/DocumentTitle';
 
 const styles = { container: { minHeight: '100vh' } };

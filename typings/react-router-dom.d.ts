@@ -32,7 +32,7 @@ declare module 'react-router-dom' {
     className?: string,
     activeStyle?: Object,
     style?: Object,
-    isActive?: (match: Match, location: Location) => boolean,
+    isActive?(match: Match, location: Location): boolean,
     children?: ReactNode,
     exact?: boolean,
     strict?: boolean,
@@ -60,7 +60,7 @@ declare module 'react-router-dom' {
     go(n: number): void,
     goBack(): void,
     goForward(): void,
-    canGo?: (n: number) => boolean,
+    canGo?(n: number): boolean,
     block(
       callback: (location: Location, action: HistoryAction) => boolean
     ): void,

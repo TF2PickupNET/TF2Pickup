@@ -4,16 +4,15 @@ DEFAULTS: &DEFAULTS
   working_directory: ~/tf2pickup
   docker:
     - image: circleci/node:10
-  steps:
-    - checkout
-    - run:
-        name: Install Packages
-        command: yarn install
 
 jobs:
   lint:
     << : *DEFAULTS
     steps:
+      - checkout
+      - run:
+          name: Install Packages
+          command: yarn install
       - run:
           name: Lint
           command: yarn lint
@@ -21,6 +20,10 @@ jobs:
   test:
     << : *DEFAULTS
     steps:
+      - checkout
+      - run:
+          name: Install Packages
+          command: yarn install
       - run:
           name: Test
           command: yarn test
@@ -28,6 +31,10 @@ jobs:
   build:
     << : *DEFAULTS
     steps:
+      - checkout
+      - run:
+          name: Install Packages
+          command: yarn install
       - run:
           name: Build
           command: yarn build

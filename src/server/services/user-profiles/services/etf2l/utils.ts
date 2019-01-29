@@ -6,7 +6,7 @@ interface Match {
   merced: number,
   division: { name: string },
   competition: { type: keyof typeof gamemodes | '6on6' | 'Highlander' },
-  gamemode: keyof typeof gamemodes,
+  gamemode: keyof typeof gamemodes | null,
   divName: string | null,
 }
 

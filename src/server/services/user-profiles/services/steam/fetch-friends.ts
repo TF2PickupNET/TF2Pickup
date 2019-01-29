@@ -9,9 +9,9 @@ interface Friend {
   steamid: string,
 }
 
-export default async function getSteamFriends(user: UserProfile, oneDaySinceLastUpdate: boolean) {
+async function fetchFriends(user: UserProfile, oneDaySinceLastUpdate: boolean) {
   if (!oneDaySinceLastUpdate) {
-    return user.steam.friends;
+    return {};
   }
 
   try {
@@ -21,14 +21,17 @@ export default async function getSteamFriends(user: UserProfile, oneDaySinceLast
         relationship: 'friend',
       },
     });
+    const friends = data.friendslist.friends.map((friend: Friend) => friend.steamid);
 
-    return data.friendslist.friends.map((friend: Friend) => friend.steamid);
+    return { friends };
   } catch (error) {
     log('Error while requesting steam friends', {
       userId: user.id,
       error,
     });
 
-    return user.steam.friends;
+    return {};
   }
 }
+
+export default fetchFriends;

@@ -39,7 +39,7 @@ function findHighestDiv(gamemode: keyof typeof gamemodes) {
   };
 }
 
-export default async function getETF2LDivisions(id: string, etf2lId: string) {
+export default async function fetchETF2LDivisions(id: string, etf2lId: string) {
   try {
     const response = await axios.get(`http://api.etf2l.org/player/${etf2lId}/results.json`, {
       params: {

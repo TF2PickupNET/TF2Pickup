@@ -6,11 +6,10 @@ import InlineDialog from '@atlaskit/inline-dialog';
 import { createSelector } from 'reselect';
 
 import roles from '../../../../../config/roles';
-import { State } from '../../../../store';
+import { State, useMakeMapState } from '../../../../store';
 import { hasPermission } from '../../../../../utils/has-permission';
 import { makeGetUserById, makeGetUserRoles } from '../../../../store/users/selectors';
 import { getCurrentUser } from '../../../../store/user-id/selectors';
-import { useMakeMapState } from '../../../../store/use-store';
 import { useUserId } from '../../utils';
 import { Keys } from '../../../../../utils/types';
 

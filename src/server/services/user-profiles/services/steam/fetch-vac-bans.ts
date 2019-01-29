@@ -6,7 +6,7 @@ import steamApi from '../../../../utils/steam-api';
 
 const log = debug('TF2Pickup:userId-user-profiles:steam:vac');
 
-export default async function getVACBans(user: UserProfile) {
+async function fetchVacBans(user: UserProfile) {
   try {
     const params = { steamids: user.id };
     const result = await steamApi.get('ISteamUser/GetPlayerBans/v1/', { params });
@@ -25,3 +25,5 @@ export default async function getVACBans(user: UserProfile) {
     return {};
   }
 }
+
+export default fetchVacBans;

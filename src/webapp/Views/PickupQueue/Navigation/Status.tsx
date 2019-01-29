@@ -1,35 +1,32 @@
 import React from 'react';
 
-import PageNavigation, {
-  Header,
-  Item,
-} from '../../../components/PageNavigation';
+import { Item } from '../../../components/PageNavigation';
 import { useGamemode } from '../utils';
 import gamemodes from '../../../../config/gamemodes';
-import { State } from '../../../store';
+import { State, useMakeMapState } from '../../../store';
 import { makeGetPickupQueueStatus } from '../../../store/pickup-queues/selectors';
 
-const makeMapState = (state: State, gamemode: keyof typeof gamemodes) => {
-  return {
-    status: makeGetPickupQueueStatus(state, gamemode),
+const makeMapState = () => {
+  const getPickupQueueStatus = makeGetPickupQueueStatus();
+
+  return (state: State, gamemode: keyof typeof gamemodes) => {
+    return { status: getPickupQueueStatus(state, gamemode) };
   };
 };
 
-function Navigation() {
+function Status() {
   const gamemode = useGamemode();
-
+  const { status } = useMakeMapState(makeMapState, gamemode);
 
   return (
-    <PageNavigation>
-      <Header text={gamemodes[gamemode].display} />
-
-      <Item text={(
+    <Item
+      text={(
         <React.Fragment>
-          <b>Status:</b>
+          <b>Status:</b> {status}
         </React.Fragment>
-      )}/>
-    </PageNavigation>
+      )}
+    />
   );
 }
 
-export default Navigation;
+export default Status;

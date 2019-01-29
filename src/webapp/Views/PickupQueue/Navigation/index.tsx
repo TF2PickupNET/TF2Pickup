@@ -1,11 +1,13 @@
 import React from 'react';
 
-import PageNavigation, { Header, Item } from '../../../components/PageNavigation';
+import PageNavigation, { Header } from '../../../components/PageNavigation';
 import { useGamemode } from '../utils';
 import gamemodes from '../../../../config/gamemodes';
 import { State, useMakeMapState } from '../../../store';
 import { makeGetPickupQueueStatus } from '../../../store/pickup-queues/selectors';
 import { AsyncStatus } from '../../../store/types';
+
+import Status from './Status';
 
 const makeMapState = () => {
   const getPickupQueueStatus = makeGetPickupQueueStatus();

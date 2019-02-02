@@ -1,37 +1,28 @@
 import { AsyncAction } from 'redux';
 
-import UserProfile from '../../../types/UserProfile';
 import app from '../../app';
 import { AsyncStatus } from '../types';
 
 import { State } from '..';
 
 import {
-  UPDATE_PROFILE,
   Actions,
-  FETCHED_PROFILE,
-  FETCH_ERROR_PROFILE,
-  START_FETCH_PROFILE,
+  UserProfileActionTypes,
 } from './types';
 import { makeGetProfileStatusById } from './selectors';
 
-function updateProfile(profile: UserProfile): Actions {
-  return {
-    type: UPDATE_PROFILE,
-    payload: { profile },
-  };
-}
+const getProfileStatus = makeGetProfileStatusById();
 
 function fetchProfile(userId: string | null): AsyncAction<State, Actions> {
-  const getProfileStatus = makeGetProfileStatusById();
-
   return async (dispatch, getState) => {
-    if (userId === null || getProfileStatus(getState(), userId) !== AsyncStatus.NOT_STARTED) {
+    const status = getProfileStatus(getState(), userId);
+
+    if (userId === null || status !== AsyncStatus.NOT_STARTED) {
       return;
     }
 
     dispatch({
-      type: START_FETCH_PROFILE,
+      type: UserProfileActionTypes.START_FETCH,
       payload: { userId },
     });
 
@@ -39,12 +30,12 @@ function fetchProfile(userId: string | null): AsyncAction<State, Actions> {
       const profile = await app.service('user-profiles').get(userId);
 
       dispatch({
-        type: FETCHED_PROFILE,
+        type: UserProfileActionTypes.FETCHED,
         payload: { profile },
       });
     } catch (error) {
       dispatch({
-        type: FETCH_ERROR_PROFILE,
+        type: UserProfileActionTypes.FETCH_ERROR,
         payload: {
           userId,
           error,
@@ -54,7 +45,4 @@ function fetchProfile(userId: string | null): AsyncAction<State, Actions> {
   };
 }
 
-export {
-  updateProfile,
-  fetchProfile,
-};
+export { fetchProfile };

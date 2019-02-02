@@ -1,17 +1,12 @@
-import {
-  FunctionComponent,
-  ReactNode,
-} from 'react';
 import withSideEffect from 'react-side-effect';
 
-import { isString } from '../../../utils/string';
+import { isString } from 'utils/string';
 
 const suffix = '| TF2Pickup.net';
 
 interface Props {
   title?: string,
   onChange?(title: string | null): void,
-  children?: ReactNode,
 }
 
 interface State {
@@ -30,29 +25,27 @@ function reducePropsToState(propsList: Props[]): State {
       title: accu.title !== null && isString(props.title) ? props.title : accu.title,
       onChange: props.onChange ? [
         ...accu.onChange,
-        props.onChange.bind(null),
+        props.onChange,
       ] : accu.onChange,
     };
   }, defaultState);
 }
 
 function handleStateChangeOnClient(state: State) {
-  const nextTitle = state.title;
+  const { title } = state;
 
-  if (nextTitle !== null && nextTitle !== document.title) {
-    document.title = nextTitle + suffix;
+  if (title !== null && title !== document.title) {
+    document.title = title + suffix;
 
-    state.onChange.forEach(fn => fn(nextTitle));
+    state.onChange.forEach(fn => fn(title));
   }
 }
 
-function DocumentTitle(props: Props) {
-  return props.children;
+function DocumentTitle() {
+  return null;
 }
 
-DocumentTitle.defaultProps = { children: null };
-
-export default withSideEffect(
+export default withSideEffect<Props, State>(
   reducePropsToState,
   handleStateChangeOnClient,
-)(DocumentTitle as FunctionComponent<Props>);
+)(DocumentTitle);

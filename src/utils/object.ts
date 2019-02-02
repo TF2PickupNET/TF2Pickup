@@ -26,7 +26,12 @@ function mapObjectValues<Obj, Key extends keyof Obj, NewValues>(
   }, {}) as { [key in Key]: NewValues };
 }
 
+function isObject(val: unknown): val is object {
+  return val !== null && typeof val === 'object' && !Array.isArray(val);
+}
+
 export {
   mapObjectKeys,
+  isObject,
   mapObjectValues,
 };

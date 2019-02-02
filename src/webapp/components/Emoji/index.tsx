@@ -1,9 +1,11 @@
 import React from 'react';
 import { Emoji as EmojiIcon } from 'emoji-mart';
 
-import { getEmojiSet } from '../../store/settings/selectors';
-import { State } from '../../store';
-import { useMapState } from '../../store/use-store';
+import { getEmojiSet } from 'webapp/store/settings/selectors';
+import {
+  State,
+  useMapState,
+} from 'webapp/store';
 
 interface OwnProps {
   emoji: string,

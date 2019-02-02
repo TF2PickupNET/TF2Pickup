@@ -1,15 +1,17 @@
 import { ClientApp } from '@feathersjs/feathers';
 
 import store from '..';
-
-import { updatePickupQueue } from './actions';
+import { PickupQueueActionTypes } from './types';
 
 export default function events() {
   return (app: ClientApp) => {
     app
       .service('pickup-queues')
       .on('patched', (queue) => {
-        store.dispatch(updatePickupQueue(queue));
+        store.dispatch({
+          type: PickupQueueActionTypes.UPDATE,
+          payload: { queue },
+        });
       });
   };
 }

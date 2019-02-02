@@ -4,17 +4,12 @@ import app from '../../app';
 
 import { State } from '..';
 
-import {
-  Actions,
-  FETCH_ERROR_CONFIG,
-  FETCHED_CONFIG,
-  START_FETCH_CONFIG,
-} from './types';
+import { Actions, ConfigActionTypes } from './types';
 
 export function fetchConfig(): AsyncAction<State, Actions> {
   return async (dispatch) => {
     dispatch({
-      type: START_FETCH_CONFIG,
+      type: ConfigActionTypes.START_FETCH,
       payload: {},
     });
 
@@ -22,12 +17,12 @@ export function fetchConfig(): AsyncAction<State, Actions> {
       const config = await app.service('configuration').get('config');
 
       dispatch({
-        type: FETCHED_CONFIG,
+        type: ConfigActionTypes.FETCHED,
         payload: { config },
       });
     } catch (error) {
       dispatch({
-        type: FETCH_ERROR_CONFIG,
+        type: ConfigActionTypes.FETCH_ERROR,
         payload: { error },
       });
     }

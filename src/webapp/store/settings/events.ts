@@ -2,19 +2,23 @@ import { ClientApp } from '@feathersjs/feathers';
 
 import store from '..';
 
-import { updateSettings } from './actions';
+import { getCurrentUserId } from '../user-id/selectors';
+import { SettingsActionTypes } from './types';
 
 export function events() {
   return (app: ClientApp) => {
-    const users = app.service('user-settings');
+    app
+      .service('user-settings')
+      .on('patched', (settings) => {
+        const userId = getCurrentUserId(store.getState());
 
-    users.on('patched', (settings) => {
-      const userId = store.getState().userId;
-
-      if (settings.id === userId) {
-        store.dispatch(updateSettings(settings));
-      }
-    });
+        if (settings.id === userId) {
+          store.dispatch({
+            type: SettingsActionTypes.UPDATE,
+            payload: { settings },
+          });
+        }
+      });
   };
 }
 

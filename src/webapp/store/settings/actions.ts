@@ -1,6 +1,5 @@
 import { AsyncAction } from 'redux';
 
-import UserSettings from '../../../types/UserSettings';
 import app from '../../app';
 import { getCurrentUserId } from '../user-id/selectors';
 import emojiSets from '../../../config/emoji-sets';
@@ -8,69 +7,37 @@ import announcers from '../../../config/announcers';
 
 import { State } from '..';
 
-import {
-  FETCH_FAILED_SETTINGS,
-  FETCHED_SETTINGS,
-  START_FETCH_SETTINGS,
-  Actions, UPDATE_SETTINGS,
-} from './types';
+import { SettingsActionTypes, Actions } from './types';
+import emitSocketEvent from '../../utils/emit-socket-event';
 
-function updateSettings(settings: UserSettings): Actions {
-  return {
-    type: UPDATE_SETTINGS,
-    payload: { settings },
+function updateVolume(volume: number): AsyncAction<State, Actions> {
+  return async () => {
+    try {
+      await emitSocketEvent('user-settings:change-volume', { volume });
+    } catch (error) {
+      console.warn(error);
+    }
   };
 }
 
-function updateVolume(volume: number): Promise<void> {
-  // eslint-disable-next-line promise/avoid-new
-  return new Promise((resolve, reject) => {
-    app.io.emit('user-settings:change-volume', { volume }, (err) => {
-      if (err) {
-        // Message.error(`Couldn't change your volume: ${err.message}`, 2);
-      } else {
-        // Message.success(`Successfully changed your volume to ${volume}%`, 1);
-      }
-
-      return err ? reject(err) : resolve();
-    });
-  });
+function updateEmojiSet(emojiSet: keyof typeof emojiSets): AsyncAction<State, Actions> {
+  return async () => {
+    try {
+      await emitSocketEvent('user-settings:change-emoji-set', { emojiSet });
+    } catch (error) {
+      console.warn(error);
+    }
+  };
 }
 
-function updateEmojiSet(emojiSet: keyof typeof emojiSets): Promise<void> {
-  // eslint-disable-next-line promise/avoid-new
-  return new Promise((resolve, reject) => {
-    app.io.emit('user-settings:change-emoji-set', { emojiSet }, (err) => {
-      if (err) {
-        // Message.error(`Couldn't change your emoji set: ${err.message}`, 2);
-      } else {
-        // Message.success(
-        //   `Successfully changed your emoji set to ${emojiSets[emojiSet].display}`,
-        //   1,
-        // );
-      }
-
-      return err ? reject(err) : resolve();
-    });
-  });
-}
-
-function updateAnnouncer(announcer: keyof typeof announcers): Promise<void> {
-  // eslint-disable-next-line promise/avoid-new
-  return new Promise((resolve, reject) => {
-    app.io.emit('user-settings:change-announcer', { announcer }, (err) => {
-      if (err) {
-        // Message.error(`Couldn't change your emoji set: ${err.message}`, 2);
-      } else {
-        // Message.success(
-        //   `Successfully changed your emoji set to ${emojiSets[emojiSet].display}`,
-        //   1,
-        // );
-      }
-
-      return err ? reject(err) : resolve();
-    });
-  });
+function updateAnnouncer(announcer: keyof typeof announcers): AsyncAction<State, Actions> {
+  return async () => {
+    try {
+      await emitSocketEvent('user-settings:change-announcer', { announcer });
+    } catch (error) {
+      console.warn(error);
+    }
+  };
 }
 
 function fetchSettings(): AsyncAction<State, Actions> {
@@ -82,7 +49,7 @@ function fetchSettings(): AsyncAction<State, Actions> {
     }
 
     dispatch({
-      type: START_FETCH_SETTINGS,
+      type: SettingsActionTypes.START_FETCH,
       payload: {},
     });
 
@@ -90,12 +57,12 @@ function fetchSettings(): AsyncAction<State, Actions> {
       const settings = await app.service('user-settings').get(userId);
 
       dispatch({
-        type: FETCHED_SETTINGS,
+        type: SettingsActionTypes.FETCHED,
         payload: { settings },
       });
     } catch (error) {
       dispatch({
-        type: FETCH_FAILED_SETTINGS,
+        type: SettingsActionTypes.FETCH_FAILED,
         payload: { error },
       });
     }
@@ -106,6 +73,5 @@ export {
   updateVolume,
   fetchSettings,
   updateEmojiSet,
-  updateSettings,
   updateAnnouncer,
 };

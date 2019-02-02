@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import gamemodes from '../../../config/gamemodes';
+import gamemodes from 'config/gamemodes';
 
 import { State } from '..';
 

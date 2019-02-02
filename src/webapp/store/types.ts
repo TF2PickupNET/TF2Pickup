@@ -1,13 +1,13 @@
 const enum AsyncStatus {
   NOT_STARTED = 'NOT-STARTED',
   LOADING = 'LOADING',
-  SUCCESS = 'SUCCESS',
+  FETCHED = 'FETCHED',
   ERROR = 'ERROR',
 }
 
 type AsyncItem<Item> =
    { status: AsyncStatus.LOADING, item: null, error: null }
- | { status: AsyncStatus.SUCCESS, item: Item, error: null }
+ | { status: AsyncStatus.FETCHED, item: Item, error: null }
  | { status: AsyncStatus.ERROR, item: null, error: Error }
  | { status: AsyncStatus.NOT_STARTED, item: null, error: null };
 
@@ -27,9 +27,9 @@ function createStateCreator<Item>() {
         error: null,
       };
     },
-    createSuccessState(item: Item): AsyncItem<Item> {
+    createFetchedState(item: Item): AsyncItem<Item> {
       return {
-        status: AsyncStatus.SUCCESS,
+        status: AsyncStatus.FETCHED,
         item,
         error: null,
       };

@@ -8,20 +8,7 @@ import shallowEqual from 'shallowequal';
 
 import store, { State } from '.';
 
-function useMapState<MappedState>(
-  mapState: (state: State) => MappedState,
-): MappedState;
-function useMapState<MappedState, Arg1>(
-  mapState: (state: State, arg1: Arg1) => MappedState,
-  arg1: Arg1,
-): MappedState;
-function useMapState<MappedState, Arg1, Arg2>(
-  mapState: (state: State, arg1: Arg1, arg2: Arg2) => MappedState,
-  arg1: Arg1,
-  arg2: Arg2,
-): MappedState;
-
-function useMapState<MappedState, Args extends []>(
+function useMapState<MappedState, Args extends any[]>(
   mapState: (state: State, ...args: Args) => MappedState,
   ...args: Args
 ): MappedState {
@@ -59,26 +46,12 @@ function useMapState<MappedState, Args extends []>(
   return mappedState;
 }
 
-function useMakeMapState<MappedState>(
-  mapState: () => (state: State) => MappedState,
-): MappedState;
-function useMakeMapState<MappedState, Arg1>(
-  mapState: () => (state: State, arg1: Arg1) => MappedState,
-  arg1: Arg1,
-): MappedState;
-function useMakeMapState<MappedState, Arg1, Arg2>(
-  mapState: () => (state: State, arg1: Arg1, arg2: Arg2) => MappedState,
-  arg1: Arg1,
-  arg2: Arg2,
-): MappedState;
-
-function useMakeMapState<MappedState, Args extends []>(
+function useMakeMapState<MappedState, Args extends any[]>(
   makeMapState: () => (state: State, ...args: Args) => MappedState,
   ...args: Args
 ): MappedState {
   const mapState = useMemo(makeMapState, []);
 
-  // @ts-ignore
   return useMapState(mapState, ...args);
 }
 

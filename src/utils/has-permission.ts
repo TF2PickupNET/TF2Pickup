@@ -3,9 +3,10 @@ import roles from '../config/roles';
 import User from '../types/User';
 
 type Permission = keyof typeof permissions;
+type Role = keyof typeof roles;
 
-function getHighestRole(user: User): keyof typeof roles | null {
-  return user.roles.reduce((highestRole: keyof typeof roles | null, role: keyof typeof roles) => {
+function getHighestRole(user: User): Role | null {
+  return user.roles.reduce((highestRole: Role | null, role) => {
     if (highestRole === null || roles[highestRole].level < roles[role].level) {
       return role;
     }

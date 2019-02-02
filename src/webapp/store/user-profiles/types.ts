@@ -5,25 +5,24 @@ import { AsyncItem } from '../types';
 
 type State = Record<string, AsyncItem<UserProfile>>;
 
-const START_FETCH_PROFILE = 'PROFILE/START-FETCH';
-const FETCHED_PROFILE = 'PROFILE/FETCHED';
-const FETCH_ERROR_PROFILE = 'PROFILE/FETCH-ERROR';
-const UPDATE_PROFILE = 'PROFILE/UPDATE';
+enum UserProfileActionTypes {
+  START_FETCH = 'USER-PROFILE/START-FETCH',
+  FETCHED = 'USER-PROFILE/FETCHED',
+  FETCH_ERROR = 'USER-PROFILE/FETCH-ERROR',
+  UPDATE = 'USER-PROFILE/UPDATE',
+}
 
 type Actions =
-  | Action<typeof UPDATE_PROFILE, { profile: UserProfile }>
-  | Action<typeof START_FETCH_PROFILE, { userId: string }>
-  | Action<typeof FETCHED_PROFILE, { profile: UserProfile }>
-  | Action<typeof FETCH_ERROR_PROFILE, {
+  | Action<typeof UserProfileActionTypes.UPDATE, { profile: UserProfile }>
+  | Action<typeof UserProfileActionTypes.START_FETCH, { userId: string }>
+  | Action<typeof UserProfileActionTypes.FETCHED, { profile: UserProfile }>
+  | Action<typeof UserProfileActionTypes.FETCH_ERROR, {
     error: Error,
     userId: string,
   }>;
 
 export {
-  UPDATE_PROFILE,
-  START_FETCH_PROFILE,
-  FETCH_ERROR_PROFILE,
-  FETCHED_PROFILE,
+  UserProfileActionTypes,
   State,
   Actions,
 };

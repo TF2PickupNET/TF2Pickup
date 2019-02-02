@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import regions from '../../../config/regions';
 import gamemodes from '../../../config/gamemodes';
 import oneOf from '../../utils/validators/one-of';
-import pickupStatus from '../../../config/pickup-status';
+import pickupStates from '../../../config/pickup-states';
 import PickupQueue from '../../../types/PickupQueue';
 import maps from '../../../config/maps';
 
@@ -18,9 +18,9 @@ export default mongoose.model('PickupQueue', new mongoose.Schema({
     required: true,
   },
 
-  status: {
+  state: {
     type: String,
-    validate: oneOf(Object.keys(pickupStatus), {}),
+    validate: oneOf(Object.keys(pickupStates), {}),
     required: true,
   },
 

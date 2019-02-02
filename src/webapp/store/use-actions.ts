@@ -3,8 +3,11 @@ import { useMemo } from 'react';
 import { mapObjectValues } from '../../utils/object';
 
 import store from '.';
+import Actions from './actions';
 
-function useActions<Actions extends Record<string, Function>>(actions: Actions): Actions {
+type ActionMap = Record<string, <Args extends any[]>(...args: Args) => Actions>;
+
+function useActions<A extends ActionMap>(actions: A): A {
   return useMemo(() => mapObjectValues(
     actions,
     // @ts-ignore

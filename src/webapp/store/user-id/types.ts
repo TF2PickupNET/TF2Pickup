@@ -2,16 +2,17 @@ import { Action } from 'redux';
 
 type State = string | null;
 
-const LOGIN_USER = 'USER/LOGIN';
-const LOGOUT_USER = 'USER/LOGOUT';
+enum UserIdActionTypes {
+  LOGIN = 'USER/LOGIN',
+  LOGOUT = 'USER/LOGOUT',
+}
 
 type Actions =
-  | Action<typeof LOGOUT_USER>
-  | Action<typeof LOGIN_USER, { userId: string }>;
+  | Action<typeof UserIdActionTypes.LOGOUT>
+  | Action<typeof UserIdActionTypes.LOGIN, { userId: string }>;
 
 export {
   State,
   Actions,
-  LOGIN_USER,
-  LOGOUT_USER,
+  UserIdActionTypes
 };

@@ -2,25 +2,27 @@ import {
   isBefore,
   subDays,
 } from 'date-fns';
-import deepMerge from 'deepmerge';
 
 import UserProfile from '../../../types/UserProfile';
 
 import fetchSteamData from './services/steam/fetch-steam-data';
-import getOzfortressUserData from './services/ozfortress/get-ozfortress-data';
-import getETF2LData from './services/etf2l/get-etf2l-data';
+import getOzfortressUserData from './services/ozfortress/fetch-ozfortress-data';
+import fetchEtf2lData from './services/etf2l/fetch-etf2l-data';
 
-export default async function getUserData(user: UserProfile) {
+export default async function getUserData(profile: UserProfile): Promise<UserProfile> {
   const yesterday = subDays(new Date(), 1);
-  const oneDaySinceLastUpdate = user.lastUpdate ? isBefore(user.lastUpdate, yesterday) : true;
-  const data = await Promise.all([
-    fetchSteamData(user, oneDaySinceLastUpdate || true),
-    getOzfortressUserData(user, oneDaySinceLastUpdate),
-    getETF2LData(user, oneDaySinceLastUpdate),
+  const oneDaySinceLastUpdate = profile.lastUpdate ? isBefore(profile.lastUpdate, yesterday) : true;
+  const [steam, ozfortress, etf2l] = await Promise.all([
+    fetchSteamData(profile, oneDaySinceLastUpdate || true),
+    getOzfortressUserData(profile, oneDaySinceLastUpdate),
+    fetchEtf2lData(profile, oneDaySinceLastUpdate),
   ]);
 
-  return deepMerge.all([
-    oneDaySinceLastUpdate ? { lastUpdate: Date.now() } : {},
-    ...data,
-  ]);
+  return {
+    ...profile,
+    ...steam,
+    ...ozfortress,
+    ...etf2l,
+    lastUpdate: oneDaySinceLastUpdate ? Date.now() : profile.lastUpdate,
+  };
 }

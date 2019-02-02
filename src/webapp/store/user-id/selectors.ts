@@ -1,21 +1,17 @@
 import { createSelector } from 'reselect';
 
-import { getUsers } from '../users/selectors';
+import { makeGetUserById } from '../users/selectors';
 
 import { State } from '..';
 
 const getCurrentUserId = (state: State) => state.userId;
 
-const getCurrentUser = createSelector(
-  getUsers,
-  getCurrentUserId,
-  (users, userId) => {
-    if (userId === null || !(userId in users)) {
-      return null;
-    }
+const getUserById = makeGetUserById();
 
-    return users[userId].item;
-  },
+const getCurrentUser = createSelector(
+  (state: State) => state,
+  getCurrentUserId,
+  getUserById,
 );
 
 function makeIsCurrentUser() {

@@ -6,11 +6,7 @@ import { isString } from '../../../utils/string';
 
 import { State } from '..';
 
-import {
-  LOGIN_USER,
-  LOGOUT_USER,
-  Actions,
-} from './types';
+import { UserIdActionTypes, Actions } from './types';
 import { fetchUser } from '../users/actions';
 import { fetchSettings } from '../settings/actions';
 import { fetchProfile } from '../user-profiles/actions';
@@ -20,7 +16,7 @@ function logoutUser(): AsyncAction<State, Actions> {
     await app.logout();
 
     dispatch({
-      type: LOGOUT_USER,
+      type: UserIdActionTypes.LOGOUT,
       payload: {},
     });
   };
@@ -47,7 +43,7 @@ function loginUser(): AsyncAction<State, Actions> {
       }
 
       dispatch({
-        type: LOGIN_USER,
+        type: UserIdActionTypes.LOGIN,
         payload: { userId: id },
       });
 

@@ -1,10 +1,10 @@
 import gamemodes from '../config/gamemodes';
 import regions from '../config/regions';
 import maps from '../config/maps';
-import pickupStatus from '../config/pickup-status';
+import pickupStates from '../config/pickup-states';
 
 interface PickupQueue {
-  status: keyof typeof pickupStatus,
+  state: keyof typeof pickupStates,
   id: string,
   region: keyof typeof regions,
   gamemode: keyof typeof gamemodes,

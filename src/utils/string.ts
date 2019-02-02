@@ -1,4 +1,4 @@
-function isString(val: any): val is string {
+function isString(val: unknown): val is string {
   return typeof val === 'string';
 }
 

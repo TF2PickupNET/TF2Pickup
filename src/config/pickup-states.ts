@@ -1,30 +1,30 @@
-interface PickupStatus {
+interface PickupState {
   name: string,
   display: string,
 }
 
-const waitingForPlayers: PickupStatus = {
+const waitingForPlayers: PickupState = {
   name: 'waiting-for-players',
   display: 'Waiting for players',
 };
-const readyUp: PickupStatus = {
+const readyUp: PickupState = {
   name: 'ready-up',
   display: 'Ready up',
 };
-const reservingServer: PickupStatus = {
+const reservingServer: PickupState = {
   name: 'reserving-server',
   display: 'Reserving server',
 };
-const configuringServer: PickupStatus = {
+const configuringServer: PickupState = {
   name: 'configuring-server',
   display: 'Configuring server',
 };
 
-const pickupStatus = {
+const pickupStates = {
   'waiting-for-players': waitingForPlayers,
   'ready-up': readyUp,
   'reserving-server': reservingServer,
   'configuring-server': configuringServer,
 };
 
-export default pickupStatus;
+export default pickupStates;

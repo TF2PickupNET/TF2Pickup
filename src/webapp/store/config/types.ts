@@ -1,23 +1,23 @@
 import { Action } from 'redux';
 
-import Config from '../../../types/Configuration';
+import Config from 'types/Configuration';
 import { AsyncItem } from '../types';
 
 type State = AsyncItem<Config>;
 
-const START_FETCH_CONFIG = 'CONFIG/START-FETCH';
-const FETCHED_CONFIG = 'CONFIG/FETCHED';
-const FETCH_ERROR_CONFIG = 'CONFIG/FETCH-ERROR';
+enum ConfigActionTypes {
+  START_FETCH = 'CONFIG/START-FETCH',
+  FETCHED = 'CONFIG/FETCHED',
+  FETCH_ERROR = 'CONFIG/FETCH_ERROR',
+}
 
 type Actions =
-  | Action<typeof START_FETCH_CONFIG>
-  | Action<typeof FETCHED_CONFIG, { config: Config }>
-  | Action<typeof FETCH_ERROR_CONFIG, { error: Error }>;
+  | Action<typeof ConfigActionTypes.START_FETCH>
+  | Action<typeof ConfigActionTypes.FETCHED, { config: Config }>
+  | Action<typeof ConfigActionTypes.FETCH_ERROR, { error: Error }>;
 
 export {
   State,
   Actions,
-  START_FETCH_CONFIG,
-  FETCH_ERROR_CONFIG,
-  FETCHED_CONFIG,
+  ConfigActionTypes,
 };

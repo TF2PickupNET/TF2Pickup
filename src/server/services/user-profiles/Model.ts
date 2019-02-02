@@ -1,17 +1,20 @@
 import mongoose from 'mongoose';
 import SteamID from 'steamid';
 
-import oneOf from '../../utils/validators/one-of';
 import steamId from '../../utils/validators/steam-id';
 import url from '../../utils/validators/url';
 
-import { divs as etf2lDivs } from './services/etf2l/utils';
-import { divs as ozfortressDivs } from './services/ozfortress/utils';
+import {
+  ETF2LDivisions,
+  OZFortressDivisions,
+} from 'types/UserProfile';
 
-function createDivisionType(divs: string[]) {
+function createDivisionType(divs: object) {
   return {
     type: String,
-    validate: oneOf(divs, {}),
+    validate(val: string) {
+      return val in divs;
+    },
     default: 'N/A',
   };
 }
@@ -33,6 +36,7 @@ export default mongoose.model('UserProfile', new mongoose.Schema({
       validate: steamId({}),
       required: [true, 'SteamId on the userId object is required!'],
     },
+    name: String,
     friends: {
       type: [String],
       validate: [
@@ -62,25 +66,25 @@ export default mongoose.model('UserProfile', new mongoose.Schema({
   },
 
   etf2l: {
-    id: Number,
+    id: String,
     name: String,
-    div6v6: createDivisionType(etf2lDivs),
-    div9v9: createDivisionType(etf2lDivs),
+    div6v6: createDivisionType(ETF2LDivisions),
+    div9v9: createDivisionType(ETF2LDivisions),
     isBanned: Boolean,
-    bannedUntil: Date,
+    bannedUntil: Number,
   },
 
   twitch: {
-    id: Number,
+    id: String,
     name: String,
   },
 
   ozfortress: {
-    id: Number,
+    id: String,
     name: String,
-    div6v6: createDivisionType(ozfortressDivs),
-    div9v9: createDivisionType(ozfortressDivs),
+    div6v6: createDivisionType(OZFortressDivisions),
+    div9v9: createDivisionType(OZFortressDivisions),
     isBanned: Boolean,
-    bannedUntil: Date,
+    bannedUntil: Number,
   },
 }));

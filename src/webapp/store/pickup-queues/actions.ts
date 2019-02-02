@@ -1,22 +1,16 @@
 import { AsyncAction } from 'redux';
 
-import gamemodes from '../../../config/gamemodes';
+import gamemodes from 'config/gamemodes';
 import app from '../../app';
 import { makeGetUserRegion } from '../users/selectors';
 import { getCurrentUserId } from '../user-id/selectors';
-import PickupQueue from '../../../types/PickupQueue';
+import PickupQueue from 'types/PickupQueue';
 import { AsyncStatus } from '../types';
 
 import { State } from '..';
 
 import { makeGetPickupQueueStatus } from './selectors';
-import {
-  Actions,
-  FETCH_ERROR_PICKUP_QUEUE,
-  FETCHED_PICKUP_QUEUE,
-  START_FETCH_PICKUP_QUEUE,
-  UPDATE_PICKUP_QUEUE,
-} from './types';
+import { Actions, PickupQueueActionTypes } from './types';
 
 const getUserRegion = makeGetUserRegion();
 
@@ -29,7 +23,7 @@ function fetchPickup(gamemode: keyof typeof gamemodes): AsyncAction<State, Actio
     }
 
     dispatch({
-      type: START_FETCH_PICKUP_QUEUE,
+      type: PickupQueueActionTypes.START_FETCH,
       payload: { gamemode },
     });
 
@@ -40,25 +34,18 @@ function fetchPickup(gamemode: keyof typeof gamemodes): AsyncAction<State, Actio
       const queue = await app.service('pickup-queues').get(`${region}-${gamemode}`);
 
       dispatch({
-        type: FETCHED_PICKUP_QUEUE,
+        type: PickupQueueActionTypes.FETCHED,
         payload: { queue },
       });
     } catch (error) {
       dispatch({
-        type: FETCH_ERROR_PICKUP_QUEUE,
+        type: PickupQueueActionTypes.FETCH_ERROR,
         payload: {
           error,
           gamemode,
         },
       });
     }
-  };
-}
-
-function updatePickupQueue(queue: PickupQueue): Actions {
-  return {
-    type: UPDATE_PICKUP_QUEUE,
-    payload: { queue },
   };
 }
 

@@ -1,4 +1,4 @@
-function isNumber(val: any): val is number {
+function isNumber(val: unknown): val is number {
   return typeof val === 'number' && !isNaN(val);
 }
 

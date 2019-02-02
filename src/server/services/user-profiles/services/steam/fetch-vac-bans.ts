@@ -1,12 +1,12 @@
 import debug from 'debug';
 import { addDays } from 'date-fns';
 
-import UserProfile from '../../../../../types/UserProfile';
+import UserProfile, { WithBans } from 'types/UserProfile';
 import steamApi from '../../../../utils/steam-api';
 
 const log = debug('TF2Pickup:userId-user-profiles:steam:vac');
 
-async function fetchVacBans(user: UserProfile) {
+async function fetchVacBans(user: UserProfile): Promise<WithBans> {
   try {
     const params = { steamids: user.id };
     const result = await steamApi.get('ISteamUser/GetPlayerBans/v1/', { params });
@@ -22,7 +22,10 @@ async function fetchVacBans(user: UserProfile) {
       error,
     });
 
-    return {};
+    return {
+      isBanned: false,
+      bannedUntil: null,
+    };
   }
 }
 

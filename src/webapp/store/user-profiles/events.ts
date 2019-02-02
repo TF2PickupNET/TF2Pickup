@@ -1,18 +1,24 @@
 import { ClientApp } from '@feathersjs/feathers';
 
 import store from '..';
-
-import { updateProfile } from './actions';
+import { UserProfileActionTypes } from './types';
+import { makeGetProfileStatusById } from './selectors';
+import { AsyncStatus } from '../types';
 
 export function events() {
+  const getUserProfileStatusById = makeGetProfileStatusById();
+
   return (app: ClientApp) => {
     const users = app.service('user-profiles');
 
-    users.on('patched', (data) => {
-      const profiles = store.getState().userProfiles;
+    users.on('patched', (profile) => {
+      const status = getUserProfileStatusById(store.getState(), profile.id);
 
-      if (data.id in profiles) {
-        store.dispatch(updateProfile(data));
+      if (status !== AsyncStatus.NOT_STARTED) {
+        store.dispatch({
+          type: UserProfileActionTypes.UPDATE,
+          payload: { profile },
+        });
       }
     });
   };

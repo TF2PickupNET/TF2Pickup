@@ -3,27 +3,18 @@ import { AsyncAction } from 'redux';
 import app from '../../app';
 import regions from '../../../config/regions';
 import roles from '../../../config/roles';
-import User from '../../../types/User';
 import { AsyncStatus } from '../types';
 
 import { State } from '..';
 
 import {
-  FETCHED_USER,
-  FETCH_FAILED,
-  STARTED_FETCH_USER,
-  Actions, UPDATE_USER,
+  UsersActionTypes,
+  Actions,
 } from './types';
 import { makeGetUserStatusById } from './selectors';
+import emitSocketEvent from '../../utils/emit-socket-event';
 
 const getUserStatus = makeGetUserStatusById();
-
-function updateUser(user: User): Actions {
-  return {
-    type: UPDATE_USER,
-    payload: { user },
-  };
-}
 
 function fetchUser(userId: string | null): AsyncAction<State, Actions> {
   return async (dispatch, getState) => {
@@ -34,7 +25,7 @@ function fetchUser(userId: string | null): AsyncAction<State, Actions> {
     }
 
     dispatch({
-      type: STARTED_FETCH_USER,
+      type: UsersActionTypes.START_FETCH,
       payload: { userId },
     });
 
@@ -42,14 +33,14 @@ function fetchUser(userId: string | null): AsyncAction<State, Actions> {
       const user = await app.service('users').get(userId);
 
       dispatch({
-        type: FETCHED_USER,
+        type: UsersActionTypes.FETCHED,
         payload: { user },
       });
     } catch (error) {
       console.error('Error while fetching a user', userId, error.message);
 
       dispatch({
-        type: FETCH_FAILED,
+        type: UsersActionTypes.FETCH_FAILED,
         payload: {
           error,
           userId,
@@ -59,100 +50,58 @@ function fetchUser(userId: string | null): AsyncAction<State, Actions> {
   };
 }
 
-function updateRegion(region: keyof typeof regions): Promise<void> {
-  // eslint-disable-next-line promise/avoid-new
-  return new Promise((resolve, reject) => {
-    app.io.emit('users:change-region', { region }, (err) => {
-      if (err) {
-        // Message.error(`Couldn't change your region: ${err.message}`, 2);
-      } else {
-        // Message.success(`Successfully changed your region to ${regions[region].fullName}`, 1);
-      }
-
-      return err ? reject(err) : resolve();
-    });
-  });
+async function updateRegion(region: keyof typeof regions) {
+  try {
+    await emitSocketEvent('users:change-region', { region });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-function setName(name: string): Promise<void> {
-  // eslint-disable-next-line promise/avoid-new
-  return new Promise((resolve, reject) => {
-    app.io.emit('users:set-name', { name }, (err) => {
-      if (err) {
-        // Message.error(`Couldn't set your name: ${err.message}`, 2);
-      } else {
-        // Message.success(`Successfully set your name to ${name}`, 1);
-      }
-
-      return err ? reject(err) : resolve();
-    });
-  });
+async function setName(name: string) {
+  try {
+    await emitSocketEvent('users:set-name', { name });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-function acceptRules(): Promise<void> {
-  // eslint-disable-next-line promise/avoid-new
-  return new Promise((resolve, reject) => {
-    app.io.emit('users:accept-rules', null, (err) => {
-      if (err) {
-        // Message.error(`Error while accepting rules: ${err.message}`, 2);
-      } else {
-        // Message.success('Successfully accepted the rules', 1);
-      }
-
-      return err ? reject(err) : resolve();
-    });
-  });
+async function acceptRules() {
+  try {
+    await emitSocketEvent('users:accept-rules', null);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-function completeSignUp(): Promise<void> {
-  // eslint-disable-next-line promise/avoid-new
-  return new Promise((resolve, reject) => {
-    app.io.emit('users:complete-sign-up', null, (err) => {
-      if (err) {
-        // Message.error(`Error while completing sign up: ${err.message}`, 2);
-      } else {
-        // Message.success('Successfully completed sign up', 1);
-      }
-
-      return err ? reject(err) : resolve();
-    });
-  });
+async function completeSignUp() {
+  try {
+    await emitSocketEvent('users:complete-sign-up', null);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-function addRole(userId: string, role: keyof typeof roles): Promise<void> {
-  // eslint-disable-next-line promise/avoid-new
-  return new Promise((resolve, reject) => {
-    app.io.emit('users:add-role', {
+async function addRole(userId: string, role: keyof typeof roles) {
+  try {
+    await emitSocketEvent('users:add-role', {
       role,
       userId,
-    }, (err) => {
-      if (err) {
-        // Message.error(`Error while adding role: ${err.message}`, 2);
-      } else {
-        // Message.success(`Successfully added ${roles[role].display}`, 1);
-      }
-
-      return err ? reject(err) : resolve();
     });
-  });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-function removeRole(userId: string, role: keyof typeof roles): Promise<void> {
-  // eslint-disable-next-line promise/avoid-new
-  return new Promise((resolve, reject) => {
-    app.io.emit('users:remove-role', {
+async function removeRole(userId: string, role: keyof typeof roles) {
+  try {
+    await emitSocketEvent('users:remove-role', {
       role,
       userId,
-    }, (err) => {
-      if (err) {
-        // Message.error(`Error while removing role: ${err.message}`, 2);
-      } else {
-        // Message.success(`Successfully remove ${roles[role].display}`, 1);
-      }
-
-      return err ? reject(err) : resolve();
     });
-  });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export {
@@ -160,7 +109,6 @@ export {
   acceptRules,
   updateRegion,
   setName,
-  updateUser,
   fetchUser,
   addRole,
   removeRole,

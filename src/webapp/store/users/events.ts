@@ -2,17 +2,25 @@ import { ClientApp } from '@feathersjs/feathers';
 
 import store from '..';
 
-import { updateUser } from './actions';
+import { UsersActionTypes } from './types';
+import { makeGetUserStatusById } from './selectors';
+import { AsyncStatus } from '../types';
 
 export default function events() {
+  const getUserStatusById = makeGetUserStatusById();
+
   return (app: ClientApp) => {
     app
       .service('users')
-      .on('patched', (data) => {
-        const users = store.getState().users;
+      .on('patched', (user) => {
+        const status = getUserStatusById(store.getState(), user.id);
 
-        if (data.id in users) {
-          store.dispatch(updateUser(data));
+        // If we have already loaded the user, we update the data
+        if (status !== AsyncStatus.NOT_STARTED) {
+          store.dispatch({
+            type: UsersActionTypes.UPDATE,
+            payload: { user },
+          });
         }
       });
   };

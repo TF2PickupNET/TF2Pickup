@@ -24,7 +24,7 @@
     "target": "es6",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "preserveConstEnums": true
   }
 }

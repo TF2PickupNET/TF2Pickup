@@ -2,14 +2,14 @@ import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
 import Button from '@atlaskit/button';
 
-import { Row } from '../../../components/Grid';
+import { Row } from '@webapp/components/Grid';
 import pkg from '../../../../../package.json';
-import { getVersion } from '../../../store/config/selectors';
+import { getVersion } from '@webapp/store/config/selectors';
 import {
   State,
   useMapState,
-} from '../../../store';
-import DocumentTitle from '../../../components/DocumentTitle';
+} from '@webapp/store';
+import DocumentTitle from '@webapp/components/DocumentTitle';
 
 const styles = { container: { minHeight: '100vh' } };
 

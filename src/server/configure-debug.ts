@@ -3,7 +3,7 @@ import { ServerApp } from '@feathersjs/feathers';
 import stripAnsi from 'strip-ansi';
 import PrettyError from 'pretty-error';
 
-import Log from '../types/Log';
+import Log from '@typings/Log';
 
 const logs: Log[] = [];
 const pe = new PrettyError();

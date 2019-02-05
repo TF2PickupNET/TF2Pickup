@@ -1,10 +1,8 @@
 import { ClientApp } from '@feathersjs/feathers';
-
-import store from '..';
+import store, { AsyncStatus } from '@webapp/store';
 
 import { UsersActionTypes } from './types';
 import { makeGetUserStatusById } from './selectors';
-import { AsyncStatus } from '../types';
 
 export default function events() {
   const getUserStatusById = makeGetUserStatusById();

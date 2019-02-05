@@ -1,9 +1,11 @@
 import React from 'react';
 import AvatarImg, { AvatarProps } from '@atlaskit/avatar';
 
-import { makeGetAvatar } from 'webapp/store/user-profiles/selectors';
-import { useMakeMapState } from 'webapp/store/use-store';
-import { State } from 'webapp/store';
+import { makeGetAvatar } from '@webapp/store/user-profiles/selectors';
+import {
+  State,
+  useMakeMapState,
+} from '@webapp/store';
 
 interface Props extends AvatarProps {
   id: string | null,

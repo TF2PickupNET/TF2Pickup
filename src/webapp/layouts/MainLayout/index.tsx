@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { Row } from '../../components/Grid';
+import { Row } from '@webapp/components/Grid';
 
 import GlobalNavigation from './GlobalNavigation';
 

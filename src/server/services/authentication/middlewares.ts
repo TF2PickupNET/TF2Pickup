@@ -3,7 +3,7 @@ import {
   ExpressResponse,
 } from '@feathersjs/express';
 
-import { isString } from '../../../utils/string';
+import { isString } from '@utils/string';
 
 const REDIRECT_URL_COOKIE = 'REDIRECT-URL';
 

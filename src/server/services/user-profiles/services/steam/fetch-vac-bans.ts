@@ -1,8 +1,8 @@
 import debug from 'debug';
 import { addDays } from 'date-fns';
 
-import UserProfile, { WithBans } from 'types/UserProfile';
-import steamApi from '../../../../utils/steam-api';
+import UserProfile, { WithBans } from '@typings/UserProfile';
+import steamApi from '@server/utils/steam-api';
 
 const log = debug('TF2Pickup:userId-user-profiles:steam:vac');
 

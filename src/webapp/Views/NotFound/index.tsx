@@ -3,8 +3,8 @@ import Button from '@atlaskit/button';
 import withStyles, { WithStyles } from 'react-jss';
 import { ContextRouter } from 'react-router-dom';
 
-import { Row } from '../../components/Grid';
-import DocumentTitle from '../../components/DocumentTitle';
+import { Row } from '@webapp/components/Grid';
+import DocumentTitle from '@webapp/components/DocumentTitle';
 
 const styles = { buttonContainer: { marginTop: 12 } };
 

@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
 
-import { Theme } from '../../theme';
-import { Row } from '../Grid';
+import { Theme } from '@webapp/theme';
+import { Row } from '@webapp/components/Grid';
 
 import Item from './Item';
 import Header from './Header';

@@ -1,8 +1,9 @@
-import { Action } from 'redux';
-
-import gamemodes from '../../../config/gamemodes';
-import { AsyncItem } from '../types';
-import PickupQueue from '../../../types/PickupQueue';
+import gamemodes from '@config/gamemodes';
+import {
+  AsyncItem,
+  Action,
+} from '@webapp/store';
+import PickupQueue from '@typings/PickupQueue';
 
 type State = Record<keyof typeof gamemodes, AsyncItem<PickupQueue>>;
 

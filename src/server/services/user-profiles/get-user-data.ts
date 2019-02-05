@@ -3,7 +3,7 @@ import {
   subDays,
 } from 'date-fns';
 
-import UserProfile from '../../../types/UserProfile';
+import UserProfile from '@typings/UserProfile';
 
 import fetchSteamData from './services/steam/fetch-steam-data';
 import getOzfortressUserData from './services/ozfortress/fetch-ozfortress-data';

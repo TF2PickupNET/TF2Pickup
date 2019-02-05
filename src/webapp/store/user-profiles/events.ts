@@ -1,9 +1,8 @@
 import { ClientApp } from '@feathersjs/feathers';
+import store, { AsyncStatus } from '@webapp/store';
 
-import store from '..';
 import { UserProfileActionTypes } from './types';
 import { makeGetProfileStatusById } from './selectors';
-import { AsyncStatus } from '../types';
 
 export function events() {
   const getUserProfileStatusById = makeGetProfileStatusById();

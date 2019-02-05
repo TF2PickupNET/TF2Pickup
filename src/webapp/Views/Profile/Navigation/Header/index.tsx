@@ -17,8 +17,8 @@ const makeMapState = () => {
 
   return (state: State, userId: string | null) => {
     return {
-      hasLoadedUser: getUserStatusById(state, userId) === AsyncStatus.SUCCESS,
-      hasLoadedProfile: getProfileStatusById(state, userId) === AsyncStatus.SUCCESS,
+      hasLoadedUser: getUserStatusById(state, userId) === AsyncStatus.FETCHED,
+      hasLoadedProfile: getProfileStatusById(state, userId) === AsyncStatus.FETCHED,
     };
   };
 };

@@ -1,3 +1,6 @@
 {
-  "extends": ["tslint-config-henribeck"]
+  "extends": ["tslint-config-henribeck"],
+  "rules": {
+    "no-implicit-dependencies": false
+  }
 }

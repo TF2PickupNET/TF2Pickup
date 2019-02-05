@@ -1,8 +1,8 @@
 import React from 'react';
-
-import RulesComp from '../../../components/Rules';
-import DocumentTitle from '../../../components/DocumentTitle';
 import withStyles, { WithStyles } from 'react-jss';
+
+import RulesComp from '@webapp/components/Rules';
+import DocumentTitle from '@webapp/components/DocumentTitle';
 
 const styles = { container: { padding: 32 } };
 

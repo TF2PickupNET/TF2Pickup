@@ -3,8 +3,8 @@ import debug from 'debug';
 import hooks from 'feathers-hooks-common';
 import { promisify } from 'util';
 
-import User from '../../../../types/User';
-import steamCommunity from '../../../utils/steam-community';
+import User from '@typings/User';
+import steamCommunity from '@server/utils/steam-community';
 
 import validateInSteamGroup from './validate-in-steam-group';
 import validateHours from './validate-hours';
@@ -45,6 +45,7 @@ export default {
           id: hook.result.id,
           steam: {
             id: hook.result.id,
+            name: '',
             isBanned: false,
             bannedUntil: null,
             friends: [],

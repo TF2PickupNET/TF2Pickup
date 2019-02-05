@@ -2,9 +2,9 @@ import React from 'react';
 import withStyles, { WithStyles } from 'react-jss';
 import Button from '@atlaskit/button';
 
-import { completeSignUp } from '../../../../store/users/actions';
-import useAsync from '../../../../utils/use-async';
-import { Row } from '../../../../components/Grid';
+import { completeSignUp } from '@webapp/store/users/actions';
+import useAsync from '@webapp/utils/use-async';
+import { Row } from '@webapp/components/Grid';
 
 const styles = { text: { textAlign: 'center' } };
 

@@ -1,9 +1,8 @@
 import { createSelector } from 'reselect';
 
-import { defaultSet } from '../../../config/emoji-sets';
-import { DEFAULT_ANNOUNCER } from '../../../config/announcers';
-
-import { State } from '..';
+import { defaultSet } from '@config/emoji-sets';
+import { DEFAULT_ANNOUNCER } from '@config/announcers';
+import { State } from '@webapp/store';
 
 const DEFAULT_VOLUME = 70;
 

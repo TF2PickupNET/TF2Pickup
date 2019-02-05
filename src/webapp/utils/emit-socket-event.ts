@@ -1,5 +1,5 @@
-import app from '../app';
-import { Events } from '../../../typings/feathers/socket-events';
+import app from '@webapp/app';
+import { Events } from '@typings/SocketEvents';
 
 function emitSocketEvent<Name extends keyof Events>(name: Name, data: Events[Name]): Promise<void> {
   // eslint-disable-next-line promise/avoid-new

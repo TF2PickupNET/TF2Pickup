@@ -2,7 +2,7 @@ import { GetBeforeHookContext } from '@feathersjs/feathers';
 import hooks from 'feathers-hooks-common';
 import { Forbidden } from '@feathersjs/errors';
 
-import UserSettings from '../../../types/UserSettings';
+import UserSettings from '@typings/UserSettings';
 
 export default {
   before: {

@@ -1,4 +1,4 @@
-import defaultIcon from '../../../assets/images/favicon.ico';
+import defaultIcon from '@assets/images/favicon.ico';
 
 interface Options {
   body?: string,

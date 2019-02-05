@@ -10,10 +10,10 @@ import {
   NotFound,
 } from '@feathersjs/errors';
 
-import gamemodes from '../../../config/gamemodes';
-import regions from '../../../config/regions';
-import { isString } from '../../../utils/string';
-import readFile from '../../../utils/read-file';
+import gamemodes from '@config/gamemodes';
+import regions from '@config/regions';
+import { isString } from '@utils/string';
+import readFile from '@utils/read-file';
 
 interface TF2Config {
   config: string,

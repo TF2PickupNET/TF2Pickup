@@ -1,7 +1,8 @@
-import { Action } from 'redux';
-
-import User from '../../../types/User';
-import { AsyncItem } from '../types';
+import User from '@typings/User';
+import {
+  AsyncItem,
+  Action,
+} from '@webapp/store';
 
 type State = Record<string, AsyncItem<User>>;
 

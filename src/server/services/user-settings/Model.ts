@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
-import announcers from '../../../config/announcers';
-import emojiSets from '../../../config/emoji-sets';
-import oneOf from '../../utils/validators/one-of';
-import steamId from '../../utils/validators/steam-id';
+import announcers from '@config/announcers';
+import emojiSets from '@config/emoji-sets';
+import oneOf from '@server/utils/validators/one-of';
+import steamId from '@server/utils/validators/steam-id';
 
 export default mongoose.model('UserSettings', new mongoose.Schema({
   id: {

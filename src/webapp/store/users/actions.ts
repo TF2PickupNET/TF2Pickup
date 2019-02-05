@@ -1,22 +1,18 @@
-import { AsyncAction } from 'redux';
-
-import app from '../../app';
-import regions from '../../../config/regions';
-import roles from '../../../config/roles';
-import { AsyncStatus } from '../types';
-
-import { State } from '..';
-
+import app from '@webapp/app';
+import regions from '@config/regions';
+import roles from '@config/roles';
 import {
-  UsersActionTypes,
-  Actions,
-} from './types';
+  AsyncStatus,
+  AsyncAction,
+} from '@webapp/store';
+import emitSocketEvent from '@webapp/utils/emit-socket-event';
+
+import { UsersActionTypes } from './types';
 import { makeGetUserStatusById } from './selectors';
-import emitSocketEvent from '../../utils/emit-socket-event';
 
 const getUserStatus = makeGetUserStatusById();
 
-function fetchUser(userId: string | null): AsyncAction<State, Actions> {
+function fetchUser(userId: string | null): AsyncAction {
   return async (dispatch, getState) => {
     const status = getUserStatus(getState(), userId);
 

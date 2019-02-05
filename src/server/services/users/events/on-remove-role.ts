@@ -9,7 +9,7 @@ import {
 import { SocketConnection } from '@feathersjs/socketio';
 import debug from 'debug';
 
-import { hasPermission } from '../../../../utils/has-permission';
+import { hasPermission } from '@utils/has-permission';
 
 const log = debug('TF2Pickup:users:events:on-remove-role');
 

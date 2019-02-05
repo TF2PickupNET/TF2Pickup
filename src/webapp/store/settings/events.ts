@@ -1,8 +1,8 @@
 import { ClientApp } from '@feathersjs/feathers';
 
-import store from '..';
+import store from '@webapp/store';
+import { getCurrentUserId } from '@webapp/store/user-id/selectors';
 
-import { getCurrentUserId } from '../user-id/selectors';
 import { SettingsActionTypes } from './types';
 
 export function events() {

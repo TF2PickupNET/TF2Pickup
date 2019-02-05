@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
-import roles from '../../../config/roles';
-import steamId from '../../utils/validators/steam-id';
-import regions from '../../../config/regions';
-import oneOf from '../../utils/validators/one-of';
+import roles from '@config/roles';
+import steamId from '@server/utils/validators/steam-id';
+import regions from '@config/regions';
+import oneOf from '@server/utils/validators/one-of';
 
 const roleNames = Object.keys(roles);
 

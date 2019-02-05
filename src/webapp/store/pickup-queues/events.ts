@@ -1,6 +1,6 @@
 import { ClientApp } from '@feathersjs/feathers';
+import store from '@webapp/store';
 
-import store from '..';
 import { PickupQueueActionTypes } from './types';
 
 export default function events() {

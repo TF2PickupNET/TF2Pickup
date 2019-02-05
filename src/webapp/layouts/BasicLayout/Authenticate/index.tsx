@@ -4,9 +4,9 @@ import React, {
   ReactNode,
 } from 'react';
 
-import { useActions } from '../../../store';
-import { loginUser } from '../../../store/user-id/actions';
-import DocumentTitle from '../../../components/DocumentTitle';
+import { useActions } from '@webapp/store';
+import { loginUser } from '@webapp/store/user-id/actions';
+import DocumentTitle from '@webapp/components/DocumentTitle';
 
 interface Props {
   children: ReactNode,

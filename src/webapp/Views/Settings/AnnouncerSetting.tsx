@@ -7,9 +7,9 @@ import { RadioGroup } from '@atlaskit/radio';
 import { getAnnouncer } from '../../store/settings/selectors';
 import { State } from '../../store';
 import { useMapState } from '../../store/use-store';
-import { updateAnnouncer } from '../../store/settings/actions';
-import { Keys } from '../../../utils/types';
-import announcers from '../../../config/announcers';
+import { updateAnnouncer } from '@webapp/store/settings/actions';
+import { Keys } from '@utils/types';
+import announcers from '@config/announcers';
 
 const mapState = (state: State) => {
   return { announcer: getAnnouncer(state) };

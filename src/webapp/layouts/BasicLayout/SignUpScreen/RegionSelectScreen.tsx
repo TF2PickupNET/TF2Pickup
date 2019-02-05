@@ -5,10 +5,10 @@ import React, {
 import Button from '@atlaskit/button';
 import { RadioGroup } from '@atlaskit/radio';
 
-import regions from '../../../../../config/regions';
-import { updateRegion } from '../../../../store/users/actions';
-import useAsync from '../../../../utils/use-async';
-import { Row } from '../../../../components/Grid';
+import regions from '@config/regions';
+import { updateRegion } from '@webapp/store/users/actions';
+import useAsync from '@webapp/utils/use-async';
+import { Row } from '@webapp/components/Grid';
 
 const regionKeys = Object.keys(regions) as Array<keyof typeof regions>;
 

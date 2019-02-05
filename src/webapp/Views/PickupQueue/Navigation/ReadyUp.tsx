@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import Button, { ButtonGroup } from '@atlaskit/button';
 
 import { Item } from '@webapp/components/PageNavigation';
 import gamemodes from '@config/gamemodes';
@@ -15,22 +16,47 @@ const makeMapState = () => {
   };
 };
 
+const loop = () => {
+
+};
+
+function useProgressState(isReady: boolean) {
+  const [progress, setProgress] = useState(0);
+
+  requestAnimationFrame(() => {
+
+  });
+
+  useEffect(() => {
+    setProgress(0);
+
+    if (isReady) {
+      // TODO: Start interval
+    }
+  }, [isReady]);
+
+  return progress;
+}
+
 function Status() {
   const gamemode = useGamemode();
   const { state } = useMakeMapState(makeMapState, gamemode);
+  const isReadyUpState = state === 'ready-up';
+  const progress = useProgressState(isReadyUpState);
 
-  if (state === null) {
+  if (!isReadyUpState) {
     return null;
   }
 
   return (
-    <Item
-      text={(
-        <React.Fragment>
-          <b>State:</b> {pickupStates[state].display}
-        </React.Fragment>
-      )}
-    />
+    <span>
+      Do you want to ready up?
+
+      <ButtonGroup>
+        <Button>Yes</Button>
+        <Button>No</Button>
+      </ButtonGroup>
+    </span>
   );
 }
 

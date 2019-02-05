@@ -1,4 +1,4 @@
-import { API_ENDPOINT } from '../app';
+import { API_ENDPOINT } from '@webapp/app';
 
 function redirectToSteamAuth() {
   window.location.assign(`${API_ENDPOINT}/auth/steam?url=${window.location.href}`);

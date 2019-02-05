@@ -1,28 +1,26 @@
-import { AsyncAction } from 'redux';
 import { NotAuthenticated } from '@feathersjs/errors';
 
-import app from '../../app';
-import { isString } from '../../../utils/string';
+import app from '@webapp/app';
+import { AsyncAction } from '@webapp/store';
+import { isString } from '@utils/string';
+import { fetchUser } from '@webapp/store/users/actions';
+import { fetchSettings } from '@webapp/store/settings/actions';
+import { fetchProfile } from '@webapp/store/user-profiles/actions';
 
-import { State } from '..';
+import { UserIdActionTypes } from './types';
 
-import { UserIdActionTypes, Actions } from './types';
-import { fetchUser } from '../users/actions';
-import { fetchSettings } from '../settings/actions';
-import { fetchProfile } from '../user-profiles/actions';
-
-function logoutUser(): AsyncAction<State, Actions> {
+function logoutUser(): AsyncAction {
   return async (dispatch) => {
     await app.logout();
 
     dispatch({
       type: UserIdActionTypes.LOGOUT,
-      payload: {},
+      payload: null,
     });
   };
 }
 
-function loginUser(): AsyncAction<State, Actions> {
+function loginUser(): AsyncAction {
   return async (dispatch) => {
     const token = window.localStorage.getItem('feathers-jwt');
 

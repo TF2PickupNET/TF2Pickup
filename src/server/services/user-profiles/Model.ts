@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 import SteamID from 'steamid';
 
-import steamId from '../../utils/validators/steam-id';
-import url from '../../utils/validators/url';
+import steamId from '@server/utils/validators/steam-id';
+import url from '@server/utils/validators/url';
 
 import {
   ETF2LDivisions,
   OZFortressDivisions,
-} from 'types/UserProfile';
+} from '@typings/UserProfile';
 
 function createDivisionType(divs: object) {
   return {

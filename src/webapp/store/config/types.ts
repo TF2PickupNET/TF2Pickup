@@ -1,7 +1,8 @@
-import { Action } from 'redux';
-
-import Config from 'types/Configuration';
-import { AsyncItem } from '../types';
+import Config from '@typings/Configuration';
+import {
+  Action,
+  AsyncItem,
+} from '@webapp/store';
 
 type State = AsyncItem<Config>;
 
@@ -12,7 +13,7 @@ enum ConfigActionTypes {
 }
 
 type Actions =
-  | Action<typeof ConfigActionTypes.START_FETCH>
+  | Action<typeof ConfigActionTypes.START_FETCH, null>
   | Action<typeof ConfigActionTypes.FETCHED, { config: Config }>
   | Action<typeof ConfigActionTypes.FETCH_ERROR, { error: Error }>;
 

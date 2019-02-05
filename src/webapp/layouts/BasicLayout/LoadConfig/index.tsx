@@ -3,18 +3,19 @@ import withStyles, { WithStyles } from 'react-jss';
 import Button from '@atlaskit/button';
 import Spinner from '@atlaskit/spinner';
 
-import { Row } from '../../../components/Grid';
-import { State } from '../../../store';
-import { useMapState } from '../../../store/use-store';
-import DocumentTitle from '../../../components/DocumentTitle';
-
-import { fetchConfig } from '../../../store/config/actions';
+import { Row } from '@webapp/components/Grid';
+import DocumentTitle from '@webapp/components/DocumentTitle';
+import { fetchConfig } from '@webapp/store/config/actions';
 import {
   getConfigError,
   getConfigStatus,
-} from '../../../store/config/selectors';
-import { AsyncStatus } from '../../../store/types';
-import useActions from '../../../store/use-actions';
+} from '@webapp/store/config/selectors';
+import {
+  State,
+  useMapState,
+  useActions,
+  AsyncStatus,
+} from '@webapp/store';
 
 const styles = {
   container: { minHeight: '100vh' },
@@ -29,7 +30,7 @@ interface Props extends WithStyles<typeof styles> {
 const mapState = (state: State) => {
   return {
     error: getConfigError(state),
-    hasLoaded: getConfigStatus(state) === AsyncStatus.SUCCESS,
+    hasLoaded: getConfigStatus(state) === AsyncStatus.FETCHED,
   };
 };
 

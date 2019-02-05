@@ -26,7 +26,7 @@ declare module '@feathersjs/express' {
     stale: boolean,
     subdomains: string[],
     xhr: boolean,
-    user: import('../../src/types/User').default,
+    user: import('../../src/typings/User').default,
     get(field: string): string | void,
     accepts(types: string | string[]): string | false,
     acceptsCharsets(...charsets: string[]): string | false,

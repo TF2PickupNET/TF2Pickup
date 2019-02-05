@@ -27,12 +27,12 @@ const routes = [
     component: PickupQueue,
   },
   {
-    path: gamemodeKeys.reduce((paths, gamemode) => {
-      return [
+    path: gamemodeKeys
+      .map(gamemode => gamemodes[gamemode].aliases.map(alias => `/${alias}`))
+      .reduce((paths, aliasPaths) => [
         ...paths,
-        ...gamemodes[gamemode].aliases.map(alias => `/${alias}`),
-      ];
-    }, []),
+        ...aliasPaths,
+      ], []),
     component: PickupRedirect,
   },
   {

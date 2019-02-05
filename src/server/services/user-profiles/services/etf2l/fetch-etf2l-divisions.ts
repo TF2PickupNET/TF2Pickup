@@ -2,9 +2,9 @@
 import axios from 'axios';
 import debug from 'debug';
 
-import gamemodes from 'config/gamemodes';
-import { ETF2LDivisions, WithDivisions } from 'types/UserProfile';
-import { isNumber } from 'utils/number';
+import gamemodes from '@config/gamemodes';
+import { ETF2LDivisions, WithDivisions } from '@typings/UserProfile';
+import { isNumber } from '@utils/number';
 
 interface Match {
   merced: number,

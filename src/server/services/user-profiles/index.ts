@@ -2,7 +2,7 @@ import { ServerApp } from '@feathersjs/feathers';
 import service from 'feathers-mongoose';
 import debug from 'debug';
 
-import UserProfile from '../../../types/UserProfile';
+import UserProfile from '@typings/UserProfile';
 
 import Model from './Model';
 import hooks from './hooks';

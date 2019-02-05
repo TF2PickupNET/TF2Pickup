@@ -1,29 +1,29 @@
-import { createStateCreator } from '../types';
-import UserProfile from '../../../types/UserProfile';
+import { createTypedAsyncItem } from '@webapp/store/utils';
+import UserProfile from '@typings/UserProfile';
 
 import { UserProfileActionTypes, Actions, State } from './types';
 
-const stateCreator = createStateCreator<UserProfile>();
+const asyncItem = createTypedAsyncItem<UserProfile>();
 
 export default function reducer(state: State | undefined = {}, action: Actions): State {
   switch (action.type) {
     case UserProfileActionTypes.START_FETCH: {
       return {
         ...state,
-        [action.payload.userId]: stateCreator.createLoadingState(),
+        [action.payload.userId]: asyncItem.createLoadingState(),
       };
     }
     case UserProfileActionTypes.UPDATE:
     case UserProfileActionTypes.FETCHED: {
       return {
         ...state,
-        [action.payload.profile.id]: stateCreator.createFetchedState(action.payload.profile),
+        [action.payload.profile.id]: asyncItem.createFetchedState(action.payload.profile),
       };
     }
     case UserProfileActionTypes.FETCH_ERROR: {
       return {
         ...state,
-        [action.payload.userId]: stateCreator.createErrorState(action.payload.error),
+        [action.payload.userId]: asyncItem.createErrorState(action.payload.error),
       };
     }
     default: {

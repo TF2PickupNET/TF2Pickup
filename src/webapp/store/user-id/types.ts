@@ -1,4 +1,4 @@
-import { Action } from 'redux';
+import { Action } from '@webapp/store';
 
 type State = string | null;
 

@@ -1,4 +1,4 @@
-import UserProfile from '../../../../types/UserProfile';
+import UserProfile from '@typings/UserProfile';
 
 interface Link {
   url: string,

@@ -4,8 +4,9 @@ import config from 'config';
 
 import UserProfile, {
   OZFortressProfile,
-  OZFortressDivisions, WithDivisions,
-} from 'types/UserProfile';
+  OZFortressDivisions,
+  WithDivisions,
+} from '@typings/UserProfile';
 
 const log = debug('TF2Pickup:userId-user-profiles:ozfortress:fetch-data');
 const apikey = config.get<string | null>('services.ozfortress.apikey');

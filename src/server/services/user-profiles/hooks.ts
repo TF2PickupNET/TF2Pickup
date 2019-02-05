@@ -1,7 +1,7 @@
 import { CreateBeforeHookContext } from '@feathersjs/feathers';
 import hooks from 'feathers-hooks-common';
 
-import UserProfile from '../../../types/UserProfile';
+import UserProfile from '@typings/UserProfile';
 
 import getUserData from './get-user-data';
 

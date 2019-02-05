@@ -1,10 +1,12 @@
 import React from 'react';
 import Avatar from '@atlaskit/avatar';
 
-import { State } from '../../../../store';
-import { makeGetAvatar } from '../../../../store/user-profiles/selectors';
-import { getCurrentUserId } from '../../../../store/user-id/selectors';
-import { useMapState } from '../../../../store/use-store';
+import {
+  State,
+  useMapState,
+} from '@webapp/store';
+import { makeGetAvatar } from '@webapp/store/user-profiles/selectors';
+import { getCurrentUserId } from '@webapp/store/user-id/selectors';
 
 const makeMapState = () => {
   const getAvatar = makeGetAvatar('medium');

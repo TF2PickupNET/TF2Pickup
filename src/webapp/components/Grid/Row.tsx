@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
 
-import { isString } from '../../../utils/string';
+import { isString } from '@utils/string';
 
 interface OwnProps {
   dir?: 'column' | 'row',

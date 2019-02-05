@@ -5,7 +5,7 @@ import {
 import debug from 'debug';
 
 import pkg from '../../../../package.json';
-import Configuration from '../../../types/Configuration';
+import Configuration from '@typings/Configuration';
 
 const log = debug('TF2Pickup:configuration');
 

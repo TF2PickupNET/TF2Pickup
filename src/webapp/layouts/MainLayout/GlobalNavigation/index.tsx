@@ -1,10 +1,13 @@
 import React, { useMemo } from 'react';
 import { GlobalNav } from '@atlaskit/navigation-next';
-import { useHistory } from '../../../utils/use-router';
 
-import { State } from '../../../store';
-import { getCurrentUserId } from '../../../store/user-id/selectors';
-import { useMapState } from '../../../store/use-store';
+import { useHistory } from '@webapp/utils/use-router';
+import {
+  State,
+  useMapState,
+} from '@webapp/store';
+import { getCurrentUserId } from '@webapp/store/user-id/selectors';
+
 import {
   getPrimaryItems,
   getSecondaryItems,

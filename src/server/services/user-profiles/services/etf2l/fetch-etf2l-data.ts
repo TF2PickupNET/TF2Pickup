@@ -6,7 +6,7 @@ import { isBefore } from 'date-fns';
 import UserProfile, {
   WithBans,
   ETF2LProfile,
-} from 'types/UserProfile';
+} from '@typings/UserProfile';
 
 import getETF2LDivisions from './fetch-etf2l-divisions';
 

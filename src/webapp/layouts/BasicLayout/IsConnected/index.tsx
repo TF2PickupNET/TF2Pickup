@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
 
-import { Row } from '../../../components/Grid';
-import DocumentTitle from '../../../components/DocumentTitle';
+import { Row } from '@webapp/components/Grid';
+import DocumentTitle from '@webapp/components/DocumentTitle';
 
 import {
   useIsConnected,

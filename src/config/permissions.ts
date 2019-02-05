@@ -1,4 +1,4 @@
-import User from '../types/User';
+import User from '@typings/User';
 
 import roles from './roles';
 

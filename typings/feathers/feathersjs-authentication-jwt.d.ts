@@ -6,7 +6,7 @@ declare module '@feathersjs/authentication-jwt' {
 
   type DoneFunction = (
     err: Error | null,
-    user: import('../../src/types/User').default | null,
+    user: import('../../src/typings/User').default | null,
     payload?: Payload,
   ) => void;
 

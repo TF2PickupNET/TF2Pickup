@@ -4,15 +4,13 @@ import {
   MenuSection,
 } from '@atlaskit/navigation-next';
 
-import PageNavigation from '../../../components/PageNavigation';
-import regions from '../../../../config/regions';
-import { makeGetUserRegion } from '../../../store/users/selectors';
-import { useMakeMapState } from '../../../store/use-store';
+import PageNavigation from '@webapp/components/PageNavigation';
+import regions from '@config/regions';
+import { makeGetUserRegion } from '@webapp/store/users/selectors';
+import { State, useMakeMapState } from '@webapp/store';
 import { useUserId } from '../utils';
-import { State } from '../../../store';
 
 import Header from './Header';
-import Roles from './Roles';
 import Links from './Links';
 
 const makeMapState = () => {
@@ -43,9 +41,6 @@ export default function Navigation() {
                 )}
               />
             )}
-
-
-            <Roles />
 
             <Links />
           </div>

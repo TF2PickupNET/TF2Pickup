@@ -3,7 +3,7 @@ import {
   useState,
 } from 'react';
 
-import playSound from '../../utils/play-sound';
+import playSound from '@webapp/utils/play-sound';
 
 export default function SoundFix() {
   const [playedSound, setPlayedSound] = useState(false);

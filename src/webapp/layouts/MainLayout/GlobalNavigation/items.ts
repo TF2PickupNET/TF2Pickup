@@ -6,13 +6,14 @@ import SignOutIcon from '@atlaskit/icon/glyph/sign-out';
 import InfoIcon from '@atlaskit/icon/glyph/editor/info';
 import { RouterHistory } from 'react-router-dom';
 
-import gamemodes from '../../../../config/gamemodes';
-import { Keys } from '../../../../utils/types';
+import gamemodes from '@config/gamemodes';
+import { Keys } from '@utils/types';
+import store from '@webapp/store';
+import { logoutUser } from '@webapp/store/user-id/actions';
+import { redirectToSteamAuth } from '@webapp/utils/auth';
+import { isString } from '@utils/string';
+
 import UserAvatar from './UserAvatar';
-import store from '../../../store';
-import { logoutUser } from '../../../store/user-id/actions';
-import { redirectToSteamAuth } from '../../../utils/auth';
-import { isString } from '../../../../utils/string';
 
 interface ItemProps extends GlobalItemProps {
   path?: string,

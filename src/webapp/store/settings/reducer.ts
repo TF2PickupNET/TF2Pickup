@@ -1,22 +1,22 @@
-import { createStateCreator } from '../types';
-import UserSettings from '../../../types/UserSettings';
+import { createTypedAsyncItem } from '@webapp/store/utils';
+import UserSettings from '@typings/UserSettings';
 
 import { SettingsActionTypes, Actions, State } from './types';
 
-const stateCreator = createStateCreator<UserSettings>();
-const defaultState = stateCreator.createNotStartedState();
+const asyncItem = createTypedAsyncItem<UserSettings>();
+const defaultState = asyncItem.createNotStartedState();
 
 export default function reducer(state: State | undefined = defaultState, action: Actions): State {
   switch (action.type) {
     case SettingsActionTypes.START_FETCH: {
-      return stateCreator.createLoadingState();
+      return asyncItem.createLoadingState();
     }
     case SettingsActionTypes.UPDATE:
     case SettingsActionTypes.FETCHED: {
-      return stateCreator.createFetchedState(action.payload.settings);
+      return asyncItem.createFetchedState(action.payload.settings);
     }
     case SettingsActionTypes.FETCH_FAILED: {
-      return stateCreator.createErrorState(action.payload.error);
+      return asyncItem.createErrorState(action.payload.error);
     }
     default: {
       return state;

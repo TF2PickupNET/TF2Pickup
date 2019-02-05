@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { State } from '..';
+import { State } from '@webapp/store';
 
 const getConfig = (state: State) => state.config.item;
 const getConfigStatus = (state: State) => state.config.status;

@@ -7,8 +7,8 @@ import {
 import {
   useLocation,
   useHistory,
-} from '../../../utils/use-router';
-import { isString } from '../../../../utils/string';
+} from '@webapp/utils/use-router';
+import { isString } from '@utils/string';
 
 interface Props extends ItemProps {
   path?: string,

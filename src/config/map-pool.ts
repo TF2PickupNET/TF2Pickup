@@ -1,4 +1,4 @@
-import { Keys } from '../utils/types';
+import { Keys } from '@utils/types';
 
 import maps from './maps';
 

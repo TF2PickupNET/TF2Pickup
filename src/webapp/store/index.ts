@@ -1,22 +1,33 @@
 import {
   createStore,
   applyMiddleware,
-  Store,
+  AnyAction,
 } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
+import {
+  AsyncAction,
+  Action,
+  AsyncStatus,
+  AsyncItem,
+} from './types';
+
 import reducers, { State } from './reducers';
-import Actions from './actions';
 import useActions from './use-actions';
 import {
   useMakeMapState,
   useMapState,
 } from './use-store';
+import Actions from './actions';
 
 const middlewares = applyMiddleware(thunk);
 
-const store: Store<State, Actions> = createStore(
+interface ThunkStore {
+  dispatch(action: Actions | AsyncAction): void,
+}
+
+const store = createStore<State, AnyAction , ThunkStore, {}>(
   reducers,
   process.env.NODE_ENV === 'development'
     ? composeWithDevTools(middlewares)
@@ -25,6 +36,10 @@ const store: Store<State, Actions> = createStore(
 
 export {
   State,
+  AsyncAction,
+  Action,
+  AsyncStatus,
+  AsyncItem,
 
   useActions,
   useMakeMapState,

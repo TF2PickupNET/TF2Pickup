@@ -1,10 +1,11 @@
 import { createSelector } from 'reselect';
 
-import roles from '../../../config/roles';
-import { getHighestRole } from '../../../utils/has-permission';
-import { AsyncStatus } from '../types';
-
-import { State } from '..';
+import roles from '@config/roles';
+import { getHighestRole } from '@utils/has-permission';
+import {
+  AsyncStatus,
+  State,
+} from '@webapp/store';
 
 type Role = keyof typeof roles;
 

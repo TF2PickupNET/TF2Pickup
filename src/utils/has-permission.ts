@@ -1,6 +1,6 @@
 import permissions from '../config/permissions';
 import roles from '../config/roles';
-import User from '../types/User';
+import User from '../typings/User';
 
 type Permission = keyof typeof permissions;
 type Role = keyof typeof roles;

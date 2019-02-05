@@ -1,8 +1,8 @@
-import alert from '../../../assets/sounds/alert.mp3';
-import attention from '../../../assets/sounds/attention.mp3';
-import notification from '../../../assets/sounds/notification.mp3';
-import soundfix from '../../../assets/sounds/sound-fix.mp3';
-import warning from '../../../assets/sounds/warning.mp3';
+import alert from '@assets/sounds/alert.mp3';
+import attention from '@assets/sounds/attention.mp3';
+import notification from '@assets/sounds/notification.mp3';
+import soundfix from '@assets/sounds/sound-fix.mp3';
+import warning from '@assets/sounds/warning.mp3';
 
 interface PickupSounds {
   'afks-kicked': null | string,

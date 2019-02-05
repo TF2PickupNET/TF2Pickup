@@ -3,14 +3,14 @@ import withStyles, { WithStyles } from 'react-jss';
 import PersonIcon from '@atlaskit/icon/glyph/person';
 import { Link } from 'react-router-dom';
 
-import { makeGetUserName } from 'webapp/store/users/selectors';
-import { fetchUser } from 'webapp/store/users/actions';
+import { makeGetUserName } from '@webapp/store/users/selectors';
+import { fetchUser } from '@webapp/store/users/actions';
 import {
   State,
   useMakeMapState,
   useActions,
-} from 'webapp/store';
-import { makeIsFriend } from 'webapp/store/user-profiles/selectors';
+} from '@webapp/store';
+import { makeIsFriend } from '@webapp/store/user-profiles/selectors';
 
 const styles = {
   container: { lineHeight: '24px' },

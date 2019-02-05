@@ -1,7 +1,8 @@
-import { Action } from 'redux';
-
-import UserSettings from '../../../types/UserSettings';
-import { AsyncItem } from '../types';
+import UserSettings from '@typings/UserSettings';
+import {
+  AsyncItem,
+  Action,
+} from '@webapp/store';
 
 type State = AsyncItem<UserSettings>;
 

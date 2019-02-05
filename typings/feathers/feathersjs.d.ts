@@ -8,19 +8,28 @@ declare module '@feathersjs/feathers' {
     Strategy,
   } from '@feathersjs/authentication';
   import { ExpressMiddleware } from '@feathersjs/express';
+  import { SocketConnection } from '@feathersjs/socketio';
+
+  import { Events } from '@typings/SocketEvents';
+  import User from '@typings/User';
+  import UserProfile from '@typings/UserProfile';
+  import UserSettings from '@typings/UserSettings';
+  import PickupQueue from '@typings/PickupQueue';
+  import Configuration from '@typings/Configuration';
+  import Log from '@typings/Log';
 
   type SKIP = Symbol;
   type Method = 'find' | 'get' | 'create' | 'update' | 'patch' | 'remove';
   type HookType = 'before' | 'after' | 'error';
 
   interface Connection {
-    user: import('../../src/types/User').default,
+    user: User,
   }
 
-  interface Params<Query extends object> {
+  interface Params<Query extends object = {}> {
     query: Query,
     provider: 'rest' | 'socketio' | 'primus' | void,
-    user?: import('../../src/types/User').default,
+    user?: User,
     accessToken?: string,
     authenticated: boolean,
     connection: Connection,
@@ -205,31 +214,46 @@ declare module '@feathersjs/feathers' {
   }
 
   interface ServerServices {
-    service(name: 'configuration'): ServerService<import('../../src/types/Configuration').default>,
-    service(name: 'user-profiles'): ServerService<import('../../src/types/UserProfile').default>,
-    service(name: 'user-settings'): ServerService<import('../../src/types/UserSettings').default>,
-    service(name: 'users'): ServerService<import('../../src/types/User').default>,
-    service(name: 'pickup-queues'): ServerService<import('../../src/types/PickupQueue').default>,
+    service(name: 'configuration'): ServerService<Configuration>,
+    service(name: 'user-profiles'): ServerService<UserProfile>,
+    service(name: 'user-settings'): ServerService<UserSettings>,
+    service(name: 'users'): ServerService<User>,
+    service(name: 'pickup-queues'): ServerService<PickupQueue>,
     service(name: 'authentication'): ServerService<{
       payload: Record<string, string>,
       accessToken?: string,
     }>,
-    service(name: 'logs'): ServerService<import('../../src/types/Log').default>,
+    service(name: 'logs'): ServerService<Log>,
   }
 
   interface ClientServices {
-    service(name: 'configuration'): ClientService<import('../../src/types/Configuration').default>,
-    service(name: 'user-profiles'): ClientService<import('../../src/types/UserProfile').default>,
-    service(name: 'user-settings'): ClientService<import('../../src/types/UserSettings').default>,
-    service(name: 'users'): ClientService<import('../../src/types/User').default>,
-    service(name: 'pickup-queues'): ClientService<import('../../src/types/PickupQueue').default>,
-    service(name: 'logs'): ClientService<import('../../src/types/Log').default>,
+    service(name: 'configuration'): ClientService<Configuration>,
+    service(name: 'user-profiles'): ClientService<UserProfile>,
+    service(name: 'user-settings'): ClientService<UserSettings>,
+    service(name: 'users'): ClientService<User>,
+    service(name: 'pickup-queues'): ClientService<PickupQueue>,
+    service(name: 'logs'): ClientService<Log>,
   }
 
-  type SocketEvents = import('./socket-events').Events;
-  type SocketCallback = import('./socket-events').Callback;
-  type ServerSocket = import('./socket-events').ServerSocket;
-  type ClientSocket = import('./socket-events').ClientSocket;
+  type SocketCallback = (err: FeathersError<number, string> | null) => void;
+
+  interface ClientSocket {
+    on(event: 'connect' | 'disconnect', cb: () => void): void,
+
+    emit<Name extends keyof Events>(
+      name: Name,
+      data: Events[Name],
+      cb: SocketCallback,
+    ): void,
+  }
+
+  interface ServerSocket extends SocketConnection {
+    on<Name extends keyof Events>(
+      name: Name,
+      handler: (data: Events[Name], cb: SocketCallback) => void | Promise<void>,
+    ): void,
+  }
+
 
   interface ServerApp extends ServerServices {
     configure(cb: (app: ServerApp) => void): ServerApp,
@@ -291,8 +315,8 @@ declare module '@feathersjs/feathers' {
     io: ClientSocket,
   }
 
-  type SocketEventHandler<Name extends keyof SocketEvents> = (
-    data: SocketEvents[Name],
+  type SocketEventHandler<Name extends keyof Events> = (
+    data: Events[Name],
     cb: SocketCallback,
   ) => void | Promise<void>;
 
@@ -335,4 +359,18 @@ declare module '@feathersjs/feathers' {
   };
 
   export default function create<App>(): App;
+
+  /**
+   * Exports for feathers-hooks-common typings.
+   */
+  export type HookContext<Doc = any> = CommonHookContext<Doc>;
+  export type Hook = (context: any) => HookResult<any>;
+  export type Query = Record<string, string>;
+  export type Application = ServerApp;
+  export interface Paginated<Data> {
+    total: number;
+    limit: number;
+    skip: number;
+    data: Data[];
+  }
 }

@@ -1,12 +1,13 @@
 import { createSelector } from 'reselect';
 
-import { getCurrentUserId } from '../user-id/selectors';
-import UserProfile from '../../../types/UserProfile';
-import { AsyncStatus } from '../types';
-import { Keys } from '../../../utils/types';
-import regions from '../../../config/regions';
-
-import { State } from '..';
+import { getCurrentUserId } from '@webapp/store/user-id/selectors';
+import UserProfile from '@typings/UserProfile';
+import {
+  AsyncStatus,
+  State,
+} from '@webapp/store';
+import { Keys } from '@utils/types';
+import regions from '@config/regions';
 
 import getLinkForService, { Link } from './utils/get-link-for-service';
 

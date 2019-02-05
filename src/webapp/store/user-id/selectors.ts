@@ -1,8 +1,7 @@
 import { createSelector } from 'reselect';
 
-import { makeGetUserById } from '../users/selectors';
-
-import { State } from '..';
+import { makeGetUserById } from '@webapp/store/users/selectors';
+import { State } from '@webapp/store';
 
 const getCurrentUserId = (state: State) => state.userId;
 

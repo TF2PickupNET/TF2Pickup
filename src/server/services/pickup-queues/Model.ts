@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 
-import regions from '../../../config/regions';
-import gamemodes from '../../../config/gamemodes';
-import oneOf from '../../utils/validators/one-of';
-import pickupStates from '../../../config/pickup-states';
-import PickupQueue from '../../../types/PickupQueue';
-import maps from '../../../config/maps';
+import regions from '@config/regions';
+import gamemodes from '@config/gamemodes';
+import oneOf from '@server/utils/validators/one-of';
+import pickupStates from '@config/pickup-states';
+import PickupQueue from '@typings/PickupQueue';
+import maps from '@config/maps';
 
 export default mongoose.model('PickupQueue', new mongoose.Schema({
   id: {

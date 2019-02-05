@@ -3,7 +3,7 @@ import {
   useEffect,
 } from 'react';
 
-import { socket } from '../../../app';
+import { socket } from '@webapp/app';
 
 function useIsConnected() {
   const [isConnected, setIsConnected] = useState(false);

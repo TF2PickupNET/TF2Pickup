@@ -1,11 +1,11 @@
 import sleep from 'sleep-promise';
 
-import store from '../store';
-import announcers from '../../config/announcers';
+import store from '@webapp/store';
+import announcers from '@config/announcers';
 import {
   getVolume,
   getAnnouncer,
-} from '../store/settings/selectors';
+} from '@webapp/store/settings/selectors';
 
 import {
   normalSounds,

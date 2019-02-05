@@ -7,8 +7,8 @@ import is from 'is_js';
 import Button from '@atlaskit/button';
 import withStyles, { WithStyles } from 'react-jss';
 
-import { Row } from '../../../components/Grid';
-import DocumentTitle from '../../../components/DocumentTitle';
+import { Row } from '@webapp/components/Grid';
+import DocumentTitle from '@webapp/components/DocumentTitle';
 
 const styles = {
   container: { minHeight: '100vh' },

@@ -6,10 +6,12 @@ import {
 } from '@atlaskit/navigation-next';
 import ShortcutIcon from '@atlaskit/icon/glyph/shortcut';
 
-import PageNavigation, { Item } from '../../components/PageNavigation';
-import socialMedias from '../../../config/social-medias';
-import { Keys } from '../../../utils/types';
-import Header from '../../components/PageNavigation/Header';
+import PageNavigation, {
+  Item,
+  Header,
+} from '@webapp/components/PageNavigation';
+import socialMedias from '@config/social-medias';
+import { Keys } from '@utils/types';
 
 const socialMediaKeys = Object.keys(socialMedias) as Keys<typeof socialMedias>;
 

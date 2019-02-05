@@ -1,46 +1,43 @@
-import { AsyncAction } from 'redux';
+import app from '@webapp/app';
+import { getCurrentUserId } from '@webapp/store/user-id/selectors';
+import emojiSets from '@config/emoji-sets';
+import announcers from '@config/announcers';
+import { AsyncAction } from '@webapp/store';
+import emitSocketEvent from '@webapp/utils/emit-socket-event';
 
-import app from '../../app';
-import { getCurrentUserId } from '../user-id/selectors';
-import emojiSets from '../../../config/emoji-sets';
-import announcers from '../../../config/announcers';
+import { SettingsActionTypes } from './types';
 
-import { State } from '..';
-
-import { SettingsActionTypes, Actions } from './types';
-import emitSocketEvent from '../../utils/emit-socket-event';
-
-function updateVolume(volume: number): AsyncAction<State, Actions> {
+function updateVolume(volume: number): AsyncAction {
   return async () => {
     try {
       await emitSocketEvent('user-settings:change-volume', { volume });
     } catch (error) {
-      console.warn(error);
+      console.error(error);
     }
   };
 }
 
-function updateEmojiSet(emojiSet: keyof typeof emojiSets): AsyncAction<State, Actions> {
+function updateEmojiSet(emojiSet: keyof typeof emojiSets): AsyncAction {
   return async () => {
     try {
       await emitSocketEvent('user-settings:change-emoji-set', { emojiSet });
     } catch (error) {
-      console.warn(error);
+      console.error(error);
     }
   };
 }
 
-function updateAnnouncer(announcer: keyof typeof announcers): AsyncAction<State, Actions> {
+function updateAnnouncer(announcer: keyof typeof announcers): AsyncAction {
   return async () => {
     try {
       await emitSocketEvent('user-settings:change-announcer', { announcer });
     } catch (error) {
-      console.warn(error);
+      console.error(error);
     }
   };
 }
 
-function fetchSettings(): AsyncAction<State, Actions> {
+function fetchSettings(): AsyncAction {
   return async (dispatch, getState) => {
     const userId = getCurrentUserId(getState());
 
@@ -50,7 +47,7 @@ function fetchSettings(): AsyncAction<State, Actions> {
 
     dispatch({
       type: SettingsActionTypes.START_FETCH,
-      payload: {},
+      payload: null,
     });
 
     try {

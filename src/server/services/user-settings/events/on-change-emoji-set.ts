@@ -9,7 +9,7 @@ import {
 } from '@feathersjs/feathers';
 import debug from 'debug';
 
-import emojiSets from '../../../../config/emoji-sets';
+import emojiSets from '@config/emoji-sets';
 
 const log = debug('TF2Pickup:user-settings:events:change-emoji-set');
 

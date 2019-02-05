@@ -1,11 +1,13 @@
 import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
 
-import { State } from '../../store';
-import { getCurrentUserId } from '../../store/user-id/selectors';
-import { useMapState } from '../../store/use-store';
-import { Row } from '../Grid';
-import SteamLoginButton from '../SteamLoginButton';
+import {
+  State,
+  useMapState,
+} from '@webapp/store';
+import { getCurrentUserId } from '@webapp/store/user-id/selectors';
+import { Row } from '@webapp/components/Grid';
+import SteamLoginButton from '@webapp/components/SteamLoginButton';
 
 const styles = {
   container: {

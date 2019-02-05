@@ -1,15 +1,17 @@
 import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
 
-import { getCurrentUser } from '../../../store/user-id/selectors';
-import { useMapState } from '../../../store/use-store';
+import { getCurrentUser } from '@webapp/store/user-id/selectors';
 import {
   Row,
   Column,
-} from '../../../components/Grid';
-import User from '../../../../types/User';
-import { State } from '../../../store';
-import DocumentTitle from '../../../components/DocumentTitle';
+} from '@webapp/components/Grid';
+import User from '@typings/User';
+import {
+  State,
+  useMapState,
+} from '@webapp/store';
+import DocumentTitle from '@webapp/components/DocumentTitle';
 
 import Stepper from './Stepper';
 import steps from './steps';

@@ -1,20 +1,18 @@
-import { AsyncAction } from 'redux';
-
-import gamemodes from 'config/gamemodes';
-import app from '../../app';
-import { makeGetUserRegion } from '../users/selectors';
-import { getCurrentUserId } from '../user-id/selectors';
-import PickupQueue from 'types/PickupQueue';
-import { AsyncStatus } from '../types';
-
-import { State } from '..';
+import gamemodes from '@config/gamemodes';
+import app from '@webapp/app';
+import { makeGetUserRegion } from '@webapp/store/users/selectors';
+import { getCurrentUserId } from '@webapp/store/user-id/selectors';
+import {
+  AsyncAction,
+  AsyncStatus,
+} from '@webapp/store';
 
 import { makeGetPickupQueueStatus } from './selectors';
-import { Actions, PickupQueueActionTypes } from './types';
+import { PickupQueueActionTypes } from './types';
 
 const getUserRegion = makeGetUserRegion();
 
-function fetchPickup(gamemode: keyof typeof gamemodes): AsyncAction<State, Actions> {
+function fetchPickup(gamemode: keyof typeof gamemodes): AsyncAction {
   const getPickupQueueStatus = makeGetPickupQueueStatus();
 
   return async (dispatch, getState) => {
@@ -51,5 +49,4 @@ function fetchPickup(gamemode: keyof typeof gamemodes): AsyncAction<State, Actio
 
 export {
   fetchPickup,
-  updatePickupQueue,
 };

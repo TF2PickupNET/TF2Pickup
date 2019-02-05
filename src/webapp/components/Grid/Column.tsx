@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
 
-import { isNumber } from '../../../utils/number';
+import { isNumber } from '@utils/number';
 
 interface OwnProps {
   col?: number,

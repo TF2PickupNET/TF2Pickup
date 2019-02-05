@@ -1,16 +1,13 @@
-import { AsyncAction } from 'redux';
+import app from '@webapp/app';
+import { AsyncAction } from '@webapp/store';
 
-import app from '../../app';
+import { ConfigActionTypes } from './types';
 
-import { State } from '..';
-
-import { Actions, ConfigActionTypes } from './types';
-
-export function fetchConfig(): AsyncAction<State, Actions> {
+export function fetchConfig(): AsyncAction {
   return async (dispatch) => {
     dispatch({
       type: ConfigActionTypes.START_FETCH,
-      payload: {},
+      payload: null,
     });
 
     try {

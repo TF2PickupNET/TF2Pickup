@@ -9,8 +9,8 @@ import { promisify } from 'util';
 import debug from 'debug';
 import { SteamGroup } from 'steamcommunity';
 
-import User from '../../../../types/User';
-import steamCommunity from '../../../utils/steam-community';
+import User from '@typings/User';
+import steamCommunity from '@server/utils/steam-community';
 
 const log = debug('TF2Pickup:users:is-in-steam-group');
 

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import Button from '@atlaskit/button';
 
-import { redirectToSteamAuth } from '../../utils/auth';
+import { redirectToSteamAuth } from '@webapp/utils/auth';
 
 function SteamLoginButton() {
   const handleClick = useCallback(() => {

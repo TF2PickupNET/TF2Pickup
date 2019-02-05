@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 import { __RouterContext as RouterContext } from 'react-router';
 
-import { isString } from '../../utils/string';
+import { isString } from '@utils/string';
 
 function useHistory(): RouterHistory {
   const context = useContext(RouterContext);

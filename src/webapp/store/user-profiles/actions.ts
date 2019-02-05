@@ -1,19 +1,15 @@
-import { AsyncAction } from 'redux';
-
-import app from '../../app';
-import { AsyncStatus } from '../types';
-
-import { State } from '..';
-
+import app from '@webapp/app';
 import {
-  Actions,
-  UserProfileActionTypes,
-} from './types';
+  AsyncStatus,
+  AsyncAction,
+} from '@webapp/store';
+
+import { UserProfileActionTypes } from './types';
 import { makeGetProfileStatusById } from './selectors';
 
 const getProfileStatus = makeGetProfileStatusById();
 
-function fetchProfile(userId: string | null): AsyncAction<State, Actions> {
+function fetchProfile(userId: string | null): AsyncAction {
   return async (dispatch, getState) => {
     const status = getProfileStatus(getState(), userId);
 

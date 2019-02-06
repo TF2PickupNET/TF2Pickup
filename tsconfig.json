@@ -26,13 +26,14 @@
     "resolveJsonModule": true,
     "baseUrl": "./",
     "preserveConstEnums": true,
+    "keyofStringsOnly": true,
     "paths": {
       "@utils/*": ["./src/utils/*"],
       "@server/*": ["./src/server/*"],
       "@webapp/*": ["./src/webapp/*"],
       "@config/*": ["./src/config/*"],
       "@typings/*": ["./src/typings/*"],
-      "@assets/*": ["./assets"]
+      "@assets/*": ["./assets/*"]
     }
   }
 }

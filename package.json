@@ -10,7 +10,7 @@
     "---Testing---": "",
     "test": "ava",
     "---Development": "",
-    "dev:server": "yarn build:server && node -r tsconfig-paths/register ./build/server/src/server",
+    "dev:server": "yarn clean && yarn build:server && node -r tsconfig-paths/register ./build/server/src/server",
     "dev:webapp": "webpack-serve --config webpack.dev.config.js --open",
     "---Build---": "",
     "prebuild": "yarn clean",

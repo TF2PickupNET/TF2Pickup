@@ -26,6 +26,8 @@ async function createJWT(req: ExpressRequest, res: ExpressResponse, next: () => 
 
   if (req.cookies && isString(req.cookies[REDIRECT_URL_COOKIE])) {
     res.redirect(`${req.cookies[REDIRECT_URL_COOKIE]}?token=${accessToken}`);
+
+    return;
   }
 
   next();

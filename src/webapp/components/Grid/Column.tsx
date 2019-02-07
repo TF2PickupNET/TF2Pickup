@@ -13,7 +13,7 @@ const COLUMNS = 24;
 const styles = {
   column: {
     flex: 1,
-    maxWidth(props: Props) {
+    maxWidth(props: OwnProps) {
       if (isNumber(props.col)) {
         return `${props.col / COLUMNS * 100}%`;
       }

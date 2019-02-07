@@ -28,9 +28,15 @@ const makeGetPickupQueueState = () => createSelector(
   queue => queue === null ? null : queue.state,
 );
 
+const makeGetPickupQueueReadyUpEnd = () => createSelector(
+  makeGetPickupQueue(),
+  queue => queue === null ? null : queue.readyUpEnd,
+);
+
 export {
   makeGetPickupQueue,
   makeGetPickupQueueError,
   makeGetPickupQueueStatus,
   makeGetPickupQueueState,
+  makeGetPickupQueueReadyUpEnd,
 };

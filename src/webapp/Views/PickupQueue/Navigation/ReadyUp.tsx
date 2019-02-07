@@ -4,16 +4,17 @@ import { differenceInMilliseconds } from 'date-fns';
 
 import gamemodes from '@config/gamemodes';
 import { State, useMakeMapState } from '@webapp/store';
-import { makeGetPickupQueueState } from '@webapp/store/pickup-queues/selectors';
+import { makeGetPickupQueueState, makeGetPickupQueueReadyUpEnd } from '@webapp/store/pickup-queues/selectors';
 import { useGamemode } from '../utils';
 
 const makeMapState = () => {
   const getPickupQueueStatus = makeGetPickupQueueState();
+  const getPickupQueueReadyUpEnd = makeGetPickupQueueReadyUpEnd();
 
   return (state: State, gamemode: keyof typeof gamemodes) => {
     return {
       state: getPickupQueueStatus(state, gamemode),
-      readyUpEnd: 0,
+      readyUpEnd: getPickupQueueReadyUpEnd(state, gamemode),
     };
   };
 };

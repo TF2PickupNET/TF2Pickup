@@ -4,6 +4,7 @@ import service from 'feathers-mongoose';
 
 import Model from './Model';
 import setupQueues from './setup-queues';
+import events from './events';
 
 const log = debug('TF2Pickup:pickup-queues');
 
@@ -16,7 +17,9 @@ export default function pickupQueues() {
       Model,
     }));
 
-    app.configure(setupQueues());
+    app
+      .configure(setupQueues)
+      .configure(events);
 
     app
       .service('pickup-queues')

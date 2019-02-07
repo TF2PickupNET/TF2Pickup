@@ -36,12 +36,10 @@ async function setupQueue(
   }
 }
 
-export default function setupQueues() {
-  return (app: ServerApp) => {
-    regionKeys.forEach((region) => {
-      gamemodeKeys.forEach((gamemode) => {
-        setupQueue(app, region, gamemode);
-      });
+export default function setupQueues(app: ServerApp) {
+  regionKeys.forEach((region) => {
+    gamemodeKeys.forEach((gamemode) => {
+      setupQueue(app, region, gamemode);
     });
-  };
+  });
 }

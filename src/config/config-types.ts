@@ -14,7 +14,6 @@ const koth: ConfigType = {
 const stopwatch: ConfigType = {
   name: 'stopwatch',
   display: 'Stopwatch',
-
 };
 
 const configTypes = {

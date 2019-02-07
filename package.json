@@ -10,7 +10,7 @@
     "---Testing---": "",
     "test": "ava",
     "---Development": "",
-    "dev:server": "yarn clean && yarn build:server && node -r tsconfig-paths/register ./build/server/src/server",
+    "dev:server": "ts-node -r tsconfig-paths/register --transpile-only src/server/index.ts",
     "dev:webapp": "webpack-serve --config webpack.dev.config.js --open",
     "---Build---": "",
     "prebuild": "yarn clean",
@@ -75,7 +75,7 @@
     "steamid": "1.1.0",
     "strip-ansi": "5.0.0",
     "styled-components": "3.2.6",
-    "tsconfig-paths": "^3.7.0"
+    "tsconfig-paths": "3.8.0"
   },
   "devDependencies": {
     "@types/config": "0.0.34",

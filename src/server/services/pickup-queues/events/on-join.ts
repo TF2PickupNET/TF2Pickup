@@ -7,6 +7,7 @@ import { SocketConnection } from '@feathersjs/socketio';
 import mongoose from 'mongoose';
 import debug from 'debug';
 import getPlayer from '@server/services/pickup-queues/utils/get-player';
+import checkForUpdateState from '@server/services/pickup-queues/check-for-update-state';
 
 const log = debug('TF2Pickup:pickup-queues:events:on-join');
 
@@ -47,6 +48,8 @@ export default function onJoin(
           class: data.class,
         });
       }
+
+      await checkForUpdateState(app, queue);
 
       return cb(null);
     } catch (error) {

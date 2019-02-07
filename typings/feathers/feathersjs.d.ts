@@ -174,6 +174,7 @@ declare module '@feathersjs/feathers' {
       query: Partial<Document> & {
         $limit?: number,
         $skip?: number,
+        $sort?: Partial<Record<keyof Document, 1 | -1>>,
       },
     }): Promise<Document[]>,
     create(data: Document): Promise<Document>,

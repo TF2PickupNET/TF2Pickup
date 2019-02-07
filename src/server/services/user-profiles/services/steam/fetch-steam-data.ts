@@ -25,13 +25,11 @@ async function fetchSteamData(
       fetchFriends(profile, oneDaySinceLastUpdate),
     ]);
 
-    console.log(player);
-
     return {
       steam: {
         ...profile.steam,
         id: profile.id,
-        name: 'test',
+        name: player.personaname,
         customUrl: player.profileurl,
         avatar: {
           small: player.avatar,

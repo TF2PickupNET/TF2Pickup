@@ -1,30 +1,26 @@
 interface PickupState {
-  name: string,
   display: string,
 }
 
-const waitingForPlayers: PickupState = {
-  name: 'waiting-for-players',
-  display: 'Waiting for players',
-};
-const readyUp: PickupState = {
-  name: 'ready-up',
-  display: 'Ready up',
-};
-const reservingServer: PickupState = {
-  name: 'reserving-server',
-  display: 'Reserving server',
-};
-const configuringServer: PickupState = {
-  name: 'configuring-server',
-  display: 'Configuring server',
+enum PickupStates {
+  WaitingForPlayers = 'waiting-for-players',
+  ReadyUp = 'ready-up',
+  CreatingPickup = 'creating-pickup',
+  ReservingServer = 'reserving-server',
+  ConfiguringServer = 'configuring-server',
+}
+
+const pickupStates: Record<PickupStates, PickupState> = {
+  [PickupStates.WaitingForPlayers]: { display: 'Waiting for players' },
+  [PickupStates.ReadyUp]: { display: 'Ready up' },
+  [PickupStates.CreatingPickup]: { display: 'Creating Pickup' },
+  [PickupStates.ReservingServer]: { display: 'Reserving server' },
+  [PickupStates.ConfiguringServer]: { display: 'Configuring server' },
 };
 
-const pickupStates = {
-  'waiting-for-players': waitingForPlayers,
-  'ready-up': readyUp,
-  'reserving-server': reservingServer,
-  'configuring-server': configuringServer,
+export {
+  PickupStates,
+  PickupState,
 };
 
 export default pickupStates;

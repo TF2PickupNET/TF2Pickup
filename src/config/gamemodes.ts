@@ -1,10 +1,11 @@
 import classes from './classes';
 import configTypes from './config-types';
 
+const SECOND = 1000;
+
 interface Gamemode {
   name: string,
   display: string,
-  maxPlayers: number,
   readyUpTime: number,
   slots: { [key in keyof typeof classes]?: number },
   aliases: string[],
@@ -16,8 +17,7 @@ interface Gamemode {
 const sixvsix: Gamemode = {
   name: '6v6',
   display: '6v6',
-  maxPlayers: 12,
-  readyUpTime: 45,
+  readyUpTime: 45 * SECOND,
   slots: {
     scout: 4,
     roamer: 2,
@@ -34,8 +34,7 @@ const sixvsix: Gamemode = {
 const hl: Gamemode = {
   name: '9v9',
   display: '9v9',
-  maxPlayers: 18,
-  readyUpTime: 45,
+  readyUpTime: 45 * SECOND,
   slots: {
     scout: 2,
     soldier: 2,
@@ -59,8 +58,7 @@ const hl: Gamemode = {
 const bball: Gamemode = {
   name: 'bball',
   display: 'BBall',
-  maxPlayers: 4,
-  readyUpTime: 30,
+  readyUpTime: 30 * SECOND,
   slots: { soldier: 4 },
   aliases: ['bb'],
   rating: false,
@@ -71,8 +69,7 @@ const bball: Gamemode = {
 const ultiduo: Gamemode = {
   name: 'ultiduo',
   display: 'Ultiduo',
-  maxPlayers: 4,
-  readyUpTime: 30,
+  readyUpTime: 30 * SECOND,
   slots: {
     soldier: 2,
     medic: 2,

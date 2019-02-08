@@ -1,6 +1,5 @@
 import React from 'react';
 import withStyles, { WithStyles } from 'react-jss';
-
 import {
   Row,
   Column,

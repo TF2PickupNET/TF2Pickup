@@ -9,7 +9,6 @@ import {
   RouterHistory,
 } from 'react-router-dom';
 import { __RouterContext as RouterContext } from 'react-router';
-
 import { isString } from '@utils/string';
 
 function useHistory(): RouterHistory {

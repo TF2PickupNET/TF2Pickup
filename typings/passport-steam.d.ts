@@ -1,5 +1,6 @@
 declare module 'passport-steam' {
   import { Strategy } from '@feathersjs/authentication';
+  import { ExpressRequest } from '@feathersjs/express';
 
   interface Options {
     returnURL: string,
@@ -13,8 +14,9 @@ declare module 'passport-steam' {
     done: (err: Error | null, user: {} | null) => void,
   ) => void | Promise<void>;
 
-  // eslint-disable-next-line typescript/no-extraneous-class
-  export default class SteamStrategy implements Strategy {
+  export default class SteamStrategy implements Strategy<Options> {
     public constructor(options: Options, callback: Callback);
+
+    public authenticate(req: ExpressRequest, options: object): void;
   }
 }

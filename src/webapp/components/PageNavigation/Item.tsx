@@ -3,7 +3,6 @@ import {
   Item as ItemComp,
   ItemProps,
 } from '@atlaskit/navigation-next';
-
 import {
   useLocation,
   useHistory,

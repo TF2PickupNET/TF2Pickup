@@ -1,5 +1,5 @@
-import { useLocation } from '../../utils/use-router';
-import gamemodes from '../../../config/gamemodes';
+import { useLocation } from '@webapp/utils/use-router';
+import gamemodes from '@config/gamemodes';
 
 function useGamemode(): keyof typeof gamemodes {
   const location = useLocation();

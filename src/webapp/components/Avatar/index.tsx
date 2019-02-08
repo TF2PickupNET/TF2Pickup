@@ -1,6 +1,5 @@
 import React from 'react';
 import AvatarImg, { AvatarProps } from '@atlaskit/avatar';
-
 import { makeGetAvatar } from '@webapp/store/user-profiles/selectors';
 import {
   State,

@@ -1,5 +1,4 @@
 import withSideEffect from 'react-side-effect';
-
 import { isString } from '@utils/string';
 
 const suffix = '| TF2Pickup.net';

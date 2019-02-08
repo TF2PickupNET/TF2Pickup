@@ -4,7 +4,7 @@ import {
   Switch,
 } from 'react-router-dom';
 
-import NotFound from '../NotFound';
+import NotFound from '@webapp/Views/NotFound';
 
 import Rules from './Rules';
 import About from './About';

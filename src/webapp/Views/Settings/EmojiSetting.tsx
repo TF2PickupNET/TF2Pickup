@@ -1,9 +1,12 @@
 import React, { useCallback } from 'react';
 import { RadioGroup } from '@atlaskit/radio';
-
 import { getEmojiSet } from '@webapp/store/settings/selectors';
 import emojiSets from '@config/emoji-sets';
-import { State, useMapState, useActions } from '@webapp/store';
+import {
+  State,
+  useMapState,
+  useActions,
+} from '@webapp/store';
 import { updateEmojiSet } from '@webapp/store/settings/actions';
 import { Keys } from '@utils/types';
 

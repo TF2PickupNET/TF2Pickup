@@ -5,7 +5,6 @@ import {
   GroupHeading,
 } from '@atlaskit/navigation-next';
 import ShortcutIcon from '@atlaskit/icon/glyph/shortcut';
-
 import PageNavigation, {
   Item,
   Header,

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-
 import { isString } from '@utils/string';
 
 export default function IndexRedirect() {

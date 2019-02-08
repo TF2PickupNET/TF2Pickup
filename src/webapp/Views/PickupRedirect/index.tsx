@@ -3,7 +3,6 @@ import {
   Redirect,
   ContextRouter,
 } from 'react-router-dom';
-
 import gamemodes from '@config/gamemodes';
 import { Keys } from '@utils/types';
 

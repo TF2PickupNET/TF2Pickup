@@ -2,7 +2,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-
 import playSound from '@webapp/utils/play-sound';
 
 export default function SoundFix() {

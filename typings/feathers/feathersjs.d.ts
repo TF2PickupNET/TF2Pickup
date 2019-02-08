@@ -9,7 +9,6 @@ declare module '@feathersjs/feathers' {
   } from '@feathersjs/authentication';
   import { ExpressMiddleware } from '@feathersjs/express';
   import { SocketConnection } from '@feathersjs/socketio';
-
   import { Events } from '@typings/SocketEvents';
   import User from '@typings/User';
   import UserProfile from '@typings/UserProfile';
@@ -258,7 +257,6 @@ declare module '@feathersjs/feathers' {
     ): void,
   }
 
-
   interface ServerApp extends ServerServices {
     configure(cb: (app: ServerApp) => void): ServerApp,
     channels: Channel[],
@@ -294,7 +292,7 @@ declare module '@feathersjs/feathers' {
         token: string,
         options: { secret: string },
       ): Promise<{ id: string }>,
-      use(strategy: Strategy): void,
+      use<Options extends object>(strategy: Strategy<Options>): void,
     },
   }
 
@@ -372,9 +370,9 @@ declare module '@feathersjs/feathers' {
   export type Query = Record<string, string>;
   export type Application = ServerApp;
   export interface Paginated<Data> {
-    total: number;
-    limit: number;
-    skip: number;
-    data: Data[];
+    total: number,
+    limit: number,
+    skip: number,
+    data: Data[],
   }
 }

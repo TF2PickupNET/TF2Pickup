@@ -1,10 +1,13 @@
 import React from 'react';
-
 import { Item } from '@webapp/components/PageNavigation';
 import gamemodes from '@config/gamemodes';
-import { State, useMakeMapState } from '@webapp/store';
+import {
+  State,
+  useMakeMapState,
+} from '@webapp/store';
 import { makeGetPickupQueueState } from '@webapp/store/pickup-queues/selectors';
 import pickupStates from '@config/pickup-states';
+
 import { useGamemode } from '../utils';
 
 const makeMapState = () => {

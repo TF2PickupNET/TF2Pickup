@@ -1,6 +1,5 @@
 import { Redirect } from 'react-router-dom';
 import React, { ReactNode } from 'react';
-
 import { useLocation } from '@webapp/utils/use-router';
 import { isString } from '@utils/string';
 

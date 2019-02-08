@@ -1,7 +1,7 @@
 import { Action as ReduxAction } from 'redux';
-import { State } from '.';
-
 import Actions from '@webapp/store/actions';
+
+import { State } from '.';
 
 interface Action<
   Type extends string,

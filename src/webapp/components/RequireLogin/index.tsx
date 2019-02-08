@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
-
 import {
   State,
   useMapState,

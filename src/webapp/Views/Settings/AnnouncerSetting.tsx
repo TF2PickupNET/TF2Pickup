@@ -3,11 +3,11 @@ import React, {
   ChangeEvent,
 } from 'react';
 import { RadioGroup } from '@atlaskit/radio';
-
 import { getAnnouncer } from '@webapp/store/settings/selectors';
 import {
   useMapState,
-  State, useActions,
+  State,
+  useActions,
 } from '@webapp/store';
 import { updateAnnouncer } from '@webapp/store/settings/actions';
 import { Keys } from '@utils/types';

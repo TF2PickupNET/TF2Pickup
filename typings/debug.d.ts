@@ -1,23 +1,23 @@
 declare module 'debug' {
   import { FeathersError } from '@feathersjs/errors';
 
-  export interface Data<Extra> {
-    userId?: string,
+  export interface Data<ExtraData> {
     error?: FeathersError<number, string>,
-    data?: Extra,
+    userId?: string,
+    data?: ExtraData,
   }
 
   interface Debug {
-    (module: string): <D>(
+    (module: string): <ExtraData>(
       message: string,
-      data?: Data<D>,
+      data?: Data<ExtraData>,
     ) => void,
 
     enable(module: string): void,
 
-    log<D>(
+    log<ExtraData>(
       message: string,
-      data?: Data<D>,
+      data?: Data<ExtraData>,
     ): void,
   }
 

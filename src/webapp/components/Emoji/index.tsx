@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { Emoji as EmojiIcon } from 'emoji-mart';
-
 import { getEmojiSet } from '@webapp/store/settings/selectors';
 import {
   State,

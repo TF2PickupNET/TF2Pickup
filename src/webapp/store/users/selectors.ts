@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-
 import roles from '@config/roles';
 import { getHighestRole } from '@utils/has-permission';
 import {

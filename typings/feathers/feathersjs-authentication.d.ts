@@ -12,8 +12,9 @@ declare module '@feathersjs/authentication' {
   } from '@feathersjs/express';
   import { SocketConnection } from '@feathersjs/socketio';
 
-  // eslint-disable-next-line typescript/no-empty-interface
-  interface Strategy {}
+  interface Strategy<Options extends object> {
+    authenticate(req: ExpressRequest, options: object): void,
+  }
 
   interface AuthenticationOptions {
     path?: string,

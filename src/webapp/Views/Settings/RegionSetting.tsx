@@ -1,10 +1,13 @@
 import React, { useCallback } from 'react';
 import { RadioGroup } from '@atlaskit/radio';
-
 import regions from '@config/regions';
 import { makeGetUserRegion } from '@webapp/store/users/selectors';
 import { getCurrentUserId } from '@webapp/store/user-id/selectors';
-import { useMakeMapState, State, useActions } from '@webapp/store';
+import {
+  useMakeMapState,
+  State,
+  useActions,
+} from '@webapp/store';
 import { updateRegion } from '@webapp/store/users/actions';
 import { Keys } from '@utils/types';
 

@@ -6,10 +6,13 @@ import React, {
 } from 'react';
 import Button from '@atlaskit/button';
 import Range from '@atlaskit/range';
-
 import playSound from '@webapp/utils/play-sound';
 import { getVolume } from '@webapp/store/settings/selectors';
-import { useMapState, State, useActions } from '@webapp/store';
+import {
+  useMapState,
+  State,
+  useActions,
+} from '@webapp/store';
 import { updateVolume } from '@webapp/store/settings/actions';
 
 const mapState = (state: State) => {

@@ -1,6 +1,5 @@
 import React from 'react';
 import withStyles, { WithStyles } from 'react-jss';
-
 import RulesComp from '@webapp/components/Rules';
 import DocumentTitle from '@webapp/components/DocumentTitle';
 

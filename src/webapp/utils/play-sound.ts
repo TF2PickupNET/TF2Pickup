@@ -1,5 +1,4 @@
 import sleep from 'sleep-promise';
-
 import store from '@webapp/store';
 import announcers from '@config/announcers';
 import {

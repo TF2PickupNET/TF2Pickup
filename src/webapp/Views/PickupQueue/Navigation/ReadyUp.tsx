@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Button, { ButtonGroup } from '@atlaskit/button';
 import { differenceInMilliseconds } from 'date-fns';
-
 import gamemodes from '@config/gamemodes';
 import { State, useMakeMapState } from '@webapp/store';
-import { makeGetPickupQueueState, makeGetPickupQueueReadyUpEnd } from '@webapp/store/pickup-queues/selectors';
+import {
+  makeGetPickupQueueState,
+  makeGetPickupQueueReadyUpEnd,
+} from '@webapp/store/pickup-queues/selectors';
+
 import { useGamemode } from '../utils';
 
 const makeMapState = () => {

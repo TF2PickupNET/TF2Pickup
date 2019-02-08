@@ -1,11 +1,13 @@
 import React from 'react';
 import { MenuSection } from '@atlaskit/navigation-next';
-
 import PageNavigation, {
   Item,
   Header,
 } from '@webapp/components/PageNavigation';
-import { State, useMakeMapState } from '@webapp/store';
+import {
+  State,
+  useMakeMapState,
+} from '@webapp/store';
 import { makeGetUserRegion } from '@webapp/store/users/selectors';
 import { getCurrentUserId } from '@webapp/store/user-id/selectors';
 import {

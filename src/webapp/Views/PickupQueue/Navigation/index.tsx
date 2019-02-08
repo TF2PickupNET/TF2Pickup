@@ -1,8 +1,8 @@
 import React from 'react';
-
 import PageNavigation, { Header } from '@webapp/components/PageNavigation';
-import { useGamemode } from '../utils';
 import gamemodes from '@config/gamemodes';
+
+import { useGamemode } from '../utils';
 
 import Status from './Status';
 

@@ -4,19 +4,18 @@ import { MenuSection } from '@atlaskit/navigation-next';
 import PageNavigation, {
   Item,
   Header,
-} from '../../components/PageNavigation';
-import { State } from '../../store';
-import { makeGetUserRegion } from '../../store/users/selectors';
-import { getCurrentUserId } from '../../store/user-id/selectors';
+} from '@webapp/components/PageNavigation';
+import { State, useMakeMapState } from '@webapp/store';
+import { makeGetUserRegion } from '@webapp/store/users/selectors';
+import { getCurrentUserId } from '@webapp/store/user-id/selectors';
 import {
   getVolume,
   getEmojiSet,
   getAnnouncer,
-} from '../../store/settings/selectors';
-import { useMakeMapState } from '../../store/use-store';
-import regions from '../../../config/regions';
-import announcers from '../../../config/announcers';
-import emojiSets from '../../../config/emoji-sets';
+} from '@webapp/store/settings/selectors';
+import regions from '@config/regions';
+import announcers from '@config/announcers';
+import emojiSets from '@config/emoji-sets';
 
 const makeMapState = () => {
   const getUserRegion = makeGetUserRegion();

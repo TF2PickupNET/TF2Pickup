@@ -4,8 +4,8 @@ import withStyles, { WithStyles } from 'react-jss';
 import {
   Row,
   Column,
-} from '../../components/Grid';
-import RequireLogin from '../../components/RequireLogin';
+} from '@webapp/components/Grid';
+import RequireLogin from '@webapp/components/RequireLogin';
 
 import RegionSetting from './RegionSetting';
 import VolumeSetting from './VolumeSetting';

@@ -4,9 +4,11 @@ import React, {
 } from 'react';
 import { RadioGroup } from '@atlaskit/radio';
 
-import { getAnnouncer } from '../../store/settings/selectors';
-import { State } from '../../store';
-import { useMapState } from '../../store/use-store';
+import { getAnnouncer } from '@webapp/store/settings/selectors';
+import {
+  useMapState,
+  State, useActions,
+} from '@webapp/store';
 import { updateAnnouncer } from '@webapp/store/settings/actions';
 import { Keys } from '@utils/types';
 import announcers from '@config/announcers';
@@ -25,9 +27,10 @@ const options = emojiSetKeys.map((announcer) => {
 
 function AnnouncerSetting() {
   const { announcer } = useMapState(mapState);
+  const actions = useActions({ updateAnnouncer });
   const handleChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
     if (ev.target.value in announcers) {
-      updateAnnouncer(ev.target.value as keyof typeof announcers);
+      actions.updateAnnouncer(ev.target.value as keyof typeof announcers);
     }
   }, []);
 

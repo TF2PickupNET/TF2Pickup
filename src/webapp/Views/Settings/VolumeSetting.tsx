@@ -7,11 +7,10 @@ import React, {
 import Button from '@atlaskit/button';
 import Range from '@atlaskit/range';
 
-import playSound from '../../utils/play-sound';
-import { getVolume } from '../../store/settings/selectors';
-import { useMapState } from '../../store/use-store';
-import { updateVolume } from '../../store/settings/actions';
-import { State } from '../../store';
+import playSound from '@webapp/utils/play-sound';
+import { getVolume } from '@webapp/store/settings/selectors';
+import { useMapState, State, useActions } from '@webapp/store';
+import { updateVolume } from '@webapp/store/settings/actions';
 
 const mapState = (state: State) => {
   return { volume: getVolume(state) };
@@ -19,6 +18,7 @@ const mapState = (state: State) => {
 
 function VolumeSetting() {
   const { volume } = useMapState(mapState);
+  const actions = useActions({ updateVolume });
   const [selectedVolume, setSelectedVolume] = useState(volume);
   const update = useRef<NodeJS.Timeout | null>(null);
 
@@ -39,7 +39,7 @@ function VolumeSetting() {
 
     // Update the value on the server after 1s
     update.current = setTimeout(() => {
-      updateVolume(value);
+      actions.updateVolume(value);
     }, 1000);
   }, []);
 

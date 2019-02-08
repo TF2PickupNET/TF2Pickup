@@ -1,13 +1,12 @@
 import React, { useCallback } from 'react';
 import { RadioGroup } from '@atlaskit/radio';
 
-import regions from '../../../config/regions';
-import { makeGetUserRegion } from '../../store/users/selectors';
-import { getCurrentUserId } from '../../store/user-id/selectors';
-import { useMakeMapState } from '../../store/use-store';
-import { updateRegion } from '../../store/users/actions';
-import { State } from '../../store';
-import { Keys } from '../../../utils/types';
+import regions from '@config/regions';
+import { makeGetUserRegion } from '@webapp/store/users/selectors';
+import { getCurrentUserId } from '@webapp/store/user-id/selectors';
+import { useMakeMapState, State, useActions } from '@webapp/store';
+import { updateRegion } from '@webapp/store/users/actions';
+import { Keys } from '@utils/types';
 
 const makeMapState = () => {
   const getUserRegion = makeGetUserRegion();
@@ -27,8 +26,9 @@ const options = regionKeys.map((region) => {
 
 function RegionSetting() {
   const { region } = useMakeMapState(makeMapState);
+  const actions = useActions({ updateRegion });
   const handleChange = useCallback((ev) => {
-    updateRegion(ev.target.value);
+    actions.updateRegion(ev.target.value);
   }, []);
 
   return (

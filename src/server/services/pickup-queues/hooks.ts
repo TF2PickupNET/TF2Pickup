@@ -4,6 +4,7 @@ import { PickupStates } from '@config/pickup-states';
 import gamemodes from '@config/gamemodes';
 
 import resetPlayers from './utils/reset-players';
+import hasEnoughPlayers from '@server/services/pickup-queues/utils/has-enough-players';
 
 const readyUpTimeouts = new Map();
 
@@ -25,13 +26,27 @@ const hooks: Hooks<PickupQueue> = {
             const timeoutId = setTimeout(async () => {
               readyUpTimeouts.delete(id);
 
-              await Promise.all([
-                resetPlayers(hook.app, id),
-                queues.patch(id, {
-                  state: PickupStates.WaitingForPlayers,
+              const hasEnough = await hasEnoughPlayers(
+                hook.app,
+                hook.result,
+                // Check if the enough players are ready
+                players => players.filter(player => player.isReady).length,
+              );
+
+              if (hasEnough) {
+                await queues.patch(id, {
+                  state: PickupStates.CreatingPickup,
                   readyUpEnd: null,
-                }),
-              ]);
+                });
+              } else {
+                await Promise.all([
+                  resetPlayers(hook.app, id),
+                  queues.patch(id, {
+                    state: PickupStates.WaitingForPlayers,
+                    readyUpEnd: null,
+                  }),
+                ]);
+              }
             }, readyUpTime);
 
             readyUpTimeouts.set(id, timeoutId);

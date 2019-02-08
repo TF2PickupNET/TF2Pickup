@@ -1,12 +1,11 @@
 import React, { useCallback } from 'react';
 import { RadioGroup } from '@atlaskit/radio';
 
-import { getEmojiSet } from '../../store/settings/selectors';
-import emojiSets from '../../../config/emoji-sets';
-import { State } from '../../store';
-import { useMapState } from '../../store/use-store';
-import { updateEmojiSet } from '../../store/settings/actions';
-import { Keys } from '../../../utils/types';
+import { getEmojiSet } from '@webapp/store/settings/selectors';
+import emojiSets from '@config/emoji-sets';
+import { State, useMapState, useActions } from '@webapp/store';
+import { updateEmojiSet } from '@webapp/store/settings/actions';
+import { Keys } from '@utils/types';
 
 const mapState = (state: State) => {
   return { emoji: getEmojiSet(state) };
@@ -22,8 +21,9 @@ const options = emojiSetKeys.map((emojiSet) => {
 
 function EmojiSetting() {
   const { emoji } = useMapState(mapState);
+  const actions = useActions({ updateEmojiSet });
   const handleChange = useCallback((ev) => {
-    updateEmojiSet(ev.target.value);
+    actions.updateEmojiSet(ev.target.value);
   }, []);
 
   return (

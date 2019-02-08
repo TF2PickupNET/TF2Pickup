@@ -6,7 +6,7 @@ module.exports = {
   ],
 
   rules: {
-    'promise/prefer-await-to-callbacks': 'off'
+    'import/no-unresolved': 'off',
   },
 
   overrides: [{

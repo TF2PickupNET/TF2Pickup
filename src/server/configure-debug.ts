@@ -2,6 +2,7 @@ import debug, { Data } from 'debug';
 import { ServerApp } from '@feathersjs/feathers';
 import stripAnsi from 'strip-ansi';
 import PrettyError from 'pretty-error';
+import mongoose from 'mongoose';
 
 import Log from '@typings/Log';
 
@@ -24,6 +25,7 @@ function parseLine(message: string, data: Data<{}>): Log | null {
   }
 
   return {
+    id: mongoose.Types.ObjectId().toHexString(),
     path: path[1],
     message: path[2].trim(),
     data,

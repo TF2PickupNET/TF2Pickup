@@ -1,5 +1,6 @@
 import classes from './classes';
 import configTypes from './config-types';
+import { Keys } from '@utils/types';
 
 const SECOND = 1000;
 
@@ -7,7 +8,7 @@ interface Gamemode {
   name: string,
   display: string,
   readyUpTime: number,
-  slots: { [key in keyof typeof classes]?: number },
+  slots: Partial<Record<keyof typeof classes, number>>,
   aliases: string[],
   rating: boolean,
   displayDiv: boolean,
@@ -87,6 +88,14 @@ const gamemodes = {
   ultiduo,
 };
 
-export { Gamemode };
+function getMinPlayersForGamemode(gamemode: keyof typeof gamemodes) {
+  const { slots } = gamemodes[gamemode];
+  const classNames = Object.keys(slots) as Keys<typeof slots>;
+
+  // @ts-ignore
+  return classNames.reduce((accu, className) => accu + slots[className], 0);
+}
+
+export { Gamemode, getMinPlayersForGamemode };
 
 export default gamemodes;

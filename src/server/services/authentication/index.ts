@@ -1,5 +1,8 @@
-import { ServerApp } from '@feathersjs/feathers';
-import auth from '@feathersjs/authentication';
+import {
+  ServerApp,
+  Hooks,
+} from '@feathersjs/feathers';
+import auth, { AuthPayload } from '@feathersjs/authentication';
 import jwt from '@feathersjs/authentication-jwt';
 import debug from 'debug';
 import config from 'config';
@@ -17,6 +20,8 @@ const options = {
   },
 };
 
+const hooks: Hooks<AuthPayload> = { before: { create: auth.hooks.authenticate(['jwt']) } };
+
 export { options };
 
 export default function authentication() {
@@ -28,6 +33,6 @@ export default function authentication() {
       .configure(jwt({ Verifier: JWTVerifier }))
       .configure(steam())
       .service('authentication')
-      .hooks({ before: { create: auth.hooks.authenticate(['jwt']) } });
+      .hooks(hooks);
   };
 }

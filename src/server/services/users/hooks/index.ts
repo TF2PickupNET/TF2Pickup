@@ -2,7 +2,6 @@ import { CreateAfterHookContext } from '@feathersjs/feathers';
 import debug from 'debug';
 import hooks from 'feathers-hooks-common';
 import { promisify } from 'util';
-
 import User from '@typings/User';
 import steamCommunity from '@server/utils/steam-community';
 

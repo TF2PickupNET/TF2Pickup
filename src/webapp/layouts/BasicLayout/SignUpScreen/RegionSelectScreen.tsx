@@ -4,11 +4,11 @@ import React, {
 } from 'react';
 import Button from '@atlaskit/button';
 import { RadioGroup } from '@atlaskit/radio';
-
 import regions from '@config/regions';
 import { updateRegion } from '@webapp/store/users/actions';
 import useAsync from '@webapp/utils/use-async';
 import { Row } from '@webapp/components/Grid';
+import { useActions } from '@webapp/store';
 
 const regionKeys = Object.keys(regions) as Array<keyof typeof regions>;
 
@@ -22,9 +22,10 @@ const options = regionKeys.map((region) => {
 
 export default function RegionSelectScreen() {
   const [region, setRegion] = useState<null | keyof typeof regions>(null);
+  const actions = useActions({ updateRegion });
   const handleSubmit = useCallback(async () => {
     if (region !== null) {
-      await updateRegion(region);
+      await actions.updateRegion(region);
     }
   }, [region]);
   const {

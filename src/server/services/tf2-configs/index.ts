@@ -9,7 +9,6 @@ import {
   BadRequest,
   NotFound,
 } from '@feathersjs/errors';
-
 import gamemodes from '@config/gamemodes';
 import regions from '@config/regions';
 import { isString } from '@utils/string';

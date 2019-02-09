@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-
 import { State } from '@webapp/store';
 
 const getConfig = (state: State) => state.config.item;

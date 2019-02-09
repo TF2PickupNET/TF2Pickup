@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-
 import regions from '@config/regions';
 import gamemodes from '@config/gamemodes';
 import oneOf from '@server/utils/validators/one-of';

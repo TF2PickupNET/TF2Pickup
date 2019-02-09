@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-
 import oneOf from '@server/utils/validators/one-of';
 import maps from '@config/maps';
 import steamId from '@server/utils/validators/steam-id';

@@ -1,15 +1,15 @@
 import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
 import Button from '@atlaskit/button';
-
 import { Row } from '@webapp/components/Grid';
-import pkg from '../../../../../package.json';
 import { getVersion } from '@webapp/store/config/selectors';
 import {
   State,
   useMapState,
 } from '@webapp/store';
 import DocumentTitle from '@webapp/components/DocumentTitle';
+
+import pkg from '../../../../../package.json';
 
 const styles = { container: { minHeight: '100vh' } };
 

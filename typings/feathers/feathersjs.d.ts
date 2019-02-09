@@ -1,4 +1,6 @@
 // eslint-disable-line max-lines
+/* tslint:disable:max-file-line-count */
+
 declare module '@feathersjs/feathers' {
   import { Server } from 'http';
   import { FeathersError } from '@feathersjs/errors';
@@ -6,8 +8,9 @@ declare module '@feathersjs/feathers' {
     Payload,
     SocketMeta,
     Strategy,
+    AuthPayload,
   } from '@feathersjs/authentication';
-  import { ExpressMiddleware } from '@feathersjs/express';
+  import { RequestHandler } from '@feathersjs/express';
   import { SocketConnection } from '@feathersjs/socketio';
   import { Events } from '@typings/SocketEvents';
   import User from '@typings/User';
@@ -110,7 +113,7 @@ declare module '@feathersjs/feathers' {
     id: string | null,
   }
 
-  interface RemoveAfterHookContext<Document> extends CommonHookContext<Document> {
+  interface RemoveAfterHookContext<Document> extends AfterHookContext<Document> {
     method: 'remove',
     id: string | null,
   }
@@ -159,8 +162,7 @@ declare module '@feathersjs/feathers' {
 
   interface Channel {
     join(connection: Connection): Channel,
-    leave(connection: Connection): Channel,
-    leave(fn: (connection: Connection) => boolean): Channel,
+    leave(fn: Connection | ((connection: Connection) => boolean)): Channel,
     filter(fn: (connection: Connection) => boolean): Channel,
     send(data: {}): Channel,
     length: number,
@@ -221,10 +223,7 @@ declare module '@feathersjs/feathers' {
     service(name: 'users'): ServerService<User>,
     service(name: 'pickup-queues'): ServerService<PickupQueue>,
     service(name: 'pickup-players'): ServerService<PickupPlayer>,
-    service(name: 'authentication'): ServerService<{
-      payload: Record<string, string>,
-      accessToken?: string,
-    }>,
+    service(name: 'authentication'): ServerService<AuthPayload>,
     service(name: 'logs'): ServerService<Log>,
   }
 
@@ -261,8 +260,8 @@ declare module '@feathersjs/feathers' {
     configure(cb: (app: ServerApp) => void): ServerApp,
     channels: Channel[],
     use<Document>(path: string, service: ServiceDefinition<Document>): ServerApp,
-    use(...middlewares: ExpressMiddleware[]): ServerApp,
-    use(path: string, ...middlewares: ExpressMiddleware[]): ServerApp,
+    use(...middlewares: RequestHandler[]): ServerApp,
+    use(path: string, ...middlewares: RequestHandler[]): ServerApp,
     hooks(hooks: Hooks<object>): ServerApp,
     channel(name: string): Channel,
     listen(port: number): Server,
@@ -292,6 +291,7 @@ declare module '@feathersjs/feathers' {
         token: string,
         options: { secret: string },
       ): Promise<{ id: string }>,
+      createJWT(payload: Record<string, string>, options: { secret: string }): Promise<string>,
       use<Options extends object>(strategy: Strategy<Options>): void,
     },
   }
@@ -322,7 +322,27 @@ declare module '@feathersjs/feathers' {
     cb: SocketCallback,
   ) => void | Promise<void>;
 
+  /**
+   * Exports for feathers-hooks-common typings.
+   */
+  type HookContext<Doc = object> = CommonHookContext<Doc>;
+  type Hook = <Context extends CommonHookContext<any>>(context: Context) => HookResult<Context>;
+  type Query = Record<string, string>;
+  type Application = ServerApp;
+  interface Paginated<Data> {
+    total: number,
+    limit: number,
+    skip: number,
+    data: Data[],
+  }
+
   export {
+    HookContext,
+    Hook,
+    Application,
+    Query,
+    Paginated,
+
     SocketEventHandler,
     ServerSocket,
     ClientSocket,
@@ -361,18 +381,4 @@ declare module '@feathersjs/feathers' {
   };
 
   export default function create<App>(): App;
-
-  /**
-   * Exports for feathers-hooks-common typings.
-   */
-  export type HookContext<Doc = any> = CommonHookContext<Doc>;
-  export type Hook = (context: any) => HookResult<any>;
-  export type Query = Record<string, string>;
-  export type Application = ServerApp;
-  export interface Paginated<Data> {
-    total: number,
-    limit: number,
-    skip: number,
-    data: Data[],
-  }
 }

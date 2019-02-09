@@ -1,12 +1,12 @@
 import React, { ReactNode } from 'react';
-
-import { useUserId } from '../utils';
 import {
   State,
   useMakeMapState,
-} from '../../../store';
-import { makeGetUserErrorById } from '../../../store/users/selectors';
-import { makeGetProfileErrorById } from '../../../store/user-profiles/selectors';
+} from '@webapp/store';
+import { makeGetUserErrorById } from '@webapp/store/users/selectors';
+import { makeGetProfileErrorById } from '@webapp/store/user-profiles/selectors';
+
+import { useUserId } from '../utils';
 
 interface Props {
   children: ReactNode,
@@ -24,12 +24,11 @@ const makeMapState = () => {
   };
 };
 
-
 function ErrorPage(props: Props) {
   const userId = useUserId();
   const {
     userError,
-    profileError
+    profileError,
   } = useMakeMapState(makeMapState, userId);
   const error = userError || profileError;
 

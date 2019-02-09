@@ -1,13 +1,15 @@
 import React from 'react';
+import {
+  State,
+  useMakeMapState,
+  AsyncStatus,
+} from '@webapp/store';
+import { makeGetUserStatusById } from '@webapp/store/users/selectors';
+import UserItem from '@webapp/components/UserItem';
+import { makeGetProfileStatusById } from '@webapp/store/user-profiles/selectors';
+import { Header as HeaderItem } from '@webapp/components/PageNavigation';
 
-import { useMakeMapState } from '../../../../store/use-store';
-import { State } from '../../../../store';
-import { makeGetUserStatusById } from '../../../../store/users/selectors';
 import { useUserId } from '../../utils';
-import UserItem from '../../../../components/UserItem';
-import { AsyncStatus } from '../../../../store/types';
-import { makeGetProfileStatusById } from '../../../../store/user-profiles/selectors';
-import Header from '../../../../components/PageNavigation/Header';
 
 import Avatar from './Avatar';
 
@@ -23,7 +25,7 @@ const makeMapState = () => {
   };
 };
 
-function ProfileHeader() {
+function Header() {
   const userId = useUserId();
   const {
     hasLoadedUser,
@@ -34,11 +36,11 @@ function ProfileHeader() {
     : <UserItem userId={userId} />;
 
   return (
-    <Header
+    <HeaderItem
       text={text}
       before={Avatar}
     />
   );
 }
 
-export default ProfileHeader;
+export default Header;

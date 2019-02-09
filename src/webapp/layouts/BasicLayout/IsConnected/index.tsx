@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
-
 import { Row } from '@webapp/components/Grid';
 import DocumentTitle from '@webapp/components/DocumentTitle';
 

@@ -12,7 +12,7 @@ function updateVolume(volume: number): AsyncAction {
     try {
       await emitSocketEvent('user-settings:change-volume', { volume });
     } catch (error) {
-      console.error(error);
+      console.warn(error);
     }
   };
 }
@@ -22,7 +22,7 @@ function updateEmojiSet(emojiSet: keyof typeof emojiSets): AsyncAction {
     try {
       await emitSocketEvent('user-settings:change-emoji-set', { emojiSet });
     } catch (error) {
-      console.error(error);
+      console.warn(error);
     }
   };
 }
@@ -32,7 +32,7 @@ function updateAnnouncer(announcer: keyof typeof announcers): AsyncAction {
     try {
       await emitSocketEvent('user-settings:change-announcer', { announcer });
     } catch (error) {
-      console.error(error);
+      console.warn(error);
     }
   };
 }
@@ -58,6 +58,7 @@ function fetchSettings(): AsyncAction {
         payload: { settings },
       });
     } catch (error) {
+      console.warn('Error while fetching settings');
       dispatch({
         type: SettingsActionTypes.FETCH_FAILED,
         payload: { error },

@@ -1,4 +1,6 @@
-import { AsyncItem, AsyncStatus } from '@webapp/store/types';
+import {
+  AsyncItem, AsyncStatus,
+} from '@webapp/store/types';
 
 function createTypedAsyncItem<Item>() {
   return {

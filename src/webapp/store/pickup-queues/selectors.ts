@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-
 import gamemodes from '@config/gamemodes';
 import { State } from '@webapp/store';
 
@@ -25,12 +24,12 @@ const makeGetPickupQueueError = () => createSelector(
 
 const makeGetPickupQueueState = () => createSelector(
   makeGetPickupQueue(),
-  queue => queue === null ? null : queue.state,
+  queue => (queue === null ? null : queue.state),
 );
 
 const makeGetPickupQueueReadyUpEnd = () => createSelector(
   makeGetPickupQueue(),
-  queue => queue === null ? null : queue.readyUpEnd,
+  queue => (queue === null ? null : queue.readyUpEnd),
 );
 
 export {

@@ -3,9 +3,9 @@ import {
   ServerApp,
 } from '@feathersjs/feathers';
 import debug from 'debug';
+import Configuration from '@typings/Configuration';
 
 import pkg from '../../../../package.json';
-import Configuration from '@typings/Configuration';
 
 const log = debug('TF2Pickup:configuration');
 

@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-
 import { getCurrentUserId } from '@webapp/store/user-id/selectors';
 import UserProfile from '@typings/UserProfile';
 import {

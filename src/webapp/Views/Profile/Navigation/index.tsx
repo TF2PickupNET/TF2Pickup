@@ -3,11 +3,13 @@ import {
   Item,
   MenuSection,
 } from '@atlaskit/navigation-next';
-
 import PageNavigation from '@webapp/components/PageNavigation';
 import regions from '@config/regions';
 import { makeGetUserRegion } from '@webapp/store/users/selectors';
-import { State, useMakeMapState } from '@webapp/store';
+import {
+  State, useMakeMapState,
+} from '@webapp/store';
+
 import { useUserId } from '../utils';
 
 import Header from './Header';

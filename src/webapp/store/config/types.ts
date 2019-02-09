@@ -13,7 +13,7 @@ enum ConfigActionTypes {
 }
 
 type Actions =
-  | Action<typeof ConfigActionTypes.START_FETCH, null>
+  | Action<typeof ConfigActionTypes.START_FETCH>
   | Action<typeof ConfigActionTypes.FETCHED, { config: Config }>
   | Action<typeof ConfigActionTypes.FETCH_ERROR, { error: Error }>;
 

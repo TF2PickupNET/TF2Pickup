@@ -14,11 +14,14 @@ interface Props extends ItemProps {
 }
 
 const itemStyles = (style: Record<string, any>) => {
-  style.itemBase.marginBottom = '8px';
-
-  return style;
+  return {
+    ...style,
+    itemBase: {
+      ...style.itemBase,
+      marginBottom: '8px',
+    },
+  };
 };
-
 
 function Item(props: Props) {
   const {
@@ -42,8 +45,8 @@ function Item(props: Props) {
     <ItemComp
       {...otherProps}
       isSelected={location.pathname === path}
-      onClick={handleClick}
       styles={itemStyles}
+      onClick={handleClick}
     />
   );
 }

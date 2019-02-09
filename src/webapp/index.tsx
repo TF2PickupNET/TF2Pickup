@@ -25,7 +25,7 @@ function App() {
   );
 }
 
-const appContainer = document.getElementById('app');
+const appContainer = document.querySelector('#app');
 
 if (appContainer) {
   ReactDOM.render((

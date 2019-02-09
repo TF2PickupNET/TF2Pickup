@@ -3,7 +3,6 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
-
 import NotFound from '@webapp/Views/NotFound';
 
 import Rules from './Rules';

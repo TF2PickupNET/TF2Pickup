@@ -2,7 +2,7 @@ import React from 'react';
 import { Item } from '@webapp/components/PageNavigation';
 import gamemodes from '@config/gamemodes';
 import {
-  State,
+  State as AppState,
   useMakeMapState,
 } from '@webapp/store';
 import { makeGetPickupQueueState } from '@webapp/store/pickup-queues/selectors';
@@ -13,12 +13,12 @@ import { useGamemode } from '../utils';
 const makeMapState = () => {
   const getPickupQueueStatus = makeGetPickupQueueState();
 
-  return (state: State, gamemode: keyof typeof gamemodes) => {
+  return (state: AppState, gamemode: keyof typeof gamemodes) => {
     return { state: getPickupQueueStatus(state, gamemode) };
   };
 };
 
-function Status() {
+function State() {
   const gamemode = useGamemode();
   const { state } = useMakeMapState(makeMapState, gamemode);
 
@@ -37,4 +37,4 @@ function Status() {
   );
 }
 
-export default Status;
+export default State;

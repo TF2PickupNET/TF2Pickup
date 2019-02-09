@@ -4,7 +4,7 @@ import config from 'config';
 import auth from '@feathersjs/authentication';
 
 import {
-  createJWT,
+  handleSuccessfulAuthentication,
   setUrlCookie,
 } from '../middlewares';
 
@@ -29,7 +29,7 @@ export default function steam() {
       .use(
         '/auth/steam/callback',
         auth.express.authenticate('steam'),
-        createJWT,
+        handleSuccessfulAuthentication,
       );
   };
 }

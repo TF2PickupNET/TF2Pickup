@@ -1,5 +1,4 @@
 import debug from 'debug';
-
 import UserProfile from '@typings/UserProfile';
 import steamApi from '@server/utils/steam-api';
 

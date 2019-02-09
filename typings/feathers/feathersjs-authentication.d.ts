@@ -6,14 +6,14 @@ declare module '@feathersjs/authentication' {
     CommonHookContext,
   } from '@feathersjs/feathers';
   import {
-    ExpressMiddleware,
-    ExpressRequest,
-    ExpressResponse,
+    Request,
+    Response,
+    RequestHandler,
   } from '@feathersjs/express';
   import { SocketConnection } from '@feathersjs/socketio';
 
   interface Strategy<Options extends object> {
-    authenticate(req: ExpressRequest, options: object): void,
+    authenticate(req: Request, options: object): void,
   }
 
   interface AuthenticationOptions {
@@ -30,7 +30,7 @@ declare module '@feathersjs/authentication' {
       secure?: boolean,
     },
     jwt?: {
-      header?: { [key: string]: string },
+      header?: Record<string, string>,
       audience?: string,
       subject?: string,
       issuer?: string,
@@ -47,8 +47,8 @@ declare module '@feathersjs/authentication' {
 
   interface RestMeta {
     provider: 'rest',
-    req: ExpressRequest,
-    res: ExpressResponse,
+    req: Request,
+    res: Response,
   }
 
   type Meta = RestMeta | SocketMeta;
@@ -63,9 +63,11 @@ declare module '@feathersjs/authentication' {
   interface Authentication {
     (opts?: AuthenticationOptions): (app: ServerApp) => void,
     hooks: {
-      authenticate(strategies: string[]): (context: CommonHookContext<any>) => HookResult<any>,
+      authenticate(strategies: string[]): <Doc, Context extends CommonHookContext<Doc>>(
+        context: Context
+      ) => HookResult<Context>,
     },
-    express: { authenticate(strategy: string): ExpressMiddleware },
+    express: { authenticate(strategy: string): RequestHandler },
   }
 
   export {

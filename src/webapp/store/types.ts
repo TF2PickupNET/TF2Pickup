@@ -15,7 +15,6 @@ type AsyncAction = (
   getState: () => State,
 ) => Promise<void> | void;
 
-
 const enum AsyncStatus {
   NOT_STARTED = 'NOT-STARTED',
   LOADING = 'LOADING',

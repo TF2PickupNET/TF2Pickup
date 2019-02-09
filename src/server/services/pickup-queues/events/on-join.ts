@@ -26,7 +26,9 @@ export default function onJoin(
       return cb(new NotAuthenticated('You aren\'t authenticated!'));
     }
 
-    const { region, id: userId } = user;
+    const {
+      region, id: userId,
+    } = user;
     const queueId = `${region}-${data.gamemode}`;
 
     try {
@@ -37,7 +39,7 @@ export default function onJoin(
         await players.patch(player.id, { class: data.class });
       } else {
         await players.create({
-          id: mongoose.Types.ObjectId().toHexString(),
+          id: new mongoose.Types.ObjectId().toHexString(),
           userId,
           map: null,
           isReady: queue.state === 'ready-up',

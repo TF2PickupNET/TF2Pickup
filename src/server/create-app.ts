@@ -31,7 +31,6 @@ export default async function createApp() {
   app
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
-    // @ts-ignore
     .use(cookie())
     .hooks(hooks)
     .configure(express.rest())

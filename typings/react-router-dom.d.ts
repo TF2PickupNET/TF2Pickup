@@ -2,6 +2,7 @@ declare module 'react-router-dom' {
   import {
     ComponentType,
     ReactNode,
+    Component,
   } from 'react';
 
   const BrowserRouter: ComponentType<{

@@ -1,9 +1,7 @@
 import mongoose from 'mongoose';
 import SteamID from 'steamid';
-
 import steamId from '@server/utils/validators/steam-id';
 import url from '@server/utils/validators/url';
-
 import {
   ETF2LDivisions,
   OZFortressDivisions,

@@ -1,24 +1,25 @@
 declare module '@feathersjs/authentication-jwt' {
-  import { ExpressRequest } from '@feathersjs/express';
+  import { Request } from '@feathersjs/express';
   import { ServerApp } from '@feathersjs/feathers';
+  import User from '@typings/User';
 
   interface Payload { id: string }
 
   type DoneFunction = (
     err: Error | null,
-    user: import('../../src/typings/User').default | null,
+    user: User | null,
     payload?: Payload,
   ) => void;
 
   interface VerifierType {
     app: ServerApp,
-    verfiy(req: ExpressRequest, payload: Payload, done: DoneFunction): void,
+    verfiy(req: Request, payload: Payload, done: DoneFunction): void,
   }
 
   class Verifier implements VerifierType {
     public app: ServerApp;
 
-    public verfiy(req: ExpressRequest, payload: Payload, done: DoneFunction): void;
+    public verfiy(req: Request, payload: Payload, done: DoneFunction): void;
   }
 
   interface Options { Verifier: new () => VerifierType }

@@ -5,7 +5,6 @@ import SettingsIcon from '@atlaskit/icon/glyph/settings';
 import SignOutIcon from '@atlaskit/icon/glyph/sign-out';
 import InfoIcon from '@atlaskit/icon/glyph/editor/info';
 import { RouterHistory } from 'react-router-dom';
-
 import gamemodes from '@config/gamemodes';
 import { Keys } from '@utils/types';
 import store from '@webapp/store';
@@ -27,7 +26,6 @@ function useMapItems(items: ItemProps[], history: RouterHistory): ItemProps[] {
     };
   }), [items, history]);
 }
-
 
 const gamemodeKeys = Object.keys(gamemodes) as Keys<typeof gamemodes>;
 

@@ -31,13 +31,10 @@ async function getPlayersForPickup(app: ServerApp, queue: PickupQueue) {
       })),
     );
 
-    return players.reduce((accu, classPlayers) => {
-      return [
-        ...accu,
-        ...classPlayers,
-      ];
-    }, []);
-
+    return players.reduce((accu, classPlayers) => [
+      ...accu,
+      ...classPlayers,
+    ], []);
   } catch (error) {
     log('Error while getting players for new pickup', {
       error,

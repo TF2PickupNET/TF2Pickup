@@ -2,7 +2,6 @@ import { Hooks } from '@feathersjs/feathers';
 import PickupQueue from '@typings/PickupQueue';
 import { PickupStates } from '@config/pickup-states';
 import gamemodes from '@config/gamemodes';
-
 import handleReadyUpTimeout from '@server/services/pickup-queues/hooks/handle-ready-up-timeout';
 import handleCreatePickup from '@server/services/pickup-queues/hooks/handle-create-pickup';
 import checkForUpdateState from '@server/services/pickup-queues/check-for-update-state';

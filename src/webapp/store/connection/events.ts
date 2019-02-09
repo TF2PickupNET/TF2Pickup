@@ -1,9 +1,17 @@
 import { socket } from '@webapp/app';
 
-function handleConnect() {}
-function handleReconnect() {}
-function handleDisconnect() {}
-function handleConnectError() {}
+function handleConnect() {
+  // TODO: Implement
+}
+function handleReconnect() {
+  // TODO: Implement
+}
+function handleDisconnect() {
+  // TODO: Implement
+}
+function handleConnectError() {
+  // TODO: Implement
+}
 
 function events() {
   return () => {

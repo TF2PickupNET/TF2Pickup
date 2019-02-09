@@ -42,7 +42,6 @@ export default {
 
   error: {
     all(hook: ErrorHookContext<object>) {
-      console.log(hook, hook.error.code);
       if (hook.error.code === 404) {
         return hook;
       }

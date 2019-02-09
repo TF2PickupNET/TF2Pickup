@@ -1,3 +1,5 @@
+/* tslint:disable:max-classes-per-file */
+
 declare module '@feathersjs/errors' {
   class FeathersError<Code extends number, Name extends string> {
     public message: string;

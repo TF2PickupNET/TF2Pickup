@@ -33,7 +33,7 @@ function fetchUser(userId: string | null): AsyncAction {
         payload: { user },
       });
     } catch (error) {
-      console.error('Error while fetching a user', userId, error.message);
+      console.warn('Error while fetching a user', userId, error.message);
 
       dispatch({
         type: UsersActionTypes.FETCH_FAILED,
@@ -46,58 +46,70 @@ function fetchUser(userId: string | null): AsyncAction {
   };
 }
 
-async function updateRegion(region: keyof typeof regions) {
-  try {
-    await emitSocketEvent('users:change-region', { region });
-  } catch (error) {
-    console.log(error);
-  }
+function updateRegion(region: keyof typeof regions): AsyncAction {
+  return async () => {
+    try {
+      await emitSocketEvent('users:change-region', { region });
+    } catch (error) {
+      console.warn(error);
+    }
+  };
 }
 
-async function setName(name: string) {
-  try {
-    await emitSocketEvent('users:set-name', { name });
-  } catch (error) {
-    console.log(error);
-  }
+function setName(name: string): AsyncAction {
+  return async () => {
+    try {
+      await emitSocketEvent('users:set-name', { name });
+    } catch (error) {
+      console.warn(error);
+    }
+  };
 }
 
-async function acceptRules() {
-  try {
-    await emitSocketEvent('users:accept-rules', null);
-  } catch (error) {
-    console.log(error);
-  }
+function acceptRules(): AsyncAction {
+  return async () => {
+    try {
+      await emitSocketEvent('users:accept-rules', null);
+    } catch (error) {
+      console.warn(error);
+    }
+  };
 }
 
-async function completeSignUp() {
-  try {
-    await emitSocketEvent('users:complete-sign-up', null);
-  } catch (error) {
-    console.log(error);
-  }
+function completeSignUp(): AsyncAction {
+  return async () => {
+    try {
+      await emitSocketEvent('users:complete-sign-up', null);
+    } catch (error) {
+      console.warn(error);
+    }
+  };
 }
 
-async function addRole(userId: string, role: keyof typeof roles) {
-  try {
-    await emitSocketEvent('users:add-role', {
-      role,
-      userId,
-    });
-  } catch (error) {
-    console.log(error);
-  }
+function addRole(userId: string, role: keyof typeof roles): AsyncAction {
+  return async () => {
+    try {
+      await emitSocketEvent('users:add-role', {
+        role,
+        userId,
+      });
+    } catch (error) {
+      console.warn(error);
+    }
+  };
 }
 
-async function removeRole(userId: string, role: keyof typeof roles) {
-  try {
-    await emitSocketEvent('users:remove-role', {
-      role,
-      userId,
-    });
-  } catch (error) {
-    console.log(error);
-  }
+function removeRole(userId: string, role: keyof typeof roles): AsyncAction {
+  return async () => {
+    try {
+      await emitSocketEvent('users:remove-role', {
+        role,
+        userId,
+      });
+    } catch (error) {
+      console.warn(error);
+    }
+  };
 }
 
 export {

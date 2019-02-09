@@ -1,7 +1,7 @@
+// eslint-disable-next-line filenames/match-exported
 import axios from 'axios';
 import debug from 'debug';
 import config from 'config';
-
 import UserProfile, {
   OZFortressProfile,
   OZFortressDivisions,
@@ -61,7 +61,7 @@ export default async function fetchOZFortressData(
         ...profile.ozfortress,
         id: data.user.id,
         name: data.user.name,
-        ...getDivisions(data.user.rosters)
+        ...getDivisions(data.user.rosters),
       },
     };
   } catch (error) {

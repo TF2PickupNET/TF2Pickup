@@ -5,6 +5,8 @@ import {
   defaultProps,
 } from '.';
 
+// tslint:disable:max-line-length
+
 function Demoman(props: IconProps) {
   return (
     <svg

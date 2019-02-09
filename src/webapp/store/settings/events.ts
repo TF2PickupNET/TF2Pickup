@@ -1,5 +1,4 @@
 import { ClientApp } from '@feathersjs/feathers';
-
 import store from '@webapp/store';
 import { getCurrentUserId } from '@webapp/store/user-id/selectors';
 

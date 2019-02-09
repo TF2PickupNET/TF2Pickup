@@ -1,7 +1,6 @@
 import { ServerApp } from '@feathersjs/feathers';
 import service from 'feathers-mongoose';
 import debug from 'debug';
-
 import UserProfile from '@typings/UserProfile';
 
 import Model from './Model';

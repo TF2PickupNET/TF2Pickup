@@ -1,6 +1,8 @@
+import { Keys } from '@utils/types';
+import { isNumber } from '@utils/number';
+
 import classes from './classes';
 import configTypes from './config-types';
-import { Keys } from '@utils/types';
 
 const SECOND = 1000;
 
@@ -92,10 +94,15 @@ function getMinPlayersForGamemode(gamemode: keyof typeof gamemodes) {
   const { slots } = gamemodes[gamemode];
   const classNames = Object.keys(slots) as Keys<typeof slots>;
 
-  // @ts-ignore
-  return classNames.reduce((accu, className) => accu + slots[className], 0);
+  return classNames.reduce((accu, className) => {
+    const num = slots[className];
+
+    return isNumber(num) ? accu + num : accu;
+  }, 0);
 }
 
-export { Gamemode, getMinPlayersForGamemode };
+export {
+  Gamemode, getMinPlayersForGamemode,
+};
 
 export default gamemodes;

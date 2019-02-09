@@ -1,6 +1,5 @@
 import debug from 'debug';
 import { addDays } from 'date-fns';
-
 import UserProfile, { WithBans } from '@typings/UserProfile';
 import steamApi from '@server/utils/steam-api';
 

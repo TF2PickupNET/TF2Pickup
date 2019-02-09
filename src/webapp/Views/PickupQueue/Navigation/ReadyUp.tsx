@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+} from 'react';
 import Button, { ButtonGroup } from '@atlaskit/button';
 import { differenceInMilliseconds } from 'date-fns';
 import gamemodes from '@config/gamemodes';
-import { State, useMakeMapState } from '@webapp/store';
+import {
+  State,
+  useMakeMapState,
+} from '@webapp/store';
 import {
   makeGetPickupQueueState,
   makeGetPickupQueueReadyUpEnd,
@@ -22,9 +28,9 @@ const makeMapState = () => {
   };
 };
 
-function useProgressState(gamemode: keyof typeof gamemodes,isReady: boolean, end: number) {
+function useProgressState(gamemode: keyof typeof gamemodes, isReady: boolean, end: number) {
   const [progress, setProgress] = useState(0);
-  const {readyUpTime} = gamemodes[gamemode];
+  const { readyUpTime } = gamemodes[gamemode];
   const updateProgress = () => {
     requestAnimationFrame(() => {
       const diff = differenceInMilliseconds(Date.now(), end);
@@ -48,7 +54,7 @@ function useProgressState(gamemode: keyof typeof gamemodes,isReady: boolean, end
   return progress;
 }
 
-function Status() {
+function ReadyUp() {
   const gamemode = useGamemode();
   const { state } = useMakeMapState(makeMapState, gamemode);
   const isReadyUpState = state === 'ready-up';
@@ -74,4 +80,4 @@ function Status() {
   );
 }
 
-export default Status;
+export default ReadyUp;

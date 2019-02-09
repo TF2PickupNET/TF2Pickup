@@ -4,7 +4,9 @@ import {
 } from '@atlaskit/navigation-next';
 import React, { useCallback } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
-import { useLocation, useHistory } from '@webapp/utils/use-router';
+import {
+  useLocation, useHistory,
+} from '@webapp/utils/use-router';
 import { isString } from '@utils/string';
 
 const styles = { container: { paddingBottom: 16 } };
@@ -38,8 +40,8 @@ function Header(props: Props) {
         <div className={`${className} ${classes.container}`}>
           <ContainerHeader
             {...headerProps}
-            onClick={handleClick}
             isSelected={location.pathname === path}
+            onClick={handleClick}
           />
         </div>
       )}

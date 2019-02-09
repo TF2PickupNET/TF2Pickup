@@ -8,7 +8,10 @@ import shallowEqual from 'shallowequal';
 
 import store, { State } from '.';
 
-function useMapState<MappedState, Args extends any[]>(
+type ValidArgs = Array<number | string | null>;
+
+// Enforce easy types here
+function useMapState<MappedState, Args extends ValidArgs>(
   mapState: (state: State, ...args: Args) => MappedState,
   ...args: Args
 ): MappedState {
@@ -46,7 +49,8 @@ function useMapState<MappedState, Args extends any[]>(
   return mappedState;
 }
 
-function useMakeMapState<MappedState, Args extends any[]>(
+// Enforce easy types here
+function useMakeMapState<MappedState, Args extends ValidArgs>(
   makeMapState: () => (state: State, ...args: Args) => MappedState,
   ...args: Args
 ): MappedState {

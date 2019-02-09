@@ -1,5 +1,4 @@
 import debug from 'debug';
-
 import UserProfile, { SteamProfile } from '@typings/UserProfile';
 import steamApi from '@server/utils/steam-api';
 
@@ -7,7 +6,6 @@ import fetchFriends from './fetch-friends';
 import fetchVacBans from './fetch-vac-bans';
 
 const log = debug('TF2Pickup:userId-user-profiles:steam:data');
-
 
 async function fetchSteamData(
   profile: UserProfile,

@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-
 import NotificationRequester from '@webapp/components/NotificationRequester';
 import SoundFix from '@webapp/components/SoundFix';
 import SteamLoginToken from '@webapp/components/SteamLoginToken';

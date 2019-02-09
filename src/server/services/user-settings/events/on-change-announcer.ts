@@ -8,7 +8,6 @@ import {
   ServerApp,
 } from '@feathersjs/feathers';
 import debug from 'debug';
-
 import announcers from '@config/announcers';
 
 const log = debug('TF2Pickup:user-settings:events:change-announcer');

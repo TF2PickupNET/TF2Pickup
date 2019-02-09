@@ -1,5 +1,7 @@
 import React from 'react';
-import { Separator, GroupHeading } from '@atlaskit/navigation-next';
+import {
+  Separator, GroupHeading,
+} from '@atlaskit/navigation-next';
 import ShortcutIcon from '@atlaskit/icon/glyph/shortcut';
 
 import { Item } from '../../../../components/PageNavigation';

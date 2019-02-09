@@ -22,10 +22,10 @@ function reducePropsToState(propsList: Props[]): State {
   return propsList.reduce((accu, props) => {
     return {
       title: accu.title !== null && isString(props.title) ? props.title : accu.title,
-      onChange: props.onChange ? [
+      onChange: [
         ...accu.onChange,
-        props.onChange,
-      ] : accu.onChange,
+        (title: string | null) => props.onChange && props.onChange(title),
+      ],
     };
   }, defaultState);
 }

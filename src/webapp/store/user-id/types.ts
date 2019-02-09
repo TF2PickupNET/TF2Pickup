@@ -14,5 +14,5 @@ type Actions =
 export {
   State,
   Actions,
-  UserIdActionTypes
+  UserIdActionTypes,
 };

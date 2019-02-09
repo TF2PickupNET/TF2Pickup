@@ -5,6 +5,8 @@ import {
   defaultProps,
 } from '.';
 
+/* tslint:disable:max-line-length */
+
 function Pyro(props: IconProps) {
   return (
     <svg

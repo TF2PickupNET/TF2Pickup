@@ -1,7 +1,9 @@
 import { createTypedAsyncItem } from '@webapp/store/utils';
 import Configuration from '@typings/Configuration';
 
-import { Actions, State, ConfigActionTypes } from './types';
+import {
+  Actions, State, ConfigActionTypes,
+} from './types';
 
 const asyncItem = createTypedAsyncItem<Configuration>();
 const defaultState = asyncItem.createNotStartedState();

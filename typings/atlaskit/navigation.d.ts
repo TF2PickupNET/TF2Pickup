@@ -41,7 +41,7 @@ declare module '@atlaskit/navigation-next' {
   }
 
   interface GroupHeadingProps {
-    after?: ComponentType<{}>,
+    after?: ComponentType,
     children: ReactNode,
   }
 
@@ -49,7 +49,7 @@ declare module '@atlaskit/navigation-next' {
     href?: string,
     id?: string,
     index?: number,
-    icon: ComponentType<any> | (() => string),
+    icon: ComponentType<{ label: string }> | (() => string),
     isSelected?: boolean,
     label?: string,
     onClick?: MouseEventHandler,
@@ -72,7 +72,7 @@ declare module '@atlaskit/navigation-next' {
   const HeaderSection: ComponentType<SectionProps>;
   const Item: ComponentType<ItemProps>;
   const ContainerHeader: ComponentType<ItemProps>;
-  const Separator: ComponentType<{}>;
+  const Separator: ComponentType;
   const GroupHeading: ComponentType<GroupHeadingProps>;
   const GlobalNav: ComponentType<GlobalNavProps>;
   const ItemAvatar: ComponentType<ItemAvatar>;

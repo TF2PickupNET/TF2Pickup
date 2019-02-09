@@ -1,4 +1,6 @@
-import { NotAuthenticated, BadRequest } from '@feathersjs/errors';
+import {
+  NotAuthenticated, BadRequest,
+} from '@feathersjs/errors';
 import {
   ServerApp,
   SocketEventHandler,
@@ -11,7 +13,7 @@ import checkForUpdateState from '@server/services/pickup-queues/check-for-update
 
 const log = debug('TF2Pickup:pickup-queues:events:on-select-map');
 
-export default function onSelectMap(
+export default function onReadyUp(
   app: ServerApp,
   connection: SocketConnection,
 ): SocketEventHandler<'pickup-queues:ready-up'> {
@@ -26,7 +28,9 @@ export default function onSelectMap(
       return cb(new NotAuthenticated('You aren\'t authenticated!'));
     }
 
-    const { region, id: userId } = user;
+    const {
+      region, id: userId,
+    } = user;
     const queueId = `${region}-${data.gamemode}`;
 
     try {

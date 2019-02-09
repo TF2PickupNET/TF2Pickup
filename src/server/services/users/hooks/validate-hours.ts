@@ -5,7 +5,6 @@ import {
 import config from 'config';
 import { CreateBeforeHookContext } from '@feathersjs/feathers';
 import debug from 'debug';
-
 import User from '@typings/User';
 import steamApi from '@server/utils/steam-api';
 
@@ -37,7 +36,7 @@ export default async function validateHours(hook: CreateBeforeHookContext<User>)
     const { data } = await steamApi.get('IPlayerService/GetOwnedGames/v0001/', {
       params: {
         steamid: hook.data.id,
-        include_played_free_games: 1, // eslint-disable-line camelcase, typescript/camelcase
+        include_played_free_games: 1, // eslint-disable-line camelcase, @typescript-eslint/camelcase
       },
     });
     const games = data.response && data.response.games ? data.response.games : [];

@@ -1,8 +1,9 @@
-import React, { ReactNode, useEffect, useCallback } from 'react';
+import React, {
+  ReactNode, useEffect, useCallback,
+} from 'react';
 import withStyles, { WithStyles } from 'react-jss';
 import Button from '@atlaskit/button';
 import Spinner from '@atlaskit/spinner';
-
 import { Row } from '@webapp/components/Grid';
 import DocumentTitle from '@webapp/components/DocumentTitle';
 import { fetchConfig } from '@webapp/store/config/actions';

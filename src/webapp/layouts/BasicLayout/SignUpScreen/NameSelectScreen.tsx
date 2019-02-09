@@ -6,7 +6,6 @@ import React, {
 import { RadioGroup } from '@atlaskit/radio';
 import Button from '@atlaskit/button';
 import { createSelector } from 'reselect';
-
 import { getCurrentUserId } from '@webapp/store/user-id/selectors';
 import { makeGetUserRegion } from '@webapp/store/users/selectors';
 import useAsync from '@webapp/utils/use-async';
@@ -15,7 +14,7 @@ import { makeGetNames } from '@webapp/store/user-profiles/selectors';
 import { Row } from '@webapp/components/Grid';
 import {
   State,
-  useMakeMapState,
+  useMakeMapState, useActions,
 } from '@webapp/store';
 
 const makeMapState = () => {
@@ -43,13 +42,14 @@ const makeMapState = () => {
 
 function useSelectName() {
   const [selectedName, setSelectedName] = useState<null | string>(null);
+  const actions = useActions({ setName });
   const {
     names,
     region,
   } = useMakeMapState(makeMapState);
   const onSubmit = useCallback(async () => {
     if (selectedName !== null) {
-      await setName(selectedName);
+      await actions.setName(selectedName);
     }
   }, [selectedName]);
   const {

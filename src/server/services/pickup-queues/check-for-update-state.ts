@@ -2,7 +2,6 @@ import debug from 'debug';
 import { ServerApp } from '@feathersjs/feathers';
 import gamemodes from '@config/gamemodes';
 import { PickupStates } from '@config/pickup-states';
-
 import PickupQueue from '@typings/PickupQueue';
 import hasEnoughPlayers from '@server/services/pickup-queues/utils/has-enough-players';
 

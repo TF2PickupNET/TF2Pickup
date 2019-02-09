@@ -1,5 +1,4 @@
 import { NotAuthenticated } from '@feathersjs/errors';
-
 import app from '@webapp/app';
 import { AsyncAction } from '@webapp/store';
 import { isString } from '@utils/string';

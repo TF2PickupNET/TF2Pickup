@@ -1,7 +1,9 @@
 import { createTypedAsyncItem } from '@webapp/store/utils';
 import UserSettings from '@typings/UserSettings';
 
-import { SettingsActionTypes, Actions, State } from './types';
+import {
+  SettingsActionTypes, Actions, State,
+} from './types';
 
 const asyncItem = createTypedAsyncItem<UserSettings>();
 const defaultState = asyncItem.createNotStartedState();

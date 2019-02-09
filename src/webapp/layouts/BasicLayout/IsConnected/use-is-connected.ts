@@ -2,7 +2,6 @@ import {
   useState,
   useEffect,
 } from 'react';
-
 import { socket } from '@webapp/app';
 
 function useIsConnected() {

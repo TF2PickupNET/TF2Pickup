@@ -4,7 +4,7 @@ import gamemodes from '@config/gamemodes';
 
 import { useGamemode } from '../utils';
 
-import Status from './Status';
+import Status from './State';
 
 function Navigation() {
   const gamemode = useGamemode();

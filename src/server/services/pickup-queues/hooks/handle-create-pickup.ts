@@ -29,8 +29,6 @@ async function handleCreatePickup(app: ServerApp, queueId: string) {
         pickupId: pickup.id,
       })),
     );
-
-
   } catch (error) {
     // TODO: Add logging
     // Reset the queue to a normal state when we get an error here

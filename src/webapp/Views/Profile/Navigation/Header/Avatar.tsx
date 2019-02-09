@@ -3,13 +3,13 @@ import {
   ItemAvatar,
   ItemBeforeAfterProps,
 } from '@atlaskit/navigation-next';
-
 import {
   useMakeMapState,
   State,
 } from '@webapp/store';
 import { makeGetAvatar } from '@webapp/store/user-profiles/selectors';
 import { makeGetUserIsOnline } from '@webapp/store/users/selectors';
+
 import { useUserId } from '../../utils';
 
 const makeMapState = () => {

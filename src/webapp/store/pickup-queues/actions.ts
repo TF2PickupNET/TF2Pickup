@@ -47,6 +47,4 @@ function fetchPickup(gamemode: keyof typeof gamemodes): AsyncAction {
   };
 }
 
-export {
-  fetchPickup,
-};
+export { fetchPickup };

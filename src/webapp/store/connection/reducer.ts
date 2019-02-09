@@ -1,4 +1,6 @@
-import { State, Actions, ConnectionActionTypes } from './types';
+import {
+  State, Actions, ConnectionActionTypes,
+} from './types';
 
 const defaultState: State = {
   isConnected: false,

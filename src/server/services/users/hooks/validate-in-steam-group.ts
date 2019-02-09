@@ -8,7 +8,6 @@ import { CreateBeforeHookContext } from '@feathersjs/feathers';
 import { promisify } from 'util';
 import debug from 'debug';
 import { SteamGroup } from 'steamcommunity';
-
 import User from '@typings/User';
 import steamCommunity from '@server/utils/steam-community';
 

@@ -1,6 +1,6 @@
 declare module 'passport-steam' {
   import { Strategy } from '@feathersjs/authentication';
-  import { ExpressRequest } from '@feathersjs/express';
+  import { Request } from '@feathersjs/express';
 
   interface Options {
     returnURL: string,
@@ -17,6 +17,6 @@ declare module 'passport-steam' {
   export default class SteamStrategy implements Strategy<Options> {
     public constructor(options: Options, callback: Callback);
 
-    public authenticate(req: ExpressRequest, options: object): void;
+    public authenticate(req: Request, options: object): void;
   }
 }

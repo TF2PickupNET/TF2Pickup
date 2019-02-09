@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
-
 import { getCurrentUser } from '@webapp/store/user-id/selectors';
 import {
   Row,

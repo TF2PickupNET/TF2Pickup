@@ -1,7 +1,9 @@
 import { createTypedAsyncItem } from '@webapp/store/utils';
 import UserProfile from '@typings/UserProfile';
 
-import { UserProfileActionTypes, Actions, State } from './types';
+import {
+  UserProfileActionTypes, Actions, State,
+} from './types';
 
 const asyncItem = createTypedAsyncItem<UserProfile>();
 

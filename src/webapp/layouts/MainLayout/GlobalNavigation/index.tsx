@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { GlobalNav } from '@atlaskit/navigation-next';
-
 import { useHistory } from '@webapp/utils/use-router';
 import {
   State,

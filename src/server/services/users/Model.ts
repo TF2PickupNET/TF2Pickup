@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-
 import roles from '@config/roles';
 import steamId from '@server/utils/validators/steam-id';
 import regions from '@config/regions';

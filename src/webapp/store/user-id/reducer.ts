@@ -1,4 +1,6 @@
-import { UserIdActionTypes, State, Actions } from './types';
+import {
+  UserIdActionTypes, State, Actions,
+} from './types';
 
 export default function reducer(state: State | undefined = null, action: Actions): State {
   switch (action.type) {

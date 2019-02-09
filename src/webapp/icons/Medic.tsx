@@ -5,6 +5,8 @@ import {
   defaultProps,
 } from '.';
 
+/* tslint:disable:max-line-length */
+
 function Medic(props: IconProps) {
   return (
     <svg

@@ -2,7 +2,6 @@
 import axios from 'axios';
 import debug from 'debug';
 import { isBefore } from 'date-fns';
-
 import UserProfile, {
   WithBans,
   ETF2LProfile,
@@ -18,7 +17,7 @@ interface Ban {
 interface Player {
   id: string,
   name: string,
-  bans: Ban[],
+  bans: Ban[] | null,
 }
 
 interface Response {

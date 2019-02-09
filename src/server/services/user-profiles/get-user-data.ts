@@ -2,7 +2,6 @@ import {
   isBefore,
   subDays,
 } from 'date-fns';
-
 import UserProfile from '@typings/UserProfile';
 
 import fetchSteamData from './services/steam/fetch-steam-data';

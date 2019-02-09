@@ -6,7 +6,6 @@ import React, {
 import is from 'is_js';
 import Button from '@atlaskit/button';
 import withStyles, { WithStyles } from 'react-jss';
-
 import { Row } from '@webapp/components/Grid';
 import DocumentTitle from '@webapp/components/DocumentTitle';
 

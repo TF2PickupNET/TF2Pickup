@@ -78,7 +78,7 @@ class Queue {
 
       await sleep(duration);
     } catch (error) {
-      console.error('Error while trying to play audio', error);
+      console.warn('Error while trying to play audio', error);
     }
 
     await this.next();
@@ -120,7 +120,7 @@ export default function playSound(
   const url = getUrl(sound, announcer);
 
   if (url === null) {
-    console.log(`Couldn't get sound url for: ${sound} ${announcer}`);
+    console.warn(`Couldn't get sound url for: ${sound} ${announcer}`);
 
     return;
   }

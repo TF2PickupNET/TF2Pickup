@@ -1,14 +1,15 @@
 // eslint-disable-next-line filenames/match-exported
 import axios from 'axios';
 import debug from 'debug';
-
 import gamemodes from '@config/gamemodes';
-import { ETF2LDivisions, WithDivisions } from '@typings/UserProfile';
+import {
+  ETF2LDivisions, WithDivisions,
+} from '@typings/UserProfile';
 import { isNumber } from '@utils/number';
 
 interface Match {
   merced: number,
-  division: { name: string },
+  division: { name: string | null },
   competition: { type: keyof typeof gamemodes | '6on6' | 'Highlander' },
 }
 
@@ -76,7 +77,7 @@ function findHighestDiv(gamemode: keyof typeof gamemodes) {
 const params = {
   // To get all of the matches
   since: 0,
-  // eslint-disable-next-line camelcase, typescript/camelcase
+  // eslint-disable-next-line camelcase, @typescript-eslint/camelcase
   per_page: 100,
 };
 

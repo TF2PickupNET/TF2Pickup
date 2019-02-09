@@ -1,20 +1,23 @@
 import React from 'react';
 import withStyles, { WithStyles } from 'react-jss';
 import Button from '@atlaskit/button';
-
 import { completeSignUp } from '@webapp/store/users/actions';
 import useAsync from '@webapp/utils/use-async';
 import { Row } from '@webapp/components/Grid';
+import { useActions } from '@webapp/store';
 
 const styles = { text: { textAlign: 'center' } };
 
 type Props = WithStyles<typeof styles>;
 
 function FinishScreen(props: Props) {
+  const actions = useActions({ completeSignUp });
   const {
     isLoading,
     run: handleFinishClick,
-  } = useAsync(completeSignUp);
+  } = useAsync(async () => {
+    await actions.completeSignUp();
+  });
 
   return (
     <React.Fragment>

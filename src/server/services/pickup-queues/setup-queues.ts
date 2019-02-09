@@ -1,5 +1,4 @@
 import { ServerApp } from '@feathersjs/feathers';
-
 import gamemodes from '@config/gamemodes';
 import { Keys } from '@utils/types';
 import regions from '@config/regions';

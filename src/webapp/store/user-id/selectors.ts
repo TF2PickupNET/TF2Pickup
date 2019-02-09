@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-
 import { makeGetUserById } from '@webapp/store/users/selectors';
 import { State } from '@webapp/store';
 

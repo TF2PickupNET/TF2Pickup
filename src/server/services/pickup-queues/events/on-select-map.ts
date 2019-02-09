@@ -1,4 +1,6 @@
-import { NotAuthenticated, BadRequest } from '@feathersjs/errors';
+import {
+  NotAuthenticated, BadRequest,
+} from '@feathersjs/errors';
 import {
   ServerApp,
   SocketEventHandler,
@@ -24,7 +26,9 @@ export default function onSelectMap(
       return cb(new NotAuthenticated('You aren\'t authenticated!'));
     }
 
-    const { region, id: userId } = user;
+    const {
+      region, id: userId,
+    } = user;
     const queueId = `${region}-${data.gamemode}`;
 
     try {

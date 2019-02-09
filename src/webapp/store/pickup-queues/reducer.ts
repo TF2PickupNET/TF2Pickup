@@ -3,7 +3,9 @@ import gamemodes from '@config/gamemodes';
 import { createTypedAsyncItem } from '@webapp/store/utils';
 import PickupQueue from '@typings/PickupQueue';
 
-import { State, Actions, PickupQueueActionTypes } from './types';
+import {
+  State, Actions, PickupQueueActionTypes,
+} from './types';
 
 const asyncItem = createTypedAsyncItem<PickupQueue>();
 const defaultState = mapObjectValues(gamemodes, () => asyncItem.createNotStartedState());

@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-
 import announcers from '@config/announcers';
 import emojiSets from '@config/emoji-sets';
 import oneOf from '@server/utils/validators/one-of';

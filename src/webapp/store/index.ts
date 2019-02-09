@@ -12,7 +12,6 @@ import {
   AsyncStatus,
   AsyncItem,
 } from './types';
-
 import reducers, { State } from './reducers';
 import useActions from './use-actions';
 import {
@@ -27,7 +26,7 @@ interface ThunkStore {
   dispatch(action: Actions | AsyncAction): void,
 }
 
-const store = createStore<State, AnyAction , ThunkStore, {}>(
+const store = createStore<State, AnyAction, ThunkStore, {}>(
   reducers,
   process.env.NODE_ENV === 'development'
     ? composeWithDevTools(middlewares)
@@ -37,6 +36,7 @@ const store = createStore<State, AnyAction , ThunkStore, {}>(
 export {
   State,
   AsyncAction,
+  Actions,
   Action,
   AsyncStatus,
   AsyncItem,

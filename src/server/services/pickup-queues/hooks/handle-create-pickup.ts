@@ -5,6 +5,9 @@ import { ServerApp } from '@feathersjs/feathers';
 import resetQueue from '@server/services/pickup-queues/utils/reset-queue';
 import { GeneralError } from '@feathersjs/errors';
 import { PickupQueueStates } from '@config/pickup-queue-states';
+import debug from 'debug';
+
+const log = debug('TF2Pickup:pickup-queues:create-new-pickup');
 
 async function handleCreatePickup(app: ServerApp, queueId: string) {
   const queues = app.service('pickup-queues');
@@ -53,7 +56,7 @@ async function handleCreatePickup(app: ServerApp, queueId: string) {
 
     // Reset the other players and their map picks if the maps have changed
     await Promise.all(
-      otherPlayers.map(player => {
+      otherPlayers.map((player) => {
         if (player.map !== null && maps.includes(player.map)) {
           return player;
         }
@@ -62,7 +65,11 @@ async function handleCreatePickup(app: ServerApp, queueId: string) {
       })
     );
   } catch (error) {
-    // TODO: Add logging
+    log('Error while creating new pickup -> resetting queue', {
+      error,
+      data: { queueId },
+    });
+
     // Reset the queue to a normal state when we get an error here
     await resetQueue(app, queueId);
   }

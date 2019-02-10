@@ -2,7 +2,7 @@ import { ServerApp } from '@feathersjs/feathers';
 import gamemodes from '@config/gamemodes';
 import { Keys } from '@utils/types';
 import regions from '@config/regions';
-import { PickupStates } from '@config/pickup-states';
+import { PickupQueueStates } from '@config/pickup-queue-states';
 
 const gamemodeKeys = Object.keys(gamemodes) as Keys<typeof gamemodes>;
 const regionKeys = Object.keys(regions) as Keys<typeof regions>;
@@ -19,14 +19,14 @@ async function setupQueue(
     await pickupQueues.get(id);
 
     await pickupQueues.patch(id, {
-      state: PickupStates.WaitingForPlayers,
+      state: PickupQueueStates.WaitingForPlayers,
       readyUpEnd: null,
     });
   } catch (error) {
     if (error.code === 404) {
       await pickupQueues.create({
         id,
-        state: PickupStates.WaitingForPlayers,
+        state: PickupQueueStates.WaitingForPlayers,
         // TODO: Generate maps
         maps: ['', '', ''],
         region,

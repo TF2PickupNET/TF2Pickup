@@ -1,6 +1,6 @@
 import PickupQueue from '@typings/PickupQueue';
 import { Forbidden } from '@feathersjs/errors';
-import { PickupStates } from '@config/pickup-states';
+import { PickupQueueStates } from '@config/pickup-queue-states';
 import gamemodes from '@config/gamemodes';
 import { Keys } from '@utils/types';
 import { ServerApp } from '@feathersjs/feathers';
@@ -9,7 +9,7 @@ import debug from 'debug';
 const log = debug('TF2Pickup:pickup-queues:get-players-fpr-pickup');
 
 async function getPlayersForPickup(app: ServerApp, queue: PickupQueue) {
-  if (queue.state !== PickupStates.CreatingPickup) {
+  if (queue.state !== PickupQueueStates.CreatingPickup) {
     throw new Forbidden();
   }
 

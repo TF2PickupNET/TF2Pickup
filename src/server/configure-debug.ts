@@ -20,7 +20,7 @@ interface Logger {
 // eslint-disable-next-line unicorn/no-unsafe-regex
 const LINE_REGEX = /^(TF2Pickup(?::[\w-]+)+) (.+) (\+\d+ms)$/;
 
-function parseLine(message: string, data: Data<{}>): Log | null {
+function parseLine(message: string, data: Data<{}> = {}): Log | null {
   const path = stripAnsi(message)
     .trim()
     .match(LINE_REGEX);
@@ -61,7 +61,10 @@ function createLogger(callback: (log: Log) => void): Logger {
       isString(timestamp) ? data : timestamp,
     );
 
-    const log = parseLine(stripAnsi(message), data);
+    const log = parseLine(
+      stripAnsi(message),
+      isString(timestamp) ? data : timestamp
+    );
 
     if (log !== null) {
       callback(log);

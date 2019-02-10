@@ -1,6 +1,6 @@
 import { ServerApp } from '@feathersjs/feathers';
 import resetPlayers from '@server/services/pickup-queues/utils/reset-players';
-import { PickupStates } from '@config/pickup-states';
+import { PickupQueueStates } from '@config/pickup-queue-states';
 
 async function resetQueue(app: ServerApp, queueId: string) {
   const queues = app.service('pickup-queues');
@@ -8,7 +8,7 @@ async function resetQueue(app: ServerApp, queueId: string) {
   await Promise.all([
     resetPlayers(app, queueId),
     queues.patch(queueId, {
-      state: PickupStates.WaitingForPlayers,
+      state: PickupQueueStates.WaitingForPlayers,
       readyUpEnd: null,
     }),
   ]);

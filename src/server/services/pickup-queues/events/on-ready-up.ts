@@ -8,7 +8,7 @@ import {
 import { SocketConnection } from '@feathersjs/socketio';
 import debug from 'debug';
 import getPlayer from '@server/services/pickup-queues/utils/get-player';
-import { PickupStates } from '@config/pickup-states';
+import { PickupQueueStates } from '@config/pickup-queue-states';
 import checkForUpdateState from '@server/services/pickup-queues/check-for-update-state';
 
 const log = debug('TF2Pickup:pickup-queues:events:on-select-map');
@@ -37,7 +37,7 @@ export default function onReadyUp(
       const queue = await queues.get(queueId);
       const player = await getPlayer(app, queueId, userId);
 
-      if (player === null || queue.state !== PickupStates.ReadyUp) {
+      if (player === null || queue.state !== PickupQueueStates.ReadyUp) {
         return cb(new BadRequest());
       }
 

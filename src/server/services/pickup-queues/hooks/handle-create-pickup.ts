@@ -4,9 +4,11 @@ import sleep from 'sleep-promise';
 import { ServerApp } from '@feathersjs/feathers';
 import resetQueue from '@server/services/pickup-queues/utils/reset-queue';
 import { GeneralError } from '@feathersjs/errors';
+import { PickupQueueStates } from '@config/pickup-queue-states';
 
 async function handleCreatePickup(app: ServerApp, queueId: string) {
   const queues = app.service('pickup-queues');
+  const users = app.service('users');
   const pickupPlayers = app.service('pickup-players');
 
   try {
@@ -28,6 +30,36 @@ async function handleCreatePickup(app: ServerApp, queueId: string) {
         queueId: null,
         pickupId: pickup.id,
       })),
+    );
+
+    // TODO: New maps generation
+    const maps: [string, string, string] = ['', '', ''];
+
+    await queues.patch(queueId, {
+      state: PickupQueueStates.WaitingForPlayers,
+      maps,
+    });
+
+    await Promise.all(
+      players.map(player => users.patch(player.userId, { lastPickup: pickup.id }))
+    );
+
+    const otherPlayers = await pickupPlayers.find({
+      query: {
+        queueId,
+        pickupId: null,
+      },
+    });
+
+    // Reset the other players and their map picks if the maps have changed
+    await Promise.all(
+      otherPlayers.map(player => {
+        if (player.map !== null && maps.includes(player.map)) {
+          return player;
+        }
+
+        return pickupPlayers.patch(player.id, { map: null });
+      })
     );
   } catch (error) {
     // TODO: Add logging

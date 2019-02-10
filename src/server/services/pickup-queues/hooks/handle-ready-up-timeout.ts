@@ -1,6 +1,6 @@
 import { ServerApp } from '@feathersjs/feathers';
 import resetQueue from '@server/services/pickup-queues/utils/reset-queue';
-import { PickupStates } from '@config/pickup-states';
+import { PickupQueueStates } from '@config/pickup-queue-states';
 
 import hasEnoughPlayers from '../utils/has-enough-players';
 
@@ -18,7 +18,7 @@ async function handleReadyUpTimeout(app: ServerApp, id: string) {
 
     if (hasEnough) {
       await queues.patch(id, {
-        state: PickupStates.CreatingPickup,
+        state: PickupQueueStates.CreatingPickup,
         readyUpEnd: null,
       });
     } else {

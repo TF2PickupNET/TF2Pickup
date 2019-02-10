@@ -6,7 +6,7 @@ import {
   useMakeMapState,
 } from '@webapp/store';
 import { makeGetPickupQueueState } from '@webapp/store/pickup-queues/selectors';
-import pickupStates from '@config/pickup-states';
+import pickupStates from '@config/pickup-queue-states';
 
 import { useGamemode } from '../utils';
 

@@ -3,19 +3,21 @@ interface PickupState {
 }
 
 enum PickupStates {
-  WaitingForPlayers = 'waiting-for-players',
-  ReadyUp = 'ready-up',
-  CreatingPickup = 'creating-pickup',
   ReservingServer = 'reserving-server',
   ConfiguringServer = 'configuring-server',
+  WaitingForReadyUp = 'waiting-for-ready-up',
+  Running = 'running',
+  Finished = 'finished',
+  Aborted = 'aborted',
 }
 
 const pickupStates: Record<PickupStates, PickupState> = {
-  [PickupStates.WaitingForPlayers]: { display: 'Waiting for players' },
-  [PickupStates.ReadyUp]: { display: 'Ready up' },
-  [PickupStates.CreatingPickup]: { display: 'Creating Pickup' },
-  [PickupStates.ReservingServer]: { display: 'Reserving server' },
+  [PickupStates.ReservingServer]: { display: 'Reserving a server' },
   [PickupStates.ConfiguringServer]: { display: 'Configuring server' },
+  [PickupStates.WaitingForReadyUp]: { display: 'Waiting for ready-up' },
+  [PickupStates.Running]: { display: 'Running' },
+  [PickupStates.Finished]: { display: 'Finished' },
+  [PickupStates.Aborted]: { display: 'Aborted' },
 };
 
 export {

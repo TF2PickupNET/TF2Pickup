@@ -1,6 +1,6 @@
 import { Hooks } from '@feathersjs/feathers';
 import PickupQueue from '@typings/PickupQueue';
-import { PickupStates } from '@config/pickup-states';
+import { PickupQueueStates } from '@config/pickup-queue-states';
 import gamemodes from '@config/gamemodes';
 import handleReadyUpTimeout from '@server/services/pickup-queues/hooks/handle-ready-up-timeout';
 import handleCreatePickup from '@server/services/pickup-queues/hooks/handle-create-pickup';
@@ -21,12 +21,12 @@ const hooks: Hooks<PickupQueue> = {
       switch (state) {
         // If we just went into waiting for players state,
         // Check if we can start another ready up phase
-        case PickupStates.WaitingForPlayers: {
+        case PickupQueueStates.WaitingForPlayers: {
           checkForUpdateState(hook.app, hook.result);
           break;
         }
         // We just entered ready-up state
-        case PickupStates.ReadyUp: {
+        case PickupQueueStates.ReadyUp: {
           if (!readyUpTimeouts.has(id)) {
             // Create a new timeout to reset the queue after the ready up time
             const timeoutId = setTimeout(() => {
@@ -41,7 +41,7 @@ const hooks: Hooks<PickupQueue> = {
           break;
         }
         // We have enough players for reserving a server
-        case PickupStates.CreatingPickup: {
+        case PickupQueueStates.CreatingPickup: {
           // Clear the timeout and remove the TimerID from the map
           clearTimeout(readyUpTimeouts.get(id));
           readyUpTimeouts.delete(id);
@@ -49,12 +49,6 @@ const hooks: Hooks<PickupQueue> = {
           // Create a new pickup
           handleCreatePickup(hook.app, id);
 
-          break;
-        }
-        case PickupStates.ReservingServer: {
-          break;
-        }
-        case PickupStates.ConfiguringServer: {
           break;
         }
         default: break;

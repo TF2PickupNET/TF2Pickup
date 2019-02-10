@@ -1,7 +1,7 @@
 import debug from 'debug';
 import { ServerApp } from '@feathersjs/feathers';
 import gamemodes from '@config/gamemodes';
-import { PickupStates } from '@config/pickup-states';
+import { PickupQueueStates } from '@config/pickup-queue-states';
 import PickupQueue from '@typings/PickupQueue';
 import hasEnoughPlayers from '@server/services/pickup-queues/utils/has-enough-players';
 
@@ -26,7 +26,7 @@ async function checkForUpdateState(
 
         if (hasEnough) {
           await queues.patch(queue.id, {
-            state: PickupStates.ReadyUp,
+            state: PickupQueueStates.ReadyUp,
             readyUpEnd: Date.now() + readyUpTime,
           });
         }
@@ -44,7 +44,7 @@ async function checkForUpdateState(
 
         if (hasEnough) {
           await queues.patch(queue.id, {
-            state: PickupStates.CreatingPickup,
+            state: PickupQueueStates.CreatingPickup,
             readyUpEnd: null,
           });
         }

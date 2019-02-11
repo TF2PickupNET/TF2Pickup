@@ -1,5 +1,13 @@
-import React, { useEffect, useCallback, useRef } from 'react';
-import { useMakeMapState, State, useActions } from '@webapp/store';
+import React, {
+  useEffect,
+  useCallback,
+  useRef,
+} from 'react';
+import {
+  useMakeMapState,
+  State,
+  useActions,
+} from '@webapp/store';
 import {
   showNotification,
   removeNotification,
@@ -9,19 +17,21 @@ import {
 import { makeGetNotificationById } from '@webapp/store/notifications/selectors';
 import { NotificationState } from '@webapp/store/notifications/types';
 
-function makeMapState() {
+import Notification from './Notification';
+
+const makeMapState = () => {
   const getNotificationById = makeGetNotificationById();
 
   return (state: State, id: number) => {
     return { notification: getNotificationById(state, id) };
   };
-}
+};
 
 interface OwnProps {
   id: number,
 }
 
-function Notification(props: OwnProps) {
+function NotificationContainer(props: OwnProps) {
   const { notification } = useMakeMapState(makeMapState, props.id);
   const actions = useActions({
     showNotification,
@@ -76,12 +86,13 @@ function Notification(props: OwnProps) {
   }
 
   return (
-    <span
+    <Notification
+      type={notification.type}
+      state={notification.state}
+      message={notification.message}
       onAnimationEnd={handleAnimationEnd}
-    >
-      {notification.message}
-    </span>
+    />
   );
 }
 
-export default Notification;
+export default NotificationContainer;

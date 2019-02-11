@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import NotificationRequester from '@webapp/components/NotificationRequester';
 import SoundFix from '@webapp/components/SoundFix';
 import SteamLoginToken from '@webapp/components/SteamLoginToken';
+import Notifications from '@webapp/components/Notifications';
 
 import Page from './Page';
 
@@ -15,6 +16,8 @@ function BasicLayout(props: Props) {
       <SoundFix />
 
       <NotificationRequester />
+
+      <Notifications />
 
       <SteamLoginToken>
         <Page>

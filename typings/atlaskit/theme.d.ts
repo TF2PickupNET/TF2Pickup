@@ -6,6 +6,12 @@ declare module '@atlaskit/theme' {
   type Styles = (style: Style) => Style;
 
   interface Colors {
+    R300: string,
+    Y300: string,
+    G300: string,
+    G400: string,
+    B300: string,
+    B400: string,
     B500: string,
     N10: string,
     N20: string,

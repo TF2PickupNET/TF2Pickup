@@ -3,7 +3,7 @@ import { GlobalItemProps } from '@atlaskit/navigation-next';
 import SignInIcon from '@atlaskit/icon/glyph/sign-in';
 import SettingsIcon from '@atlaskit/icon/glyph/settings';
 import SignOutIcon from '@atlaskit/icon/glyph/sign-out';
-import InfoIcon from '@atlaskit/icon/glyph/editor/info';
+import InfoIcon from '@atlaskit/icon/glyph/info';
 import { RouterHistory } from 'react-router-dom';
 import gamemodes from '@config/gamemodes';
 import { Keys } from '@utils/types';

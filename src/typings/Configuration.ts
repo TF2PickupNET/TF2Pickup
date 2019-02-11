@@ -1,5 +1,5 @@
 interface Configuration {
-  version: string,
+  readonly version: string,
 }
 
 export default Configuration;

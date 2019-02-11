@@ -1,15 +1,15 @@
 import classes from '@config/classes';
 
 interface PickupPlayer {
-  id: string,
-  userId: string,
-  map: string | null,
-  isReady: boolean,
-  isSubbed: boolean,
-  pickupId: number | null,
-  queueId: string | null,
-  class: keyof typeof classes,
-  joinedOn: number,
+  readonly id: string,
+  readonly userId: string,
+  readonly map: string | null,
+  readonly isReady: boolean,
+  readonly isSubbed: boolean,
+  readonly pickupId: number | null,
+  readonly queueId: string | null,
+  readonly class: keyof typeof classes,
+  readonly joinedOn: number,
 }
 
 export default PickupPlayer;

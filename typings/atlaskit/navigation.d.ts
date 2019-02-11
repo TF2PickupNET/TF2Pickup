@@ -5,6 +5,7 @@ declare module '@atlaskit/navigation-next' {
     ReactNode,
   } from 'react';
   import { AvatarProps } from '@atlaskit/avatar';
+  import { Styles } from '@atlaskit/theme';
 
   interface ItemBeforeAfterProps {
     isActive?: boolean,
@@ -30,7 +31,7 @@ declare module '@atlaskit/navigation-next' {
     target?: string,
     text: ReactNode,
     component?: ComponentType<ItemProps>,
-    styles?(styles: Record<string, object>): Record<string, object>,
+    styles?: Styles,
   }
 
   interface SectionProps {

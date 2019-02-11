@@ -9,25 +9,23 @@ import setupEvents from './setup-events';
 
 const log = debug('TF2Pickup:user-profiles');
 
-export default function userProfiles() {
-  return (app: ServerApp) => {
-    log('Setting up user-profiles service');
+export default function userProfiles(app: ServerApp) {
+  log('Setting up user-profiles service');
 
-    app.use('/user-profiles', service({
-      Model,
-      id: 'id',
-    }));
+  app.use('/user-profiles', service({
+    Model,
+    id: 'id',
+  }));
 
-    app
-      .configure(setupEvents)
-      .service('user-profiles')
-      .hooks(hooks)
-      // Publish the events only to the userId that owns the document
-      .publish(
-        'patched',
-        (data: UserProfile) => app
-          .channel('authenticated')
-          .filter(connection => connection.user.id === data.id),
-      );
-  };
+  app
+    .configure(setupEvents)
+    .service('user-profiles')
+    .hooks(hooks)
+    // Publish the events only to the userId that owns the document
+    .publish(
+      'patched',
+      (data: UserProfile) => app
+        .channel('authenticated')
+        .filter(connection => connection.user.id === data.id),
+    );
 }

@@ -2,10 +2,10 @@ import emojiSets from '../config/emoji-sets';
 import announcers from '../config/announcers';
 
 interface UserSettings {
-  id: string,
-  announcer: keyof typeof announcers,
-  volume: number,
-  emojiSet: keyof typeof emojiSets,
+  readonly id: string,
+  readonly announcer: keyof typeof announcers,
+  readonly volume: number,
+  readonly emojiSet: keyof typeof emojiSets,
 }
 
 export default UserSettings;

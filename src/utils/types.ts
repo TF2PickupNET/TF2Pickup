@@ -1,3 +1,10 @@
 type Keys<Obj extends object> = Array<keyof Obj>;
 
-export { Keys };
+type Immutable<Obj> = {
+  [Key in keyof Obj]: Obj[Key]
+};
+
+export {
+  Keys,
+  Immutable,
+};

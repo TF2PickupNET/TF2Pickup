@@ -8,19 +8,17 @@ import events from './events';
 
 const log = debug('TF2Pickup:users');
 
-export default function users() {
-  return (app: ServerApp) => {
-    log('Setting up users service');
+export default function users(app: ServerApp) {
+  log('Setting up users service');
 
-    app.use('/users', service({
-      Model,
-      id: 'id',
-    }));
+  app.use('/users', service({
+    Model,
+    id: 'id',
+  }));
 
-    app
-      .configure(events)
-      .service('users')
-      .hooks(hooks)
-      .publish('patched', () => app.channel('authenticated'));
-  };
+  app
+    .configure(events)
+    .service('users')
+    .hooks(hooks)
+    .publish('patched', () => app.channel('authenticated'));
 }

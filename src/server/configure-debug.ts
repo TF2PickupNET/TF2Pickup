@@ -66,9 +66,11 @@ function createLogger(callback: (log: Log) => void): Logger {
       isString(timestamp) ? data : timestamp
     );
 
-    if (log !== null) {
-      callback(log);
+    if (log === null) {
+      return;
     }
+
+    callback(log);
   };
 }
 

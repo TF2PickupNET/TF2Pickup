@@ -17,15 +17,13 @@ class ConfigurationService implements ServiceDefinition<Configuration> {
   }
 }
 
-export default function configuration() {
-  return (app: ServerApp) => {
-    log('Setting up configuration service');
+export default function configuration(app: ServerApp) {
+  log('Setting up configuration service');
 
-    /**
-     * Simple service for fetching some useful information about the server.
-     *
-     * This returns whether or not the server runs in beta mode and which version it's currently.
-     */
-    app.use('/configuration', new ConfigurationService());
-  };
+  /**
+   * Simple service for fetching some useful information about the server.
+   *
+   * This returns whether or not the server runs in beta mode and which version it's currently.
+   */
+  app.use('/configuration', new ConfigurationService());
 }

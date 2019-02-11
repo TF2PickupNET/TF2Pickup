@@ -27,7 +27,7 @@ async function hasEnoughPlayers(
             pickupId: null,
             queueId: queue.id,
             class: className,
-            // TODO: Make sure this is the correct sorting, the players should be sorted
+            // TODO: Make sure this is the correct sorting
             $sort: { joinedOn: 1 },
           },
         });

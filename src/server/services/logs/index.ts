@@ -6,13 +6,11 @@ import Model from './Model';
 
 const log = debug('TF2Pickup:logs');
 
-export default function logs() {
-  return (app: ServerApp) => {
-    log('Setting up logs service');
+export default function logs(app: ServerApp) {
+  log('Setting up logs service');
 
-    app.use('/logs', service({
-      Model,
-      id: 'id',
-    }));
-  };
+  app.use('/logs', service({
+    Model,
+    id: 'id',
+  }));
 }

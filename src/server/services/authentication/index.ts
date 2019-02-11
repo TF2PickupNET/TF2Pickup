@@ -24,15 +24,13 @@ const hooks: Hooks<AuthPayload> = { before: { create: auth.hooks.authenticate(['
 
 export { options };
 
-export default function authentication() {
-  return (app: ServerApp) => {
-    log('Setting up authentication service');
+export default function authentication(app: ServerApp) {
+  log('Setting up authentication service');
 
-    app
-      .configure(auth(options))
-      .configure(jwt({ Verifier: JWTVerifier }))
-      .configure(steam())
-      .service('authentication')
-      .hooks(hooks);
-  };
+  app
+    .configure(auth(options))
+    .configure(jwt({ Verifier: JWTVerifier }))
+    .configure(steam())
+    .service('authentication')
+    .hooks(hooks);
 }

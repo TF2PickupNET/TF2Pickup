@@ -65,15 +65,13 @@ class TF2ConfigsService implements ServiceDefinition<TF2Config> {
 
 export { Config };
 
-export default function tf2Configs() {
-  return (app: ServerApp) => {
-    log('Setting up tf2-configs service');
+export default function tf2Configs(app: ServerApp) {
+  log('Setting up tf2-configs service');
 
-    /**
-     * Simple service for fetching some useful information about the server.
-     *
-     * This returns whether or not the server runs in beta mode and which version it's currently.
-     */
-    app.use('/tf2-configs', new TF2ConfigsService());
-  };
+  /**
+   * Simple service for fetching some useful information about the server.
+   *
+   * This returns whether or not the server runs in beta mode and which version it's currently.
+   */
+  app.use('/tf2-configs', new TF2ConfigsService());
 }

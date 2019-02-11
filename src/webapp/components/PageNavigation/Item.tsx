@@ -8,12 +8,13 @@ import {
   useHistory,
 } from '@webapp/utils/use-router';
 import { isString } from '@utils/string';
+import { Styles } from '@atlaskit/theme';
 
 interface Props extends ItemProps {
   path?: string,
 }
 
-const itemStyles = (style: Record<string, any>) => {
+const itemStyles: Styles = (style) => {
   return {
     ...style,
     itemBase: {

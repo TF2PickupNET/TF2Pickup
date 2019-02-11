@@ -9,22 +9,20 @@ import hooks from './hooks';
 
 const log = debug('TF2Pickup:pickup-queues');
 
-export default function pickupQueues() {
-  return (app: ServerApp) => {
-    log('Setting up pickup queues');
+export default function pickupQueues(app: ServerApp) {
+  log('Setting up pickup queues');
 
-    app.use('/pickup-queues', service({
-      id: 'id',
-      Model,
-    }));
+  app.use('/pickup-queues', service({
+    id: 'id',
+    Model,
+  }));
 
-    app
-      .configure(setupQueues)
-      .configure(events);
+  app
+    .configure(setupQueues)
+    .configure(events);
 
-    app
-      .service('pickup-queues')
-      .hooks(hooks)
-      .publish('patched', queue => app.channel(`region:${queue.region}`));
-  };
+  app
+    .service('pickup-queues')
+    .hooks(hooks)
+    .publish('patched', queue => app.channel(`region:${queue.region}`));
 }

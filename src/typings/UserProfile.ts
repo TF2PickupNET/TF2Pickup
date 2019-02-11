@@ -15,33 +15,33 @@ enum OZFortressDivisions {
 }
 
 interface Profile {
-  id: string,
-  name: string,
+  readonly id: string,
+  readonly name: string,
 }
 
 interface WithDivisions<Divs> {
-  div6v6: keyof Divs,
-  div9v9: keyof Divs,
+  readonly div6v6: keyof Divs,
+  readonly div9v9: keyof Divs,
 }
 
 interface WithBans {
-  isBanned: boolean,
-  bannedUntil: number | null,
+  readonly isBanned: boolean,
+  readonly bannedUntil: number | null,
 }
 
 interface SteamProfile extends Profile, WithBans {
-  customUrl: string | null,
-  friends: string[],
-  avatar: {
-    small: string,
-    medium: string,
-    large: string,
+  readonly customUrl: string | null,
+  readonly friends: string[],
+  readonly avatar: {
+    readonly small: string,
+    readonly medium: string,
+    readonly large: string,
   },
 }
 
 interface TwitchProfile extends Profile {
-  streaming: boolean,
-  viewers: number | null,
+  readonly streaming: boolean,
+  readonly viewers: number | null,
 }
 
 interface ETF2LProfile extends Profile, WithBans, WithDivisions<typeof ETF2LDivisions> {}
@@ -49,12 +49,12 @@ interface ETF2LProfile extends Profile, WithBans, WithDivisions<typeof ETF2LDivi
 interface OZFortressProfile extends Profile, WithDivisions<typeof OZFortressDivisions> {}
 
 interface UserProfile {
-  id: string,
-  lastUpdate: number,
-  steam: SteamProfile,
-  etf2l?: ETF2LProfile,
-  twitch?: TwitchProfile,
-  ozfortress?: OZFortressProfile,
+  readonly id: string,
+  readonly lastUpdate: number,
+  readonly steam: SteamProfile,
+  readonly etf2l?: ETF2LProfile,
+  readonly twitch?: TwitchProfile,
+  readonly ozfortress?: OZFortressProfile,
 }
 
 export {

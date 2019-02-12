@@ -12,7 +12,7 @@ const getFirstThreeNotificationIds = createSelector(
 
 const makeGetNotificationById = () => createSelector(
   getNotifications,
-  (_, id: number) => id,
+  (_: State, id: number) => id,
   (notifications, id) => notifications.find(notification => notification.id === id) || null,
 );
 

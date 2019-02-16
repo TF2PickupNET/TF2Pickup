@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { GlobalNav } from '@atlaskit/navigation-next';
-import { useHistory } from '@webapp/utils/use-router';
 import {
   State,
   useMapState,
@@ -19,14 +18,13 @@ const mapState = (state: State) => {
 
 function GlobalNavigation() {
   const { isLoggedIn } = useMapState(mapState);
-  const history = useHistory();
   const primaryItems = useMemo(getPrimaryItems, []);
   const secondaryItems = useMemo(() => getSecondaryItems(isLoggedIn), [isLoggedIn]);
 
   return (
     <GlobalNav
-      primaryItems={useMapItems(primaryItems, history)}
-      secondaryItems={useMapItems(secondaryItems, history)}
+      primaryItems={useMapItems(primaryItems)}
+      secondaryItems={useMapItems(secondaryItems)}
     />
   );
 }

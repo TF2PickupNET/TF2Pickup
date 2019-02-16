@@ -4,9 +4,9 @@ import {
   ItemProps,
 } from '@atlaskit/navigation-next';
 import {
-  useLocation,
-  useHistory,
-} from '@webapp/utils/use-router';
+  Location,
+  navigate,
+} from '@reach/router';
 import { isString } from '@utils/string';
 import { Styles } from '@atlaskit/theme';
 
@@ -30,11 +30,9 @@ function Item(props: Props) {
     onClick,
     ...otherProps
   } = props;
-  const location = useLocation();
-  const history = useHistory();
   const handleClick = useCallback((ev) => {
     if (isString(path)) {
-      history.push(path);
+      navigate(path);
     }
 
     if (onClick) {
@@ -43,12 +41,16 @@ function Item(props: Props) {
   }, []);
 
   return (
-    <ItemComp
-      {...otherProps}
-      isSelected={location.pathname === path}
-      styles={itemStyles}
-      onClick={handleClick}
-    />
+    <Location>
+      {({ location }) => (
+        <ItemComp
+          {...otherProps}
+          isSelected={location.pathname === path}
+          styles={itemStyles}
+          onClick={handleClick}
+        />
+      )}
+    </Location>
   );
 }
 

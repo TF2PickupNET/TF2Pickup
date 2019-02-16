@@ -35,7 +35,9 @@ const settings = [
   EmojiSetting,
 ];
 
-type Props = WithStyles<typeof styles>;
+interface Props extends WithStyles<typeof styles> {
+  path: string,
+}
 
 function Settings(props: Props) {
   return (

@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  Switch,
-  Route,
-} from 'react-router-dom';
+  Router,
+  Redirect,
+} from '@reach/router';
 
-import { Keys } from '../../utils/types';
-import gamemodes from '../../config/gamemodes';
+import { Keys } from '@utils/types';
+import gamemodes from '@config/gamemodes';
 
 import Profile from './Profile';
 import IndexRedirect from './IndexRedirect';
@@ -13,60 +13,55 @@ import NotFound from './NotFound';
 import Info from './Info';
 import Settings from './Settings';
 import PickupQueue from './PickupQueue';
-import PickupRedirect from './PickupRedirect';
+import About from '@webapp/Views/About';
+import Rules from '@webapp/Views/Rules';
+import ProfileRedirect from '@webapp/Views/ProfileRedirect';
 
 const gamemodeKeys = Object.keys(gamemodes) as Keys<typeof gamemodes>;
-
-const routes = [
-  {
-    path: ['/profile', '/profile/:userId'],
-    component: Profile,
-  },
-  {
-    path: gamemodeKeys.map(gamemode => `/${gamemode}`),
-    component: PickupQueue,
-  },
-  {
-    path: gamemodeKeys
-      .map(gamemode => gamemodes[gamemode].aliases.map(alias => `/${alias}`))
-      .reduce((paths, aliasPaths) => [
-        ...paths,
-        ...aliasPaths,
-      ], []),
-    component: PickupRedirect,
-  },
-  {
-    path: '/',
-    component: IndexRedirect,
-    exact: true,
-    strict: true,
-  },
-  {
-    path: '/info',
-    component: Info,
-  },
-  {
-    path: '/settings',
-    component: Settings,
-    strict: true,
-    exact: true,
-  },
-  {
-    path: '*',
-    component: NotFound,
-  },
-];
+const gamemodeAliases = gamemodeKeys
+  .map(gamemode => gamemodes[gamemode].aliases.map(alias => {
+    return {
+      path: `/${alias}`,
+      to: `/${gamemode}`,
+    };
+  }))
+  .reduce((paths, aliasPaths) => [
+    ...paths,
+    ...aliasPaths,
+  ], []);
 
 function Views() {
   return (
-    <Switch>
-      {routes.map(route => (
-        <Route
-          key={Array.isArray(route.path) ? route.path[0] : route.path}
-          {...route}
+    <Router>
+      <IndexRedirect path="/" />
+
+      <React.Fragment path="/profile">
+        <ProfileRedirect path="/" />
+
+        <Profile path="/:userId" userId="" />
+      </React.Fragment>
+
+      {gamemodeKeys.map(gamemode => (
+        <PickupQueue
+          path={`/${gamemode}`}
+          gamemode={gamemode}
         />
       ))}
-    </Switch>
+
+      {gamemodeAliases.map(alias => (
+        <Redirect {...alias} />
+      ))}
+
+      <Info path="/info">
+        <About path="/" />
+
+        <Rules path="/rules" />
+      </Info>
+
+      <Settings path="/settings" />
+
+      <NotFound default />
+    </Router>
   );
 }
 

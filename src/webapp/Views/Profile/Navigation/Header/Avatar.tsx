@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   ItemAvatar,
   ItemBeforeAfterProps,
@@ -9,8 +9,7 @@ import {
 } from '@webapp/store';
 import { makeGetAvatar } from '@webapp/store/user-profiles/selectors';
 import { makeGetUserIsOnline } from '@webapp/store/users/selectors';
-
-import { useUserId } from '../../utils';
+import { UserIdContext } from '@webapp/Views/Profile';
 
 const makeMapState = () => {
   const getAvatar = makeGetAvatar('large');
@@ -25,7 +24,7 @@ const makeMapState = () => {
 };
 
 function Avatar(props: ItemBeforeAfterProps) {
-  const userId = useUserId();
+  const userId = useContext(UserIdContext);
   const {
     avatar,
     isOnline,

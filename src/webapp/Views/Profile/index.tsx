@@ -1,45 +1,27 @@
 import React, { useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
 
-import { getCurrentUserId } from '../../store/user-id/selectors';
-import { useMapState } from '../../store/use-store';
-import { State } from '../../store';
-import RequireLogin from '../../components/RequireLogin';
 import { fetchUser } from '../../store/users/actions';
 import { fetchProfile } from '../../store/user-profiles/actions';
 
-import { useUserId } from './utils';
 import Navigation from './Navigation';
 
-const mapState = (state: State) => {
-  return { currentUserId: getCurrentUserId(state) };
-};
+interface Props {
+  userId: string,
+  path: string,
+}
 
-function Profile() {
-  const userId = useUserId();
-  const { currentUserId } = useMapState(mapState);
+export const UserIdContext = React.createContext('');
 
+function Profile(props: Props) {
   useEffect(() => {
-    if (userId !== null) {
-      fetchUser(userId);
-      fetchProfile(userId);
-    }
-  }, [userId]);
-
-  if (userId === null) {
-    return (
-      <RequireLogin>
-        {currentUserId !== null && (
-          <Redirect to={`/profile/${currentUserId}`} />
-        )}
-      </RequireLogin>
-    );
-  }
+    fetchUser(props.userId);
+    fetchProfile(props.userId);
+  }, [props.userId]);
 
   return (
-    <React.Fragment>
+    <UserIdContext.Provider value={props.userId}>
       <Navigation />
-    </React.Fragment>
+    </UserIdContext.Provider>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, {
   useState,
-  useEffect,
+  useEffect, useContext,
 } from 'react';
 import Button, { ButtonGroup } from '@atlaskit/button';
 import { differenceInMilliseconds } from 'date-fns';
@@ -13,8 +13,7 @@ import {
   makeGetPickupQueueState,
   makeGetPickupQueueReadyUpEnd,
 } from '@webapp/store/pickup-queues/selectors';
-
-import { useGamemode } from '../utils';
+import { GamemodeContext } from '@webapp/Views/PickupQueue';
 
 const makeMapState = () => {
   const getPickupQueueStatus = makeGetPickupQueueState();
@@ -55,7 +54,7 @@ function useProgressState(gamemode: keyof typeof gamemodes, isReady: boolean, en
 }
 
 function ReadyUp() {
-  const gamemode = useGamemode();
+  const gamemode = useContext(GamemodeContext);
   const { state } = useMakeMapState(makeMapState, gamemode);
   const isReadyUpState = state === 'ready-up';
   const progress = useProgressState(gamemode, isReadyUpState, 0);

@@ -7,6 +7,8 @@ import { fetchSettings } from '@webapp/store/settings/actions';
 import { fetchProfile } from '@webapp/store/user-profiles/actions';
 
 import { UserIdActionTypes } from './types';
+import { createNotification } from '@webapp/store/notifications/actions';
+import { NotificationType } from '@webapp/store/notifications/types';
 
 function logoutUser(): AsyncAction {
   return async (dispatch) => {
@@ -49,6 +51,14 @@ function loginUser(): AsyncAction {
         dispatch(fetchSettings()),
         dispatch(fetchProfile(id)),
       ]);
+
+      dispatch(
+        createNotification(
+          NotificationType.SUCCESS,
+          'Logged in',
+          100 * 1000,
+        ),
+      );
 
       return null;
     } catch (error) {

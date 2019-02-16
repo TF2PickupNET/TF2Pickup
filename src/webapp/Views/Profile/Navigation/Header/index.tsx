@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   State,
   useMakeMapState,
@@ -8,8 +8,7 @@ import { makeGetUserStatusById } from '@webapp/store/users/selectors';
 import UserItem from '@webapp/components/UserItem';
 import { makeGetProfileStatusById } from '@webapp/store/user-profiles/selectors';
 import { Header as HeaderItem } from '@webapp/components/PageNavigation';
-
-import { useUserId } from '../../utils';
+import { UserIdContext } from '@webapp/Views/Profile';
 
 import Avatar from './Avatar';
 
@@ -26,7 +25,7 @@ const makeMapState = () => {
 };
 
 function Header() {
-  const userId = useUserId();
+  const userId = useContext(UserIdContext);
   const {
     hasLoadedUser,
     hasLoadedProfile,

@@ -1,6 +1,5 @@
-import { Redirect } from 'react-router-dom';
+import { Redirect, Location } from '@reach/router';
 import React, { ReactNode } from 'react';
-import { useLocation } from '@webapp/utils/use-router';
 import { isString } from '@utils/string';
 
 interface Props {
@@ -8,28 +7,32 @@ interface Props {
 }
 
 function SteamLoginToken(props: Props) {
-  const location = useLocation();
-  const query = new URLSearchParams(location.search);
-  const token = query.get('token');
-
-  if (isString(token)) {
-    window.localStorage.setItem('feathers-jwt', token);
-    query.delete('token');
-
-    return (
-      <Redirect
-        to={{
-          ...location,
-          search: query.toString(),
-        }}
-      />
-    );
-  }
-
   return (
-    <React.Fragment>
-      {props.children}
-    </React.Fragment>
+    <Location>
+      {({ location }) => {
+        const url = new URL(location.href);
+        const query = new URLSearchParams(url.search);
+        const token = query.get('token');
+
+        if (isString(token)) {
+          window.localStorage.setItem('feathers-jwt', token);
+          query.delete('token');
+
+          url.search = query.toString();
+
+          return (
+            <Redirect to={url.toString()} />
+          );
+        }
+
+        return (
+          <React.Fragment>
+            {props.children}
+          </React.Fragment>
+        );
+
+      }}
+    </Location>
   );
 }
 

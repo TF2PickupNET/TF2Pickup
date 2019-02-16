@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
-  Separator, GroupHeading,
+  Separator,
+  GroupHeading,
 } from '@atlaskit/navigation-next';
 import ShortcutIcon from '@atlaskit/icon/glyph/shortcut';
-
-import { Item } from '../../../../components/PageNavigation';
-import { makeGetServiceLinks } from '../../../../store/user-profiles/selectors';
-import { State } from '../../../../store';
-import { useUserId } from '../../utils';
-import { useMakeMapState } from '../../../../store/use-store';
+import { Item } from '@webapp/components/PageNavigation';
+import { makeGetServiceLinks } from '@webapp/store/user-profiles/selectors';
+import { useMakeMapState, State } from '@webapp/store';
+import { UserIdContext } from '@webapp/Views/Profile';
 
 const makeMapState = () => {
   const getServiceLinks = makeGetServiceLinks();
@@ -19,7 +18,7 @@ const makeMapState = () => {
 };
 
 function Links() {
-  const userId = useUserId();
+  const userId = useContext(UserIdContext);
   const { links } = useMakeMapState(makeMapState, userId);
 
   return (

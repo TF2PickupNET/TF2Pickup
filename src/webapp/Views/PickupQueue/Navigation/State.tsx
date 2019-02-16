@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Item } from '@webapp/components/PageNavigation';
 import gamemodes from '@config/gamemodes';
 import {
@@ -7,8 +7,7 @@ import {
 } from '@webapp/store';
 import { makeGetPickupQueueState } from '@webapp/store/pickup-queues/selectors';
 import pickupStates from '@config/pickup-queue-states';
-
-import { useGamemode } from '../utils';
+import { GamemodeContext } from '@webapp/Views/PickupQueue';
 
 const makeMapState = () => {
   const getPickupQueueStatus = makeGetPickupQueueState();
@@ -19,7 +18,7 @@ const makeMapState = () => {
 };
 
 function State() {
-  const gamemode = useGamemode();
+  const gamemode = useContext(GamemodeContext);
   const { state } = useMakeMapState(makeMapState, gamemode);
 
   if (state === null) {

@@ -1,12 +1,11 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useContext } from 'react';
 import {
   State,
   useMakeMapState,
 } from '@webapp/store';
 import { makeGetUserErrorById } from '@webapp/store/users/selectors';
 import { makeGetProfileErrorById } from '@webapp/store/user-profiles/selectors';
-
-import { useUserId } from '../utils';
+import { UserIdContext } from '@webapp/Views/Profile';
 
 interface Props {
   children: ReactNode,
@@ -25,7 +24,7 @@ const makeMapState = () => {
 };
 
 function ErrorPage(props: Props) {
-  const userId = useUserId();
+  const userId = useContext(UserIdContext);
   const {
     userError,
     profileError,

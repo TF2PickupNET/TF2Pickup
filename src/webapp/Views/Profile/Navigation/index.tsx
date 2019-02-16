@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Item,
   MenuSection,
@@ -9,8 +9,7 @@ import { makeGetUserRegion } from '@webapp/store/users/selectors';
 import {
   State, useMakeMapState,
 } from '@webapp/store';
-
-import { useUserId } from '../utils';
+import { UserIdContext } from '@webapp/Views/Profile';
 
 import Header from './Header';
 import Links from './Links';
@@ -24,7 +23,7 @@ const makeMapState = () => {
 };
 
 export default function Navigation() {
-  const userId = useUserId();
+  const userId = useContext(UserIdContext);
   const { region } = useMakeMapState(makeMapState, userId);
 
   return (

@@ -1,17 +1,18 @@
 import React, { useCallback } from 'react';
 import Button from '@atlaskit/button';
 import withStyles, { WithStyles } from 'react-jss';
-import { ContextRouter } from 'react-router-dom';
 import { Row } from '@webapp/components/Grid';
 import DocumentTitle from '@webapp/components/DocumentTitle';
 
 const styles = { buttonContainer: { marginTop: 12 } };
 
-type Props = ContextRouter & WithStyles<typeof styles>;
+interface Props extends WithStyles<typeof styles> {
+  default: true,
+}
 
 function NotFound(props: Props) {
   const handleBack = useCallback(() => {
-    props.history.goBack();
+    // Props.history.goBack();
   }, []);
 
   return (

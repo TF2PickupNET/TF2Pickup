@@ -1,19 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PageNavigation, { Header } from '@webapp/components/PageNavigation';
 import gamemodes from '@config/gamemodes';
+import { GamemodeContext } from '@webapp/Views/PickupQueue';
 
-import { useGamemode } from '../utils';
-
-import Status from './State';
+import State from './State';
 
 function Navigation() {
-  const gamemode = useGamemode();
+  const gamemode = useContext(GamemodeContext);
 
   return (
     <PageNavigation>
       <Header text={gamemodes[gamemode].display} />
 
-      <Status />
+      <State />
     </PageNavigation>
   );
 }

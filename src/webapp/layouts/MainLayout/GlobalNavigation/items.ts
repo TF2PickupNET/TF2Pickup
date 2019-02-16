@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
+import { navigate } from "@reach/router"
 import { GlobalItemProps } from '@atlaskit/navigation-next';
 import SignInIcon from '@atlaskit/icon/glyph/sign-in';
 import SettingsIcon from '@atlaskit/icon/glyph/settings';
 import SignOutIcon from '@atlaskit/icon/glyph/sign-out';
 import InfoIcon from '@atlaskit/icon/glyph/info';
-import { RouterHistory } from 'react-router-dom';
 import gamemodes from '@config/gamemodes';
 import { Keys } from '@utils/types';
 import store from '@webapp/store';
@@ -18,10 +18,10 @@ interface ItemProps extends GlobalItemProps {
   path?: string,
 }
 
-function useMapItems(items: ItemProps[], history: RouterHistory): ItemProps[] {
+function useMapItems(items: ItemProps[]): ItemProps[] {
   return useMemo(() => items.map((item) => {
     return {
-      onClick: () => isString(item.path) && history.push(item.path),
+      onClick: () => isString(item.path) && navigate(item.path),
       ...item,
     };
   }), [items, history]);

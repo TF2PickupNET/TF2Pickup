@@ -3,17 +3,11 @@ import regions from '@config/regions';
 import gamemodes from '@config/gamemodes';
 import oneOf from '@server/utils/validators/one-of';
 import pickupStates from '@config/pickup-queue-states';
-import PickupQueue from '@typings/PickupQueue';
 import maps from '@config/maps';
 
 export default mongoose.model('PickupQueue', new mongoose.Schema({
   id: {
     type: String,
-    validate(this: PickupQueue, id: string) {
-      const [region, gamemode] = id.split('-');
-
-      return region === this.region && gamemode === this.gamemode;
-    },
     required: true,
   },
 
@@ -37,7 +31,6 @@ export default mongoose.model('PickupQueue', new mongoose.Schema({
 
   readyUpEnd: {
     type: Number,
-    required: true,
   },
 
   maps: {

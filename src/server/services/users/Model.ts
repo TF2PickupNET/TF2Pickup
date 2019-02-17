@@ -27,7 +27,9 @@ export default mongoose.model('User', new mongoose.Schema({
 
   roles: {
     type: [String],
-    validate: (value: Array<keyof typeof roles>) => value.every(role => roleNames.includes(role)),
+    validate(value: Array<keyof typeof roles>) {
+      return value.every(role => roleNames.includes(role));
+    },
   },
 
   online: Boolean,

@@ -17,12 +17,17 @@ import {
   useActions,
   AsyncStatus,
 } from '@webapp/store';
+import { fetchPickup } from '@webapp/store/pickup-queues/actions';
+import gamemodes from '@config/gamemodes';
+import { Keys } from '@utils/types';
 
 const styles = {
   container: { minHeight: '100vh' },
 
   text: { textAlign: 'center' },
 };
+
+const gamemodeKeys = Object.keys(gamemodes) as Keys<typeof gamemodes>;
 
 interface Props extends WithStyles<typeof styles> {
   children: ReactNode,
@@ -35,14 +40,22 @@ const mapState = (state: State) => {
   };
 };
 
+// TODO: Make this a generic loading component
 function LoadConfig(props: Props) {
   const {
     error,
     hasLoaded,
   } = useMapState(mapState);
-  const actions = useActions({ fetchConfig });
+  const actions = useActions({
+    fetchConfig,
+    fetchPickup,
+  });
   const loadConfig = useCallback(() => {
     actions.fetchConfig();
+
+    gamemodeKeys.forEach((key) => {
+      actions.fetchPickup(key);
+    });
   }, []);
 
   useEffect(() => {

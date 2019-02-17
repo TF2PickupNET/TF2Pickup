@@ -19,7 +19,7 @@ const ProfileRedirect: FunctionComponent<Props> = () => {
   return (
     <RequireLogin>
       {currentUserId !== null && (
-        <Redirect to={`/profile/${currentUserId}`} />
+        <Redirect noThrow to={`/profile/${currentUserId}`} />
       )}
     </RequireLogin>
   );

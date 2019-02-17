@@ -54,6 +54,13 @@ function NotificationContainer(props: OwnProps) {
           }, notification.timeout);
           break;
         }
+        // Clear the timeout when we animate it out from somewhere else
+        case NotificationState.ANIMATING_OUT: {
+          if (timeout.current !== null) {
+            clearTimeout(timeout.current);
+          }
+          break;
+        }
         default: break;
       }
     }
@@ -87,6 +94,7 @@ function NotificationContainer(props: OwnProps) {
 
   return (
     <Notification
+      id={notification.id}
       type={notification.type}
       state={notification.state}
       message={notification.message}

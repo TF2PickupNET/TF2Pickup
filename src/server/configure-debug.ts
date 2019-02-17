@@ -74,23 +74,22 @@ function createLogger(callback: (log: Log) => void): Logger {
   };
 }
 
-// We need this to catch the logs which were emitted before the server was ready
-debug.log = createLogger((log) => {
-  logs.push(log);
-});
+export default function configureDebug(app: ServerApp) {
+  // We need this to catch the logs which were emitted before the server was ready
+  debug.log = createLogger((log) => {
+    logs.push(log);
+  });
 
-export default function configureDebug() {
-  return (app: ServerApp) => {
-    app.on('listening', async () => {
-      debug.log = createLogger((log) => {
-        app.service('logs').create(log);
-      });
 
-      const service = app.service('logs');
-
-      await Promise.all(
-        logs.map(log => service.create(log)),
-      );
+  app.on('listening', async () => {
+    debug.log = createLogger((log) => {
+      app.service('logs').create(log);
     });
-  };
+
+    const service = app.service('logs');
+
+    await Promise.all(
+      logs.map(log => service.create(log)),
+    );
+  });
 }

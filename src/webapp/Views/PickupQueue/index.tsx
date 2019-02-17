@@ -13,7 +13,7 @@ export const GamemodeContext = React.createContext<keyof typeof gamemodes>('6v6'
 function PickupQueue(props: Props) {
   return (
     <GamemodeContext.Provider value={props.gamemode}>
-    <Navigation />
+      <Navigation />
     </GamemodeContext.Provider>
   );
 }

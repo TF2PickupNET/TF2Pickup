@@ -6,6 +6,6 @@ export default function IndexRedirect() {
   const lastGamemode = localStorage.getItem('last-gamemode');
 
   return (
-    <Redirect to={`/${isString(lastGamemode) ? lastGamemode : '6v6'}`} />
+    <Redirect to={`/${isString(lastGamemode) ? lastGamemode : '6v6'}`} noThrow />
   );
 }

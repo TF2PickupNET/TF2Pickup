@@ -23,6 +23,7 @@ const mongoUrl = config.get<string>('server.mongourl');
 
 export default async function createApp() {
   log('Creating Feathers App');
+
   await mongoose.connect(mongoUrl, { useNewUrlParser: true });
   await setupSteam();
 
@@ -39,9 +40,9 @@ export default async function createApp() {
         app.emit('socket-connection', socket);
       });
     }))
-    .configure(services())
-    .configure(configureChannels())
-    .configure(configureDebug());
+    .configure(configureDebug)
+    .configure(services)
+    .configure(configureChannels);
 
   app
     .use(express.notFound({ verbose: true }))
@@ -51,6 +52,8 @@ export default async function createApp() {
       },
       logger: false,
     }));
+
+  log('Created Feathers App');
 
   return app;
 }

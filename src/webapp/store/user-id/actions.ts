@@ -56,7 +56,7 @@ function loginUser(): AsyncAction {
         createNotification(
           NotificationType.SUCCESS,
           'Logged in',
-          100 * 1000,
+          1000,
         ),
       );
 

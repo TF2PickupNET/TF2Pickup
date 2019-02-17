@@ -10,6 +10,7 @@ function styles(theme: Theme) {
   return {
     contentNavigation: {
       width: 256,
+      height: '100vh',
       backgroundColor: theme.pageNavigation.backgroundColor,
     },
   };
@@ -19,7 +20,7 @@ interface Props extends WithStyles<typeof styles> {
   children: ReactNode,
 }
 
-function ContentNavigation(props: Props) {
+function PageNavigation(props: Props) {
   return (
     <Row
       dir="column"
@@ -35,4 +36,4 @@ export {
   Header,
 };
 
-export default withStyles(styles)(ContentNavigation);
+export default withStyles(styles)(PageNavigation);

@@ -16,12 +16,22 @@ import PickupQueue from './PickupQueue';
 import About from '@webapp/Views/About';
 import Rules from '@webapp/Views/Rules';
 import ProfileRedirect from '@webapp/Views/ProfileRedirect';
+import RouteContainer from '@webapp/Views/RouteContainer';
+import withStyles, { WithStyles } from 'react-jss';
+
+const styles = {
+  router: {
+    display: 'flex',
+    flexDirection: 'row',
+    flex: 1,
+  },
+};
 
 const gamemodeKeys = Object.keys(gamemodes) as Keys<typeof gamemodes>;
 const gamemodeAliases = gamemodeKeys
   .map(gamemode => gamemodes[gamemode].aliases.map(alias => {
     return {
-      path: `/${alias}`,
+      from: `/${alias}`,
       to: `/${gamemode}`,
     };
   }))
@@ -30,26 +40,33 @@ const gamemodeAliases = gamemodeKeys
     ...aliasPaths,
   ], []);
 
-function Views() {
+type Props = WithStyles<typeof styles>;
+
+function Views(props: Props) {
   return (
-    <Router>
+    <Router className={props.classes.router}>
       <IndexRedirect path="/" />
 
-      <React.Fragment path="/profile">
+      <RouteContainer path="/profile">
         <ProfileRedirect path="/" />
 
         <Profile path="/:userId" userId="" />
-      </React.Fragment>
+      </RouteContainer>
 
       {gamemodeKeys.map(gamemode => (
         <PickupQueue
+          key={gamemode}
           path={`/${gamemode}`}
           gamemode={gamemode}
         />
       ))}
 
       {gamemodeAliases.map(alias => (
-        <Redirect {...alias} />
+        <Redirect
+          noThrow
+          key={alias.from}
+          {...alias}
+        />
       ))}
 
       <Info path="/info">
@@ -65,4 +82,4 @@ function Views() {
   );
 }
 
-export default Views;
+export default withStyles(styles)(Views);

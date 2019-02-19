@@ -25,6 +25,7 @@ declare module '@atlaskit/navigation-next' {
     index?: number,
     isDragging?: boolean,
     isSelected?: boolean,
+    isActive?: boolean,
     onClick?: MouseEventHandler,
     spacing?: 'compact' | 'default',
     subText?: ReactNode,
@@ -57,6 +58,7 @@ declare module '@atlaskit/navigation-next' {
     size?: 'large' | 'small',
     target?: string,
     tooltip?: ReactNode,
+    styles?: Styles,
   }
 
   interface GlobalNavProps {
@@ -69,6 +71,13 @@ declare module '@atlaskit/navigation-next' {
     itemState: ItemBeforeAfterProps,
   }
 
+  interface GroupProps {
+    children: ReactNode,
+    hasSeparator?: boolean,
+    heading?: ReactNode,
+    id?: string,
+  }
+
   const MenuSection: ComponentType<SectionProps>;
   const HeaderSection: ComponentType<SectionProps>;
   const Item: ComponentType<ItemProps>;
@@ -76,7 +85,9 @@ declare module '@atlaskit/navigation-next' {
   const Separator: ComponentType;
   const GroupHeading: ComponentType<GroupHeadingProps>;
   const GlobalNav: ComponentType<GlobalNavProps>;
+  const GlobalItem: ComponentType<GlobalItemProps>;
   const ItemAvatar: ComponentType<ItemAvatar>;
+  const Group: ComponentType<GroupProps>;
 
   export {
     ItemProps,
@@ -88,6 +99,9 @@ declare module '@atlaskit/navigation-next' {
     HeaderSection,
     GroupHeading,
     GlobalNav,
+    GlobalItem,
+    GroupProps,
+    Group,
     ItemAvatar,
     ItemBeforeAfterProps,
     GlobalItemProps,

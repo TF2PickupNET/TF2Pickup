@@ -9,6 +9,7 @@ const SECOND = 1000;
 interface Gamemode {
   name: string,
   display: string,
+  badgeText: string,
   readyUpTime: number,
   slots: Partial<Record<keyof typeof classes, number>>,
   aliases: string[],
@@ -20,6 +21,7 @@ interface Gamemode {
 const sixvsix: Gamemode = {
   name: '6v6',
   display: '6v6',
+  badgeText: '6v6',
   readyUpTime: 45 * SECOND,
   slots: {
     scout: 4,
@@ -37,6 +39,7 @@ const sixvsix: Gamemode = {
 const hl: Gamemode = {
   name: '9v9',
   display: '9v9',
+  badgeText: '9v9',
   readyUpTime: 45 * SECOND,
   slots: {
     scout: 2,
@@ -61,6 +64,7 @@ const hl: Gamemode = {
 const bball: Gamemode = {
   name: 'bball',
   display: 'BBall',
+  badgeText: 'BB',
   readyUpTime: 30 * SECOND,
   slots: { soldier: 4 },
   aliases: ['bb'],
@@ -72,6 +76,7 @@ const bball: Gamemode = {
 const ultiduo: Gamemode = {
   name: 'ultiduo',
   display: 'Ultiduo',
+  badgeText: 'UD',
   readyUpTime: 30 * SECOND,
   slots: {
     soldier: 2,

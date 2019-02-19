@@ -2,13 +2,14 @@ declare module '@atlaskit/range' {
   import {
     ComponentType,
     FocusEventHandler,
+    ChangeEventHandler,
   } from 'react';
 
   interface RangeProps {
     isDisabled?: boolean,
     max?: number,
     min?: number,
-    onChange(val: number): void,
+    onChange: ChangeEventHandler<HTMLInputElement>,
     step?: number,
     value: number,
     onBlur?: FocusEventHandler,

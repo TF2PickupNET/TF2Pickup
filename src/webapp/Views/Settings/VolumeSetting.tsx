@@ -3,6 +3,7 @@ import React, {
   useState,
   useRef,
   useEffect,
+  ChangeEvent,
 } from 'react';
 import Button from '@atlaskit/button';
 import Range from '@atlaskit/range';
@@ -32,7 +33,9 @@ function VolumeSetting() {
   );
 
   // Update the currently selected volume
-  const handleChange = useCallback((value: number) => {
+  const handleChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(ev.target.value, 10);
+
     setSelectedVolume(value);
 
     // Remove the previous timeout if one exists

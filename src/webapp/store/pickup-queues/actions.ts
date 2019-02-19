@@ -3,13 +3,15 @@ import app from '@webapp/app';
 import { makeGetUserRegion } from '@webapp/store/users/selectors';
 import { getCurrentUserId } from '@webapp/store/user-id/selectors';
 import { AsyncAction, AsyncStatus } from '@webapp/store';
-
-import { makeGetPickupQueueStatus } from './selectors';
-import { PickupQueueActionTypes } from './types';
 import emitSocketEvent from '@webapp/utils/emit-socket-event';
 import { createNotification } from '@webapp/store/notifications/actions';
 import { NotificationType } from '@webapp/store/notifications/types';
 import classes from '@config/classes';
+import { fetchQueuePlayers } from '@webapp/store/pickup-players/actions';
+
+import { makeGetPickupQueueStatus } from './selectors';
+import { PickupQueueActionTypes } from './types';
+import maps from '@config/maps';
 
 const getUserRegion = makeGetUserRegion();
 
@@ -28,14 +30,17 @@ function fetchPickup(gamemode: keyof typeof gamemodes): AsyncAction {
 
     const state = getState();
     const region = getUserRegion(state, getCurrentUserId(state));
+    const queueId = `${region}-${gamemode}`;
 
     try {
-      const queue = await app.service('pickup-queues').get(`${region}-${gamemode}`);
+      const queue = await app.service('pickup-queues').get(queueId);
 
       dispatch({
         type: PickupQueueActionTypes.FETCHED,
         payload: { queue },
       });
+
+      await dispatch(fetchQueuePlayers(queueId));
     } catch (error) {
       dispatch({
         type: PickupQueueActionTypes.FETCH_ERROR,
@@ -106,9 +111,29 @@ function readyUp(gamemode: keyof typeof gamemodes): AsyncAction {
   };
 }
 
+function selectMap(gamemode: keyof typeof gamemodes, map: keyof typeof maps): AsyncAction {
+  return async (dispatch) => {
+    try {
+      await emitSocketEvent('pickup-queues:select-map', {
+        gamemode,
+        map,
+      });
+    } catch (error) {
+      dispatch(
+        createNotification(
+          NotificationType.ERROR,
+          `Couldn't select a map for pickup queue: ${error.message}`,
+          2 * 1000,
+        ),
+      );
+    }
+  };
+}
+
 export {
   fetchPickup,
   joinPickup,
   leavePickup,
   readyUp,
+  selectMap,
 };

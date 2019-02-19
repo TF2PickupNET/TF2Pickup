@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import gamemodes from '@config/gamemodes';
 import { State } from '@webapp/store';
+import maps from '@config/maps';
 
 const getPickupQueues = (state: State) => state.pickupQueues;
 
@@ -32,9 +33,15 @@ const makeGetPickupQueueReadyUpEnd = () => createSelector(
   queue => (queue === null ? null : queue.readyUpEnd),
 );
 
+const makeGetPickupQueueMaps = () => createSelector(
+  makeGetPickupQueue(),
+  (queue): Array<keyof typeof maps> => (queue === null ? [] : queue.maps)
+);
+
 export {
   makeGetPickupQueue,
   makeGetPickupQueueError,
+  makeGetPickupQueueMaps,
   makeGetPickupQueueStatus,
   makeGetPickupQueueState,
   makeGetPickupQueueReadyUpEnd,

@@ -49,6 +49,7 @@ function Navigation() {
           <div className={className}>
             {region !== null && (
               <Item
+                path="#region"
                 text={(
                   <React.Fragment>
                     <b>Region:</b> {regions[region].fullName}
@@ -58,6 +59,7 @@ function Navigation() {
             )}
 
             <Item
+              path="#announcer"
               text={(
                 <React.Fragment>
                   <b>Announcer:</b> {announcers[announcer].display}
@@ -66,6 +68,7 @@ function Navigation() {
             />
 
             <Item
+              path="#volume"
               text={(
                 <React.Fragment>
                   <b>Volume:</b> {volume}%
@@ -74,6 +77,7 @@ function Navigation() {
             />
 
             <Item
+              path="#emoji"
               text={(
                 <React.Fragment>
                   <b>Emoji:</b> {emojiSets[emoji].display}

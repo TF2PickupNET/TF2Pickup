@@ -9,7 +9,7 @@ import {
 } from '@webapp/store';
 import DocumentTitle from '@webapp/components/DocumentTitle';
 
-import pkg from '../../../../../package.json';
+import pkg from '../../../../package.json';
 
 const styles = { container: { minHeight: '100vh' } };
 

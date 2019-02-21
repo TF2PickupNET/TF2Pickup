@@ -11,6 +11,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 function NotFound(props: Props) {
+  console.log(props);
   const handleBack = useCallback(() => {
     // Props.history.goBack();
   }, []);
@@ -22,7 +23,7 @@ function NotFound(props: Props) {
       <Row justify="center">
         <h2>Not Found</h2>
         <div>
-          We couldn&apos;t find what you are looking for.
+          We couldn't find what you are looking for.
         </div>
 
         <Row

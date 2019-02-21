@@ -1,16 +1,16 @@
 import React, { ReactNode } from 'react';
+import { Row } from '@webapp/components/Grid';
+import GlobalNavigation from '@webapp/components/GlobalNavigation';
 import NotificationRequester from '@webapp/components/NotificationRequester';
-import SoundFix from '@webapp/components/SoundFix';
-import SteamLoginToken from '@webapp/components/SteamLoginToken';
 import Notifications from '@webapp/components/Notifications';
-
-import Page from './Page';
+import SoundFix from '@webapp/components/SoundFix';
+import Page from '@webapp/Layout/Page';
 
 interface Props {
   children: ReactNode,
 }
 
-function BasicLayout(props: Props) {
+function Layout(props: Props) {
   return (
     <React.Fragment>
       <SoundFix />
@@ -19,13 +19,15 @@ function BasicLayout(props: Props) {
 
       <Notifications />
 
-      <SteamLoginToken>
+      <Row>
+        <GlobalNavigation />
+
         <Page>
           {props.children}
         </Page>
-      </SteamLoginToken>
+      </Row>
     </React.Fragment>
   );
 }
 
-export default BasicLayout;
+export default Layout;

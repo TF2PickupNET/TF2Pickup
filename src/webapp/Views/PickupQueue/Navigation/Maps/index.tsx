@@ -15,7 +15,7 @@ const makeMapState = () => {
   };
 };
 
-function Index() {
+function Maps() {
   const gamemode = useContext(GamemodeContext);
   const { maps } = useMakeMapState(makeMapState, gamemode);
 
@@ -35,4 +35,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default Maps;

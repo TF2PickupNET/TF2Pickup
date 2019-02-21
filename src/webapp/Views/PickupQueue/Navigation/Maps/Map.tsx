@@ -1,20 +1,40 @@
 import React, { useCallback, useContext } from 'react';
 import { Item } from '@webapp/components/PageNavigation';
 import maps from '@config/maps';
-import { useActions } from '@webapp/store';
+import { useActions, State, useMakeMapState } from '@webapp/store';
 import { selectMap } from '@webapp/store/pickup-queues/actions';
 import { GamemodeContext } from '@webapp/Views/PickupQueue';
+import { makeGetPlayerByUserId } from '@webapp/store/pickup-queues/selectors';
+import { getCurrentUserId } from '@webapp/store/user-id/selectors';
+import gamemodes from '@config/gamemodes';
 
 interface Props {
   map: keyof typeof maps,
 }
 
+const makeMapState = () => {
+  const getPlayerByUserId = makeGetPlayerByUserId();
+
+  return (state: State, gamemode: keyof typeof gamemodes) => {
+    const player = getPlayerByUserId(state, gamemode, getCurrentUserId(state));
+
+    return {
+      isInPickup: player !== null,
+      map: player === null ? null : player.map,
+    };
+  };
+};
+
 function Map(props: Props) {
-  const isInPickup = true;
   const gamemode = useContext(GamemodeContext);
+  const {
+    isInPickup,
+    map,
+  } = useMakeMapState(makeMapState, gamemode);
+
   const actions = useActions({ selectMap });
   const handleClick = useCallback(() => {
-    if (isInPickup) {
+    if (isInPickup && props.map !== map) {
       actions.selectMap(gamemode, props.map);
     }
   }, [gamemode, props.map, isInPickup]);
@@ -22,7 +42,7 @@ function Map(props: Props) {
   return (
     <Item
       text={maps[props.map].display}
-      isActive={false}
+      isActive={props.map === map}
       onClick={handleClick}
     />
   );

@@ -4,20 +4,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ThemeProvider } from 'react-jss';
 
-import BasicLayout from './layouts/BasicLayout';
-import registerServiceWorker from './register-service-worker';
-import MainLayout from './layouts/MainLayout';
+import Layout from './Layout';
 import theme from './theme';
 import Views from './Views';
+import registerServiceWorker from './register-service-worker';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <BasicLayout>
-        <MainLayout>
-          <Views />
-        </MainLayout>
-      </BasicLayout>
+      <Layout>
+        <Views />
+      </Layout>
     </ThemeProvider>
   );
 }

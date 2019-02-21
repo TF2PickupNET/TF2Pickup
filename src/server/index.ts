@@ -6,7 +6,7 @@ import createApp from './create-app';
 debug.enable('TF2Pickup*');
 
 const log = debug('TF2Pickup');
-const port: number = config.get('server.port');
+const port = config.get<number>('server.port');
 
 /**
  * Start the server.
@@ -20,6 +20,10 @@ async function startServer() {
       log(`Server started on port ${port}`);
 
       app.emit('listening');
+    });
+
+    server.on('error', (err) => {
+      console.log('Error', err);
     });
   } catch (error) {
     log('Failed to create app', { error });

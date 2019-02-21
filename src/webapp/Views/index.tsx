@@ -20,7 +20,7 @@ import RouteContainer from '@webapp/Views/RouteContainer';
 import withStyles, { WithStyles } from 'react-jss';
 
 const styles = {
-  router: {
+  main: {
     display: 'flex',
     flexDirection: 'row',
     flex: 1,
@@ -44,7 +44,7 @@ type Props = WithStyles<typeof styles>;
 
 function Views(props: Props) {
   return (
-    <Router className={props.classes.router}>
+    <Router className={props.classes.main} component="main">
       <IndexRedirect path="/" />
 
       <RouteContainer path="/profile">

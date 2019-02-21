@@ -1,16 +1,16 @@
 import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
-import { getCurrentUser } from '@webapp/store/user-id/selectors';
+import { getCurrentUser } from '../../store/user-id/selectors';
 import {
   Row,
   Column,
-} from '@webapp/components/Grid';
-import User from '@typings/User';
+} from '../Grid';
+import User from '../../../typings/User';
 import {
   State,
   useMapState,
-} from '@webapp/store';
-import DocumentTitle from '@webapp/components/DocumentTitle';
+} from '../../store';
+import DocumentTitle from '../DocumentTitle';
 
 import Stepper from './Stepper';
 import steps from './steps';

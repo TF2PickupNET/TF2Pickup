@@ -6,16 +6,16 @@ import React, {
 import { RadioGroup } from '@atlaskit/radio';
 import Button from '@atlaskit/button';
 import { createSelector } from 'reselect';
-import { getCurrentUserId } from '@webapp/store/user-id/selectors';
-import { makeGetUserRegion } from '@webapp/store/users/selectors';
-import useAsync from '@webapp/utils/use-async';
-import { setName } from '@webapp/store/users/actions';
-import { makeGetNames } from '@webapp/store/user-profiles/selectors';
-import { Row } from '@webapp/components/Grid';
+import { getCurrentUserId } from '../../store/user-id/selectors';
+import { makeGetUserRegion } from '../../store/users/selectors';
+import useAsync from '../../utils/use-async';
+import { setName } from '../../store/users/actions';
+import { makeGetNames } from '../../store/user-profiles/selectors';
+import { Row } from '../Grid';
 import {
   State,
   useMakeMapState, useActions,
-} from '@webapp/store';
+} from '../../store';
 
 const makeMapState = () => {
   const getUserRegion = makeGetUserRegion();

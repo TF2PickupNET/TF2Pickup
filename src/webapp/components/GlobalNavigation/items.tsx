@@ -9,10 +9,10 @@ import { Keys } from '@utils/types';
 import store from '@webapp/store';
 import { logoutUser } from '@webapp/store/user-id/actions';
 import { redirectToSteamAuth } from '@webapp/utils/auth';
+import TF2Pickup from '@webapp/icons/TF2Pickup';
 
 import UserAvatar from './UserAvatar';
-import GamemodeIcon from '@webapp/layouts/MainLayout/GlobalNavigation/GamemodeIcon';
-import TF2Pickup from '@webapp/icons/TF2Pickup';
+import GamemodeIcon from './GamemodeIcon';
 
 interface ItemProps extends GlobalItemProps {
   path?: string,

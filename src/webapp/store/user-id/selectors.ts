@@ -12,16 +12,20 @@ const getCurrentUser = createSelector(
   getUserById,
 );
 
-function makeIsCurrentUser() {
-  return createSelector(
-    getCurrentUserId,
-    (_: State, userId: string) => userId,
-    (currentUserId, userId) => currentUserId === userId,
-  );
-}
+const makeIsCurrentUser = () => createSelector(
+  getCurrentUserId,
+  (_: State, userId: string) => userId,
+  (currentUserId, userId) => currentUserId === userId,
+);
+
+const getCurrentRegion = createSelector(
+  getCurrentUser,
+  user => user === null ? 'eu' : user.region,
+);
 
 export {
   getCurrentUserId,
   getCurrentUser,
   makeIsCurrentUser,
+  getCurrentRegion,
 };

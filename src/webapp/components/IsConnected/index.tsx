@@ -3,11 +3,6 @@ import withStyles, { WithStyles } from 'react-jss';
 import { Row } from '@webapp/components/Grid';
 import DocumentTitle from '@webapp/components/DocumentTitle';
 
-import {
-  useIsConnected,
-  useIsFirstConnect,
-} from './use-is-connected';
-
 const styles = {
   container: { minHeight: '100vh' },
 
@@ -22,8 +17,8 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 function IsConnected(props: Props) {
-  const isConnected = useIsConnected();
-  const isFirstConnect = useIsFirstConnect();
+  const isConnected = true;
+  const isFirstConnect = false;
 
   if (isConnected) {
     return (

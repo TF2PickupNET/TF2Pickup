@@ -21,7 +21,7 @@ import { Theme } from '@webapp/theme';
 import withStyles, { WithStyles } from 'react-jss';
 import {
   readyUp,
-  leavePickup,
+  leavePickupQueue,
 } from '@webapp/store/pickup-queues/actions';
 
 const makeMapState = () => {
@@ -101,7 +101,7 @@ function ReadyUp(props: Props) {
   const gamemode = useContext(GamemodeContext);
   const actions = useActions({
     readyUp,
-    leavePickup,
+    leavePickupQueue,
   });
   const { state } = useMakeMapState(makeMapState, gamemode);
   const isReadyUpState = state === 'ready-up';
@@ -110,7 +110,7 @@ function ReadyUp(props: Props) {
     actions.readyUp(gamemode);
   }, [gamemode]);
   const handleNotReadyClick = useCallback(() => {
-    actions.leavePickup(gamemode);
+    actions.leavePickupQueue(gamemode);
   }, [gamemode]);
 
   return (

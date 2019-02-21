@@ -1,35 +1,25 @@
 import gamemodes from '@config/gamemodes';
 import app from '@webapp/app';
-import { makeGetUserRegion } from '@webapp/store/users/selectors';
-import { getCurrentUserId } from '@webapp/store/user-id/selectors';
-import { AsyncAction, AsyncStatus } from '@webapp/store';
+import { getCurrentRegion } from '@webapp/store/user-id/selectors';
+import { AsyncAction } from '@webapp/store';
 import emitSocketEvent from '@webapp/utils/emit-socket-event';
 import { createNotification } from '@webapp/store/notifications/actions';
 import { NotificationType } from '@webapp/store/notifications/types';
 import classes from '@config/classes';
 import { fetchQueuePlayers } from '@webapp/store/pickup-players/actions';
 
-import { makeGetPickupQueueStatus } from './selectors';
 import { PickupQueueActionTypes } from './types';
 import maps from '@config/maps';
 
-const getUserRegion = makeGetUserRegion();
-
-function fetchPickup(gamemode: keyof typeof gamemodes): AsyncAction {
-  const getPickupQueueStatus = makeGetPickupQueueStatus();
-
+function fetchPickupQueue(gamemode: keyof typeof gamemodes): AsyncAction {
   return async (dispatch, getState) => {
-    if (getPickupQueueStatus(getState(), gamemode) !== AsyncStatus.NOT_STARTED) {
-      return;
-    }
-
     dispatch({
       type: PickupQueueActionTypes.START_FETCH,
       payload: { gamemode },
     });
 
     const state = getState();
-    const region = getUserRegion(state, getCurrentUserId(state));
+    const region = getCurrentRegion(state);
     const queueId = `${region}-${gamemode}`;
 
     try {
@@ -53,7 +43,7 @@ function fetchPickup(gamemode: keyof typeof gamemodes): AsyncAction {
   };
 }
 
-function joinPickup(
+function joinPickupQueue(
   gamemode: keyof typeof gamemodes,
   className: keyof typeof classes,
 ): AsyncAction {
@@ -75,7 +65,7 @@ function joinPickup(
   };
 }
 
-function leavePickup(gamemode: keyof typeof gamemodes): AsyncAction {
+function leavePickupQueue(gamemode: keyof typeof gamemodes): AsyncAction {
   return async (dispatch) => {
     try {
       await emitSocketEvent('pickup-queues:leave', {
@@ -131,9 +121,9 @@ function selectMap(gamemode: keyof typeof gamemodes, map: keyof typeof maps): As
 }
 
 export {
-  fetchPickup,
-  joinPickup,
-  leavePickup,
+  fetchPickupQueue,
+  joinPickupQueue,
+  leavePickupQueue,
   readyUp,
   selectMap,
 };

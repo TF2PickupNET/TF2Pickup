@@ -5,6 +5,7 @@ import NotificationRequester from '@webapp/components/NotificationRequester';
 import Notifications from '@webapp/components/Notifications';
 import SoundFix from '@webapp/components/SoundFix';
 import Page from '@webapp/Layout/Page';
+import Loaders from '@webapp/components/Loaders';
 
 interface Props {
   children: ReactNode,
@@ -18,6 +19,8 @@ function Layout(props: Props) {
       <NotificationRequester />
 
       <Notifications />
+
+      <Loaders />
 
       <Row>
         <GlobalNavigation />

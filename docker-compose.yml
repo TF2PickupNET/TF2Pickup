@@ -1,0 +1,22 @@
+version: '3'
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ./src/server/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - .
+  database:
+    image: "mongo:latest"
+    ports:
+      - "27017:27017"
+  webapp:
+    build:
+      context: .
+      dockerfile: ./src/webapp/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - .

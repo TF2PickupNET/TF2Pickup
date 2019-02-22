@@ -9,7 +9,7 @@ interface PickupQueue {
   readonly region: keyof typeof regions,
   readonly gamemode: keyof typeof gamemodes,
   readonly readyUpEnd: number | null,
-  readonly maps: [keyof typeof maps, keyof typeof maps, keyof typeof maps],
+  readonly maps: Array<keyof typeof maps>,
 }
 
 export default PickupQueue;

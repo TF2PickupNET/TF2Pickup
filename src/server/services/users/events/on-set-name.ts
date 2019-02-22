@@ -16,9 +16,10 @@ export default function onSetName(
   connection: SocketConnection,
 ): SocketEventHandler<'users:set-name'> {
   const users = app.service('users');
-  const user = connection.feathers.user;
 
   return async (data, cb) => {
+    const { user } = connection.feathers;
+
     // Make sure the user is authenticated
     if (!user) {
       return cb(new NotAuthenticated());

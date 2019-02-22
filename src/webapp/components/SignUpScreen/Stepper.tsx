@@ -11,6 +11,7 @@ const styles = {
   stepperContainer: {
     display: 'flex',
     flexDirection: 'column',
+    overflow: 'scroll',
   },
 
   stepper: { width: 'auto' },

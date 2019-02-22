@@ -18,12 +18,14 @@ import steps from './steps';
 const styles = {
   container: {
     height: '100vh',
-    padding: '15% 64px',
+    flex: 1,
+    overflowY: 'scroll',
+    paddingTop: 50,
   },
 
   header: {
     textAlign: 'center',
-    marginBottom: 25,
+    marginBottom: 20,
   },
 };
 

@@ -5,11 +5,13 @@ import withStyles, { WithStyles } from 'react-jss';
 import Navigation from './Navigation';
 import Content from './Content';
 import { Row } from '@webapp/components/Grid';
+import RunningPickupBanner from '@webapp/components/RunningPickupBanner';
 
 const styles = {
   container: {
     minHeight: '100vh',
-    padding: [32, 16],
+    overflowY: 'scroll',
+    flex: 1,
   },
 };
 
@@ -26,10 +28,11 @@ function PickupQueue(props: Props) {
       <Navigation />
 
       <Row
-        align="center"
-        justify="center"
+        dir="column"
         className={props.classes.container}
       >
+        <RunningPickupBanner />
+
         <Content gamemode={props.gamemode} />
       </Row>
     </GamemodeContext.Provider>

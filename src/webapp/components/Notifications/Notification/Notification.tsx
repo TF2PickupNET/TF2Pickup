@@ -32,24 +32,23 @@ function getColorForNotificationType(type: NotificationType) {
 const styles = (theme: Theme) => {
   return {
     '@keyframes animateIn': {
-      from: { transform: 'translateX(0)' },
-      to: { transform: 'translateX(-200%)' },
+      from: { transform: 'translateX(200%)' },
+      to: { transform: 'translateX(0)' },
     },
 
     '@keyframes animateOut': {
-      from: { transform: 'translateX(-200%)' },
-      to: { transform: 'translateX(0)' },
+      from: { transform: 'translateX(0)' },
+      to: { transform: 'translateX(200%)' },
     },
 
     container: {
       borderRadius: 6,
-      width: 200,
+      minWidth: 200,
+      maxWidth: 350,
       padding: '8px 16px',
       display: 'flex',
       flexDirection: 'row',
       marginBottom: 16,
-      right: -400,
-      position: 'absolute',
       backgroundColor: (props: OwnProps) => getColorForNotificationType(props.type),
       animationDuration: 333,
       animationFillMode: 'forwards',

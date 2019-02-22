@@ -8,7 +8,7 @@ import shallowEqual from 'shallowequal';
 
 import store, { State } from '.';
 
-type ValidArgs = Array<number | string | null>;
+type ValidArgs = Array<number | string | null | boolean>;
 
 // Enforce easy types here
 function useMapState<MappedState, Args extends ValidArgs>(

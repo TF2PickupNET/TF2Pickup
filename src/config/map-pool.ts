@@ -41,9 +41,9 @@ const mapPool: MapPool = {
     'cp_steel',
   ],
 
-  'eu-bball': ultiduoMaps,
+  'eu-bball': bballMaps,
 
-  'eu-ultiduo': bballMaps,
+  'eu-ultiduo': ultiduoMaps,
 };
 
 export default mapPool;

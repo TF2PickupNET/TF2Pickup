@@ -3,6 +3,7 @@ import gamemodes from '@config/gamemodes';
 import { Keys } from '@utils/types';
 import regions from '@config/regions';
 import { PickupQueueStates } from '@config/pickup-queue-states';
+import getRandomMaps from '@server/services/pickup-queues/utils/get-random-maps';
 
 const gamemodeKeys = Object.keys(gamemodes) as Keys<typeof gamemodes>;
 const regionKeys = Object.keys(regions) as Keys<typeof regions>;
@@ -26,11 +27,10 @@ async function setupQueue(
     if (error.code === 404) {
       await pickupQueues.create({
         id,
-        state: PickupQueueStates.WaitingForPlayers,
-        // TODO: Generate maps
-        maps: ['', '', ''],
         region,
         gamemode,
+        state: PickupQueueStates.WaitingForPlayers,
+        maps: getRandomMaps(id, null),
         readyUpEnd: null,
       });
     }

@@ -72,6 +72,7 @@ function setName(name: string): AsyncAction {
     try {
       await emitSocketEvent('users:set-name', { name });
     } catch (error) {
+      console.log(error);
       dispatch(
         createNotification(
           NotificationType.ERROR,

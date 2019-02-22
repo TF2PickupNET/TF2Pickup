@@ -6,6 +6,7 @@ import resetQueue from '@server/services/pickup-queues/utils/reset-queue';
 import { GeneralError } from '@feathersjs/errors';
 import { PickupQueueStates } from '@config/pickup-queue-states';
 import debug from 'debug';
+import getRandomMaps from '@server/services/pickup-queues/utils/get-random-maps';
 
 const log = debug('TF2Pickup:pickup-queues:create-new-pickup');
 
@@ -26,7 +27,7 @@ async function handleCreatePickup(app: ServerApp, queueId: string) {
     }
 
     // TODO: Add pickup creation
-    const pickup = { id: 1 };
+    const pickup = { id: 1, map: queue.maps[0] };
 
     await Promise.all(
       players.map(player => pickupPlayers.patch(player.id, {
@@ -35,12 +36,9 @@ async function handleCreatePickup(app: ServerApp, queueId: string) {
       })),
     );
 
-    // TODO: New maps generation
-    const maps: [string, string, string] = ['', '', ''];
-
     await queues.patch(queueId, {
       state: PickupQueueStates.WaitingForPlayers,
-      maps,
+      maps: getRandomMaps(queueId, pickup.map),
     });
 
     await Promise.all(
@@ -57,11 +55,11 @@ async function handleCreatePickup(app: ServerApp, queueId: string) {
     // Reset the other players and their map picks if the maps have changed
     await Promise.all(
       otherPlayers.map((player) => {
-        if (player.map !== null && maps.includes(player.map)) {
-          return player;
+        if (player.map === pickup.map) {
+          return pickupPlayers.patch(player.id, { map: null });
         }
 
-        return pickupPlayers.patch(player.id, { map: null });
+        return player;
       })
     );
   } catch (error) {

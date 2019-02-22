@@ -1,28 +1,31 @@
 import { socket } from '@webapp/app';
-
-function handleConnect() {
-  // TODO: Implement
-}
-function handleReconnect() {
-  // TODO: Implement
-}
-function handleDisconnect() {
-  // TODO: Implement
-}
-function handleConnectError() {
-  // TODO: Implement
-}
+import store from '@webapp/store';
+import { ConnectionActionTypes } from '@webapp/store/connection/types';
 
 function events() {
-  return () => {
-    socket
-      .on('connect', handleConnect)
-      .on('reconnect', handleReconnect)
-      .on('disconnect', handleDisconnect)
-      .off('connect_error', handleConnectError);
+  socket
+    .on('connect', () => {
+      store.dispatch({
+        type: ConnectionActionTypes.CONNECT,
+      });
+    })
+    .on('reconnect', () => {
+      store.dispatch({
+        type: ConnectionActionTypes.CONNECT,
+      });
+    })
+    .on('disconnect', () => {
+      store.dispatch({
+        type: ConnectionActionTypes.DISCONNECT,
+      });
+    })
+    .on('connect_error', () => {
+      store.dispatch({
+        type: ConnectionActionTypes.DISCONNECT,
+      });
+    });
 
-    socket.connect();
-  };
+  socket.connect();
 }
 
 export default events;

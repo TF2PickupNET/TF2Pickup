@@ -13,7 +13,6 @@ const log = debug('TF2Pickup:hooks');
 export default {
   before: {
     all(hook: BeforeHookContext<object>) {
-      console.log('Request', hook.method);
       if (hook.params.provider === 'external') {
         return auth.hooks.authenticate(['jwt'])(hook);
       }

@@ -62,6 +62,14 @@ function loginUser(): AsyncAction {
 
       return null;
     } catch (error) {
+      dispatch(
+        createNotification(
+          NotificationType.ERROR,
+          `Error while authenticating with our server: ${error.message}`,
+          2 * 1000,
+        ),
+      );
+
       return error;
     }
   };

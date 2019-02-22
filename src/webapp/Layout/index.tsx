@@ -6,8 +6,16 @@ import Notifications from '@webapp/components/Notifications';
 import SoundFix from '@webapp/components/SoundFix';
 import Page from '@webapp/Layout/Page';
 import Loaders from '@webapp/components/Loaders';
+import Authenticator from '@webapp/components/Authenticator';
+import withStyles, { WithStyles } from 'react-jss';
 
-interface Props {
+const styles = {
+  page: {
+    height: '100vh',
+  },
+};
+
+interface Props extends WithStyles<typeof styles> {
   children: ReactNode,
 }
 
@@ -22,7 +30,9 @@ function Layout(props: Props) {
 
       <Loaders />
 
-      <Row>
+      <Authenticator />
+
+      <Row className={props.classes.page}>
         <GlobalNavigation />
 
         <Page>
@@ -33,4 +43,4 @@ function Layout(props: Props) {
   );
 }
 
-export default Layout;
+export default withStyles(styles)(Layout);

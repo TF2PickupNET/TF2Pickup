@@ -9,11 +9,7 @@ import withStyles, { WithStyles } from 'react-jss';
 const styles = {
   text: { margin: '0 8px' },
 
-  button: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    color: ['#FAFBFC', '!important'],
-    margin: '0 8px',
-  },
+  button: { margin: '0 8px' },
 };
 
 type Props = WithStyles<typeof styles>;
@@ -38,6 +34,7 @@ function NotificationRequester(props: Props) {
       </span>
 
       <Button
+        isSelected
         className={props.classes.button}
         onClick={handleEnableClick}
       >
@@ -45,6 +42,7 @@ function NotificationRequester(props: Props) {
       </Button>
 
       <Button
+        isSelected
         className={props.classes.button}
         onClick={handleDenyClick}
       >

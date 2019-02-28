@@ -1,9 +1,9 @@
 import React from 'react';
 import { State, useMapState } from '@webapp/store';
 import { getFirstThreeNotificationIds } from '@webapp/store/notifications/selectors';
+import withStyles, { WithStyles } from 'react-jss';
 
 import Notification from './Notification';
-import withStyles, { WithStyles } from 'react-jss';
 
 const styles = {
   container: {

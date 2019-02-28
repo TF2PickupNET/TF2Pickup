@@ -1,6 +1,6 @@
-import { CreateAfterHookContext } from '@feathersjs/feathers';
+import { CreateAfterHookContext, Hooks } from '@feathersjs/feathers';
 import debug from 'debug';
-import hooks from 'feathers-hooks-common';
+import {disallow} from 'feathers-hooks-common';
 import { promisify } from 'util';
 import User from '@typings/User';
 import steamCommunity from '@server/utils/steam-community';
@@ -11,7 +11,7 @@ import validateHours from './validate-hours';
 const log = debug('TF2Pickup:users:hooks');
 const inviteUserToGroup = promisify(steamCommunity.inviteUserToGroup.bind(steamCommunity));
 
-export default {
+const hooks: Hooks<User> = {
   before: {
     create: [
       // Validate that the userId is in the steam group when the website is in beta mode
@@ -19,12 +19,12 @@ export default {
       // Validate the users TF2 hours
       validateHours,
     ],
-    remove: hooks.disallow(),
+    remove: disallow(),
   },
 
   after: {
     create: [
-      (hook: CreateAfterHookContext<User>) => {
+      (hook) => {
         log('Created a new user', {
           userId: hook.result.id,
           data: hook.result,
@@ -59,7 +59,7 @@ export default {
       },
 
       // Invite the userId to the official steam group
-      async (hook: CreateAfterHookContext<User>) => {
+      async (hook) => {
         try {
           await inviteUserToGroup(hook.result.id, '103582791435021680');
         } catch (error) {
@@ -72,3 +72,5 @@ export default {
     ],
   },
 };
+
+export default hooks;

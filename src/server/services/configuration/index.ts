@@ -10,7 +10,10 @@ import pkg from '../../../../package.json';
 const log = debug('TF2Pickup:configuration');
 
 class ConfigurationService implements ServiceDefinition<Configuration> {
-  private readonly config: Configuration = { version: pkg.version };
+  private readonly config: Configuration = {
+    id: 'config',
+    version: pkg.version,
+  };
 
   public get() {
     return Promise.resolve(this.config);

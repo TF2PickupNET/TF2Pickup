@@ -17,7 +17,7 @@ function reducer(state: State |  undefined = defaultState, action: Actions): Sta
       return {
         ...state,
         [action.payload.id]: asyncItem.createFetchedState(
-          action.payload.players.reduce((accu, player) => {
+          action.payload.players.reduce<Record<string, PickupPlayer>>((accu, player) => {
             return {
               ...accu,
               [player.id]: player,

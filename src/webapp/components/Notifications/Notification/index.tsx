@@ -39,7 +39,7 @@ function NotificationContainer(props: OwnProps) {
     animateNotificationIn,
     animateNotificationOut,
   });
-  const timeout = useRef<NodeJS.Timeout | null>(null);
+  const timeout = useRef<number | null>(null);
 
   useEffect(() => {
     if (notification) {

@@ -11,7 +11,6 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 function NotFound(props: Props) {
-  console.log(props);
   const handleBack = useCallback(() => {
     // Props.history.goBack();
   }, []);
@@ -20,7 +19,7 @@ function NotFound(props: Props) {
     <React.Fragment>
       <DocumentTitle title="Not Found" />
 
-      <Row justify="center">
+      <Row justify="center" dir="column">
         <h2>Not Found</h2>
         <div>
           We couldn't find what you are looking for.

@@ -30,7 +30,7 @@ function Header() {
     hasLoadedUser,
     hasLoadedProfile,
   } = useMakeMapState(makeMapState, userId);
-  const text = userId === null || !(hasLoadedUser && hasLoadedProfile)
+  const text = !(hasLoadedUser && hasLoadedProfile)
     ? 'Loading...'
     : <UserItem userId={userId} />;
 

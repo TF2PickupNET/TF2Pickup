@@ -2,9 +2,11 @@ import { useEffect } from 'react';
 import {
   State,
   useMakeMapState,
+  useActions,
 } from '@webapp/store';
 import { getCurrentUserId } from '@webapp/store/user-id/selectors';
 import { makeGetLastPickup } from '@webapp/store/users/selectors';
+import { fetchPickup } from '@webapp/store/pickups/actions';
 
 const makeMapState = () => {
   const getLastPickupId = makeGetLastPickup();
@@ -16,9 +18,12 @@ const makeMapState = () => {
 
 function LastPickupLoader() {
   const { lastPickupId } = useMakeMapState(makeMapState);
+  const actions = useActions({ fetchPickup });
 
   useEffect(() => {
-    // TODO: Fetch pickup here
+    if (lastPickupId !== null) {
+      actions.fetchPickup(lastPickupId);
+    }
   }, [lastPickupId]);
 
   return null;

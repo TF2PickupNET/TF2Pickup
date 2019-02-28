@@ -1,14 +1,17 @@
 declare module 'feathers-mongoose' {
-  import { ServerService } from '@feathersjs/feathers';
+  import {
+    ServerService,
+    DefaultDocument,
+  } from '@feathersjs/feathers';
   import {
     Model,
     Document,
   } from 'mongoose';
 
-  interface Options<Doc extends Document> {
-    Model: Model<Doc>,
+  interface Options<MongooseDocument extends Document> {
+    Model: Model<MongooseDocument>,
     lean?: boolean,
-    id?: string,
+    id: 'id',
     events?: string[],
     paginate?: {
       max: number,
@@ -16,5 +19,7 @@ declare module 'feathers-mongoose' {
     },
   }
 
-  export default function service<Doc extends Document>(options: Options<Doc>): ServerService<Doc>;
+  export default function service<MongooseDocument extends Document, Doc extends DefaultDocument>(
+    options: Options<MongooseDocument>
+  ): ServerService<Doc>;
 }

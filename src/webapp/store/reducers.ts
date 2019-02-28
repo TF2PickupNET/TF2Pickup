@@ -9,6 +9,7 @@ import pickupQueues from './pickup-queues/reducer';
 import notifications from './notifications/reducer';
 import pickupPlayers from './pickup-players/reducer';
 import connection from './connection/reducer';
+import pickups from './pickups/reducer';
 
 const reducers = combineReducers({
   users,
@@ -20,6 +21,7 @@ const reducers = combineReducers({
   notifications,
   pickupPlayers,
   connection,
+  pickups,
 });
 
 type State = ReturnType<typeof reducers>;

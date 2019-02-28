@@ -2,7 +2,6 @@ import maps from '@config/maps';
 import { PickupStates } from '@config/pickup-states';
 import regions from '@config/regions';
 import gamemodes from '@config/gamemodes';
-import configTypes from '@config/config-types';
 
 interface Pickup {
   readonly id: number,
@@ -13,7 +12,6 @@ interface Pickup {
   readonly endDate: number | null,
   readonly region: keyof typeof regions,
   readonly gamemode: keyof typeof gamemodes,
-  readonly configType: keyof typeof configTypes | null,
 }
 
 export default Pickup;

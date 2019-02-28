@@ -40,7 +40,11 @@ const Content = (props: Props) => {
         </span>
       );
     case AsyncStatus.FETCHED:
-      return null;
+      return (
+        <div>
+          
+        </div>
+      );
     case AsyncStatus.ERROR:
       return (
         <Column col={16} className={props.classes.errorContainer}>

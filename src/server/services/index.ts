@@ -1,14 +1,15 @@
 import { ServerApp } from '@feathersjs/feathers';
 
-import users from './users';
-import authentication from './authentication';
-import userProfiles from './user-profiles';
-import userSettings from './user-settings';
-import configuration from './configuration';
-import tf2Configs from './tf2-configs';
-import logs from './logs';
-import pickupPlayers from './pickup-players';
+import users from '@server/services//users';
+import authentication from '@server/services//authentication';
+import userProfiles from '@server/services//user-profiles';
+import userSettings from '@server/services//user-settings';
+import configuration from '@server/services//configuration';
+import tf2Configs from '@server/services//tf2-configs';
+import logs from '@server/services//logs';
+import pickupPlayers from '@server/services//pickup-players';
 import pickupQueues from '@server/services/pickup-queues';
+import pickups from '@server/services/pickups';
 
 export default function services(app: ServerApp) {
   app
@@ -20,5 +21,6 @@ export default function services(app: ServerApp) {
     .configure(authentication)
     .configure(logs)
     .configure(pickupQueues)
-    .configure(pickupPlayers);
+    .configure(pickupPlayers)
+    .configure(pickups);
 }

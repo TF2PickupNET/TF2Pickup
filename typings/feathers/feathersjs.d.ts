@@ -20,6 +20,7 @@ declare module '@feathersjs/feathers' {
   import Configuration from '@typings/Configuration';
   import Log from '@typings/Log';
   import PickupPlayer from '@typings/PickupPlayer';
+  import Pickup from '@typings/Pickup';
 
   type SKIP = Symbol;
   type Method = 'find' | 'get' | 'create' | 'update' | 'patch' | 'remove';
@@ -27,6 +28,10 @@ declare module '@feathersjs/feathers' {
 
   interface Connection {
     user: User,
+  }
+
+  interface DefaultDocument {
+    id: string | number,
   }
 
   interface Params<Query extends object = {}> {
@@ -38,7 +43,7 @@ declare module '@feathersjs/feathers' {
     connection: Connection,
   }
 
-  interface CommonHookContext<Document> {
+  interface CommonHookContext<Document extends DefaultDocument> {
     app: ServerApp,
     service: ServerService<Document>,
     path: string,
@@ -48,72 +53,96 @@ declare module '@feathersjs/feathers' {
     statusCode: number,
   }
 
-  interface ErrorHookContext<Document> extends CommonHookContext<Document> {
+  interface ErrorHookContext<Document extends DefaultDocument> extends CommonHookContext<Document> {
     type: 'error',
     error: FeathersError<number, string>,
-    result: void,
+    result: never,
   }
 
-  interface BeforeHookContext<Document> extends CommonHookContext<Document> {
+  type BeforeHookContext<Document extends DefaultDocument> =
+    | CreateBeforeHookContext<Document>
+    | GetBeforeHookContext<Document>
+    | FindBeforeHookContext<Document>
+    | PatchBeforeHookContext<Document>
+    | RemoveBeforeHookContext<Document>;
+
+  type  AfterHookContext<Document extends DefaultDocument> =
+    | CreateAfterHookContext<Document>
+    | GetAfterHookContext<Document>
+    | FindAfterHookContext<Document>
+    | PatchAfterHookContext<Document>
+    | RemoveAfterHookContext<Document>;
+
+  interface CreateBeforeHookContext<Document extends DefaultDocument>
+    extends CommonHookContext<Document> {
     type: 'before',
-    result: void,
+    method: 'create',
+    data: Document,
   }
 
-  interface AfterHookContext<Document> extends CommonHookContext<Document> {
+  interface CreateAfterHookContext<Document extends DefaultDocument>
+    extends CommonHookContext<Document> {
     type: 'after',
-    dispatch: void,
-  }
-
-  interface CreateBeforeHookContext<Document> extends BeforeHookContext<Document> {
-    method: 'create',
-    data: Document,
-  }
-
-  interface CreateAfterHookContext<Document> extends AfterHookContext<Document> {
     method: 'create',
     data: Document,
     result: Document,
   }
 
-  interface GetBeforeHookContext<Document> extends BeforeHookContext<Document> {
+  interface GetBeforeHookContext<Document extends DefaultDocument>
+    extends CommonHookContext<Document> {
+    type: 'before',
     method: 'get',
     id: string,
   }
 
-  interface GetAfterHookContext<Document> extends AfterHookContext<Document> {
+  interface GetAfterHookContext<Document extends DefaultDocument>
+    extends CommonHookContext<Document> {
+    type: 'after',
     method: 'get',
     id: string,
     result: Document,
   }
 
-  interface FindBeforeHookContext<Document> extends BeforeHookContext<Document> {
+  interface FindBeforeHookContext<Document extends DefaultDocument>
+    extends CommonHookContext<Document> {
+    type: 'before',
     method: 'find',
   }
 
-  interface FindAfterHookContext<Document> extends AfterHookContext<Document> {
+  interface FindAfterHookContext<Document extends DefaultDocument>
+    extends CommonHookContext<Document> {
+    type: 'after',
     method: 'find',
     result: Document[],
   }
 
-  interface PatchBeforeHookContext<Document> extends BeforeHookContext<Document> {
+  interface PatchBeforeHookContext<Document extends DefaultDocument>
+    extends CommonHookContext<Document> {
+    type: 'before',
     method: 'patch',
     id: string | null,
     data: {},
   }
 
-  interface PatchAfterHookContext<Document> extends AfterHookContext<Document> {
+  interface PatchAfterHookContext<Document extends DefaultDocument>
+    extends CommonHookContext<Document> {
+    type: 'after',
     method: 'patch',
     id: string | null,
     data: {},
     result: Document,
   }
 
-  interface RemoveBeforeHookContext<Document> extends BeforeHookContext<Document> {
+  interface RemoveBeforeHookContext<Document extends DefaultDocument>
+    extends CommonHookContext<Document> {
+    type: 'before',
     method: 'remove',
     id: string | null,
   }
 
-  interface RemoveAfterHookContext<Document> extends AfterHookContext<Document> {
+  interface RemoveAfterHookContext<Document extends DefaultDocument>
+    extends CommonHookContext<Document> {
+    type: 'after',
     method: 'remove',
     id: string | null,
   }
@@ -126,37 +155,36 @@ declare module '@feathersjs/feathers' {
     | Promise<SKIP>
     | Promise<void>;
 
-  type HookFunction<Context> =
-    | ((context: Context) => HookResult<Context>)
-    | Array<((context: Context) => HookResult<Context>)>;
+  type HookFunction<Context> = (context: Context) => HookResult<Context>;
+  type HookFunctions<Context> = HookFunction<Context> | Array<HookFunction<Context>>;
 
-  interface Hooks<Doc> {
+  interface Hooks<Doc extends DefaultDocument> {
     before?: {
-      all?: HookFunction<BeforeHookContext<Doc>>,
-      create?: HookFunction<CreateBeforeHookContext<Doc>>,
-      find?: HookFunction<FindBeforeHookContext<Doc>>,
-      get?: HookFunction<GetBeforeHookContext<Doc>>,
-      update?: HookFunction<BeforeHookContext<Doc>>,
-      patch?: HookFunction<PatchBeforeHookContext<Doc>>,
-      remove?: HookFunction<RemoveBeforeHookContext<Doc>>,
+      all?: HookFunctions<BeforeHookContext<Doc>>,
+      create?: HookFunctions<CreateBeforeHookContext<Doc>>,
+      find?: HookFunctions<FindBeforeHookContext<Doc>>,
+      get?: HookFunctions<GetBeforeHookContext<Doc>>,
+      update?: HookFunctions<BeforeHookContext<Doc>>,
+      patch?: HookFunctions<PatchBeforeHookContext<Doc>>,
+      remove?: HookFunctions<RemoveBeforeHookContext<Doc>>,
     },
     after?: {
-      all?: HookFunction<AfterHookContext<Doc>>,
-      create?: HookFunction<CreateAfterHookContext<Doc>>,
-      find?: HookFunction<FindAfterHookContext<Doc>>,
-      get?: HookFunction<GetAfterHookContext<Doc>>,
-      update?: HookFunction<AfterHookContext<Doc>>,
-      patch?: HookFunction<PatchAfterHookContext<Doc>>,
-      remove?: HookFunction<RemoveAfterHookContext<Doc>>,
+      all?: HookFunctions<AfterHookContext<Doc>>,
+      create?: HookFunctions<CreateAfterHookContext<Doc>>,
+      find?: HookFunctions<FindAfterHookContext<Doc>>,
+      get?: HookFunctions<GetAfterHookContext<Doc>>,
+      update?: HookFunctions<AfterHookContext<Doc>>,
+      patch?: HookFunctions<PatchAfterHookContext<Doc>>,
+      remove?: HookFunctions<RemoveAfterHookContext<Doc>>,
     },
     error?: {
-      all?: HookFunction<ErrorHookContext<Doc>>,
-      create?: HookFunction<ErrorHookContext<Doc>>,
-      find?: HookFunction<ErrorHookContext<Doc>>,
-      get?: HookFunction<ErrorHookContext<Doc>>,
-      update?: HookFunction<ErrorHookContext<Doc>>,
-      patch?: HookFunction<ErrorHookContext<Doc>>,
-      remove?: HookFunction<ErrorHookContext<Doc>>,
+      all?: HookFunctions<ErrorHookContext<Doc>>,
+      create?: HookFunctions<ErrorHookContext<Doc>>,
+      find?: HookFunctions<ErrorHookContext<Doc>>,
+      get?: HookFunctions<ErrorHookContext<Doc>>,
+      update?: HookFunctions<ErrorHookContext<Doc>>,
+      patch?: HookFunctions<ErrorHookContext<Doc>>,
+      remove?: HookFunctions<ErrorHookContext<Doc>>,
     },
   }
 
@@ -169,8 +197,8 @@ declare module '@feathersjs/feathers' {
     connections: Connection[],
   }
 
-  interface ServiceQueries<Document> {
-    get(id: string): Promise<Document>,
+  interface ServiceQueries<Document extends DefaultDocument> {
+    get(id: Document['id']): Promise<Document>,
     find(query: {
       query: Partial<Document> & {
         $limit?: number,
@@ -184,7 +212,17 @@ declare module '@feathersjs/feathers' {
     remove(id: string): Promise<Document>,
   }
 
-  interface ServerService<Document> extends ServiceQueries<Document> {
+  interface ServiceDefinition<Document extends DefaultDocument> {
+    setup?(app: ServerApp, path: string): void,
+    find?(params: Params<object>): Promise<Document[]>,
+    get?(id: Document['id'], params: Params<object>): Promise<Document>,
+    create?(data: Document, params: Params<object>): Promise<Document>,
+    update?(id: string, data: Partial<Document>, params: Params<object>): Promise<Document>,
+    patch?(id: string, data: Partial<Document>, params: Params<object>): Promise<Document>,
+    remove?(id: string, params: Params<object>): Promise<Document>,
+  }
+
+  interface ServerService<Document  extends DefaultDocument> extends ServiceQueries<Document> {
     hooks(hooks: Hooks<Document>): ServerService<Document>,
     publish(publisher: (data: {}) => Connection[]): ServerService<Document>,
     publish(
@@ -198,22 +236,12 @@ declare module '@feathersjs/feathers' {
     removeListener(eventname: string, listeners: (data: Document) => void): ServerService<Document>,
   }
 
-  interface ClientService<Document> extends ServiceQueries<Document> {
+  interface ClientService<Document extends DefaultDocument> extends ServiceQueries<Document> {
     on(
       eventname: 'created' | 'patched' | 'removed',
       cb: (data: Document) => void,
     ): ClientService<Document>,
     removeListener(eventname: string, listeners: (data: Document) => void): ClientService<Document>,
-  }
-
-  interface ServiceDefinition<Document> {
-    setup?(app: ServerApp, path: string): void,
-    find?(params: Params<object>): Promise<Document[]>,
-    get?(id: string, params: Params<object>): Promise<Document>,
-    create?(data: Document, params: Params<object>): Promise<Document>,
-    update?(id: string, data: Partial<Document>, params: Params<object>): Promise<Document>,
-    patch?(id: string, data: Partial<Document>, params: Params<object>): Promise<Document>,
-    remove?(id: string, params: Params<object>): Promise<Document>,
   }
 
   interface ServerServices {
@@ -225,6 +253,7 @@ declare module '@feathersjs/feathers' {
     service(name: 'pickup-players'): ServerService<PickupPlayer>,
     service(name: 'authentication'): ServerService<AuthPayload>,
     service(name: 'logs'): ServerService<Log>,
+    service(name: 'pickups'): ServerService<Pickup>,
   }
 
   interface ClientServices {
@@ -235,6 +264,7 @@ declare module '@feathersjs/feathers' {
     service(name: 'users'): ClientService<User>,
     service(name: 'pickup-queues'): ClientService<PickupQueue>,
     service(name: 'logs'): ClientService<Log>,
+    service(name: 'pickups'): ClientService<Pickup>,
   }
 
   type SocketCallback = (err: FeathersError<number, string> | null) => void;
@@ -259,10 +289,13 @@ declare module '@feathersjs/feathers' {
   interface ServerApp extends ServerServices {
     configure(cb: (app: ServerApp) => void): ServerApp,
     channels: Channel[],
-    use<Document>(path: string, service: ServiceDefinition<Document>): ServerApp,
+    use<Document extends DefaultDocument>(
+      path: string,
+      service: ServiceDefinition<Document>,
+    ): ServerApp,
     use(...middlewares: RequestHandler[]): ServerApp,
     use(path: string, ...middlewares: RequestHandler[]): ServerApp,
-    hooks(hooks: Hooks<object>): ServerApp,
+    hooks(hooks: Hooks<DefaultDocument>): ServerApp,
     channel(name: string): Channel,
     listen(port: number): Server,
     on(
@@ -325,7 +358,8 @@ declare module '@feathersjs/feathers' {
   /**
    * Exports for feathers-hooks-common typings.
    */
-  type HookContext<Doc = object> = CommonHookContext<Doc>;
+  // @ts-ignore
+  type HookContext<Doc extends any = any> = CommonHookContext<Doc>;
   type Hook = <Context extends CommonHookContext<any>>(context: Context) => HookResult<Context>;
   type Query = Record<string, string>;
   type Application = ServerApp;
@@ -356,6 +390,7 @@ declare module '@feathersjs/feathers' {
     SKIP,
     Connection,
     Params,
+    DefaultDocument,
 
     Hooks,
     HookResult,

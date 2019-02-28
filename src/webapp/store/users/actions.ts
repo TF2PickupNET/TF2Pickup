@@ -35,7 +35,7 @@ function fetchUser(userId: string | null): AsyncAction {
       dispatch(
         createNotification(
           NotificationType.ERROR,
-          `Error while fetching a user ${userId}: ${error.message}`,
+          `Error while fetching a user ${userId}: ${error.name}`,
           4 * 1000,
         ),
       );
@@ -59,7 +59,7 @@ function updateRegion(region: keyof typeof regions): AsyncAction {
       dispatch(
         createNotification(
           NotificationType.ERROR,
-          `Error while updating region: ${error.message}`,
+          `Error while updating region: ${error.name}`,
           4 * 1000,
         ),
       );
@@ -72,11 +72,10 @@ function setName(name: string): AsyncAction {
     try {
       await emitSocketEvent('users:set-name', { name });
     } catch (error) {
-      console.log(error);
       dispatch(
         createNotification(
           NotificationType.ERROR,
-          `Error while setting your name: ${error.message}`,
+          `Error while setting your name: ${error.name}`,
           4 * 1000,
         ),
       );
@@ -92,7 +91,7 @@ function acceptRules(): AsyncAction {
       dispatch(
         createNotification(
           NotificationType.ERROR,
-          `Error while accepting your rules: ${error.message}`,
+          `Error while accepting your rules: ${error.name}`,
           4 * 1000,
         ),
       );
@@ -108,7 +107,7 @@ function completeSignUp(): AsyncAction {
       dispatch(
         createNotification(
           NotificationType.ERROR,
-          `Error while completing sign up: ${error.message}`,
+          `Error while completing sign up: ${error.name}`,
           4 * 1000,
         ),
       );
@@ -127,7 +126,7 @@ function addRole(userId: string, role: keyof typeof roles): AsyncAction {
       dispatch(
         createNotification(
           NotificationType.ERROR,
-          `Error while adding role ${role}: ${error.message}`,
+          `Error while adding role ${role}: ${error.name}`,
           4 * 1000,
         ),
       );
@@ -146,7 +145,7 @@ function removeRole(userId: string, role: keyof typeof roles): AsyncAction {
       dispatch(
         createNotification(
           NotificationType.ERROR,
-          `Error while removing role ${role}: ${error.message}`,
+          `Error while removing role ${role}: ${error.name}`,
           4 * 1000,
         ),
       );

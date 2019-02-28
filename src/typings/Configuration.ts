@@ -1,4 +1,5 @@
 interface Configuration {
+  readonly id: string,
   readonly version: string,
 }
 

@@ -6,6 +6,7 @@ import { Actions as UsersActions } from './users/types';
 import { Actions as PickupQueuesActions } from './pickup-queues/types';
 import { Actions as PickupPlayerActions } from './pickup-players/types';
 import { Actions as NotificationActions } from './notifications/types';
+import { Actions as PickupActions } from './pickups/types';
 
 type Actions =
   | ConfigActions
@@ -15,6 +16,7 @@ type Actions =
   | UsersActions
   | PickupQueuesActions
   | NotificationActions
-  | PickupPlayerActions;
+  | PickupPlayerActions
+  | PickupActions;
 
 export default Actions;

@@ -11,7 +11,7 @@ interface Action<
 }
 
 type AsyncAction = (
-  dispatch: (action: Actions | AsyncAction) => void,
+  dispatch: <A extends Actions | AsyncAction>(action: A) => A,
   getState: () => State,
 ) => Promise<void> | void;
 

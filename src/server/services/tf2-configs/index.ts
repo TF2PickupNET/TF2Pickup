@@ -9,10 +9,7 @@ import gamemodes from '@config/gamemodes';
 import regions from '@config/regions';
 import configTypes from '@config/config-types';
 import { compileConfig } from '@server/services/tf2-configs/compile-config';
-
-interface TF2Config {
-  config: string,
-}
+import TF2Config from '@typings/TF2Config';
 
 interface Config {
   region: keyof typeof regions,
@@ -40,13 +37,16 @@ function parseConfigId(id: string): Config | null {
 }
 
 class TF2ConfigsService implements ServiceDefinition<TF2Config> {
-  private readonly cache = new Map();
+  private readonly cache = new Map<string, string>();
 
   public async get(id: string) {
     const cachedConfig = this.cache.get(id);
 
     if (cachedConfig) {
-      return cachedConfig;
+      return {
+        id,
+        config: cachedConfig,
+      };
     }
 
     const configInfo = parseConfigId(id);
@@ -59,7 +59,10 @@ class TF2ConfigsService implements ServiceDefinition<TF2Config> {
 
     this.cache.set(id, config);
 
-    return { config };
+    return {
+      id,
+      config,
+    };
   }
 }
 

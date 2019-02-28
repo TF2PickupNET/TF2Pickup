@@ -4,8 +4,7 @@ import WarningIcon from '@atlaskit/icon/glyph/warning';
 import InfoIcon from '@atlaskit/icon/glyph/info';
 import SuccessIcon from '@atlaskit/icon/glyph/check-circle';
 import ErrorIcon from '@atlaskit/icon/glyph/cross-circle';
-
-import { getColorForNotificationType } from './Notification';
+import theme from '@webapp/theme';
 
 interface OwnProps {
   type: NotificationType,
@@ -37,7 +36,7 @@ function NotificationIcon(props: OwnProps) {
     <Icon
       label="Notification icon"
       primaryColor="white"
-      secondaryColor={getColorForNotificationType(props.type)}
+      secondaryColor={theme.notification.color[props.type]}
     />
   );
 }

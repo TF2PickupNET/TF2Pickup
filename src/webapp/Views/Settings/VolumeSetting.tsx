@@ -24,7 +24,7 @@ function VolumeSetting() {
   const { volume } = useMapState(mapState);
   const actions = useActions({ updateVolume });
   const [selectedVolume, setSelectedVolume] = useState(volume);
-  const update = useRef<NodeJS.Timeout | null>(null);
+  const update = useRef<number | null>(null);
 
   // Play a sound with the currently selected volume
   const handleTestClick = useCallback(

@@ -6,33 +6,53 @@ import { AsyncAction } from '@webapp/store';
 import emitSocketEvent from '@webapp/utils/emit-socket-event';
 
 import { SettingsActionTypes } from './types';
+import { createNotification } from '@webapp/store/notifications/actions';
+import { NotificationType } from '@webapp/store/notifications/types';
 
 function updateVolume(volume: number): AsyncAction {
-  return async () => {
+  return async (dispatch) => {
     try {
       await emitSocketEvent('user-settings:change-volume', { volume });
     } catch (error) {
-      console.warn(error);
+      dispatch(
+        createNotification(
+          NotificationType.ERROR,
+          `Error while updating your volume setting: ${error.name}`,
+          2 * 1000,
+        ),
+      );
     }
   };
 }
 
 function updateEmojiSet(emojiSet: keyof typeof emojiSets): AsyncAction {
-  return async () => {
+  return async (dispatch) => {
     try {
       await emitSocketEvent('user-settings:change-emoji-set', { emojiSet });
     } catch (error) {
-      console.warn(error);
+      dispatch(
+        createNotification(
+          NotificationType.ERROR,
+          `Error while updating your emoji setting: ${error.name}`,
+          2 * 1000,
+        ),
+      );
     }
   };
 }
 
 function updateAnnouncer(announcer: keyof typeof announcers): AsyncAction {
-  return async () => {
+  return async (dispatch) => {
     try {
       await emitSocketEvent('user-settings:change-announcer', { announcer });
     } catch (error) {
-      console.warn(error);
+      dispatch(
+        createNotification(
+          NotificationType.ERROR,
+          `Error while updating your announcer setting: ${error.name}`,
+          2 * 1000,
+        ),
+      );
     }
   };
 }
@@ -58,11 +78,18 @@ function fetchSettings(): AsyncAction {
         payload: { settings },
       });
     } catch (error) {
-      console.warn('Error while fetching settings');
       dispatch({
         type: SettingsActionTypes.FETCH_FAILED,
         payload: { error },
       });
+
+      dispatch(
+        createNotification(
+          NotificationType.ERROR,
+          `Error while fetching your settings: ${error.name}`,
+          2 * 1000,
+        ),
+      );
     }
   };
 }

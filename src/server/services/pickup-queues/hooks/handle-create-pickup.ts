@@ -7,6 +7,7 @@ import { GeneralError } from '@feathersjs/errors';
 import { PickupQueueStates } from '@config/pickup-queue-states';
 import debug from 'debug';
 import getRandomMaps from '@server/services/pickup-queues/utils/get-random-maps';
+import createNewPickup from '@server/services/pickups/utils/create-new-pickup';
 
 const log = debug('TF2Pickup:pickup-queues:create-new-pickup');
 
@@ -26,8 +27,11 @@ async function handleCreatePickup(app: ServerApp, queueId: string) {
       throw new GeneralError();
     }
 
-    // TODO: Add pickup creation
-    const pickup = { id: 1, map: queue.maps[0] };
+    const pickup = await createNewPickup(app, queue.region, queue.gamemode, queue.maps[0]);
+
+    if (pickup === null) {
+      throw new GeneralError();
+    }
 
     await Promise.all(
       players.map(player => pickupPlayers.patch(player.id, {

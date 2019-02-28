@@ -2,6 +2,8 @@ import { AsyncAction } from '@webapp/store';
 import { PickupPlayerActionTypes } from '@webapp/store/pickup-players/types';
 import app from '@webapp/app';
 import PickupPlayer from '@typings/PickupPlayer';
+import { createNotification } from '@webapp/store/notifications/actions';
+import { NotificationType } from '@webapp/store/notifications/types';
 
 function fetchPlayers(id: string | number, query: Partial<PickupPlayer>): AsyncAction {
   const pickupPlayers = app.service('pickup-players');
@@ -23,7 +25,13 @@ function fetchPlayers(id: string | number, query: Partial<PickupPlayer>): AsyncA
         },
       });
     } catch (error) {
-      console.warn('HEllo');
+      dispatch(
+        createNotification(
+          NotificationType.ERROR,
+          `Error while fetching players: ${error.name}`,
+          2 * 1000,
+        )
+      );
     }
   };
 }

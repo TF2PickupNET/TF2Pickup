@@ -21,10 +21,6 @@ async function startServer() {
 
       app.emit('listening');
     });
-
-    server.on('error', (err) => {
-      console.log('Error', err);
-    });
   } catch (error) {
     log('Failed to create app', { error });
 

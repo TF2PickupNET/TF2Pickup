@@ -3,7 +3,8 @@ declare module '@feathersjs/authentication' {
     ServerApp,
     Connection,
     HookResult,
-    CommonHookContext,
+    DefaultDocument,
+    BeforeHookContext,
   } from '@feathersjs/feathers';
   import {
     Request,
@@ -55,7 +56,8 @@ declare module '@feathersjs/authentication' {
 
   interface Payload { accessToken: string }
 
-  interface AuthPayload {
+  interface AuthPayload extends DefaultDocument {
+    id: string,
     payload?: Record<string, string>,
     accessToken?: string,
   }
@@ -63,9 +65,10 @@ declare module '@feathersjs/authentication' {
   interface Authentication {
     (opts?: AuthenticationOptions): (app: ServerApp) => void,
     hooks: {
-      authenticate(strategies: string[]): <Doc, Context extends CommonHookContext<Doc>>(
-        context: Context
-      ) => HookResult<Context>,
+      authenticate(strategies: string[]): <
+        Document extends DefaultDocument,
+        Context extends BeforeHookContext<Document>,
+      >(context: Context) => HookResult<Context>,
     },
     express: { authenticate(strategy: string): RequestHandler },
   }

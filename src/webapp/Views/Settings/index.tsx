@@ -1,30 +1,26 @@
 import React from 'react';
 import withStyles, { WithStyles } from 'react-jss';
 import {
-  Row,
+  Container,
   Column,
 } from '@webapp/components/Grid';
 import RequireLogin from '@webapp/components/RequireLogin';
+import { MenuSection } from '@atlaskit/navigation-next';
+import PageNavigation, { Header } from '@webapp/components/PageNavigation';
 
 import RegionSetting from './RegionSetting';
 import VolumeSetting from './VolumeSetting';
 import EmojiSetting from './EmojiSetting';
-import Navigation from './Navigation';
 import AnnouncerSetting from './AnnouncerSetting';
 
 const styles = {
   content: {
-    padding: {
-      top: 16,
-      left: 16,
-      right: 8,
-      bottom: 12,
-    },
+    padding: [16, 8, 12, 16],
   },
 
   container: {
     flex: 1,
-    padding: '32px 0',
+    padding: [32, 0],
   },
 };
 
@@ -42,26 +38,36 @@ interface Props extends WithStyles<typeof styles> {
 function Settings(props: Props) {
   return (
     <RequireLogin>
-      <Navigation />
+      <PageNavigation>
+        <Header text="Settings" />
 
-      <Row
+        <MenuSection>
+          {({ className }) => (
+            <div className={className}>
+              {settings.map(Setting => (
+                <Setting.Navigation key={Setting.key} />
+              ))}
+            </div>
+          )}
+        </MenuSection>
+      </PageNavigation>
+
+      <Container
         justify="center"
         className={props.classes.container}
       >
         <Column col={16}>
-          {settings.map(setting => (
-            <React.Fragment key={setting.key}>
-              <h3>
-                {setting.title}
-              </h3>
+          {settings.map(Setting => (
+            <React.Fragment key={Setting.key}>
+              <Setting.Title />
 
               <div className={props.classes.content}>
-                <setting.Comp />
+                <Setting />
               </div>
             </React.Fragment>
           ))}
         </Column>
-      </Row>
+      </Container>
     </RequireLogin>
   );
 }

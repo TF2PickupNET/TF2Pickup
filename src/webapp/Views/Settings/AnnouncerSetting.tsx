@@ -12,6 +12,7 @@ import {
 import { updateAnnouncer } from '@webapp/store/settings/actions';
 import { Keys } from '@utils/types';
 import announcers from '@config/announcers';
+import { Item } from '@webapp/components/PageNavigation';
 
 const mapState = (state: State) => {
   return { announcer: getAnnouncer(state) };
@@ -43,8 +44,27 @@ function AnnouncerSetting() {
   );
 }
 
-export default {
-  key: 'announcer',
-  title: 'Announcer',
-  Comp: AnnouncerSetting,
+AnnouncerSetting.Title = () => (
+  <h3>
+    Announcer
+  </h3>
+);
+
+AnnouncerSetting.Navigation = () => {
+  const { announcer } = useMapState(mapState);
+
+  return (
+    <Item
+      path="#announcer"
+      text={(
+        <React.Fragment>
+          <b>Announcer:</b> {announcers[announcer].display}
+        </React.Fragment>
+      )}
+    />
+  );
 };
+
+AnnouncerSetting.key = 'announcer';
+
+export default AnnouncerSetting;

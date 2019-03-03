@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
-import { Row } from '@webapp/components/Grid';
+import { Container } from '@webapp/components/Grid';
 import theme from '@webapp/theme';
 
 import Item from './Item';
@@ -20,12 +20,12 @@ interface Props extends WithStyles<typeof styles> {
 
 function PageNavigation(props: Props) {
   return (
-    <Row
+    <Container
       dir="column"
       className={props.classes.contentNavigation}
     >
       {props.children}
-    </Row>
+    </Container>
   );
 }
 

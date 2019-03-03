@@ -4,7 +4,7 @@ import maps from '@config/maps';
 import steamId from '@server/utils/validators/steam-id';
 import classes from '@config/classes';
 
-export default mongoose.model('PickupPlayer', new mongoose.Schema({
+export default mongoose.model('Player', new mongoose.Schema({
   id: { type: mongoose.Types.ObjectId },
 
   userId: {
@@ -15,8 +15,7 @@ export default mongoose.model('PickupPlayer', new mongoose.Schema({
 
   map: {
     type: String,
-    validate: oneOf(Object.keys(maps), {}),
-    required: true,
+    validate: oneOf(Object.keys(maps), { nullIsAllowed: true }),
   },
 
   isReady: {
@@ -31,12 +30,10 @@ export default mongoose.model('PickupPlayer', new mongoose.Schema({
 
   pickupId: {
     type: Number,
-    required: true,
   },
 
   queueId: {
     type: String,
-    required: true,
   },
 
   class: {

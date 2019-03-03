@@ -16,7 +16,7 @@ export default function onJoin(
   connection: SocketConnection,
 ): SocketEventHandler<'pickup-queues:join'> {
   const queues = app.service('pickup-queues');
-  const players = app.service('pickup-players');
+  const players = app.service('players');
 
   return async (data, cb) => {
     const { user } = connection.feathers;
@@ -27,7 +27,8 @@ export default function onJoin(
     }
 
     const {
-      region, id: userId,
+      region,
+      id: userId,
     } = user;
     const queueId = `${region}-${data.gamemode}`;
 
@@ -41,11 +42,11 @@ export default function onJoin(
         await players.create({
           id: new mongoose.Types.ObjectId().toHexString(),
           userId,
+          queueId,
           map: null,
           isReady: queue.state === 'ready-up',
           isSubbed: false,
           pickupId: null,
-          queueId: null,
           joinedOn: Date.now(),
           class: data.class,
         });

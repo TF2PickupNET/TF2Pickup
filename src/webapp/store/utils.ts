@@ -1,5 +1,6 @@
 import {
-  AsyncItem, AsyncStatus,
+  AsyncItem,
+  AsyncStatus,
 } from '@webapp/store/types';
 
 function createTypedAsyncItem<Item>() {

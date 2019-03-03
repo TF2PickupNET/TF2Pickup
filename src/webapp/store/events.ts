@@ -4,6 +4,7 @@ import settingsEvents from './settings/events';
 import profileEvents from './user-profiles/events';
 import usersEvents from './users/events';
 import pickupQueuesEvents from './pickup-queues/events';
+import pickupPlayerEvents from './players/events';
 import connectionEvents from './connection/events';
 
 export default function events() {
@@ -13,6 +14,7 @@ export default function events() {
       .configure(profileEvents())
       .configure(usersEvents())
       .configure(pickupQueuesEvents())
-      .configure(connectionEvents);
+      .configure(connectionEvents)
+      .configure(pickupPlayerEvents);
   };
 }

@@ -1,10 +1,10 @@
 import React from 'react';
 import Button from '@atlaskit/button';
-import { acceptRules } from '../../store/users/actions';
-import useAsync from '../../utils/use-async';
-import Rules from '../Rules';
-import { Row } from '../Grid';
-import { useActions } from '../../store';
+import { acceptRules } from '@webapp/store/users/actions';
+import useAsync from '@webapp/utils/use-async';
+import Rules from '@webapp/components/Rules';
+import { Container } from '@webapp/components/Grid';
+import { useActions } from '@webapp/store';
 
 export default function AcceptRulesScreen() {
   const actions = useActions({ acceptRules });
@@ -19,14 +19,14 @@ export default function AcceptRulesScreen() {
     <React.Fragment>
       <Rules />
 
-      <Row justify="center">
+      <Container justify="center">
         <Button
           isLoading={isLoading}
           onClick={handleAcceptClick}
         >
           Accept Rules
         </Button>
-      </Row>
+      </Container>
     </React.Fragment>
   );
 }

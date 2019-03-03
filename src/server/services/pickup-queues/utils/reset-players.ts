@@ -4,10 +4,8 @@ import { ServerApp } from '@feathersjs/feathers';
 const log = debug('TF2Pickup:pickup-players:reset-players');
 
 async function resetPlayers(app: ServerApp, queueId: string) {
-  const pickupPlayers = app.service('pickup-players');
-
   try {
-    const players = await pickupPlayers.find({
+    const players = await app.service('players').find({
       query: {
         queueId,
         pickupId: null,
@@ -15,7 +13,7 @@ async function resetPlayers(app: ServerApp, queueId: string) {
     });
 
     await Promise.all(
-      players.map(player => pickupPlayers.patch(
+      players.map(player => app.service('players').patch(
         player.id,
         { isReady: false },
       )),

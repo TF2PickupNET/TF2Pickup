@@ -1,7 +1,7 @@
 import { ServerApp } from '@feathersjs/feathers';
 
 async function getPlayer(app: ServerApp, queueId: string, userId: string) {
-  const [player = null] = await app.service('pickup-players').find({
+  const [player = null] = await app.service('players').find({
     query: {
       pickupId: null,
       queueId,

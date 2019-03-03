@@ -1,32 +1,32 @@
 import { AsyncItem, Action } from '@webapp/store';
-import PickupPlayer from '@typings/PickupPlayer';
+import Player from '@typings/Player';
 
 type State = Record<
   string,
-  AsyncItem<Record<string, PickupPlayer>>
+  AsyncItem<Record<string, Player>>
 >;
 
 enum PickupPlayerActionTypes {
-  FETCH_PLAYERS = 'PICKUP-PLAYERS/FETCH-PLAYERS',
-  FETCHED_PLAYERS = 'PICKUP-PLAYERS/FETCHED-PLAYERS',
-  UPDATE_PLAYER = 'PICKUP-PLAYERS/UPDATE-PLAYER',
-  ADD_PLAYER = 'PICKUP-PLAYERS/ADD-PLAYER',
-  REMOVE_PLAYER = 'PICKUP-PLAYERS/REMOVE-PLAYER',
+  FETCH_PLAYERS = 'PLAYERS/FETCH-PLAYERS',
+  FETCHED_PLAYERS = 'PLAYERS/FETCHED-PLAYERS',
+  UPDATE_PLAYER = 'PLAYERS/UPDATE-PLAYER',
+  ADD_PLAYER = 'PLAYERS/ADD-PLAYER',
+  REMOVE_PLAYER = 'PLAYERS/REMOVE-PLAYER',
 }
 
 type Actions =
   | Action<typeof PickupPlayerActionTypes.FETCH_PLAYERS, { id: string | number }>
   | Action<typeof PickupPlayerActionTypes.FETCHED_PLAYERS, {
       id: string | number
-      players: PickupPlayer[],
+      players: Player[],
     }>
   | Action<typeof PickupPlayerActionTypes.UPDATE_PLAYER, {
       id: string | number,
-      player: PickupPlayer,
+      player: Player,
     }>
   | Action<typeof PickupPlayerActionTypes.ADD_PLAYER, {
       id: string | number,
-      player: PickupPlayer,
+      player: Player,
     }>
   | Action<typeof PickupPlayerActionTypes.REMOVE_PLAYER, {
       id: string | number,

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeGetPickupQueueItem } from '@webapp/store/pickup-queues/selectors';
 import Spinner from '@atlaskit/spinner';
 import { State, useMakeMapState, AsyncStatus } from '@webapp/store';
 import gamemodes from '@config/gamemodes';
-import { Column } from '@webapp/components/Grid';
+import { Column, Container } from '@webapp/components/Grid';
 import withStyles, { WithStyles } from 'react-jss';
+import Classes from '@webapp/Views/PickupQueue/Classes';
+import { GamemodeContext } from '@webapp/Views/PickupQueue/index';
 
 const styles = {
   spinnerContainer: {
@@ -16,10 +18,6 @@ const styles = {
   },
 };
 
-interface Props extends WithStyles<typeof styles> {
-  gamemode: keyof typeof gamemodes,
-}
-
 const makeMapState = () => {
   const getPickupQueuue = makeGetPickupQueueItem();
 
@@ -28,8 +26,11 @@ const makeMapState = () => {
   };
 };
 
+type Props = WithStyles<typeof styles>;
+
 const Content = (props: Props) => {
-  const { queue } = useMakeMapState(makeMapState, props.gamemode);
+  const gamemode = useContext(GamemodeContext);
+  const { queue } = useMakeMapState(makeMapState, gamemode);
 
   switch (queue.status) {
     case AsyncStatus.NOT_STARTED:
@@ -41,15 +42,15 @@ const Content = (props: Props) => {
       );
     case AsyncStatus.FETCHED:
       return (
-        <div>
-          
-        </div>
+        <Container dir="column">
+          <Classes gamemode={gamemode} />
+        </Container>
       );
     case AsyncStatus.ERROR:
       return (
         <Column col={16} className={props.classes.errorContainer}>
           <h3>
-            An error occurred while fetching {gamemodes[props.gamemode].display} pickup queue:
+            An error occurred while fetching {gamemodes[gamemode].display} pickup queue:
             {queue.error.name}
           </h3>
 

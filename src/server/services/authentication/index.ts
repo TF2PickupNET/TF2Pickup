@@ -1,6 +1,6 @@
 import {
   ServerApp,
-  Hooks,
+  CreateBeforeHookContext,
 } from '@feathersjs/feathers';
 import auth, { AuthPayload } from '@feathersjs/authentication';
 import jwt from '@feathersjs/authentication-jwt';
@@ -20,7 +20,11 @@ const options = {
   },
 };
 
-const hooks: Hooks<AuthPayload> = { before: { create: auth.hooks.authenticate(['jwt']) } };
+const hooks = {
+  before: {
+    create: auth.hooks.authenticate<AuthPayload, CreateBeforeHookContext<AuthPayload>>(['jwt']),
+  },
+};
 
 export { options };
 

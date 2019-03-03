@@ -7,7 +7,7 @@ import userProfiles from './user-profiles/reducer';
 import users from './users/reducer';
 import pickupQueues from './pickup-queues/reducer';
 import notifications from './notifications/reducer';
-import pickupPlayers from './pickup-players/reducer';
+import players from './players/reducer';
 import connection from './connection/reducer';
 import pickups from './pickups/reducer';
 
@@ -19,7 +19,7 @@ const reducers = combineReducers({
   userProfiles,
   pickupQueues,
   notifications,
-  pickupPlayers,
+  players,
   connection,
   pickups,
 });

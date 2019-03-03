@@ -15,7 +15,7 @@ export default function onLeave(
   app: ServerApp,
   connection: SocketConnection,
 ): SocketEventHandler<'pickup-queues:leave'> {
-  const players = app.service('pickup-players');
+  const players = app.service('players');
 
   return async (data, cb) => {
     const { user } = connection.feathers;

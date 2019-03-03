@@ -10,6 +10,7 @@ import {
 } from '@webapp/store';
 import { updateRegion } from '@webapp/store/users/actions';
 import { Keys } from '@utils/types';
+import { Item } from '@webapp/components/PageNavigation';
 
 const makeMapState = () => {
   const getUserRegion = makeGetUserRegion();
@@ -43,8 +44,31 @@ function RegionSetting() {
   );
 }
 
-export default {
-  key: 'region',
-  title: 'Region',
-  Comp: RegionSetting,
+RegionSetting.Title = () => (
+  <h3>
+    Region
+  </h3>
+);
+
+RegionSetting.Navigation = () => {
+  const { region } = useMakeMapState(makeMapState);
+
+  if (region === null) {
+    return null;
+  }
+
+  return (
+    <Item
+      path="#region"
+      text={(
+        <React.Fragment>
+          <b>Region:</b> {regions[region].fullName}
+        </React.Fragment>
+      )}
+    />
+  );
 };
+
+RegionSetting.key = 'region';
+
+export default RegionSetting;

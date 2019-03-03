@@ -1,13 +1,11 @@
 import { AsyncAction } from '@webapp/store';
-import { PickupPlayerActionTypes } from '@webapp/store/pickup-players/types';
+import { PickupPlayerActionTypes } from '@webapp/store/players/types';
 import app from '@webapp/app';
-import PickupPlayer from '@typings/PickupPlayer';
+import Player from '@typings/Player';
 import { createNotification } from '@webapp/store/notifications/actions';
 import { NotificationType } from '@webapp/store/notifications/types';
 
-function fetchPlayers(id: string | number, query: Partial<PickupPlayer>): AsyncAction {
-  const pickupPlayers = app.service('pickup-players');
-
+function fetchPlayers(id: string | number, query: Partial<Player>): AsyncAction {
   return async (dispatch) => {
     dispatch({
       type: PickupPlayerActionTypes.FETCH_PLAYERS,
@@ -15,7 +13,9 @@ function fetchPlayers(id: string | number, query: Partial<PickupPlayer>): AsyncA
     });
 
     try {
-      const players = await pickupPlayers.find({ query });
+      const players = await app.service('players').find({ query });
+
+      console.log(players);
 
       dispatch({
         type: PickupPlayerActionTypes.FETCHED_PLAYERS,

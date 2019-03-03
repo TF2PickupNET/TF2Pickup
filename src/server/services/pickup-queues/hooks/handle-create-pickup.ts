@@ -14,7 +14,6 @@ const log = debug('TF2Pickup:pickup-queues:create-new-pickup');
 async function handleCreatePickup(app: ServerApp, queueId: string) {
   const queues = app.service('pickup-queues');
   const users = app.service('users');
-  const pickupPlayers = app.service('pickup-players');
 
   try {
     const queue = await queues.get(queueId);
@@ -34,7 +33,7 @@ async function handleCreatePickup(app: ServerApp, queueId: string) {
     }
 
     await Promise.all(
-      players.map(player => pickupPlayers.patch(player.id, {
+      players.map(player => app.service('players').patch(player.id, {
         queueId: null,
         pickupId: pickup.id,
       })),
@@ -49,7 +48,7 @@ async function handleCreatePickup(app: ServerApp, queueId: string) {
       players.map(player => users.patch(player.userId, { lastPickup: pickup.id }))
     );
 
-    const otherPlayers = await pickupPlayers.find({
+    const otherPlayers = await app.service('players').find({
       query: {
         queueId,
         pickupId: null,
@@ -60,7 +59,7 @@ async function handleCreatePickup(app: ServerApp, queueId: string) {
     await Promise.all(
       otherPlayers.map((player) => {
         if (player.map === pickup.map) {
-          return pickupPlayers.patch(player.id, { map: null });
+          return app.service('players').patch(player.id, { map: null });
         }
 
         return player;

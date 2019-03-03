@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
-import { Row } from '@webapp/components/Grid';
+import { Container } from '@webapp/components/Grid';
 import Spinner from '@atlaskit/spinner';
 import DocumentTitle from '@webapp/components/DocumentTitle';
 import {
@@ -50,7 +50,7 @@ function IsConnected(props: Props) {
   }
 
   return (
-    <Row
+    <Container
       dir="column"
       justify="center"
       align="center"
@@ -77,7 +77,7 @@ function IsConnected(props: Props) {
           </p>
         </React.Fragment>
       )}
-    </Row>
+    </Container>
   );
 }
 

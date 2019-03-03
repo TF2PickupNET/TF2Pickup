@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Row } from '@webapp/components/Grid';
+import { Container } from '@webapp/components/Grid';
 import GlobalNavigation from '@webapp/components/GlobalNavigation';
 import NotificationRequester from '@webapp/components/NotificationRequester';
 import Notifications from '@webapp/components/Notifications';
@@ -32,13 +32,13 @@ function Layout(props: Props) {
 
       <Authenticator />
 
-      <Row className={props.classes.page}>
+      <Container className={props.classes.page}>
         <GlobalNavigation />
 
         <Page>
           {props.children}
         </Page>
-      </Row>
+      </Container>
     </React.Fragment>
   );
 }

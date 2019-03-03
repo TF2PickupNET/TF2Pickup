@@ -1,6 +1,6 @@
 import { ServerApp } from '@feathersjs/feathers';
 import service from 'feathers-mongoose';
-import Model from '@server/services/pickup-players/Model';
+import Model from '@server/services/players/Model';
 import debug from 'debug';
 
 const log = debug('TF2Pickup:pickup');

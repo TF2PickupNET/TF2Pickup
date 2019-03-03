@@ -8,12 +8,18 @@ const theme = {
   textColor: {
     light: colors.N10,
     dark: colors.N900,
+
+    secondary: {
+      light: '#6B778C'
+    },
   },
 
   pageNavigation: {
     backgroundColor: colors.N20,
     darkBackgroundColor: colors.N40,
   },
+
+  divider: colors.N40,
 
   notification: {
     color: {

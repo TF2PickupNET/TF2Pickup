@@ -9,6 +9,7 @@ import {
 } from '@webapp/store';
 import { updateEmojiSet } from '@webapp/store/settings/actions';
 import { Keys } from '@utils/types';
+import { Item } from '@webapp/components/PageNavigation';
 
 const mapState = (state: State) => {
   return { emoji: getEmojiSet(state) };
@@ -38,8 +39,27 @@ function EmojiSetting() {
   );
 }
 
-export default {
-  key: 'emoji-set',
-  title: 'Emoji Set',
-  Comp: EmojiSetting,
+EmojiSetting.Title = () => (
+  <h3>
+    Emoji Set
+  </h3>
+);
+
+EmojiSetting.Navigation = () => {
+  const { emoji } = useMapState(mapState);
+
+  return (
+    <Item
+      path="#emoji"
+      text={(
+        <React.Fragment>
+          <b>Emoji:</b> {emojiSets[emoji].display}
+        </React.Fragment>
+      )}
+    />
+  );
 };
+
+EmojiSetting.key = 'emoji-set';
+
+export default EmojiSetting;

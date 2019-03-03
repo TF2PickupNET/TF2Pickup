@@ -34,6 +34,7 @@ const styles = {
     marginBottom: 16,
     animationDuration: 333,
     animationFillMode: 'forwards',
+    from: { transform: 'translateX(200%)' },
     backgroundColor: (props: OwnProps) => theme.notification.color[props.type],
     animationName(props: OwnProps) {
       switch (props.state) {
@@ -41,7 +42,7 @@ const styles = {
         case NotificationState.ANIMATING_IN:
           return '$animateIn';
         case NotificationState.ANIMATING_OUT:
-          return'$animateOut';
+          return '$animateOut';
         default:
           return null;
       }

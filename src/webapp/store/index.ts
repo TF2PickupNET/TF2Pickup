@@ -11,16 +11,16 @@ import {
   Action,
   AsyncStatus,
   AsyncItem,
-} from './types';
-import reducers, { State } from './reducers';
-import useActions from './use-actions';
+} from '@webapp/store/types';
+import reducers, { State } from '@webapp/store/reducers';
+import useActions from '@webapp/store/use-actions';
 import {
   useMakeMapState,
   useMapState,
-} from './use-store';
-import Actions from './actions';
+} from '@webapp/store/use-store';
+import Actions from '@webapp/store/actions';
 
-const middlewares = applyMiddleware(thunk);
+const middleware = applyMiddleware(thunk);
 
 interface ThunkStore {
   dispatch(action: Actions | AsyncAction): void,
@@ -29,8 +29,8 @@ interface ThunkStore {
 const store = createStore<State, AnyAction, ThunkStore, {}>(
   reducers,
   process.env.NODE_ENV === 'development'
-    ? composeWithDevTools(middlewares)
-    : middlewares,
+    ? composeWithDevTools(middleware)
+    : middleware,
 );
 
 export {

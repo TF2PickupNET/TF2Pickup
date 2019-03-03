@@ -3,8 +3,8 @@ import gamemodes from '@config/gamemodes';
 import { State } from '@webapp/store';
 import maps from '@config/maps';
 import { getCurrentRegion } from '@webapp/store/user-id/selectors';
-import { makeGetPickupPlayersForId } from '@webapp/store/pickup-players/selectors';
-import PickupPlayer from '@typings/PickupPlayer';
+import { makeGetPickupPlayersForId } from '@webapp/store/players/selectors';
+import Player from '@typings/Player';
 import classes from '@config/classes';
 
 const getPickupQueues = (state: State) => state.pickupQueues;
@@ -48,7 +48,7 @@ const makeGetPlayers = () => {
 
 const makeGetPlayersData = () => createSelector(
   makeGetPlayers(),
-  (players): PickupPlayer[] => players === null ? [] : Object.values(players),
+  (players): Player[] => players === null ? [] : Object.values(players),
 );
 
 const makeGetPlayerByUserId = () => {

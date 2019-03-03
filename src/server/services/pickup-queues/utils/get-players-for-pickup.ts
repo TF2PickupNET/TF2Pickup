@@ -13,13 +13,12 @@ async function getPlayersForPickup(app: ServerApp, queue: PickupQueue) {
     throw new Forbidden();
   }
 
-  const pickupPlayers = app.service('pickup-players');
   const { slots } = gamemodes[queue.gamemode];
   const classNames = Object.keys(slots) as Keys<typeof slots>;
 
   try {
     const players = await Promise.all(
-      classNames.map(className => pickupPlayers.find({
+      classNames.map(className => app.service('players').find({
         query: {
           pickupId: null,
           queueId: queue.id,

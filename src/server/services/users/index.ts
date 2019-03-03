@@ -19,6 +19,5 @@ export default function users(app: ServerApp) {
   app
     .configure(events)
     .service('users')
-    .hooks(hooks)
-    .publish('patched', () => app.channel('authenticated'));
+    .hooks(hooks);
 }

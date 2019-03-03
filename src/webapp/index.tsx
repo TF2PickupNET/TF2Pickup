@@ -1,5 +1,5 @@
-import 'modern-normalize/modern-normalize.css';
 import '@atlaskit/css-reset/dist/bundle.css';
+import 'emoji-mart/css/emoji-mart.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ThemeProvider } from 'react-jss';

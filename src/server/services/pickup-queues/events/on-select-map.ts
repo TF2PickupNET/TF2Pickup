@@ -16,7 +16,7 @@ export default function onSelectMap(
   connection: SocketConnection,
 ): SocketEventHandler<'pickup-queues:select-map'> {
   const queues = app.service('pickup-queues');
-  const players = app.service('pickup-players');
+  const players = app.service('players');
 
   return async (data, cb) => {
     const { user } = connection.feathers;

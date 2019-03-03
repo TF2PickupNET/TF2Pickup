@@ -1,9 +1,9 @@
 import { State, Actions, PickupPlayerActionTypes } from './types';
 import { createTypedAsyncItem } from '@webapp/store/utils';
-import PickupPlayer from '@typings/PickupPlayer';
+import Player from '@typings/Player';
 
 const defaultState = {};
-const asyncItem = createTypedAsyncItem<Record<string, PickupPlayer>>();
+const asyncItem = createTypedAsyncItem<Record<string, Player>>();
 
 function reducer(state: State |  undefined = defaultState, action: Actions): State {
   switch (action.type) {
@@ -17,7 +17,7 @@ function reducer(state: State |  undefined = defaultState, action: Actions): Sta
       return {
         ...state,
         [action.payload.id]: asyncItem.createFetchedState(
-          action.payload.players.reduce<Record<string, PickupPlayer>>((accu, player) => {
+          action.payload.players.reduce<Record<string, Player>>((accu, player) => {
             return {
               ...accu,
               [player.id]: player,

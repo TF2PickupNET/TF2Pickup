@@ -19,7 +19,7 @@ declare module '@feathersjs/feathers' {
   import PickupQueue from '@typings/PickupQueue';
   import Configuration from '@typings/Configuration';
   import Log from '@typings/Log';
-  import PickupPlayer from '@typings/PickupPlayer';
+  import Player from '@typings/Player';
   import Pickup from '@typings/Pickup';
 
   type SKIP = Symbol;
@@ -250,7 +250,7 @@ declare module '@feathersjs/feathers' {
     service(name: 'user-settings'): ServerService<UserSettings>,
     service(name: 'users'): ServerService<User>,
     service(name: 'pickup-queues'): ServerService<PickupQueue>,
-    service(name: 'pickup-players'): ServerService<PickupPlayer>,
+    service(name: 'players'): ServerService<Player>,
     service(name: 'authentication'): ServerService<AuthPayload>,
     service(name: 'logs'): ServerService<Log>,
     service(name: 'pickups'): ServerService<Pickup>,
@@ -260,7 +260,7 @@ declare module '@feathersjs/feathers' {
     service(name: 'configuration'): ClientService<Configuration>,
     service(name: 'user-profiles'): ClientService<UserProfile>,
     service(name: 'user-settings'): ClientService<UserSettings>,
-    service(name: 'pickup-players'): ServerService<PickupPlayer>,
+    service(name: 'players'): ServerService<Player>,
     service(name: 'users'): ClientService<User>,
     service(name: 'pickup-queues'): ClientService<PickupQueue>,
     service(name: 'logs'): ClientService<Log>,

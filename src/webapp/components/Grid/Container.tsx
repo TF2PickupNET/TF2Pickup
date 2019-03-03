@@ -46,7 +46,7 @@ const styles = {
 
 interface Props extends OwnProps, WithStyles<typeof styles> {}
 
-function Row(props: Props) {
+function Container(props: Props) {
   return (
     <div className={`${props.classes.row} ${props.className}`}>
       {props.children}
@@ -54,6 +54,6 @@ function Row(props: Props) {
   );
 }
 
-Row.defaultProps = { className: '' };
+Container.defaultProps = { className: '' };
 
-export default withStyles(styles)(Row);
+export default withStyles(styles)(Container);

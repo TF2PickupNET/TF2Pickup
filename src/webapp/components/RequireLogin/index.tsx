@@ -5,7 +5,7 @@ import {
   useMapState,
 } from '@webapp/store';
 import { getCurrentUserId } from '@webapp/store/user-id/selectors';
-import { Row } from '@webapp/components/Grid';
+import { Container } from '@webapp/components/Grid';
 import SteamLoginButton from '@webapp/components/SteamLoginButton';
 
 const styles = {
@@ -37,7 +37,7 @@ function RequireLogin(props: Props) {
   }
 
   return (
-    <Row
+    <Container
       justify="center"
       dir="column"
       align="center"
@@ -48,7 +48,7 @@ function RequireLogin(props: Props) {
       </h4>
 
       <SteamLoginButton />
-    </Row>
+    </Container>
   );
 }
 

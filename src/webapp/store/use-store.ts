@@ -6,7 +6,7 @@ import {
 } from 'react';
 import shallowEqual from 'shallowequal';
 
-import store, { State } from '.';
+import store, { State } from '@webapp/store';
 
 type ValidArgs = Array<number | string | null | boolean>;
 

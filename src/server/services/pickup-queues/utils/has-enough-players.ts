@@ -3,7 +3,7 @@ import gamemodes from '@config/gamemodes';
 import { Keys } from '@utils/types';
 import { ServerApp } from '@feathersjs/feathers';
 import PickupQueue from '@typings/PickupQueue';
-import PickupPlayer from '@typings/PickupPlayer';
+import Player from '@typings/Player';
 
 const log = debug('TF2Pickup:pickup-queues:has-enough-players');
 
@@ -13,16 +13,15 @@ const log = debug('TF2Pickup:pickup-queues:has-enough-players');
 async function hasEnoughPlayers(
   app: ServerApp,
   queue: PickupQueue,
-  getPlayerCount: (players: PickupPlayer[], min: number) => number,
+  getPlayerCount: (players: Player[], min: number) => number,
 ) {
-  const pickupPlayers = app.service('pickup-players');
   const { slots } = gamemodes[queue.gamemode];
   const classNames = Object.keys(slots) as Keys<typeof slots>;
 
   try {
     const players = await Promise.all(
-      classNames.map(async (className): Promise<[keyof typeof slots, PickupPlayer[]]> => {
-        const playersForClass = await pickupPlayers.find({
+      classNames.map(async (className): Promise<[keyof typeof slots, Player[]]> => {
+        const playersForClass = await app.service('players').find({
           query: {
             pickupId: null,
             queueId: queue.id,

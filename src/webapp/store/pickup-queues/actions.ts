@@ -6,7 +6,7 @@ import emitSocketEvent from '@webapp/utils/emit-socket-event';
 import { createNotification } from '@webapp/store/notifications/actions';
 import { NotificationType } from '@webapp/store/notifications/types';
 import classes from '@config/classes';
-import { fetchQueuePlayers } from '@webapp/store/pickup-players/actions';
+import { fetchQueuePlayers } from '@webapp/store/players/actions';
 
 import { PickupQueueActionTypes } from './types';
 import maps from '@config/maps';

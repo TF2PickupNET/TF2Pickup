@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import Button from '@atlaskit/button';
 import withStyles, { WithStyles } from 'react-jss';
-import { Row } from '@webapp/components/Grid';
+import { Container } from '@webapp/components/Grid';
 import DocumentTitle from '@webapp/components/DocumentTitle';
 
 const styles = { buttonContainer: { marginTop: 12 } };
@@ -19,13 +19,13 @@ function NotFound(props: Props) {
     <React.Fragment>
       <DocumentTitle title="Not Found" />
 
-      <Row justify="center" dir="column">
+      <Container justify="center" dir="column">
         <h2>Not Found</h2>
         <div>
           We couldn't find what you are looking for.
         </div>
 
-        <Row
+        <Container
           inline
           justify="end"
           className={props.classes.buttonContainer}
@@ -33,8 +33,8 @@ function NotFound(props: Props) {
           <Button onClick={handleBack}>
             Go Back
           </Button>
-        </Row>
-      </Row>
+        </Container>
+      </Container>
     </React.Fragment>
   );
 }

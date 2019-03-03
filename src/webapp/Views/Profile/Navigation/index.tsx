@@ -13,6 +13,7 @@ import { UserIdContext } from '@webapp/Views/Profile';
 
 import Header from './Header';
 import Links from './Links';
+import Roles from '@webapp/Views/Profile/Navigation/Roles';
 
 const makeMapState = () => {
   const getUserRegion = makeGetUserRegion();
@@ -42,6 +43,8 @@ export default function Navigation() {
                 )}
               />
             )}
+
+            <Roles />
 
             <Links />
           </div>

@@ -6,7 +6,7 @@ import React, {
 import is from 'is_js';
 import Button from '@atlaskit/button';
 import withStyles, { WithStyles } from 'react-jss';
-import { Row } from '@webapp/components/Grid';
+import { Container } from '@webapp/components/Grid';
 import DocumentTitle from '@webapp/components/DocumentTitle';
 
 const styles = {
@@ -75,7 +75,7 @@ function BrowserValidator(props: Props) {
   }
 
   return (
-    <Row
+    <Container
       dir="column"
       justify="center"
       align="center"
@@ -94,7 +94,7 @@ function BrowserValidator(props: Props) {
       <Button onClick={handleClick}>
         Ignore warning and continue
       </Button>
-    </Row>
+    </Container>
   );
 }
 

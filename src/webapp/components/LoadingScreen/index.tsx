@@ -12,7 +12,7 @@ import {
 import { fetchConfig } from '@webapp/store/config/actions';
 import { getIsConnected } from '@webapp/store/connection/selectors';
 import { getConfigStatus } from '@webapp/store/config/selectors';
-import { Row } from '@webapp/components/Grid';
+import { Container } from '@webapp/components/Grid';
 import withStyles, { WithStyles } from 'react-jss';
 
 const makeMapState = () => {
@@ -57,13 +57,13 @@ function LoadingScreen(props: Props) {
   }
 
   return (
-    <Row
+    <Container
       align="center"
       justify="center"
       className={props.classes.container}
     >
       <Spinner />
-    </Row>
+    </Container>
   );
 }
 

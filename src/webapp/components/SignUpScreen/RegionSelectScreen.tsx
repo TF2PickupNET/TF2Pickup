@@ -4,11 +4,11 @@ import React, {
 } from 'react';
 import Button from '@atlaskit/button';
 import { RadioGroup } from '@atlaskit/radio';
-import regions from '../../../config/regions';
-import { updateRegion } from '../../store/users/actions';
-import useAsync from '../../utils/use-async';
-import { Row } from '../Grid';
-import { useActions } from '../../store';
+import regions from '@config/regions';
+import { updateRegion } from '@webapp/store/users/actions';
+import useAsync from '@webapp/utils/use-async';
+import { Container } from '@webapp/components/Grid';
+import { useActions } from '@webapp/store';
 
 const regionKeys = Object.keys(regions) as Array<keyof typeof regions>;
 
@@ -45,14 +45,14 @@ export default function RegionSelectScreen() {
         onChange={handleChange}
       />
 
-      <Row justify="center">
+      <Container justify="center">
         <Button
           isLoading={isLoading}
           onClick={handleClick}
         >
           Select Region
         </Button>
-      </Row>
+      </Container>
     </React.Fragment>
   );
 }

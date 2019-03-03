@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { State } from '@webapp/store';
 
-const getPickupPlayers = (state: State) => state.pickupPlayers;
+const getPickupPlayers = (state: State) => state.players;
 
 const makeGetPickupPlayersForId = () => createSelector(
   getPickupPlayers,

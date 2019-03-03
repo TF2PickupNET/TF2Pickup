@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import withStyles, { WithStyles } from 'react-jss';
 import Button from '@atlaskit/button';
-import { Row } from '@webapp/components/Grid';
+import { Container } from '@webapp/components/Grid';
 import { getVersion } from '@webapp/store/config/selectors';
 import {
   State,
@@ -37,7 +37,7 @@ function VersionValidator(props: Props) {
   }
 
   return (
-    <Row
+    <Container
       dir="column"
       justify="center"
       align="center"
@@ -61,7 +61,7 @@ function VersionValidator(props: Props) {
           Refresh
         </Button>
       </p>
-    </Row>
+    </Container>
   );
 }
 

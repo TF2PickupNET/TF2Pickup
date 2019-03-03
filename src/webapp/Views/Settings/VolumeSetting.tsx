@@ -15,6 +15,7 @@ import {
   useActions,
 } from '@webapp/store';
 import { updateVolume } from '@webapp/store/settings/actions';
+import { Item } from '@webapp/components/PageNavigation';
 
 const mapState = (state: State) => {
   return { volume: getVolume(state) };
@@ -67,8 +68,27 @@ function VolumeSetting() {
   );
 }
 
-export default {
-  key: 'volume',
-  title: 'Volume',
-  Comp: VolumeSetting,
+VolumeSetting.Title = () => (
+  <h3>
+    Volume
+  </h3>
+);
+
+VolumeSetting.Navigation = () => {
+  const { volume } = useMapState(mapState);
+
+  return (
+    <Item
+      path="#volume"
+      text={(
+        <React.Fragment>
+          <b>Volume:</b> {volume}%
+        </React.Fragment>
+      )}
+    />
+  );
 };
+
+VolumeSetting.key = 'volume';
+
+export default VolumeSetting;

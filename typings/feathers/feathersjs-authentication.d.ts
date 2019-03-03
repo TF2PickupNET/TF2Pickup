@@ -65,10 +65,10 @@ declare module '@feathersjs/authentication' {
   interface Authentication {
     (opts?: AuthenticationOptions): (app: ServerApp) => void,
     hooks: {
-      authenticate(strategies: string[]): <
+      authenticate<
         Document extends DefaultDocument,
         Context extends BeforeHookContext<Document>,
-      >(context: Context) => HookResult<Context>,
+      >(strategies: string[]): (context: Context) => HookResult<Context>,
     },
     express: { authenticate(strategy: string): RequestHandler },
   }

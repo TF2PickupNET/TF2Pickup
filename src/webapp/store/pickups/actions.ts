@@ -5,7 +5,7 @@ import {
 import app from '@webapp/app';
 import { PickupActionTypes } from '@webapp/store/pickups/types';
 import { makeGetPickupStatusById } from '@webapp/store/pickups/selectors';
-import { fetchPickupPlayers } from '@webapp/store/pickup-players/actions';
+import { fetchPickupPlayers } from '@webapp/store/players/actions';
 
 const pickups = app.service('pickups');
 const getPickupStatusById = makeGetPickupStatusById();

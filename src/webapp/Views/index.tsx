@@ -22,6 +22,7 @@ import withStyles, { WithStyles } from 'react-jss';
 const styles = {
   main: {
     display: 'flex',
+    overflow: 'hidden',
     flexDirection: 'row',
     flex: 1,
   },

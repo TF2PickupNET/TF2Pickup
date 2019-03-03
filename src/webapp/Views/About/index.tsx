@@ -1,6 +1,6 @@
 import React from 'react';
 import withStyles, { WithStyles } from 'react-jss';
-import { Column, Row } from '@webapp/components/Grid';
+import { Column, Container } from '@webapp/components/Grid';
 
 const styles = {
   container: { padding: 32 },
@@ -12,7 +12,7 @@ interface Props extends WithStyles<typeof styles> {
 
 function About(props: Props) {
   return (
-    <Row
+    <Container
       justify="center"
       className={props.classes.container}
     >
@@ -21,7 +21,7 @@ function About(props: Props) {
           About TF2Pickup
         </h3>
       </Column>
-    </Row>
+    </Container>
   );
 }
 

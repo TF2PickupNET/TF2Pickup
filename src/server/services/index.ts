@@ -7,7 +7,7 @@ import userSettings from '@server/services//user-settings';
 import configuration from '@server/services//configuration';
 import tf2Configs from '@server/services//tf2-configs';
 import logs from '@server/services//logs';
-import pickupPlayers from '@server/services//pickup-players';
+import players from '@server/services/players';
 import pickupQueues from '@server/services/pickup-queues';
 import pickups from '@server/services/pickups';
 
@@ -20,7 +20,7 @@ export default function services(app: ServerApp) {
     .configure(tf2Configs)
     .configure(authentication)
     .configure(logs)
+    .configure(players)
     .configure(pickupQueues)
-    .configure(pickupPlayers)
     .configure(pickups);
 }

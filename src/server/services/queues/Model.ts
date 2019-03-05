@@ -2,10 +2,10 @@ import mongoose from 'mongoose';
 import regions from '@config/regions';
 import gamemodes from '@config/gamemodes';
 import oneOf from '@server/utils/validators/one-of';
-import pickupStates from '@config/pickup-queue-states';
+import pickupStates from '@config/queue-states';
 import maps from '@config/maps';
 
-export default mongoose.model('PickupQueue', new mongoose.Schema({
+export default mongoose.model('Queue', new mongoose.Schema({
   id: {
     type: String,
     required: true,

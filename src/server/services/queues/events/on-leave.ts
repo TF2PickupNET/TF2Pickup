@@ -7,17 +7,14 @@ import {
 } from '@feathersjs/feathers';
 import { SocketConnection } from '@feathersjs/socketio';
 import debug from 'debug';
-import getPlayer from '@server/services/pickup-queues/utils/get-player';
-import { PickupQueueStates } from '@config/pickup-queue-states';
-import checkForUpdateState from '@server/services/pickup-queues/check-for-update-state';
+import getPlayer from '@server/services/queues/utils/get-player';
 
-const log = debug('TF2Pickup:pickup-queues:events:on-select-map');
+const log = debug('TF2Pickup:pickup-queues:events:on-leave');
 
-export default function onReadyUp(
+export default function onLeave(
   app: ServerApp,
   connection: SocketConnection,
-): SocketEventHandler<'pickup-queues:ready-up'> {
-  const queues = app.service('pickup-queues');
+): SocketEventHandler<'queues:leave'> {
   const players = app.service('players');
 
   return async (data, cb) => {
@@ -29,25 +26,23 @@ export default function onReadyUp(
     }
 
     const {
-      region, id: userId,
+      region,
+      id: userId,
     } = user;
     const queueId = `${region}-${data.gamemode}`;
 
     try {
-      const queue = await queues.get(queueId);
       const player = await getPlayer(app, queueId, userId);
 
-      if (player === null || queue.state !== PickupQueueStates.ReadyUp) {
+      if (player === null) {
         return cb(new BadRequest());
       }
 
-      await players.patch(player.id, { isReady: true });
-
-      await checkForUpdateState(app, queue);
+      await players.remove(player.id);
 
       return cb(null);
     } catch (error) {
-      log('Error while player select map for pickup queue', {
+      log('Error while player wanted to leave pickup queue', {
         error,
         userId,
         data,

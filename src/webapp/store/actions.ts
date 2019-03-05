@@ -3,7 +3,7 @@ import { Actions as SettingsActions } from './settings/types';
 import { Actions as UserIdActions } from './user-id/types';
 import { Actions as UserProfilesActions } from './user-profiles/types';
 import { Actions as UsersActions } from './users/types';
-import { Actions as PickupQueuesActions } from './pickup-queues/types';
+import { Actions as PickupQueuesActions } from './queues/types';
 import { Actions as PickupPlayerActions } from './players/types';
 import { Actions as NotificationActions } from './notifications/types';
 import { Actions as PickupActions } from './pickups/types';

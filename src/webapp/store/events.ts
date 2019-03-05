@@ -3,7 +3,7 @@ import { ClientApp } from '@feathersjs/feathers';
 import settingsEvents from './settings/events';
 import profileEvents from './user-profiles/events';
 import usersEvents from './users/events';
-import pickupQueuesEvents from './pickup-queues/events';
+import pickupQueuesEvents from './queues/events';
 import pickupPlayerEvents from './players/events';
 import connectionEvents from './connection/events';
 

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { makeGetPickupQueueItem } from '@webapp/store/pickup-queues/selectors';
+import { makeGetQueueItem } from '@webapp/store/queues/selectors';
 import Spinner from '@atlaskit/spinner';
 import { State, useMakeMapState, AsyncStatus } from '@webapp/store';
 import gamemodes from '@config/gamemodes';
@@ -19,10 +19,10 @@ const styles = {
 };
 
 const makeMapState = () => {
-  const getPickupQueuue = makeGetPickupQueueItem();
+  const getQueue = makeGetQueueItem();
 
   return (state: State, gamemode: keyof typeof gamemodes) => {
-    return { queue: getPickupQueuue(state, gamemode) };
+    return { queue: getQueue(state, gamemode) };
   };
 };
 

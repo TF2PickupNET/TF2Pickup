@@ -1,31 +1,33 @@
 import { mapObjectValues } from '@utils/object';
 import gamemodes from '@config/gamemodes';
 import { createTypedAsyncItem } from '@webapp/store/utils';
-import PickupQueue from '@typings/PickupQueue';
+import Queue from '@typings/Queue';
 
 import {
-  State, Actions, PickupQueueActionTypes,
+  State,
+  Actions,
+  QueueActionTypes,
 } from './types';
 
-const asyncItem = createTypedAsyncItem<PickupQueue>();
+const asyncItem = createTypedAsyncItem<Queue>();
 const defaultState = mapObjectValues(gamemodes, () => asyncItem.createNotStartedState());
 
 export default function reducer(state: State | undefined = defaultState, action: Actions): State {
   switch (action.type) {
-    case PickupQueueActionTypes.START_FETCH: {
+    case QueueActionTypes.START_FETCH: {
       return {
         ...state,
         [action.payload.gamemode]: asyncItem.createLoadingState(),
       };
     }
-    case PickupQueueActionTypes.UPDATE:
-    case PickupQueueActionTypes.FETCHED: {
+    case QueueActionTypes.UPDATE:
+    case QueueActionTypes.FETCHED: {
       return {
         ...state,
         [action.payload.queue.gamemode]: asyncItem.createFetchedState(action.payload.queue),
       };
     }
-    case PickupQueueActionTypes.FETCH_ERROR: {
+    case QueueActionTypes.FETCH_ERROR: {
       return {
         ...state,
         [action.payload.gamemode]: asyncItem.createErrorState(action.payload.error),

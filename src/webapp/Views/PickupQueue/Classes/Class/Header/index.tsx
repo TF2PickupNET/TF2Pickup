@@ -3,7 +3,7 @@ import classes from '@config/classes';
 import { capitalize } from '@utils/string';
 import Icon from './Icon';
 import withStyles, { WithStyles } from 'react-jss';
-import { makeGetPlayerIdsForClass } from '@webapp/store/pickup-queues/selectors';
+import { makeGetPlayerIdsForClass } from '@webapp/store/queues/selectors';
 import { State, useMakeMapState } from '@webapp/store';
 import gamemodes from '@config/gamemodes';
 import { GamemodeContext } from '@webapp/Views/PickupQueue';

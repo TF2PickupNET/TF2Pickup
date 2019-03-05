@@ -4,7 +4,7 @@ import {
   State,
   useMakeMapState,
 } from '@webapp/store';
-import { fetchPickupQueue } from '@webapp/store/pickup-queues/actions';
+import { fetchQueue } from '@webapp/store/queues/actions';
 import { getCurrentRegion } from '@webapp/store/user-id/selectors';
 import gamemodes from '@config/gamemodes';
 import { Keys } from '@utils/types';
@@ -18,7 +18,7 @@ const makeMapState = () => {
 };
 
 function PickupQueueLoader() {
-  const actions = useActions({ fetchPickupQueue });
+  const actions = useActions({ fetchPickupQueue: fetchQueue });
   const { region } = useMakeMapState(makeMapState);
 
   useEffect(() => {

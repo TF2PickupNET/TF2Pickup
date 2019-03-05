@@ -24,13 +24,13 @@ interface Events {
   'user-settings:change-emoji-set': { emojiSet: keyof typeof emojiSets },
   'user-settings:change-announcer': { announcer: keyof typeof announcers },
 
-  'pickup-queues:join': {
+  'queues:join': {
     gamemode: keyof typeof gamemodes,
     class: keyof typeof classes,
   },
-  'pickup-queues:leave': { gamemode: keyof typeof gamemodes },
-  'pickup-queues:ready-up': { gamemode: keyof typeof gamemodes },
-  'pickup-queues:select-map': {
+  'queues:leave': { gamemode: keyof typeof gamemodes },
+  'queues:ready-up': { gamemode: keyof typeof gamemodes },
+  'queues:select-map': {
     gamemode: keyof typeof gamemodes,
     map: keyof typeof maps,
   },

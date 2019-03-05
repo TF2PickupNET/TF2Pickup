@@ -23,7 +23,7 @@ function configureChannels(app: ServerApp) {
   app.on('logout', (_, { connection }) => {
     app.channel('authenticated').leave(connection);
 
-    app.channel('anonymous').leave(connection);
+    app.channel('anonymous').join(connection);
   });
 }
 

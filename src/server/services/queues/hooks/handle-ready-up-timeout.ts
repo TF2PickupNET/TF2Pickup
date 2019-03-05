@@ -1,6 +1,6 @@
 import { ServerApp } from '@feathersjs/feathers';
-import resetQueue from '@server/services/pickup-queues/utils/reset-queue';
-import { PickupQueueStates } from '@config/pickup-queue-states';
+import resetQueue from '@server/services/queues/utils/reset-queue';
+import { QueueStates } from '@config/queue-states';
 import debug from 'debug';
 
 import hasEnoughPlayers from '../utils/has-enough-players';
@@ -8,7 +8,7 @@ import hasEnoughPlayers from '../utils/has-enough-players';
 const log = debug('TF2Pickup:pickup-queues:hooks:handle-ready-up-timeout');
 
 async function handleReadyUpTimeout(app: ServerApp, queueId: string) {
-  const queues = app.service('pickup-queues');
+  const queues = app.service('queues');
 
   try {
     const queue = await queues.get(queueId);
@@ -21,7 +21,7 @@ async function handleReadyUpTimeout(app: ServerApp, queueId: string) {
 
     if (hasEnough) {
       await queues.patch(queueId, {
-        state: PickupQueueStates.CreatingPickup,
+        state: QueueStates.CreatingPickup,
         readyUpEnd: null,
       });
     } else {

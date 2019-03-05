@@ -4,10 +4,10 @@ import service from 'feathers-mongoose';
 
 import Model from './Model';
 
-const log = debug('TF2Pickup:pickup-players');
+const log = debug('TF2Pickup:players');
 
 export default function pickupPlayers(app: ServerApp) {
-  log('Setting up pickup players');
+  log('Setting up players service');
 
   app.use('/players', service({
     id: 'id',

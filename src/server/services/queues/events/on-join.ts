@@ -6,16 +6,16 @@ import {
 import { SocketConnection } from '@feathersjs/socketio';
 import mongoose from 'mongoose';
 import debug from 'debug';
-import getPlayer from '@server/services/pickup-queues/utils/get-player';
-import checkForUpdateState from '@server/services/pickup-queues/check-for-update-state';
+import getPlayer from '@server/services/queues/utils/get-player';
+import checkForUpdateState from '@server/services/queues/check-for-update-state';
 
 const log = debug('TF2Pickup:pickup-queues:events:on-join');
 
 export default function onJoin(
   app: ServerApp,
   connection: SocketConnection,
-): SocketEventHandler<'pickup-queues:join'> {
-  const queues = app.service('pickup-queues');
+): SocketEventHandler<'queues:join'> {
+  const queues = app.service('queues');
   const players = app.service('players');
 
   return async (data, cb) => {

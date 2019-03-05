@@ -1,6 +1,6 @@
 import maps from '@config/maps';
 import mapPool from '@config/map-pool';
-import PickupQueue from '@typings/PickupQueue';
+import Queue from '@typings/Queue';
 
 function getRandomMaps(
   queueId: string,
@@ -12,7 +12,7 @@ function getRandomMaps(
     throw new TypeError('Map pool for ');
   }
 
-  const newMaps: PickupQueue['maps'] = [];
+  const newMaps: Queue['maps'] = [];
 
   while (newMaps.length < 3) {
     const index = Math.round(Math.random() * (pool.length - 1));

@@ -14,25 +14,25 @@ import {
   useActions,
 } from '@webapp/store';
 import {
-  makeGetPickupQueueState,
-  makeGetPickupQueueReadyUpEnd,
-} from '@webapp/store/pickup-queues/selectors';
+  makeGetQueueState,
+  makeGetQueueReadyUpEnd,
+} from '@webapp/store/queues/selectors';
 import { GamemodeContext } from '@webapp/Views/PickupQueue';
 import withStyles, { WithStyles } from 'react-jss';
 import {
   readyUp,
-  leavePickupQueue,
-} from '@webapp/store/pickup-queues/actions';
+  leaveQueue,
+} from '@webapp/store/queues/actions';
 import theme from '@webapp/theme';
 
 const makeMapState = () => {
-  const getPickupQueueStatus = makeGetPickupQueueState();
-  const getPickupQueueReadyUpEnd = makeGetPickupQueueReadyUpEnd();
+  const getQueueStatus = makeGetQueueState();
+  const getQueueReadyUpEnd = makeGetQueueReadyUpEnd();
 
   return (state: State, gamemode: keyof typeof gamemodes) => {
     return {
-      state: getPickupQueueStatus(state, gamemode),
-      readyUpEnd: getPickupQueueReadyUpEnd(state, gamemode),
+      state: getQueueStatus(state, gamemode),
+      readyUpEnd: getQueueReadyUpEnd(state, gamemode),
     };
   };
 };
@@ -101,7 +101,7 @@ function ReadyUp(props: Props) {
   const gamemode = useContext(GamemodeContext);
   const actions = useActions({
     readyUp,
-    leavePickupQueue,
+    leavePickupQueue: leaveQueue,
   });
   const { state } = useMakeMapState(makeMapState, gamemode);
   const isReadyUpState = state === 'ready-up';

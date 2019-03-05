@@ -8,7 +8,7 @@ import configuration from '@server/services//configuration';
 import tf2Configs from '@server/services//tf2-configs';
 import logs from '@server/services//logs';
 import players from '@server/services/players';
-import pickupQueues from '@server/services/pickup-queues';
+import pickupQueues from '@server/services/queues';
 import pickups from '@server/services/pickups';
 
 export default function services(app: ServerApp) {

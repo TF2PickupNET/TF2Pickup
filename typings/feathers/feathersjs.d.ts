@@ -16,7 +16,7 @@ declare module '@feathersjs/feathers' {
   import User from '@typings/User';
   import UserProfile from '@typings/UserProfile';
   import UserSettings from '@typings/UserSettings';
-  import PickupQueue from '@typings/PickupQueue';
+  import Queue from '@typings/Queue';
   import Configuration from '@typings/Configuration';
   import Log from '@typings/Log';
   import Player from '@typings/Player';
@@ -249,7 +249,7 @@ declare module '@feathersjs/feathers' {
     service(name: 'user-profiles'): ServerService<UserProfile>,
     service(name: 'user-settings'): ServerService<UserSettings>,
     service(name: 'users'): ServerService<User>,
-    service(name: 'pickup-queues'): ServerService<PickupQueue>,
+    service(name: 'queues'): ServerService<Queue>,
     service(name: 'players'): ServerService<Player>,
     service(name: 'authentication'): ServerService<AuthPayload>,
     service(name: 'logs'): ServerService<Log>,
@@ -262,7 +262,7 @@ declare module '@feathersjs/feathers' {
     service(name: 'user-settings'): ClientService<UserSettings>,
     service(name: 'players'): ServerService<Player>,
     service(name: 'users'): ClientService<User>,
-    service(name: 'pickup-queues'): ClientService<PickupQueue>,
+    service(name: 'queues'): ClientService<Queue>,
     service(name: 'logs'): ClientService<Log>,
     service(name: 'pickups'): ClientService<Pickup>,
   }

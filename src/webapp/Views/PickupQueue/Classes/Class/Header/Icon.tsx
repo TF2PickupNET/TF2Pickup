@@ -2,9 +2,9 @@ import React, { useCallback, useContext } from 'react';
 import classes from '@config/classes';
 import AddIcon from '@atlaskit/icon/glyph/add';
 import { useActions, State, useMakeMapState } from '@webapp/store';
-import { joinPickupQueue, leavePickupQueue } from '@webapp/store/pickup-queues/actions';
+import { joinQueue, leaveQueue } from '@webapp/store/queues/actions';
 import { GamemodeContext } from '@webapp/Views/PickupQueue';
-import { makeGetPlayerByUserId } from '@webapp/store/pickup-queues/selectors';
+import { makeGetPlayerByUserId } from '@webapp/store/queues/selectors';
 import gamemodes from '@config/gamemodes';
 import { getCurrentUserId } from '@webapp/store/user-id/selectors';
 import CrossIcon from '@atlaskit/icon/glyph/cross';
@@ -36,14 +36,14 @@ function Icon(props: Props) {
   const gamemode = useContext(GamemodeContext);
   const { isInClass } = useMakeMapState(makeMapState, gamemode, props.className);
   const actions = useActions({
-    joinPickupQueue,
-    leavePickupQueue,
+    joinQueue,
+    leaveQueue,
   });
   const handleClick = useCallback(() => {
     if (isInClass) {
-      actions.leavePickupQueue(gamemode);
+      actions.leaveQueue(gamemode);
     } else {
-      actions.joinPickupQueue(gamemode, props.className);
+      actions.joinQueue(gamemode, props.className);
     }
   }, [gamemode, props.className, isInClass]);
 

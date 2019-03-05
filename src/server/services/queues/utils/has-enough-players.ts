@@ -2,7 +2,7 @@ import debug from 'debug';
 import gamemodes from '@config/gamemodes';
 import { Keys } from '@utils/types';
 import { ServerApp } from '@feathersjs/feathers';
-import PickupQueue from '@typings/PickupQueue';
+import Queue from '@typings/Queue';
 import Player from '@typings/Player';
 
 const log = debug('TF2Pickup:pickup-queues:has-enough-players');
@@ -12,7 +12,7 @@ const log = debug('TF2Pickup:pickup-queues:has-enough-players');
  */
 async function hasEnoughPlayers(
   app: ServerApp,
-  queue: PickupQueue,
+  queue: Queue,
   getPlayerCount: (players: Player[], min: number) => number,
 ) {
   const { slots } = gamemodes[queue.gamemode];

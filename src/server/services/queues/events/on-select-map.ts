@@ -7,15 +7,15 @@ import {
 } from '@feathersjs/feathers';
 import { SocketConnection } from '@feathersjs/socketio';
 import debug from 'debug';
-import getPlayer from '@server/services/pickup-queues/utils/get-player';
+import getPlayer from '@server/services/queues/utils/get-player';
 
 const log = debug('TF2Pickup:pickup-queues:events:on-select-map');
 
 export default function onSelectMap(
   app: ServerApp,
   connection: SocketConnection,
-): SocketEventHandler<'pickup-queues:select-map'> {
-  const queues = app.service('pickup-queues');
+): SocketEventHandler<'queues:select-map'> {
+  const queues = app.service('queues');
   const players = app.service('players');
 
   return async (data, cb) => {

@@ -8,13 +8,13 @@ import { NotificationType } from '@webapp/store/notifications/types';
 import classes from '@config/classes';
 import { fetchQueuePlayers } from '@webapp/store/players/actions';
 
-import { PickupQueueActionTypes } from './types';
+import { QueueActionTypes } from './types';
 import maps from '@config/maps';
 
-function fetchPickupQueue(gamemode: keyof typeof gamemodes): AsyncAction {
+function fetchQueue(gamemode: keyof typeof gamemodes): AsyncAction {
   return async (dispatch, getState) => {
     dispatch({
-      type: PickupQueueActionTypes.START_FETCH,
+      type: QueueActionTypes.START_FETCH,
       payload: { gamemode },
     });
 
@@ -23,17 +23,17 @@ function fetchPickupQueue(gamemode: keyof typeof gamemodes): AsyncAction {
     const queueId = `${region}-${gamemode}`;
 
     try {
-      const queue = await app.service('pickup-queues').get(queueId);
+      const queue = await app.service('queues').get(queueId);
 
       dispatch({
-        type: PickupQueueActionTypes.FETCHED,
+        type: QueueActionTypes.FETCHED,
         payload: { queue },
       });
 
       await dispatch(fetchQueuePlayers(queueId));
     } catch (error) {
       dispatch({
-        type: PickupQueueActionTypes.FETCH_ERROR,
+        type: QueueActionTypes.FETCH_ERROR,
         payload: {
           error,
           gamemode,
@@ -43,13 +43,13 @@ function fetchPickupQueue(gamemode: keyof typeof gamemodes): AsyncAction {
   };
 }
 
-function joinPickupQueue(
+function joinQueue(
   gamemode: keyof typeof gamemodes,
   className: keyof typeof classes,
 ): AsyncAction {
   return async (dispatch) => {
     try {
-      await emitSocketEvent('pickup-queues:join', {
+      await emitSocketEvent('queues:join', {
         gamemode,
         class: className,
       });
@@ -57,7 +57,7 @@ function joinPickupQueue(
       dispatch(
         createNotification(
           NotificationType.ERROR,
-          `Couldn't join pickup queue: ${error.message}`,
+          `Couldn't join queue: ${error.message}`,
           2 * 1000,
         ),
       );
@@ -65,17 +65,17 @@ function joinPickupQueue(
   };
 }
 
-function leavePickupQueue(gamemode: keyof typeof gamemodes): AsyncAction {
+function leaveQueue(gamemode: keyof typeof gamemodes): AsyncAction {
   return async (dispatch) => {
     try {
-      await emitSocketEvent('pickup-queues:leave', {
+      await emitSocketEvent('queues:leave', {
         gamemode,
       });
     } catch (error) {
       dispatch(
         createNotification(
           NotificationType.ERROR,
-          `Couldn't leave pickup queue: ${error.message}`,
+          `Couldn't leave queue: ${error.message}`,
           2 * 1000,
         ),
       );
@@ -86,14 +86,14 @@ function leavePickupQueue(gamemode: keyof typeof gamemodes): AsyncAction {
 function readyUp(gamemode: keyof typeof gamemodes): AsyncAction {
   return async (dispatch) => {
     try {
-      await emitSocketEvent('pickup-queues:ready-up', {
+      await emitSocketEvent('queues:ready-up', {
         gamemode,
       });
     } catch (error) {
       dispatch(
         createNotification(
           NotificationType.ERROR,
-          `Couldn't ready up for pickup queue: ${error.message}`,
+          `Couldn't ready up for queue: ${error.message}`,
           2 * 1000,
         ),
       );
@@ -104,7 +104,7 @@ function readyUp(gamemode: keyof typeof gamemodes): AsyncAction {
 function selectMap(gamemode: keyof typeof gamemodes, map: keyof typeof maps): AsyncAction {
   return async (dispatch) => {
     try {
-      await emitSocketEvent('pickup-queues:select-map', {
+      await emitSocketEvent('queues:select-map', {
         gamemode,
         map,
       });
@@ -112,7 +112,7 @@ function selectMap(gamemode: keyof typeof gamemodes, map: keyof typeof maps): As
       dispatch(
         createNotification(
           NotificationType.ERROR,
-          `Couldn't select a map for pickup queue: ${error.message}`,
+          `Couldn't select a map for queue: ${error.message}`,
           2 * 1000,
         ),
       );
@@ -121,9 +121,9 @@ function selectMap(gamemode: keyof typeof gamemodes, map: keyof typeof maps): As
 }
 
 export {
-  fetchPickupQueue,
-  joinPickupQueue,
-  leavePickupQueue,
+  fetchQueue,
+  joinQueue,
+  leaveQueue,
   readyUp,
   selectMap,
 };

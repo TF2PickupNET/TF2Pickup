@@ -5,15 +5,15 @@ import {
   State as AppState,
   useMakeMapState,
 } from '@webapp/store';
-import { makeGetPickupQueueState } from '@webapp/store/pickup-queues/selectors';
-import pickupStates from '@config/pickup-queue-states';
+import { makeGetQueueState } from '@webapp/store/queues/selectors';
+import pickupStates from '@config/queue-states';
 import { GamemodeContext } from '@webapp/Views/PickupQueue';
 
 const makeMapState = () => {
-  const getPickupQueueStatus = makeGetPickupQueueState();
+  const getQueueState = makeGetQueueState();
 
   return (state: AppState, gamemode: keyof typeof gamemodes) => {
-    return { state: getPickupQueueStatus(state, gamemode) };
+    return { state: getQueueState(state, gamemode) };
   };
 };
 

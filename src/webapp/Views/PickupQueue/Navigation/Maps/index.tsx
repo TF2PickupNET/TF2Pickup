@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { GamemodeContext } from '../..';
-import { makeGetPickupQueueMaps } from '@webapp/store/pickup-queues/selectors';
+import { makeGetQueueMaps } from '@webapp/store/queues/selectors';
 import { State, useMakeMapState } from '@webapp/store';
 import gamemodes from '@config/gamemodes';
 import { GroupHeading } from '@atlaskit/navigation-next';
@@ -8,10 +8,10 @@ import { GroupHeading } from '@atlaskit/navigation-next';
 import Map from './Map';
 
 const makeMapState = () => {
-  const getPickupQueueMaps = makeGetPickupQueueMaps();
+  const getQueueMaps = makeGetQueueMaps();
 
   return (state: State, gamemode: keyof typeof gamemodes) => {
-    return { maps: getPickupQueueMaps(state, gamemode) };
+    return { maps: getQueueMaps(state, gamemode) };
   };
 };
 

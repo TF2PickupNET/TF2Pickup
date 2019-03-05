@@ -1,18 +1,18 @@
-import getPlayersForPickup from '@server/services/pickup-queues/utils/get-players-for-pickup';
+import getPlayersForPickup from '@server/services/queues/utils/get-players-for-pickup';
 import { getMinPlayersForGamemode } from '@config/gamemodes';
 import sleep from 'sleep-promise';
 import { ServerApp } from '@feathersjs/feathers';
-import resetQueue from '@server/services/pickup-queues/utils/reset-queue';
+import resetQueue from '@server/services/queues/utils/reset-queue';
 import { GeneralError } from '@feathersjs/errors';
-import { PickupQueueStates } from '@config/pickup-queue-states';
+import { QueueStates } from '@config/queue-states';
 import debug from 'debug';
-import getRandomMaps from '@server/services/pickup-queues/utils/get-random-maps';
+import getRandomMaps from '@server/services/queues/utils/get-random-maps';
 import createNewPickup from '@server/services/pickups/utils/create-new-pickup';
 
 const log = debug('TF2Pickup:pickup-queues:create-new-pickup');
 
 async function handleCreatePickup(app: ServerApp, queueId: string) {
-  const queues = app.service('pickup-queues');
+  const queues = app.service('queues');
   const users = app.service('users');
 
   try {
@@ -40,7 +40,7 @@ async function handleCreatePickup(app: ServerApp, queueId: string) {
     );
 
     await queues.patch(queueId, {
-      state: PickupQueueStates.WaitingForPlayers,
+      state: QueueStates.WaitingForPlayers,
       maps: getRandomMaps(queueId, pickup.map),
     });
 

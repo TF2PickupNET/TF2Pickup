@@ -9,29 +9,29 @@ import classes from '@config/classes';
 
 const getPickupQueues = (state: State) => state.pickupQueues;
 
-const makeGetPickupQueueItem = () => createSelector(
+const makeGetQueueItem = () => createSelector(
   getPickupQueues,
   (_: State, gamemode: keyof typeof gamemodes) => gamemode,
   (queues, gamemode) => queues[gamemode],
 );
 
-const makeGetPickupQueue = () => createSelector(
-  makeGetPickupQueueItem(),
+const makeGetQueue = () => createSelector(
+  makeGetQueueItem(),
   (queue) => queue.item,
 );
 
-const makeGetPickupQueueState = () => createSelector(
-  makeGetPickupQueue(),
+const makeGetQueueState = () => createSelector(
+  makeGetQueue(),
   queue => (queue === null ? null : queue.state),
 );
 
-const makeGetPickupQueueReadyUpEnd = () => createSelector(
-  makeGetPickupQueue(),
+const makeGetQueueReadyUpEnd = () => createSelector(
+  makeGetQueue(),
   queue => (queue === null ? null : queue.readyUpEnd),
 );
 
-const makeGetPickupQueueMaps = () => createSelector(
-  makeGetPickupQueue(),
+const makeGetQueueMaps = () => createSelector(
+  makeGetQueue(),
   (queue): Array<keyof typeof maps> => (queue === null ? [] : queue.maps)
 );
 
@@ -78,11 +78,13 @@ const makeGetPlayerDataById = () => {
 };
 
 export {
-  makeGetPickupQueue,
-  makeGetPickupQueueItem,
-  makeGetPickupQueueMaps,
-  makeGetPickupQueueState,
-  makeGetPickupQueueReadyUpEnd,
+  makeGetPlayers,
+  makeGetPlayersData,
+  makeGetQueue,
+  makeGetQueueItem,
+  makeGetQueueMaps,
+  makeGetQueueReadyUpEnd,
+  makeGetQueueState,
   makeGetPlayerByUserId,
   makeGetPickupPlayersForId,
   makeGetPlayerDataById,

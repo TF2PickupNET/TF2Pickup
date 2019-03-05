@@ -12,12 +12,12 @@ export default function events(app: ServerApp) {
   log('Setting up events for the pickup-queues service');
 
   app.on('socket-connection', (socket) => {
-    socket.on('pickup-queues:join', onJoin(app, socket));
+    socket.on('queues:join', onJoin(app, socket));
 
-    socket.on('pickup-queues:leave', onLeave(app, socket));
+    socket.on('queues:leave', onLeave(app, socket));
 
-    socket.on('pickup-queues:ready-up', onReadyUp(app, socket));
+    socket.on('queues:ready-up', onReadyUp(app, socket));
 
-    socket.on('pickup-queues:select-map', onSelectMap(app, socket));
+    socket.on('queues:select-map', onSelectMap(app, socket));
   });
 }

@@ -2,9 +2,9 @@ import React, { useCallback, useContext } from 'react';
 import { Item } from '@webapp/components/PageNavigation';
 import maps from '@config/maps';
 import { useActions, State, useMakeMapState } from '@webapp/store';
-import { selectMap } from '@webapp/store/pickup-queues/actions';
+import { selectMap } from '@webapp/store/queues/actions';
 import { GamemodeContext } from '@webapp/Views/PickupQueue';
-import { makeGetPlayerByUserId } from '@webapp/store/pickup-queues/selectors';
+import { makeGetPlayerByUserId } from '@webapp/store/queues/selectors';
 import { getCurrentUserId } from '@webapp/store/user-id/selectors';
 import gamemodes from '@config/gamemodes';
 

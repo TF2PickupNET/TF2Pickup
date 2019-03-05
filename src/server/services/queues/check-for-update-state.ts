@@ -1,18 +1,18 @@
 import debug from 'debug';
 import { ServerApp } from '@feathersjs/feathers';
 import gamemodes from '@config/gamemodes';
-import { PickupQueueStates } from '@config/pickup-queue-states';
-import PickupQueue from '@typings/PickupQueue';
-import hasEnoughPlayers from '@server/services/pickup-queues/utils/has-enough-players';
+import { QueueStates } from '@config/queue-states';
+import Queue from '@typings/Queue';
+import hasEnoughPlayers from '@server/services/queues/utils/has-enough-players';
 
 const log = debug('TF2Pickup:pickup-queues:check-for-update-state');
 
 async function checkForUpdateState(
   app: ServerApp,
-  queue: PickupQueue,
+  queue: Queue,
 ) {
   try {
-    const queues = app.service('pickup-queues');
+    const queues = app.service('queues');
 
     switch (queue.state) {
       // Check if we have enough players for each class for a ready up state
@@ -26,7 +26,7 @@ async function checkForUpdateState(
 
         if (hasEnough) {
           await queues.patch(queue.id, {
-            state: PickupQueueStates.ReadyUp,
+            state: QueueStates.ReadyUp,
             readyUpEnd: Date.now() + readyUpTime,
           });
         }
@@ -44,7 +44,7 @@ async function checkForUpdateState(
 
         if (hasEnough) {
           await queues.patch(queue.id, {
-            state: PickupQueueStates.CreatingPickup,
+            state: QueueStates.CreatingPickup,
             readyUpEnd: null,
           });
         }
